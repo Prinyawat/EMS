@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Status_ColorAPI</RootNamespace>
+    <RootNamespace>Ems.App</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
