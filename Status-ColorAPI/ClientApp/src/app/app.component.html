@@ -1,0 +1,87 @@
+<div class="container mt-5" style="max-width: 1300px;">
+  <div class="row p-3 border rounded shadow-sm">
+      
+      <div class="d-flex justify-content-between align sts-center w-100">
+          <h4 class="mb-0">Status</h4>
+          <button class="btn btn-lg btn-outline-primary" (click)="open()">+ Add New Status</button>
+      </div>
+
+      <div class="row w-100 g-2 mt-2">
+          <div class="col-2">
+              <div class="form-group">
+                <select class="form-select w-100" id="dropdownSelect1" (change)="onActiveStatusChange($event)">
+                  <option value="" selected>All</option>
+                  <option value="1">Active</option>
+                  <option value="2">Inactive</option>
+                </select>                
+              </div>
+          </div>
+
+          <div class="col-2">
+            <div class="form-group">
+              <select class="form-select w-100" id="dropdownSelect2" (change)="onStatusTypeChange($event)">
+                <option value="" selected>All Status Type</option> 
+                <option *ngFor="let st of  DistrictStatusTypes()" [value]="st">
+                  {{ st }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search by Status Name" (input)="onSearchChange($event)" list="searchOptions">
+                <datalist id="searchOptions">
+                </datalist>
+              </div>
+            </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="container mt-5" style="max-width: 1300px;">
+  <div class="row p-3 border rounded shadow-sm">
+    <table class="table table-striped">
+      <thead class="text-center"> 
+        <tr>
+          <th scope="col" class="text-center" (click)="onSort('statusType')"> 
+            Status Type
+            <span *ngIf="sortColumn === 'statusType'">
+              <i class="bi" [ngClass]="{'bi-caret-up-fill': sortDirection, 'bi-caret-down-fill': !sortDirection}"></i>
+            </span>
+          </th>
+          <th scope="col" class="text-center" (click)="onSort('statusCode')"> 
+            Status Code
+            <span *ngIf="sortColumn === 'statusCode'">
+              <i class="bi" [ngClass]="{'bi-caret-up-fill': sortDirection, 'bi-caret-down-fill': !sortDirection}"></i>
+            </span>
+          </th>
+          <th scope="col" class="text-center" (click)="onSort('statusName')"> 
+            Status Name
+            <span *ngIf="sortColumn === 'statusName'">
+              <i class="bi" [ngClass]="{'bi-caret-up-fill': sortDirection, 'bi-caret-down-fill': !sortDirection}"></i>
+            </span>
+          </th>
+          <th scope="col" class="text-center">Active</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let st of getFilteredStatus()">
+          <td class="text-start" id="st1"(click)="openEditModal(st)">{{ st.statusType }}</td> 
+          <td class="text-start">{{ st.statusCode }}</td> 
+          <td class="text-start">{{ st.statusName }}</td> 
+          <td class="text-center"> 
+            <i *ngIf="st.active" class="bi bi-check-circle-fill text-success"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
