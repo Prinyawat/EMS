@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

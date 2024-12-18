@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Status_ColorAPI.Models;
+using Status_ColorAPI.Entities;
 
 namespace Status_ColorAPI.Controllers
 {
@@ -13,34 +8,12 @@ namespace Status_ColorAPI.Controllers
     [ApiController]
     public class StatusColorController : ControllerBase
     {
-        private readonly StatusColorContext _context;
+        private readonly EmsContext _context;
 
-        public StatusColorController(StatusColorContext context)
+        public StatusColorController(EmsContext context)
         {
             _context = context;
         }
-
-        //GET: api/StatusColor
-        //[HttpGet]
-        // public async Task<ActionResult<IEnumerable<StatusColor>>> GetStatusColors(datatype parametername)
-        // {
-        //     if (_context.StatusColors == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     var statusList = await _context.StatusColors.ToListAsync();
-        //     if (condition 1 ?){
-        //         statusList = statusList.Where(x => x.Active == condition1 ?).ToList();
-        //     }
-        //     if (condition 2 ?){
-        //         statusList = statusList.Where(x => x.StatusType == condition2 ?).ToList();
-        //     }
-        //     if (condition 3 ?){
-        //         statusList = statusList.Where(x => x.StatusName == condition3 ?).ToList();
-        //     }
-
-        //     return statusList;
-        // }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StatusColor>>> GetStatusColors(

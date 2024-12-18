@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Status_ColorAPI.Models;
+using Status_ColorAPI.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<StatusColorContext>(options =>
+builder.Services.AddDbContext<EmsContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection")));
 
 var app = builder.Build();
