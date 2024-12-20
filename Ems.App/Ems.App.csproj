@@ -20,16 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\pages\account\change-password\" />
-    <Folder Include="ClientApp\src\app\pages\account\login\" />
-    <Folder Include="ClientApp\src\app\pages\account\logout\" />
-    <Folder Include="ClientApp\src\app\pages\admin\course-management\" />
-    <Folder Include="ClientApp\src\app\pages\admin\schedule-management\" />
-    <Folder Include="ClientApp\src\app\pages\admin\user-mamangement\" />
-    <Folder Include="ClientApp\src\app\pages\checking\" />
-    <Folder Include="ClientApp\src\app\pages\course\" />
-    <Folder Include="ClientApp\src\app\shared\models\" />
-    <Folder Include="ClientApp\src\app\shared\services\" />
+    <Folder Include="ClientApp\src\app\shared\" />
     <Folder Include="Models\" />
   </ItemGroup>
 
