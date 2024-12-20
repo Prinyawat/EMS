@@ -18,6 +18,7 @@ import { CourseComponent } from './pages/course/course.component';
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'checking', loadChildren: () => import('./pages/checking/checking.module').then(m => m.CheckingComponentModule) },
                     { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CourseModule) },
+                    // { path: 'employee', loadChildren: () => import('').then(m => m.CourseModule) },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
