@@ -23,7 +23,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Cause',
                 items: [
-                    { label: 'Cause', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                    { label: 'Cause', icon: 'pi pi-fw pi-home', routerLink: ['/course'] }
                 ]
             },
             {
