@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\shared\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
