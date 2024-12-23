@@ -9,35 +9,59 @@
                         <span class="p-input-icon-left">
                             <i class="pi pi-user"></i>
                             <label htmlFor="firstname1" class="p-sr-only">Firstname</label>
-                            <input pInputText id="firstname1" type="text" placeholder="Firstname" />
+                            <input pInputText id="firstname1" type="text" [disabled]="true" placeholder="Firstname" />
                         </span>
                     </div>
-                    <div class="field col-12 md:col mr-auto">
+                    <div class="field col-12 md:col">
                         <label htmlFor="lastname1" class="p-sr-only">Lastname</label>
-                        <input pInputText id="lastname1" type="text" placeholder="Lastname" />
+                        <input pInputText id="lastname1" type="text" placeholder="Lastname" [disabled]="true" />
+                    </div>
+                    <div class="field col-12 md:col">
+                        <p-inputGroup>
+                            <p-inputGroupAddon>
+                                <i class="pi pi-stopwatch"></i>
+                            </p-inputGroupAddon>
+                            <input pInputText type="text" placeholder="Time In" [disabled]="true"/>
+                        </p-inputGroup>
+                    </div>
+                    <div class="field col-12 md:col mr-auto">
+                        <p-inputGroup>
+                            <p-inputGroupAddon>
+                                <i class="pi pi-stopwatch"></i>
+                            </p-inputGroupAddon>
+                            <input pInputText type="text" placeholder="Time Out" [disabled]="true" />
+                        </p-inputGroup>
                     </div>
 
                 </div>
             </div>
 
-            <div class="formgroup">
+            <div class="grid formgrid col justify-content-center">
                 <p-calendar [showIcon]="true" inputId="icon"></p-calendar>
             </div>
 
             <div class="grid formgrid mt-3 justify-content-center">
-                <div class="col-12 md:col-3">
-                    <div class="field-radiobutton">
-                        <p-radioButton name="city" value="Chicago" [(ngModel)]="valRadio" id="city1">
+                <div class="col-12 md:col-3 ">
+                    <div class="field-radiobutton justify-content-center">
+                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1">
                         </p-radioButton>
                         <label for="city1">Check In</label>
                     </div>
                 </div>
-                <div class="col-12 md:col-3">
-                    <div class="field-radiobutton">
-                        <p-radioButton name="city" value="Los Angeles" [(ngModel)]="valRadio" id="city2">
+                <div class="col-12 md:col-3 ">
+                    <div class="field-radiobutton justify-content-center">
+                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2">
                         </p-radioButton>
                         <label for="city2">Check Out</label>
                     </div>
+                </div>
+            </div>
+
+            <div class="grid formgrid mt-3 justify-content-center">
+                <div class="col-12 md:col-2">
+                    <p-toast></p-toast>
+                    <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"></button>
+                    <p-confirmPopup key="confirm2"></p-confirmPopup>
                 </div>
             </div>
 
