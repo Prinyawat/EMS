@@ -9,6 +9,10 @@ import { InputDemoRoutingModule } from 'src/app/demo/components/uikit/input/inpu
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToastModule } from 'primeng/toast';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 
 
@@ -23,6 +27,10 @@ import { DialogModule } from 'primeng/dialog';
         InputTextareaModule,
         RadioButtonModule,
         DialogModule,
+        ToastModule,
+        ConfirmPopupModule,
+        InputGroupModule,
+        InputGroupAddonModule,
     ],
         declarations: [CheckingComponent]
 })

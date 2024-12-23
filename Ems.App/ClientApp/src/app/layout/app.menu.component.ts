@@ -40,9 +40,17 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Checking',
+                label: 'Check Information',
                 items: [
-                    { label: 'Checking', icon: 'pi pi-fw pi-id-card', routerLink: ['/checking'] }
+                    {label: 'Checking', icon: 'pi pi-chart-pie',
+                    items: [
+                        {
+                         label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checking']
+                        },
+                        {
+                            label: 'LeaveRequest', icon: 'pi pi-calendar', routerLink: ['/checking']
+                           }
+                    ]}
                 ]
             },
             // {

@@ -1,18 +1,22 @@
 import { Component} from '@angular/core';
 import * as L from 'leaflet';
+import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
-    providers: []
+    providers: [ConfirmationService, MessageService]
 })
 export class CheckingComponent {
-    valRadio: string = '';
+    valRadio: string = 'CheckIn';
 
     display: boolean = false;
 
     private map!: L.Map;
+constructor(private confirmationService: ConfirmationService,
+    private messageService: MessageService){}
 
     ngOnInit(): void {
+
         // พิกัดเริ่มต้นของแผนที่
         this.map = L.map('map').setView([18.7953, 98.9989], 13); // พิกัดของเชียงใหม่ (latitude, longitude)
 
@@ -22,4 +26,18 @@ export class CheckingComponent {
         }).addTo(this.map);
       }
 
+      confirm2(event: Event) {
+        this.confirmationService.confirm({
+            key: 'confirm2',
+            target: event.target || new EventTarget,
+            message: 'Are you sure that you want to proceed?',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+            },
+            reject: () => {
+                this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            }
+        });
+    }
 }
