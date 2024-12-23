@@ -8,5 +8,9 @@ if (environment.production) {
   enableProdMode();
 }
 
+if (typeof console !== 'undefined') {
+    console.warn = function () {};
+  }
+  
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
