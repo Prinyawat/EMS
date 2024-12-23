@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-registration-history-course',
   templateUrl: './registration-history-course.component.html',
+  styleUrls:['./registration-history-course.component.scss'],
   providers: [MessageService]
 })
 export class RegistrationHistoryCourseComponent {
   
   display: boolean = false;
+  breadcrumbItems: MenuItem[] = [];
   
-    constructor(
-      private messageService: MessageService
-    ){}
+  constructor(
+    private messageService: MessageService,
+  ){}
     
   courses = [
     {
@@ -38,6 +40,12 @@ export class RegistrationHistoryCourseComponent {
       display: false,
     },
   ]
+
+  ngOnInit() {
+    this.breadcrumbItems = [];
+            this.breadcrumbItems.push({ label: 'Course'});
+            this.breadcrumbItems.push({ label: 'ประวัติการลงทะเบียน', styleClass: 'custom-register'});
+    }
 
   showCanCelViaToast(courseId: number) {
     console.log('ยกเลิกการลงทะเบียน:', courseId);

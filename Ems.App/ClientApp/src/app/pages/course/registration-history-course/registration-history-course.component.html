@@ -1,3 +1,4 @@
+<p-breadcrumb [model]="breadcrumbItems" [home]="{icon: 'pi pi-home', routerLink: '/'}"></p-breadcrumb>
 <h2>Course ที่ลงทะเบียนแล้ว</h2>
 <hr>
 <div class="grid">
@@ -18,14 +19,14 @@
                     <strong>วันที่ปิด:</strong> {{ course.closeDate | date:'dd/MM/yyyy' }} เวลา: {{ course.closeTime }}
                 </p>
                 <ng-template pTemplate="footer">
-                    <button type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกการลงทะเบียน" class="p-button-danger"></button>
+                    <button type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกลงทะเบียน" class="p-button-danger"></button>
                     <button pButton icon="pi pi-check" (click)="course.display = false" label="ปิด" class="p-button-outlined"></button>
                 </ng-template>
             </p-dialog>
             <div class="grid">
                 <div class="col-12">
                     <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2"></button>
-                    <button type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกการลงทะเบียน" class="p-button-danger"></button>
+                    <button type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกลงทะเบียน" class="p-button-danger"></button>
                 </div>
             </div> 
         </div>

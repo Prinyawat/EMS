@@ -6,6 +6,7 @@ import { RegistrationHistoryCourseComponent } from './registration-history-cours
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ToastModule } from 'primeng/toast';
     RegistrationHistoryCourseRoutingModule,
     DialogModule,
     ButtonModule,
-    ToastModule
+    ToastModule,
+    BreadcrumbModule
   ],
   declarations: [RegistrationHistoryCourseComponent]
 })
