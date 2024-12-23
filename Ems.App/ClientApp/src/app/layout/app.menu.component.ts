@@ -33,9 +33,17 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Checking',
+                label: 'Check Information',
                 items: [
-                    { label: 'Checking', icon: 'pi pi-fw pi-id-card', routerLink: ['/checking'] }
+                    {label: 'Checking', icon: 'pi pi-chart-pie',
+                    items: [
+                        {
+                         label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checking']
+                        },
+                        {
+                            label: 'LeaveRequest', icon: 'pi pi-calendar', routerLink: ['/checking']
+                           }
+                    ]}
                 ]
             },
             // {
@@ -147,24 +155,24 @@ export class AppMenuComponent implements OnInit {
                             },
                         ]
                     },
-                    {
-                        label: 'Submenu 2', icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2', icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' },
-                                ]
-                            },
-                        ]
-                    }
+                    // {
+                    //     label: 'Submenu 2', icon: 'pi pi-fw pi-bookmark',
+                    //     items: [
+                    //         {
+                    //             label: 'Submenu 2.1', icon: 'pi pi-fw pi-bookmark',
+                    //             items: [
+                    //                 { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
+                    //                 { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' },
+                    //             ]
+                    //         },
+                    //         {
+                    //             label: 'Submenu 2.2', icon: 'pi pi-fw pi-bookmark',
+                    //             items: [
+                    //                 { label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' },
+                    //             ]
+                    //         },
+                    //     ]
+                    // }
                 ]
             },
             // {
