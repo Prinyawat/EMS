@@ -1,0 +1,105 @@
+<div class="grid p-fluid">
+    <div class="col-12 lg:col-8 xl:col-7">
+        <div class="card">
+
+            <h5>Leave Request</h5>
+            <div class="grid formgrid justify-content-center">
+                <div class="formgroup-inline justify-content-center ">
+
+                    <div class="field col-12 md:col-5">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-user"></i>
+                            <label htmlFor="firstname1" class="p-sr-only">Firstname</label>
+                            <input pInputText id="firstname1" type="text" [disabled]="true" placeholder="Firstname" />
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label htmlFor="lastname1" class="p-sr-only">Lastname</label>
+                        <input pInputText id="lastname1" type="text" placeholder="Lastname" [disabled]="true" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="grid formgrid col justify-content-center">
+                <p-calendar [showIcon]="true" inputId="icon"></p-calendar>
+            </div>
+
+            <h5>Additional proof</h5>
+            <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)"
+                          [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+
+            <h5>Leave Request Detail</h5>
+			<textarea rows="5" cols="30" placeholder="Your Message....." pInputTextarea></textarea>
+
+            <div class="grid formgrid mt-3 justify-content-center">
+                <div class="col-12 md:col-3">
+                    <p-toast></p-toast>
+                    <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"></button>
+                    <p-confirmPopup key="confirm2"></p-confirmPopup>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-12 xl:col-5">
+        <div class="card">
+            <div class="card">
+                <div class="flex align-items-center justify-content-between mb-4">
+                    <h5>Notifications</h5>
+                    <div>
+                        <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-rounded p-button-text p-button-plain" (click)="menu.toggle($event)"></button>
+                        <p-menu #menu [popup]="true" [model]="items"></p-menu>
+                    </div>
+                </div>
+
+                <span class="block text-600 font-medium mb-3">TODAY</span>
+                <ul class="p-0 mx-0 mt-0 mb-4 list-none">
+                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+                            <i class="pi pi-dollar text-xl text-blue-500"></i>
+                        </div>
+                        <span class="text-900 line-height-3">Admin
+                            <span class="text-700"> has denied the personal leave request Phuritat Hongjik <span class="text-red-500">Denied</span></span>
+                        </span>
+                    </li>
+                    <li class="flex align-items-center py-2">
+                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-orange-100 border-circle mr-3 flex-shrink-0">
+                            <i class="pi pi-download text-xl text-orange-500"></i>
+                        </div>
+                        <span class="text-900 line-height-3">Admin
+                            <span class="text-700 line-height-3">has approved the leave request Phanthakit Phanthakitpatamakul <span class="text-green-500 font-medium">Approved</span></span>
+                        </span>
+                    </li>
+                </ul>
+
+                <span class="block text-600 font-medium mb-3">YESTERDAY</span>
+                <ul class="p-0 m-0 list-none">
+                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+                            <i class="pi pi-dollar text-xl text-blue-500"></i>
+                        </div>
+                        <span class="text-900 line-height-3">Phanthakit Phanthakitpatamakul :
+                    <span class="text-700">  has submitted a personal leave request for your approval.</span>
+                </span>
+                    </li>
+                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-pink-100 border-circle mr-3 flex-shrink-0">
+                            <i class="pi pi-question text-xl text-pink-500"></i>
+                        </div>
+                        <span class="text-900 line-height-3">Phuritat Hongjik :<span class="text-700"> has submitted a personal leave request for your approval.</span></span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</div>

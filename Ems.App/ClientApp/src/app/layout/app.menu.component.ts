@@ -29,13 +29,13 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Cause',
                 items: [
-                    { 
+                    {
                         label: 'Cause', icon: 'pi pi-book',
                         items:[
                             {label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register']},
                             {label: 'ประวัติการลงทะเบียน', icon: 'pi pi-check-square', routerLink: ['/course/RegistrationHistory-course']}
 
-                        ] 
+                        ]
                     }
                 ]
             },
@@ -45,10 +45,10 @@ export class AppMenuComponent implements OnInit {
                     {label: 'Checking', icon: 'pi pi-chart-pie',
                     items: [
                         {
-                         label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checking']
+                         label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
                         },
                         {
-                            label: 'LeaveRequest', icon: 'pi pi-calendar', routerLink: ['/checking']
+                            label: 'LeaveRequest', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
                            }
                     ]}
                 ]

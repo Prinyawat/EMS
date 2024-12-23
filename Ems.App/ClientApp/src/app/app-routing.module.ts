@@ -15,12 +15,8 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-                    { path: 'checking', loadChildren: () => import('./pages/checking/checking.module').then(m => m.CheckingComponentModule) },
                     { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CourseModule) },
-
-                    // { path: 'course', loadChildren: () => import('./pages/course/course-register/course-register.module').then(m => m.CourseRegisterModule) },
-                    // { path: 'RegistrationHistory-course', loadChildren: () => import('./pages/course/registration-history-course/registration-history-course.module').then(m => m.RegistrationHistoryCourseModule) },
-                    // { path: 'employee', loadChildren: () => import('').then(m => m.CourseModule) },
+                    { path: 'checkinginformation', loadChildren: () => import('./pages/checking-information/checking-information.module').then(m => m.CheckingInformationModule) },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
