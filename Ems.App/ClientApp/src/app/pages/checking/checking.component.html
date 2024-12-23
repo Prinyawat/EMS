@@ -1,1 +1,53 @@
-<h1>Hello World</h1>
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="card">
+
+            <h5>Check Information</h5>
+            <div class="grid formgrid ">
+                <div class="formgroup-inline">
+                    <div class="field col-12 md:col">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-user"></i>
+                            <label htmlFor="firstname1" class="p-sr-only">Firstname</label>
+                            <input pInputText id="firstname1" type="text" placeholder="Firstname" />
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col mr-auto">
+                        <label htmlFor="lastname1" class="p-sr-only">Lastname</label>
+                        <input pInputText id="lastname1" type="text" placeholder="Lastname" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="formgroup">
+                <p-calendar [showIcon]="true" inputId="icon"></p-calendar>
+            </div>
+
+            <div class="grid formgrid mt-3 justify-content-center">
+                <div class="col-12 md:col-3">
+                    <div class="field-radiobutton">
+                        <p-radioButton name="city" value="Chicago" [(ngModel)]="valRadio" id="city1">
+                        </p-radioButton>
+                        <label for="city1">Check In</label>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field-radiobutton">
+                        <p-radioButton name="city" value="Los Angeles" [(ngModel)]="valRadio" id="city2">
+                        </p-radioButton>
+                        <label for="city2">Check Out</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <h5>Mapping</h5>
+                    <div id="map" style="height: 500px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
