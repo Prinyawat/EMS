@@ -1,30 +1,3 @@
-<!-- <div class="col-12 lg:col-6">
-    <div class="card">
-        <h2>Angular</h2>
-        <h6>คอร์สเรียนรู้พื้นฐาน</h6>
-        <p-dialog header="Dialog" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
-            <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <ng-template pTemplate="footer">
-                <button type="button" pButton (click)="showSuccessViaToast()" label="ลงทะเบียนเรียน" class="p-button-success"></button>
-                <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
-            </ng-template>
-        </p-dialog>
-        <div class="grid">
-            <div class="col-12">
-                <button (click)="display=true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2"></button>
-            </div>
-        </div> 
-        <p-toast key="tst"></p-toast>       
-        <button type="button" pButton (click)="showSuccessViaToast()" label="ลงทะเบียนเรียน" class="p-button-success"></button>
-    </div>
-</div>
- -->
-
  <div class="grid">
     <div class="col-12 lg:col-6" *ngFor="let course of courses">
         <div class="card">

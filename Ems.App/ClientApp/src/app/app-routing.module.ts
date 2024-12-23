@@ -2,7 +2,6 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
-import { CourseComponent } from './pages/course/course.component';
 
 @NgModule({
     imports: [
@@ -18,6 +17,9 @@ import { CourseComponent } from './pages/course/course.component';
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'checking', loadChildren: () => import('./pages/checking/checking.module').then(m => m.CheckingComponentModule) },
                     { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CourseModule) },
+
+                    // { path: 'course', loadChildren: () => import('./pages/course/course-register/course-register.module').then(m => m.CourseRegisterModule) },
+                    // { path: 'RegistrationHistory-course', loadChildren: () => import('./pages/course/registration-history-course/registration-history-course.module').then(m => m.RegistrationHistoryCourseModule) },
                     // { path: 'employee', loadChildren: () => import('').then(m => m.CourseModule) },
                 ]
             },
