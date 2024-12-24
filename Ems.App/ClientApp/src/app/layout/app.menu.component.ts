@@ -55,7 +55,7 @@ export class AppMenuComponent implements OnInit {
                          label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
                         },
                         {
-                            label: 'LeaveRequest', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
+                            label: 'Leave Request', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
                            },
                            {
                             label: 'User Agenda', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
