@@ -18,6 +18,7 @@ export class AgendaComponent {
 
     // ChatGPT Helper ควรกลับมาศึกษาจุดนี้ col -> resolvefiled
     cols = [
+        { field: 'representative.name', header: 'Representative'},
         { field: 'name', header: 'Name' },
         { field: 'country.name', header: 'Country' },
         { field: 'company', header: 'Company' },

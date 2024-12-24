@@ -6,16 +6,24 @@
 
                 <p-dialog header="Table Data" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '80vw'}" [breakpoints]="{'960px': '75vw'}">
 
-                    <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll">
+                    <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll" rowGroupMode="subheader" groupRowsBy="representative.name">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th *ngFor="let col of columns">{{ col.header }}</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                            <!-- Row Group Header -->
+                            <tr *ngIf="rowGroupMetadata[rowData.representative.name]?.index === rowIndex" class="row-group-header">
+                                <td colspan="columns.length" class="font-bold">
+                                    {{ rowData.representative.name }}
+                                </td>
+                            </tr>
+                            <!-- Row Data -->
                             <tr>
-                                <td *ngFor="let col of columns">{{ resolveField(rowData, col.field) }}</td>
-
+                                <td *ngFor="let col of cols">
+                                    {{ resolveField(rowData, col.field) }}
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>
