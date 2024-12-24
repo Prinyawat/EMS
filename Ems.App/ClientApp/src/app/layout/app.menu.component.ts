@@ -33,8 +33,15 @@ export class AppMenuComponent implements OnInit {
                         label: 'Cause', icon: 'pi pi-book',
                         items:[
                             {label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register']},
-                            {label: 'ประวัติการลงทะเบียน', icon: 'pi pi-check-square', routerLink: ['/course/RegistrationHistory-course']}
+                            {
+                                label: 'ประวัติ', icon: 'pi pi-history',
+                                items: [
+                                    {label:'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course']},
+                                    {label:'ประวัติการเรียน/การอบรบ', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course']},
 
+                                ]
+                            },
+                            {label: 'วันเปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open']}
                         ]
                     }
                 ]

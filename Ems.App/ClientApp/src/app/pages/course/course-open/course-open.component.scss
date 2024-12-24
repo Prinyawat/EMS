@@ -1,0 +1,13 @@
+::ng-deep .p-breadcrumb .pi-home {
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease; 
+    &:hover {
+      color: var(--primary-color); 
+      transform: scale(1.2); 
+    }
+}
+
+::ng-deep .p-breadcrumb .custom-register {
+    color: var(--primary-color); 
+    font-weight: bold; 
+}

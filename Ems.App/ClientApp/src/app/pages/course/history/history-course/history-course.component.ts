@@ -3,11 +3,11 @@ import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-registration-history-course',
-  templateUrl: './registration-history-course.component.html',
-  styleUrls:['./registration-history-course.component.scss'],
+  templateUrl: './history-course.component.html',
+  styleUrls:['./history-course.component.scss'],
   providers: [MessageService]
 })
-export class RegistrationHistoryCourseComponent {
+export class HistoryCourseComponent {
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
@@ -44,12 +44,8 @@ export class RegistrationHistoryCourseComponent {
   ngOnInit() {
     this.breadcrumbItems = [];
             this.breadcrumbItems.push({ label: 'Course'});
-            this.breadcrumbItems.push({ label: 'ประวัติการลงทะเบียน', styleClass: 'custom-register'});
+            this.breadcrumbItems.push({ label: 'ประวัติ'});
+            this.breadcrumbItems.push({ label: 'ประวัติการเรียน/อบรบ', styleClass: 'custom-register'});
     }
-
-  showCanCelViaToast(courseId: number) {
-    console.log('ยกเลิกการลงทะเบียน:', courseId);
-    this.messageService.add({ key: 'tst', severity: 'error', summary: 'ยกเลิกการลงทะเบียน', detail: 'คุณได้ยกเลิกการลงทะเบียนแล้ว' });
-}
 
 }
