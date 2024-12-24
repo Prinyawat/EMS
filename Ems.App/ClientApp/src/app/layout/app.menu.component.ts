@@ -49,6 +49,9 @@ export class AppMenuComponent implements OnInit {
                         },
                         {
                             label: 'LeaveRequest', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
+                           },
+                           {
+                            label: 'User Agenda', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
                            }
                     ]}
                 ]
