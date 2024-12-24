@@ -3,23 +3,35 @@
         <p-toolbar styleClass="mb-4">
             <h5>User Agenda</h5>
             <ng-template pTemplate="right">
+
+                <p-dialog header="Table Data" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '80vw'}" [breakpoints]="{'960px': '75vw'}">
+
+                    <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns">{{ col.header }}</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td *ngFor="let col of columns">{{ resolveField(rowData, col.field) }}</td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <ng-template pTemplate="footer">
+                            <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
+                    </ng-template>
+
+                </p-dialog>
+
+                <button (click)="display=true" pButton icon="pi pi-external-link" label="Export Data" style="margin-right: 10px"></button>
                 <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help" (click)="dt.exportCSV()"></button>
             </ng-template>
         </p-toolbar>
 
-        <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll">
-            <ng-template pTemplate="header" let-columns>
-                <tr>
-                    <th *ngFor="let col of columns">{{ col.header }}</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                    <td *ngFor="let col of columns">{{ resolveField(rowData, col.field) }}</td>
 
-                </tr>
-            </ng-template>
-        </p-table>
 
         <p-table [value]="customers3" rowGroupMode="subheader" groupRowsBy="representative.name" sortField="representative.name" sortMode="single" (onSort)="onSort()" responsiveLayout="scroll" [scrollable]="true" scrollHeight="400px">
             <ng-template pTemplate="header">
