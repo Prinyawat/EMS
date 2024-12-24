@@ -13,6 +13,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 
 
@@ -31,6 +32,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         ConfirmPopupModule,
         InputGroupModule,
         InputGroupAddonModule,
+        BreadcrumbModule,
     ],
         declarations: [CheckingComponent]
 })

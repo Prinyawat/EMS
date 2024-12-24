@@ -1,12 +1,17 @@
 import { Component} from '@angular/core';
 import * as L from 'leaflet';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
     providers: [ConfirmationService, MessageService]
 })
 export class CheckingComponent {
+
+    breadcrumbItems: MenuItem[] = [];
+
+    menuItems: MenuItem[] = [];
+
     valRadio: string = 'CheckIn';
 
     display: boolean = false;
@@ -16,7 +21,10 @@ constructor(private confirmationService: ConfirmationService,
     private messageService: MessageService){}
 
     ngOnInit(): void {
-
+        this.breadcrumbItems = [];
+        this.breadcrumbItems.push({ label: 'Check Information' });
+        this.breadcrumbItems.push({ label: 'Checking' });
+        this.breadcrumbItems.push({ label: 'Check Form' });
         // พิกัดเริ่มต้นของแผนที่
         this.map = L.map('map').setView([18.7953, 98.9989], 13); // พิกัดของเชียงใหม่ (latitude, longitude)
 

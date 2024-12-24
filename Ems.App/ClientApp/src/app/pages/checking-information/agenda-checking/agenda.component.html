@@ -1,82 +1,102 @@
-<div class="col-12">
-    <div class="card">
-        <p-toolbar styleClass="mb-4">
-            <h5>User Agenda</h5>
-            <ng-template pTemplate="right">
+<div class="grid p-fluid">
 
-                <p-dialog header="Table Data" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '80vw'}" [breakpoints]="{'960px': '75vw'}">
+    <div class="col-12 ">
+        <div class="card card-w-title">
+            <p-breadcrumb [model]="breadcrumbItems" [home]="{icon: 'pi pi-home'}"></p-breadcrumb>
+        </div>
+    </div>
 
-                    <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll" rowGroupMode="subheader" groupRowsBy="representative.name">
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns">{{ col.header }}</th>
-                            </tr>
+    <div class="col-12 md:col-12">
+        <div class="card col-12">
+            <p-toolbar styleClass="mb-4">
+                <h5>User Agenda</h5>
+                <ng-template pTemplate="right">
+
+                    <p-dialog header="Table Data" [(visible)]="display" [modal]="true" showEffect="fade"
+                        [style]="{width: '80vw'}" [breakpoints]="{'960px': '75vw'}">
+
+                        <p-table #dt [value]="customers3" [columns]="cols" dataKey="id" responsiveLayout="scroll"
+                            rowGroupMode="subheader" groupRowsBy="representative.name">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns">{{ col.header }}</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+                                <!-- Row Group Header -->
+                                <tr *ngIf="rowGroupMetadata[rowData.representative.name]?.index === rowIndex"
+                                    class="row-group-header">
+                                    <td colspan="columns.length" class="font-bold">
+                                        {{ rowData.representative.name }}
+                                    </td>
+                                </tr>
+                                <!-- Row Data -->
+                                <tr>
+                                    <td *ngFor="let col of cols">
+                                        {{ resolveField(rowData, col.field) }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <ng-template pTemplate="footer">
+                            <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                                class="p-button-outlined"></button>
                         </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                            <!-- Row Group Header -->
-                            <tr *ngIf="rowGroupMetadata[rowData.representative.name]?.index === rowIndex" class="row-group-header">
-                                <td colspan="columns.length" class="font-bold">
-                                    {{ rowData.representative.name }}
-                                </td>
-                            </tr>
-                            <!-- Row Data -->
-                            <tr>
-                                <td *ngFor="let col of cols">
-                                    {{ resolveField(rowData, col.field) }}
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
 
-                    <ng-template pTemplate="footer">
-                            <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
-                    </ng-template>
+                    </p-dialog>
 
-                </p-dialog>
-
-                <button (click)="display=true" pButton icon="pi pi-external-link" label="Export Data" style="margin-right: 10px"></button>
-                <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help" (click)="dt.exportCSV()"></button>
-            </ng-template>
-        </p-toolbar>
+                    <button (click)="display=true" pButton icon="pi pi-external-link" label="Example"
+                        style="margin-right: 10px"></button>
+                    <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
 
 
 
-        <p-table [value]="customers3" rowGroupMode="subheader" groupRowsBy="representative.name" sortField="representative.name" sortMode="single" (onSort)="onSort()" responsiveLayout="scroll" [scrollable]="true" scrollHeight="400px">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Name</th>
-					<th>Country</th>
-					<th>Company</th>
-					<th>Date</th>
-					<th>Status</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
-                <tr pRowGroupHeader *ngIf="rowGroupMetadata[customer.representative.name].index === rowIndex">
-                    <td colspan="5" style="min-width: 200px;">
-                        <img [alt]="customer.representative.name" src="assets/demo/images/avatar/{{customer.representative.image}}" width="32" style="vertical-align: middle" />
-                        <span class="font-bold ml-2">{{customer.representative.name}}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="min-width: 200px;">
-                        {{customer.name}}
-                    </td>
-                    <td style="min-width: 200px;">
-                        <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" width="30">
-                        <span class="image-text" style="margin-left: .5em">{{customer.country.name}}</span>
-                    </td>
-                    <td style="min-width: 200px;">
-                        {{customer.company}}
-                    </td>
-                    <td style="min-width: 150px;">
-                        {{customer.date}}
-                    </td>
-                    <td style="min-width: 200px;">
-                        <span [class]="'customer-badge status-' + customer.status">{{customer.status}}</span>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+            <p-table [value]="customers3" rowGroupMode="subheader" groupRowsBy="representative.name"
+                sortField="representative.name" sortMode="single" (onSort)="onSort()" responsiveLayout="scroll"
+                [scrollable]="true" scrollHeight="400px">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>Company</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+                    <tr pRowGroupHeader *ngIf="rowGroupMetadata[customer.representative.name].index === rowIndex">
+                        <td colspan="5" style="min-width: 200px;">
+                            <img [alt]="customer.representative.name"
+                                src="assets/demo/images/avatar/{{customer.representative.image}}" width="32"
+                                style="vertical-align: middle" />
+                            <span class="font-bold ml-2">{{customer.representative.name}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="min-width: 200px;">
+                            {{customer.name}}
+                        </td>
+                        <td style="min-width: 200px;">
+                            <img src="assets/demo/images/flag/flag_placeholder.png"
+                                [class]="'flag flag-' + customer.country.code" width="30">
+                            <span class="image-text" style="margin-left: .5em">{{customer.country.name}}</span>
+                        </td>
+                        <td style="min-width: 200px;">
+                            {{customer.company}}
+                        </td>
+                        <td style="min-width: 150px;">
+                            {{customer.date}}
+                        </td>
+                        <td style="min-width: 200px;">
+                            <span [class]="'customer-badge status-' + customer.status">{{customer.status}}</span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
     </div>
 </div>

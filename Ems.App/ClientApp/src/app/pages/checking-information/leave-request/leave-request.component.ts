@@ -10,6 +10,11 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
     providers: [MessageService, ConfirmationService, ProductService, LayoutService]
 })
 export class LeaveRequestComponent {
+
+    breadcrumbItems: MenuItem[] = [];
+
+    menuItems: MenuItem[] = [];
+
     uploadedFiles: any[] = [];
 
     items!: MenuItem[];
@@ -55,7 +60,12 @@ export class LeaveRequestComponent {
         });
     }
 
-    gOnInit() {
+    ngOnInit() {
+        this.breadcrumbItems = [];
+        this.breadcrumbItems.push({ label: 'Check Information' });
+        this.breadcrumbItems.push({ label: 'Checking' });
+        this.breadcrumbItems.push({ label: 'Leave Request' });
+
         this.initChart();
         this.productService.getProductsSmall().then(data => this.products = data);
 

@@ -9,6 +9,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { MenuModule } from 'primeng/menu';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import { MenuModule } from 'primeng/menu';
         ConfirmPopupModule,
         ToastModule,
         MenuModule,
+        BreadcrumbModule,
 
     ],
         declarations: [LeaveRequestComponent]

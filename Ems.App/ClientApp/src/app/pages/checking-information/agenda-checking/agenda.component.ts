@@ -1,4 +1,5 @@
 import { Component} from '@angular/core';
+import { MenuItem } from 'primeng/api';
 import { Customer, Representative } from 'src/app/demo/api/customer';
 import { CustomerService } from 'src/app/demo/service/customer.service';
 import { ProductService } from 'src/app/demo/service/product.service';
@@ -8,7 +9,12 @@ import { ProductService } from 'src/app/demo/service/product.service';
     providers: [CustomerService, ProductService]
 })
 export class AgendaComponent {
+    breadcrumbItems: MenuItem[] = [];
+
+    menuItems: MenuItem[] = [];
+
     rowGroupMetadata: any;
+
     representatives: Representative[] = [];
 
     statuses: any[] = [];
@@ -33,6 +39,11 @@ export class AgendaComponent {
     constructor(private customerService: CustomerService, private productService: ProductService) { }
 
     ngOnInit() {
+        this.breadcrumbItems = [];
+        this.breadcrumbItems.push({ label: 'Check Information' });
+        this.breadcrumbItems.push({ label: 'Checking' });
+        this.breadcrumbItems.push({ label: 'User Agenda' });
+
         this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
 
         this.representatives = [

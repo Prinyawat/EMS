@@ -7,6 +7,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { DialogModule } from 'primeng/dialog';
         ButtonModule,
         FileUploadModule,
         DialogModule,
+        BreadcrumbModule,
 
     ],
         declarations: [AgendaComponent]
