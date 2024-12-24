@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-course',
+  selector: 'app-course-open',
   templateUrl: './course-open.component.html',
   styleUrls:['./course-open.component.scss'],
   providers: [MessageService]
@@ -56,7 +56,7 @@ export class CourseOpenComponent implements OnInit{
   ngOnInit() {
   this.breadcrumbItems = [];
           this.breadcrumbItems.push({ label: 'Course'});
-          this.breadcrumbItems.push({ label: 'วันที่เปิดเรียน', styleClass: 'custom-register'});
+          this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
   }
 
   

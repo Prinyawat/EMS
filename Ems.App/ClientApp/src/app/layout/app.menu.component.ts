@@ -27,10 +27,10 @@ export class AppMenuComponent implements OnInit {
             //     ]
             // },
             {
-                label: 'Cause',
+                label: 'Course',
                 items: [
                     {
-                        label: 'Cause', icon: 'pi pi-book',
+                        label: 'Course', icon: 'pi pi-book',
                         items:[
                             {label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register']},
                             {
@@ -41,7 +41,7 @@ export class AppMenuComponent implements OnInit {
 
                                 ]
                             },
-                            {label: 'วันเปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open']}
+                            {label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open']}
                         ]
                     }
                 ]

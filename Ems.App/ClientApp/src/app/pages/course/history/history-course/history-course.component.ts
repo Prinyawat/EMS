@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-registration-history-course',
+  selector: 'app-history-course',
   templateUrl: './history-course.component.html',
   styleUrls:['./history-course.component.scss'],
   providers: [MessageService]

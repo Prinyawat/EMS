@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-course',
+  selector: 'app-course-register',
   templateUrl: './course.component.html',
   styleUrls:['./course-register.component.scss'],
   providers: [MessageService]
