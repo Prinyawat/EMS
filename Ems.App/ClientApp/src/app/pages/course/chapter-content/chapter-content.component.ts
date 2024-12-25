@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { course } from '../mock-course';
+
+@Component({
+  selector: 'app-chapter-content',
+  templateUrl: './chapter-content.component.html',
+  // styleUrls: ['./chapter-content.component.scss'],
+})
+export class ChapterContentComponent implements OnInit {
+  course: any;
+  chapter: any;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    const courseId = Number(this.route.snapshot.params['courseId']);
+    const chapterId = Number(this.route.snapshot.params['chapterId']);
+    this.course = course.find((c) => c.id === courseId);
+    this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
+  }
+  
+}

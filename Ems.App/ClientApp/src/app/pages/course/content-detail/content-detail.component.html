@@ -1,0 +1,12 @@
+<p-breadcrumb [model]="[
+    {label: 'Home', routerLink: '/'},
+    {label: 'Course'}, 
+    {label: course?.title, routerLink: '/course/course-open/' + course?.id},
+    {label: chapter?.title, routerLink: '/course/course-open/' + course?.id + '/' + chapter?.id},
+    {label: content?.title}
+]"></p-breadcrumb>
+<h2>{{ content?.title }}</h2>
+<p>{{ content?.body }}</p>
+<button pButton pRipple type="button" label="Back" class="p-button-text" [routerLink]="['/course/course-open/' + course?.id + '/' + chapter?.id]"></button>
+
+

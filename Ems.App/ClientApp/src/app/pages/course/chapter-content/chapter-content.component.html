@@ -1,0 +1,10 @@
+<p-breadcrumb [model]="[{label: 'Home', routerLink: '/'}, {label: 'Course'}, {label: course?.title, routerLink: '/course/course-open/' + course?.id}, {label: chapter?.title}]"></p-breadcrumb>
+<h2>{{ chapter?.title }}</h2>
+
+<ul>
+  <li *ngFor="let content of chapter?.contents">
+    <a [routerLink]="[content.id]">{{ content.title }}</a>
+  </li>
+</ul>
+<button pButton pRipple type="button" label="Back" class="p-button-text" [routerLink]="['/course/course-open', course.id]"></button>
+
