@@ -50,7 +50,7 @@ constructor(private confirmationService: ConfirmationService,
           clearInterval(this.interval);
         }
     }
-
+    //
     startClock(): void {
         const now = new Date();
         const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
