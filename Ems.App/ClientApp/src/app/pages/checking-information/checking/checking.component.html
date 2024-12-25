@@ -10,19 +10,8 @@
         <div class="card">
 
             <h5>Check Information</h5>
-            <div class="grid formgrid ">
-                <div class="formgroup-inline">
-                    <div class="field col-12 md:col">
-                        <span class="p-input-icon-left">
-                            <i class="pi pi-user"></i>
-                            <label htmlFor="firstname1" class="p-sr-only">Firstname</label>
-                            <input pInputText id="firstname1" type="text" [disabled]="true" placeholder="Firstname" />
-                        </span>
-                    </div>
-                    <div class="field col-12 md:col">
-                        <label htmlFor="lastname1" class="p-sr-only">Lastname</label>
-                        <input pInputText id="lastname1" type="text" placeholder="Lastname" [disabled]="true" />
-                    </div>
+            <div class="grid formgrid justify-content-center">
+                <div class="formgroup-inline ">
                     <div class="field col-12 md:col">
                         <p-inputGroup>
                             <p-inputGroupAddon>
@@ -43,8 +32,26 @@
                 </div>
             </div>
 
-            <div class="grid formgrid col justify-content-center">
-                <p-calendar [showIcon]="true" inputId="icon"></p-calendar>
+            <div class="grid formgrid col-12 justify-content-center ml-2 md-2">
+                <div class="formgroup-inline justify-content-center">
+                    <button pButton pRipple type="button" icon="pi pi-calendar" class="p-button-rounded p-button-warning p-button-outlined justify-content-center gap-2"> {{currentDateTime}} </button>
+                </div>
+            </div>
+
+            <div class="grid formgrid justify-content-center">
+                <div class="formgroup-inline justify-content-center">
+
+                    <div class="field col-12 md:col-3 ml-auto">
+                        <button pButton pRipple type="button" class="p-button-rounded p-button-text justify-content-center ">{{ hours }} Hours</button>
+                    </div>
+                    <div class="field col-12 md:col-3 ml-auto">
+                        <button pButton pRipple type="button" class="p-button-rounded p-button-success p-button-text justify-content-center ">{{ minutes }} Minutes</button>
+                    </div>
+                    <div class="field col-12 md:col-3 ml-auto">
+                        <button pButton pRipple type="button" class="p-button-rounded p-button-info p-button-text justify-content-center align-item-center ">{{ seconds }} Seconds</button>
+                    </div>
+
+                </div>
             </div>
 
             <div class="grid formgrid mt-3 justify-content-center">

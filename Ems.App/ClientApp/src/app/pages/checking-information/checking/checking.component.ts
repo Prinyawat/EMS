@@ -8,6 +8,16 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 })
 export class CheckingComponent {
 
+    currentDateTime: string = '';
+
+    hours: string = '00';
+
+    minutes: string = '00';
+
+    seconds: string = '00';
+
+    private interval: any;
+
     breadcrumbItems: MenuItem[] = [];
 
     menuItems: MenuItem[] = [];
@@ -17,6 +27,10 @@ export class CheckingComponent {
     display: boolean = false;
 
     private map!: L.Map;
+
+    private marker: L.Marker | null = null;
+
+    private circle: L.Circle | null = null;
 constructor(private confirmationService: ConfirmationService,
     private messageService: MessageService){}
 
@@ -27,10 +41,40 @@ constructor(private confirmationService: ConfirmationService,
         this.breadcrumbItems.push({ label: 'Check Form' });
 
         this.initializeMap();
-        this.getCurrentLocation();
+        this.displaySpecificLocation();
+        this.startClock();
       }
 
-      initializeMap() {
+    ngOnDestroy(): void {
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+    }
+
+    startClock(): void {
+        const now = new Date();
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        const day = dayNames[now.getDay()]; // Day
+        const date = now.getDate(); // Date
+        const month = monthNames[now.getMonth()]; // Month
+        const year = now.getFullYear();
+
+        this.interval = setInterval(() => {
+          const now = new Date();
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+
+          this.currentDateTime = `${day} ${date} ${month} ${year}`;
+          this.hours = hours;
+          this.minutes = minutes;
+          this.seconds = seconds;
+        }, 1000);
+    }
+
+    initializeMap() {
 
         this.map = L.map('map').setView([18.7953, 98.9989], 13); // พิกัดของเชียงใหม่
 
@@ -39,42 +83,32 @@ constructor(private confirmationService: ConfirmationService,
         }).addTo(this.map);
       }
 
-      async getCurrentLocation() {
-        try {
-            // ตรวจสอบสิทธิ์การเข้าถึง GPS
-            const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+      async displaySpecificLocation() {
+        const latitude = 18.740493;
+        const longitude = 98.940390;
 
-            if (permissionStatus.state === 'granted') {
-                // สิทธิ์ได้รับอนุญาตแล้ว
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const { latitude, longitude } = position.coords;
-                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-                    this.addMarker(latitude, longitude);  // สร้าง marker ที่ตำแหน่งที่ได้รับ
-                }, (error) => {
-                    console.error('Error getting location:', error);
-                });
+        if (this.marker) this.map.removeLayer(this.marker);
+        if (this.circle) this.map.removeLayer(this.circle);
 
-            } else if (permissionStatus.state === 'prompt') {
-                // สิทธิ์ยังไม่ได้รับอนุญาต แสดงให้ผู้ใช้อนุญาต
-                alert('กรุณาอนุญาตให้ใช้ตำแหน่งของคุณ');
-                // เมื่อต้องการให้ขออนุญาต GPS ต้องเรียก getCurrentPosition เพื่อแสดงกล่องขออนุญาต
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const { latitude, longitude } = position.coords;
-                    this.addMarker(latitude, longitude);
-                });
-            } else {
-                // สิทธิ์ถูกบล็อกหรือไม่อนุญาต
-                alert('ไม่อนุญาตให้ใช้ตำแหน่งของคุณ');
-            }
-        } catch (error) {
-            alert('เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
-        }
-    }
+        this.marker = L.circleMarker([latitude, longitude], {
+            color: 'blue',
+            fillColor: '#0000ff',
+            fillOpacity: 0.8,
+            radius: 10
+        }).addTo(this.map);
+        this.marker.bindPopup(`<b>ตำแหน่งที่กำหนด</b><br>
+                               <b>Latitude:</b> ${latitude}<br>
+                               <b>Longitude:</b> ${longitude}`).openPopup();
 
-    addMarker(latitude: number, longitude: number) {
-        // สร้าง Marker และเพิ่มลงในแผนที่
-        const marker = L.marker([latitude, longitude]).addTo(this.map);
-        marker.bindPopup("<b>คุณอยู่ที่นี่</b>").openPopup();
+        this.circle = L.circle([latitude, longitude], {
+            color: 'blue',
+            fillColor: '#add8e6',
+            fillOpacity: 0.5,
+            radius: 100
+        }).addTo(this.map);
+
+        this.map.setView([latitude, longitude], 20);
+
     }
 
       confirm2(event: Event) {
