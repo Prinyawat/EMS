@@ -7,6 +7,15 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
     imports: [
         RouterModule.forRoot([
             {
+                path: '', redirectTo: 'auth/login', pathMatch: 'full'
+            },
+            {
+                path: 'auth',
+                children: [
+                    { path: 'login', loadChildren: () => import('./demo/components/auth/login/login.module').then(m => m.LoginModule) },
+                ]
+            },
+            {
                 path: '', component: AppLayoutComponent,
                 children: [
                     { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
@@ -15,16 +24,17 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
+                    { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
                     { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CourseModule) },
-                    { path: 'checkinginformation', loadChildren: () => import('./pages/checking-information/checking-information.module').then(m => m.CheckingInformationModule) }
+                    { path: 'checkinginformation', loadChildren: () => import('./pages/checking-information/checking-information.module').then(m => m.CheckingInformationModule) },
                 ]
             },
-            { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
+            // { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
             { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'notfound', component: NotfoundComponent },
             { path: '**', redirectTo: '/notfound' },
         ],
-        { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
+            { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
     ],
     exports: [RouterModule]
 })
