@@ -6,5 +6,8 @@
     <a [routerLink]="[content.id]">{{ content.title }}</a>
   </li>
 </ul>
-<button pButton pRipple type="button" label="Back" class="p-button-text" [routerLink]="['/course/course-open', course.id]"></button>
 
+<div class="navigation-container">
+  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course.id]"></button>
+  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].id]"></button>
+</div>

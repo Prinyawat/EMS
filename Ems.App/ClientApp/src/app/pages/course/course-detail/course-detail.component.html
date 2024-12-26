@@ -4,24 +4,29 @@
 <p>{{ course?.description }}</p>
 
 <h2>Chapters</h2>
-<table class="p-datatable">
-  <thead>
+<p-table [value]="course?.chapters" styleClass="p-datatable-gridlines custom-table" responsiveLayout="scroll">
+  <ng-template pTemplate="header">
     <tr>
       <th>ตอนที่</th>
-      <th>เนื้อหา</th>
-      <th>เอกสาร</th>
+      <th class="text-center">หัวข้อ</th>
+      <th class="text-center">เอกสาร</th>
     </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let chapter of course?.chapters; let i = index">
+  </ng-template>
+  <ng-template pTemplate="body" let-chapter let-i="rowIndex">
+    <tr>
       <td>{{ i + 1 }}</td>
       <td>{{ chapter.title }}</td>
-      <td>
-        <!-- <button pButton label="อ่าน" [routerLink]="[chapter.id]"></button> -->
+      <td class="text-center">
         <button pButton pRipple type="button" label="อ่าน" class="p-button-text" [routerLink]="[chapter.id]"></button>
       </td>
     </tr>
-  </tbody>
-</table>
+  </ng-template>
+</p-table>
+
+
+<div class="navigation-container">
+  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].id]"></button>
+</div>
+
 
 

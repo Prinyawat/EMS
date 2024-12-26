@@ -5,7 +5,7 @@ import { course } from '../mock-course';
 @Component({
   selector: 'app-chapter-content',
   templateUrl: './chapter-content.component.html',
-  // styleUrls: ['./chapter-content.component.scss'],
+  styleUrls: ['./chapter-content.component.scss']
 })
 export class ChapterContentComponent implements OnInit {
   course: any;

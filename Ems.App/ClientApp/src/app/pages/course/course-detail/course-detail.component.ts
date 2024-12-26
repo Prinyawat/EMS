@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { course } from '../mock-course';
 
 @Component({
   selector: 'app-course-detail',
   templateUrl: './course-detail.component.html',
-  // styleUrls: ['./course-detail.component.scss'],
+  styleUrls: ['./course-detail.component.scss'],
 })
 export class CourseDetailComponent implements OnInit {
   course: any;

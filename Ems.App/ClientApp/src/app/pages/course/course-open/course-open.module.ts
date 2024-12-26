@@ -11,6 +11,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { CourseDetailComponent } from '../course-detail/course-detail.component';
 import { ChapterContentComponent } from '../chapter-content/chapter-content.component';
 import { ContentDetailComponent } from '../content-detail/content-detail.component';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { ContentDetailComponent } from '../content-detail/content-detail.compone
     DialogModule,
     ButtonModule,
     ToastModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    TableModule
   ],
   declarations: [
     CourseOpenComponent,
