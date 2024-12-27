@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { course } from '../mock-course';
+import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -10,11 +10,14 @@ import { course } from '../mock-course';
 export class CourseDetailComponent implements OnInit {
   course: any;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private courseService: CourseService
+  ) {}
 
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.params['courseId']); 
-    this.course = course.find((c) => c.id === courseId);
+    this.course =  this.courseService.getCourses().find((c) => c.id === courseId);
   }
   
 }

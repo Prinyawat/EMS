@@ -1,4 +1,4 @@
-export const course = [
+export const Course = [
   {
     id: 1,
     title: 'angular',

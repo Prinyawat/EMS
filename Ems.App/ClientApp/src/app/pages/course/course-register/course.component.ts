@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { course } from '../mock-course';
+import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
   selector: 'app-course-register',
@@ -13,27 +13,29 @@ export class CourseComponent implements OnInit{
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
-  course = course;
   filteredCourses = [];
 
   constructor(
-    private messageService: MessageService
+    private messageService: MessageService,
+    private courseService: CourseService
   ){}
 
   ngOnInit() {
   this.breadcrumbItems = [];
-    this.breadcrumbItems.push({ label: 'Course'});
-    this.breadcrumbItems.push({ label: 'ลงทะเบียน', styleClass: 'custom-register'});
+  this.breadcrumbItems.push({ label: 'Course'});
+  this.breadcrumbItems.push({ label: 'ลงทะเบียน', styleClass: 'custom-register'});
 
-    this.filteredCourses = this.course.filter((c) => c.status !== 'เสร็จสิ้น');
+  this.filteredCourses = this.courseService
+    .getCourses()
+    .filter((c) => c.status !== 'เสร็จสิ้น');
   }
 
   showSuccessViaToast(courseId: number) {
     console.log('ลงทะเบียนคอร์ส:', courseId);
-    const course = this.filteredCourses.find(c => c.id === courseId);
-    if (course) {
-      course.status = 'ลงทะเบียนแล้ว';
-    }
+    this.courseService.registerCourse(courseId); 
+    this.filteredCourses = this.courseService
+      .getCourses()
+      .filter((c) => c.status !== 'เสร็จสิ้น'); 
     this.messageService.add({ key: 'tst', severity: 'success', summary: 'ลงทะเบียนสำเร็จ', detail: 'คุณได้ลงทะเบียนอบรบเรียนเสร็จสิ้น' });
   }
   

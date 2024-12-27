@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { course } from '../../mock-course';
+import { CourseService } from 'src/app/shared/services/course.service';
+
 
 @Component({
   selector: 'app-history-course',
@@ -12,21 +13,20 @@ export class HistoryCourseComponent {
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
-  course = course;
   filteredCourses: any[] = [];
 
   constructor(
+    private courseService: CourseService
   ){}
     
 
   ngOnInit() {
     this.breadcrumbItems = [];
-      this.breadcrumbItems.push({ label: 'Course'});
-      this.breadcrumbItems.push({ label: 'ประวัติ'});
-      this.breadcrumbItems.push({ label: 'ประวัติการเรียน/อบรบ', styleClass: 'custom-register'});
+    this.breadcrumbItems.push({ label: 'Course'});
+    this.breadcrumbItems.push({ label: 'ประวัติ'});
+    this.breadcrumbItems.push({ label: 'ประวัติการเรียน/อบรบ', styleClass: 'custom-register'});
 
-    const allowedIds = [2]; 
-    this.filteredCourses = this.course.filter((c) => allowedIds.includes(c.id));
+    this.filteredCourses = this.courseService.getCompletedCourses();
     }
 
 }

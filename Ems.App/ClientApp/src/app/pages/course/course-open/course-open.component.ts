@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { course } from '../mock-course';
+import { CourseService } from 'src/app/shared/services/course.service';
+
 
 @Component({
   selector: 'app-course-open',
@@ -13,20 +14,19 @@ export class CourseOpenComponent implements OnInit{
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
-  course = course;
+  
   filteredCourses: any[] = [];
 
   constructor(
-
+    private courseService: CourseService
   ){}
 
   ngOnInit():void {
     this.breadcrumbItems = [];
-      this.breadcrumbItems.push({ label: 'Course'});
-      this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
+    this.breadcrumbItems.push({ label: 'Course'});
+    this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
 
-    const allowedIds = [1,3]; 
-    this.filteredCourses = this.course.filter((c) => allowedIds.includes(c.id));
+    this.filteredCourses = this.courseService.getRegisteredCourses();
   }
 
   
