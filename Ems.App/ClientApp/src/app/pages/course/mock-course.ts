@@ -98,7 +98,7 @@ export const Course = [
     openTime: '10:00',
     closeTime: '16:00',
     display: false,
-    status: '', 
+    status: '',
     chapters: [
       {
         id: 1,

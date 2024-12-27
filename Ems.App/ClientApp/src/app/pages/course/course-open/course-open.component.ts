@@ -10,8 +10,8 @@ import { CourseService } from 'src/app/shared/services/course.service';
   providers: []
 
 })
-export class CourseOpenComponent implements OnInit{ 
-  
+export class CourseOpenComponent implements OnInit{
+
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   
