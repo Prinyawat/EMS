@@ -8,4 +8,4 @@ import { RouterModule } from '@angular/router';
     ])],
     exports: [RouterModule]
 })
-export class CauseRoutingModule { }
+export class CourseRoutingModule { }
