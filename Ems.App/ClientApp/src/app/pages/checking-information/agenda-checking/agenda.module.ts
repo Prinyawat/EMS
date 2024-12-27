@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         FileUploadModule,
         DialogModule,
         BreadcrumbModule,
-
+        InputTextModule,
+        ToastModule,
     ],
         declarations: [AgendaComponent]
 })

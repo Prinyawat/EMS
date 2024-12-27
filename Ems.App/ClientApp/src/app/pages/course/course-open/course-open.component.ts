@@ -9,8 +9,8 @@ import { course } from '../mock-course';
   providers: []
 
 })
-export class CourseOpenComponent implements OnInit{ 
-  
+export class CourseOpenComponent implements OnInit{
+
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   course = course;
