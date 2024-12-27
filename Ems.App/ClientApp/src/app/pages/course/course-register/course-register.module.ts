@@ -7,6 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
     DialogModule,
     ButtonModule,
     ToastModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    TagModule
   ],
   declarations: [CourseComponent,]
 })

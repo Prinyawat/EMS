@@ -14,6 +14,8 @@ export class CourseOpenComponent implements OnInit{
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   course = course;
+  filteredCourses: any[] = [];
+
   constructor(
 
   ){}
@@ -22,7 +24,10 @@ export class CourseOpenComponent implements OnInit{
     this.breadcrumbItems = [];
       this.breadcrumbItems.push({ label: 'Course'});
       this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
+
+    const allowedIds = [1,3]; 
+    this.filteredCourses = this.course.filter((c) => allowedIds.includes(c.id));
   }
 
-
+  
 }
