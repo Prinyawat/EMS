@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 
 @Component({
@@ -16,6 +17,8 @@ export class AgendaComponent {
     loading: boolean = true;
 
     customeragenda = customeragenda;
+
+    @ViewChild('filter') filter!: ElementRef;
 
     // @ViewChild('filter') filter!: ElementRef;
 
@@ -41,4 +44,13 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'Checking' });
         this.breadcrumbItems.push({ label: 'User Agenda' });
     }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
+    clear(table: Table) {
+            table.clear();
+            this.filter.nativeElement.value = '';
+        }
 }

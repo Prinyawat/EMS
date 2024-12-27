@@ -8,7 +8,7 @@ export const customeragenda = [
     checkin: '8:58',
     checkout: '17:30',
     date: new Date(2024,11,23),
-    status: 'None'
+    status: 'None',
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const customeragenda = [
     days: 'Wednesday',
     checkin: '8:40',
     checkout: '17:30',
-    date: new Date(2024,11,24),
+    date: new Date(2024,11,25),
     status: 'None'
   },
   {
@@ -34,7 +34,7 @@ export const customeragenda = [
     days: 'Thursday',
     checkin: '8:30',
     checkout: '18:00',
-    date: new Date(2024,11,25),
+    date: new Date(2024,11,26),
     status: 'None'
   },
   {
@@ -43,7 +43,7 @@ export const customeragenda = [
     days: 'Friday',
     checkin: '8:15',
     checkout: '17:30',
-    date: new Date(2024,11,26),
+    date: new Date(2024,11,27),
     status: 'None'
   },
 
