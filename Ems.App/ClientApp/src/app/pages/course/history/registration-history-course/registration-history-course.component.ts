@@ -13,7 +13,8 @@ export class RegistrationHistoryCourseComponent {
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   course = course;
-  filteredCourses: any[] = [];  
+  filteredCourses: any[] = [];
+    
   constructor(
     private messageService: MessageService,
   ){}

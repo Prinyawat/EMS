@@ -88,4 +88,34 @@ export const course = [
       },
     ],
   },
+  {
+    id: 4,
+    title: 'Java',
+    subtitle: 'คอร์สเรียนรู้พื้นฐาน การใช้ภาษา Java',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    openDate: new Date(2024, 2, 10),
+    closeDate: new Date(2024, 2, 15),
+    openTime: '10:00',
+    closeTime: '16:00',
+    display: false,
+    status: '', 
+    chapters: [
+      {
+        id: 1,
+        title: 'Introduction to Java',
+        contents: [
+          { id: 1, title: 'Java Basics', body: 'Learn the syntax and basic concepts of Java programming.' },
+          { id: 2, title: 'Object-Oriented Programming', body: 'Understand OOP concepts in Java, including classes and inheritance.' },
+        ],
+      },
+      {
+        id: 2,
+        title: 'Java Developer Tools',
+        contents: [
+          { id: 1, title: 'Setting Up Your Environment', body: 'Learn to set up the Java development environment.' },
+          { id: 2, title: 'Using IDEs for Java', body: 'Explore the most popular IDEs for Java development, such as IntelliJ and Eclipse.' },
+        ],
+      },
+    ],
+  },
 ];
