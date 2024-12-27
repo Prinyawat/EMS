@@ -1,12 +1,13 @@
 import { Component} from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { Customer, Representative } from 'src/app/demo/api/customer';
-import { CustomerService } from 'src/app/demo/service/customer.service';
+import { Representative } from 'src/app/demo/api/customer';
 import { ProductService } from 'src/app/demo/service/product.service';
+import { AgendaService } from '../agenda.service';
+import { CheckCustomer } from '../check-customers';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
-    providers: [CustomerService, ProductService]
+    providers: [AgendaService, ProductService]
 })
 export class AgendaComponent {
     breadcrumbItems: MenuItem[] = [];
@@ -19,8 +20,7 @@ export class AgendaComponent {
 
     statuses: any[] = [];
 
-
-    customers3: Customer[] = [];
+    customers3: CheckCustomer[] = [];
 
     // ChatGPT Helper ควรกลับมาศึกษาจุดนี้ col -> resolvefiled
     cols = [
@@ -36,7 +36,7 @@ export class AgendaComponent {
         return field.split('.').reduce((obj, key) => (obj ? obj[key] : null), data);
     }
 
-    constructor(private customerService: CustomerService, private productService: ProductService) { }
+    constructor(private AgendaService: AgendaService, private productService: ProductService) { }
 
     ngOnInit() {
         this.breadcrumbItems = [];
@@ -44,7 +44,7 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'Checking' });
         this.breadcrumbItems.push({ label: 'User Agenda' });
 
-        this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
+        this.AgendaService.getCustomersAgendar().then(customers => this.customers3 = customers);
 
         this.representatives = [
             { name: 'Amy Elsner', image: 'amyelsner.png' },
@@ -61,7 +61,7 @@ export class AgendaComponent {
 
         this.statuses = [
             { label: 'Unqualified', value: 'unqualified' },
-            { label: 'Qualified', value: 'qualified' },
+            { label: 'Approve', value: 'Approve' },
             { label: 'New', value: 'new' },
             { label: 'Negotiation', value: 'negotiation' },
             { label: 'Renewal', value: 'renewal' },
