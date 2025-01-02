@@ -35,4 +35,28 @@ export class CourseService {
     getCompletedCourses() {
         return this.course.filter((c) => c.status === 'เสร็จสิ้น');
     }
+
+    getCurrentQuestion(courseId: number, questionIndex: number) {
+        const course = this.course.find((c) => c.id === courseId);
+        return course?.questions[questionIndex];
+    }
+
+    
+    getNextQuestion(courseId: number, currentQuestionIndex: number) {
+        const course = this.course.find((c) => c.id === courseId);
+        if (course && currentQuestionIndex < course.questions.length - 1) {
+        return course.questions[currentQuestionIndex + 1];
+        }
+        return null;
+    }
+
+    getPreviousQuestion(courseId: number, currentQuestionIndex: number) {
+        const course = this.course.find((c) => c.id === courseId);
+        if (course && currentQuestionIndex > 0) {
+        return course.questions[currentQuestionIndex - 1];
+        }
+        return null;
+    }
+
+    
 }

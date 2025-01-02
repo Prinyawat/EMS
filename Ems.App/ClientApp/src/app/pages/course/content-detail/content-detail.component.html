@@ -3,10 +3,15 @@
     {label: 'Course'}, 
     {label: course?.title, routerLink: '/course/course-open/' + course?.id},
     {label: chapter?.title, routerLink: '/course/course-open/' + course?.id + '/' + chapter?.id},
-    {label: content?.title}
-]"></p-breadcrumb>
+    {label: content?.title}]">
+</p-breadcrumb>
+
 <h2>{{ content?.title }}</h2>
 <p>{{ content?.body }}</p>
-<button pButton pRipple type="button" label="Back" class="p-button-text" [routerLink]="['/course/course-open/' + course?.id + '/' + chapter?.id]"></button>
+
+<div class="navigation-container">
+    <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.id + '/' + chapter?.id]"></button>
+</div>
+
 
 

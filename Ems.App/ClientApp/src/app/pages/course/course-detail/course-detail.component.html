@@ -1,5 +1,9 @@
 <p-breadcrumb [model]="[{label: 'Home', routerLink: '/home'}, {label: 'Course'}, {label: course?.title}]"></p-breadcrumb>
-<h1>{{ course?.title }}</h1>
+
+<h1 class="p-d-flex p-ai-center">
+  {{ course?.title }}
+  <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']"></button>
+</h1>
 <h3>{{ course?.subtitle }}</h3>
 <p>{{ course?.description }}</p>
 

@@ -1,0 +1,27 @@
+<p-breadcrumb 
+  [model]="[
+    {label: 'Home', routerLink: '/home'},
+    {label: 'Course', routerLink: '/course'},
+    {label: course?.title, routerLink: '/course/course-open/' + course?.id},
+    {label: 'Quiz', routerLink: '/course/course-open/' + course?.id + '/quiz'},
+    {label: 'Question ' + (currentQuestionIndex + 1)}
+  ]">
+</p-breadcrumb>
+
+<h2>{{ currentQuestion.question }}</h2>
+<div *ngIf="currentQuestion">
+  <ul>
+    <li *ngFor="let option of currentQuestion.options">
+        <label>
+            <input type="radio" name="option" [value]="option.id" (change)="onOptionSelect(option.id)" />
+            {{ option.text }}
+        </label>
+    </li>
+  </ul>
+</div>
+
+<div class="navigation-container">
+    <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" (click)="previousQuestion()"></button>
+    <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" (click)="nextQuestion()"></button>
+</div>
+

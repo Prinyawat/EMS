@@ -5,7 +5,7 @@ import { CourseService } from 'src/app/shared/services/course.service';
 @Component({
   selector: 'app-content-detail',
   templateUrl: './content-detail.component.html',
-  // styleUrls: ['./content-detail.component.scss'],
+  styleUrls: ['./content-detail.component.scss'],
 })
 export class ContentDetailComponent implements OnInit {
   course: any;

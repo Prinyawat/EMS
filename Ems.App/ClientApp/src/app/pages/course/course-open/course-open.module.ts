@@ -12,6 +12,7 @@ import { CourseDetailComponent } from '../course-detail/course-detail.component'
 import { ChapterContentComponent } from '../chapter-content/chapter-content.component';
 import { ContentDetailComponent } from '../content-detail/content-detail.component';
 import { TableModule } from 'primeng/table';
+import { QuizComponent } from '../quiz/quiz.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { TableModule } from 'primeng/table';
     CourseOpenComponent,
     CourseDetailComponent,
     ChapterContentComponent,
-    ContentDetailComponent
+    ContentDetailComponent,
+    QuizComponent
   ]
 })
 export class CourseOpenModule {}
