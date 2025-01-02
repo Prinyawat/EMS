@@ -1,5 +1,3 @@
-import { timestamp } from "rxjs";
-
 export const customeragenda = [
   {
     id: 1,
@@ -17,7 +15,7 @@ export const customeragenda = [
     checkin: '8:40',
     checkout: '17:30',
     date: new Date(2024,11,24),
-    status: 'None'
+    status: 'WorkFromHome'
   },
   {
     id: 3,
@@ -26,7 +24,7 @@ export const customeragenda = [
     checkin: '8:40',
     checkout: '17:30',
     date: new Date(2024,11,25),
-    status: 'None'
+    status: 'WorkIn'
   },
   {
     id: 4,
@@ -35,7 +33,7 @@ export const customeragenda = [
     checkin: '8:30',
     checkout: '18:00',
     date: new Date(2024,11,26),
-    status: 'None'
+    status: 'WorkIn'
   },
   {
     id: 5,
@@ -44,7 +42,7 @@ export const customeragenda = [
     checkin: '8:15',
     checkout: '17:30',
     date: new Date(2024,11,27),
-    status: 'None'
+    status: 'LeaveRequest'
   },
 
 ];

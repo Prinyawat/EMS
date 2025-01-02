@@ -10,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
         BreadcrumbModule,
         InputTextModule,
         ToastModule,
+        DropdownModule,
     ],
         declarations: [AgendaComponent]
 })

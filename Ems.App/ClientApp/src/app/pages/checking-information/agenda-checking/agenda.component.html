@@ -12,10 +12,8 @@
 
                 <h5>User Agenda</h5>
                 <ng-template pTemplate="right">
-                    <button (click)="display=true" pButton icon="pi pi-external-link" label="Example"
-                        style="margin-right: 10px"></button>
-                    <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help"
-                        (click)="dt.exportCSV()"></button>
+                    <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help" (click)="exportExcel()" pTooltip="XLS" tooltipPosition="bottom"></button>
+
                 </ng-template>
 
             </p-toolbar>
@@ -39,36 +37,51 @@
 					</div>
 
 				</ng-template>
-				<ng-template pTemplate="header" >
+				<ng-template pTemplate="header">
 					<tr>
-						<th style="min-width: 12rem">
-							<div class="flex justify-content-between align-items-center">
+						<th style="min-width: 12rem" pSortableColumn="name">
+							<div class="flex justify-content-center ">
 								Name
+                                <p-sortIcon field="name"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 12rem">
-							<div class="flex justify-content-between align-items-center">
+						<th style="min-width: 12rem" pSortableColumn="days">
+							<div class="flex justify-content-center ">
 								Days
+                                <p-sortIcon field="days"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 10rem">
-							<div class="flex justify-content-between align-items-center">
+						<th style="min-width: 10rem" pSortableColumn="checkin">
+							<div class="flex justify-content-center ">
 								Check In
+                                <p-sortIcon field="checkin"></p-sortIcon>
 							</div>
 						</th>
-                        <th style="min-width: 10rem">
-							<div class="flex justify-content-between align-items-center">
+                        <th style="min-width: 10rem" pSortableColumn="checkout">
+							<div class="flex justify-content-center ">
 								Check Out
+                                <p-sortIcon field="checkout"></p-sortIcon>
+							</div>
+						</th>
+						<th style="min-width: 10rem" pSortableColumn="date">
+							<div class="flex justify-content-center ">
+								Date
+                                <p-sortIcon field="date"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 10rem">
-							<div class="flex justify-content-between align-items-center">
-								Date
-							</div>
-						</th>
-						<th style="min-width: 12rem">
-							<div class="flex justify-content-between align-items-center">
+							<div class="flex justify-content-center align-items-center">
 								Status
+                                <p-columnFilter field="status" display="menu">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
+                                            <ng-template let-option pTemplate="item">
+                                                <span [style.background-color]="getStatusColor(option.value)" [style.color]="'white'"
+                                                [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>
 							</div>
 						</th>
 					</tr>
@@ -79,19 +92,22 @@
 							{{agenda.name}}
 						</td>
 						<td>
-							<span class="image-text ml-2">{{agenda.days}}</span>
+							<span>{{agenda.days}}</span>
 						</td>
 						<td>
-							<span class="image-text ml-2">{{agenda.checkin}}</span>
+							<span>{{agenda.checkin}}</span>
 						</td>
 						<td>
-							<span class="image-text ml-2">{{agenda.checkout}}</span>
+							<span>{{agenda.checkout}}</span>
 						</td>
 						<td>
 							{{agenda.date | date: 'dd/MM/yyyy'}}
 						</td>
 						<td>
-							<span class="customer-badge">{{agenda.status}}</span>
+                            <div class="flex justify-content-center align-items-center">
+							    <span [class]="'customer-badge status-' + agenda.status" [style.background-color]="getStatusColor(agenda.status)"
+                                [style.color]="'white'">{{agenda.status}}</span>
+                            </div>
 						</td>
 					</tr>
 				</ng-template>
