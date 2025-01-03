@@ -9,6 +9,8 @@ export const Course = [
     openTime: '09:00',
     closeTime: '17:00',
     status: 'ลงทะเบียนแล้ว',
+    score: null, 
+    passStatus: null, 
     chapters: [
       {
         id: 1,
@@ -97,7 +99,9 @@ export const Course = [
     openTime: '09:00',
     closeTime: '17:00',
     display: false,
-    status: 'เสร็จสิ้น',
+    status: '',
+    score: null, 
+    passStatus: null, 
     chapters: [
       {
         id: 1,
@@ -187,6 +191,8 @@ export const Course = [
     closeTime: '17:00',
     display: false,
     status: 'ลงทะเบียนแล้ว',
+    score: null, 
+    passStatus: null, 
     chapters: [
       {
         id: 1,
@@ -276,6 +282,8 @@ export const Course = [
     closeTime: '16:00',
     display: false,
     status: '',
+    score: null, 
+    passStatus: null,
     chapters: [
       {
         id: 1,

@@ -13,16 +13,22 @@ import { ChapterContentComponent } from '../chapter-content/chapter-content.comp
 import { ContentDetailComponent } from '../content-detail/content-detail.component';
 import { TableModule } from 'primeng/table';
 import { QuizComponent } from '../quiz/quiz.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     CourseOpenRoutingModule,
     DialogModule,
     ButtonModule,
     ToastModule,
     BreadcrumbModule,
-    TableModule
+    TableModule,
+    CheckboxModule,
+    RadioButtonModule
   ],
   declarations: [
     CourseOpenComponent,

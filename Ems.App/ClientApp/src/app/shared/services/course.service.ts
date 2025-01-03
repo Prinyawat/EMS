@@ -14,9 +14,14 @@ export class CourseService {
         return this.course;
     }
 
-    getRegisteredCourses() {
-        return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว');
-    }
+    getCourseById(courseId: number) {
+        return this.course.find((c) => c.id === courseId);
+      }
+
+      getRegisteredCourses() {
+        return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
+      }
+      
 
     registerCourse(courseId: number) {
         const course = this.course.find((c) => c.id === courseId);
@@ -37,26 +42,30 @@ export class CourseService {
     }
 
     getCurrentQuestion(courseId: number, questionIndex: number) {
-        const course = this.course.find((c) => c.id === courseId);
+        const course = this.getCourseById(courseId);
         return course?.questions[questionIndex];
     }
-
     
-    getNextQuestion(courseId: number, currentQuestionIndex: number) {
-        const course = this.course.find((c) => c.id === courseId);
-        if (course && currentQuestionIndex < course.questions.length - 1) {
-        return course.questions[currentQuestionIndex + 1];
+    updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
+        const course = this.getCourseById(courseId);
+        if (course && course.questions[questionIndex]) {
+          course.questions[questionIndex].selectedOptionId = selectedOptionId;
         }
-        return null;
     }
-
-    getPreviousQuestion(courseId: number, currentQuestionIndex: number) {
-        const course = this.course.find((c) => c.id === courseId);
-        if (course && currentQuestionIndex > 0) {
-        return course.questions[currentQuestionIndex - 1];
-        }
-        return null;
-    }
-
     
-}
+    updateQuizResult(courseId: number, score: number, passStatus: boolean): void {
+        const course = this.getCourseById(courseId);
+        if (course) {
+          course.score = score;
+          course.passStatus = passStatus;
+        }
+    }
+      
+    updateCourseStatus(courseId: number, status: string): void {
+        const course = this.getCourseById(courseId);
+        if (course) {
+          course.status = status;
+        }
+    }
+      
+} 
