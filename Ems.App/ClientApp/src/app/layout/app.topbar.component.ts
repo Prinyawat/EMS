@@ -13,7 +13,7 @@ import { ListDemoComponent } from '../demo/components/uikit/list/listdemo.compon
 })
 export class AppTopBarComponent {
 
-    leaveRequestMessage: string | null = null;
+    leaveRequestMessages: string[] = [];
 
     submittedData: string | null = null;
 
@@ -62,7 +62,7 @@ export class AppTopBarComponent {
             const date = new Date(this.submittedData);  // ถ้า submittedData เป็น string ที่สามารถแปลงได้
             const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 
-            this.leaveRequestMessage = `
+            const message = `
                 <li class="flex align-items-center py-2 border-bottom-1 surface-border">
                     <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
                         <i class="pi pi-user text-xl text-blue-500"></i>
@@ -75,6 +75,7 @@ export class AppTopBarComponent {
                     </span>
                 </li>
             `;
+            this.leaveRequestMessages.push(message);
         }
     }
 

@@ -34,7 +34,11 @@
         <p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
             <ul class="p-0 mx-0 mt-0 mb-4 list-none">
 
-                <div *ngIf="leaveRequestMessage" [innerHTML]="leaveRequestMessage"></div>
+                <!-- <div *ngIf="leaveRequestMessage" [innerHTML]="leaveRequestMessage"></div> -->
+
+                <ng-container *ngFor="let message of leaveRequestMessages">
+                    <div [innerHTML]="message"></div>
+                </ng-container>
 
             </ul>
         </p-dialog>
