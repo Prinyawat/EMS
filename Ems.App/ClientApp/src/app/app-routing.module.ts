@@ -13,6 +13,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                 path: 'account',
                 children: [
                     { path: 'login', loadChildren: () => import('./pages/account/login/login.module').then(m => m.LoginModule) },
+                    { path: 'register', loadChildren: () => import('./pages/account/register/register.module').then(m => m.RegisterModule) },
                 ]
             },
             // {
