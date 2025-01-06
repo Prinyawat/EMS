@@ -16,6 +16,7 @@ import { QuizComponent } from '../quiz/quiz.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { FormsModule } from '@angular/forms';
     BreadcrumbModule,
     TableModule,
     CheckboxModule,
-    RadioButtonModule
+    RadioButtonModule,
+    TagModule
   ],
   declarations: [
     CourseOpenComponent,

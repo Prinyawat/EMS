@@ -65,7 +65,8 @@ export class QuizComponent implements OnInit {
 
     this.score = correctAnswers;
     this.passStatus = this.score >= Math.ceil(totalQuestions / 2);
-  }
+    this.courseService.updateQuizResult(this.course.id, this.score, this.passStatus);
+  }  
 
   resetQuiz(): void {
     this.currentQuestionIndex = 0;

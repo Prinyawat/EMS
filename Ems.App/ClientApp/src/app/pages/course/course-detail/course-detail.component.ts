@@ -9,6 +9,7 @@ import { CourseService } from 'src/app/shared/services/course.service';
 })
 export class CourseDetailComponent implements OnInit {
   course: any;
+  showResultDialog: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -16,8 +17,10 @@ export class CourseDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // const courseId = Number(this.route.snapshot.params['courseId']); 
+    // this.course =  this.courseService.getCourses().find((c) => c.id === courseId);
     const courseId = Number(this.route.snapshot.params['courseId']); 
-    this.course =  this.courseService.getCourses().find((c) => c.id === courseId);
+    this.course = this.courseService.getCourseById(courseId);
   }
   
 }

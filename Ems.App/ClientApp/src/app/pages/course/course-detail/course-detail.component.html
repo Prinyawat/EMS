@@ -2,7 +2,13 @@
 
 <h1 class="p-d-flex p-ai-center">
   {{ course?.title }}
-  <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']"></button>
+  <!-- <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']"></button> -->
+  <ng-container *ngIf="course?.status === 'เสร็จสิ้น'; else quizButton">
+    <button pButton pRipple type="button" label="ดูผลลัพธ์" class="p-button-outlined" (click)="showResultDialog = true"></button>
+  </ng-container>
+  <ng-template #quizButton>
+    <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']" [disabled]="course?.status === 'เสร็จสิ้น'"></button>
+  </ng-template>
 </h1>
 <h3>{{ course?.subtitle }}</h3>
 <p>{{ course?.description }}</p>
@@ -27,6 +33,14 @@
   </ng-template>
 </p-table>
 
+<p-dialog [(visible)]="showResultDialog" header="ผลการทดสอบ"
+  showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+  <p>คะแนนของคุณ: {{ course?.score }}/{{ course?.questions.length }}</p>
+  <p>สถานะ: {{ course?.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}</p>
+  <ng-template pTemplate="footer">
+    <button pButton label="ปิด" icon="pi pi-times" class="p-button-outlined" (click)="showResultDialog = false"></button>
+  </ng-template>
+</p-dialog>
 
 <div class="navigation-container">
   <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].id]"></button>
