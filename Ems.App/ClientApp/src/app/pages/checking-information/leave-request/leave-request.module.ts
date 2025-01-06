@@ -10,6 +10,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { MenuModule } from 'primeng/menu';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         ToastModule,
         MenuModule,
         BreadcrumbModule,
+        FormsModule,
 
     ],
         declarations: [LeaveRequestComponent]

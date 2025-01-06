@@ -3,8 +3,6 @@ import { MenuItem } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
-import * as jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
 @Component({
     selector: 'app-agenda',

@@ -1,4 +1,5 @@
-import { Component} from '@angular/core';
+import { CheckingService } from './../../../shared/services/checking.service';
+import { Component, ViewChild} from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { debounceTime, Subscription } from 'rxjs';
 import { Product } from 'src/app/demo/api/product';
@@ -27,10 +28,14 @@ export class LeaveRequestComponent {
 
     subscription!: Subscription;
 
+    selectedDate: Date | null = null;
+
     constructor(private productService: ProductService,
         public layoutService: LayoutService,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService) {
+        private messageService: MessageService,
+        private checkingService: CheckingService
+        ) {
                 this.subscription = this.layoutService.configUpdate$
                         .pipe(debounceTime(25))
                         .subscribe((config) => {
@@ -46,18 +51,53 @@ export class LeaveRequestComponent {
     }
 
     confirm2(event: Event) {
+        if (!this.selectedDate) {
+            // console.log('No date selected');
+            this.showWarnViaToast();
+            return;
+        }
+        const formattedDate = this.formatDate(this.selectedDate);
+
         this.confirmationService.confirm({
             key: 'confirm2',
-            target: event.target || new EventTarget,
+            target: event.target || new EventTarget(),
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+                // console.log('Selected Date:', this.selectedDate);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Data has been submitted successfully.'
+                  });
+
+                  this.checkingService.saveData(this.selectedDate)
             },
             reject: () => {
-                this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+                // console.log('User rejected');
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Cancelled',
+                    detail: 'Data submission has been cancelled.'
+                  });
             }
         });
+    }
+
+    showWarnViaToast(): void {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Please select a date before proceeding.'
+        });
+      }
+
+    formatDate(date: Date): string {
+        const utcDate = new Date(date).toISOString(); // แปลงวันที่เป็น UTC
+        const year = utcDate.substring(0, 4); // ปี
+        const month = utcDate.substring(5, 7); // เดือน
+        const day = utcDate.substring(8, 10); // วัน
+        return `${year}-${month}-${day}`; // แสดงแค่วัน เดือน ปี
     }
 
     ngOnInit() {

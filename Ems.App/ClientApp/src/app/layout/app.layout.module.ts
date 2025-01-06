@@ -18,6 +18,10 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { MenuModule } from 'primeng/menu';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     declarations: [
@@ -41,7 +45,11 @@ import { MenuModule } from 'primeng/menu';
         RippleModule,
         RouterModule,
         AppConfigModule,
-        MenuModule
+        MenuModule,
+        ConfirmPopupModule,
+        ToastModule,
+        ButtonModule,
+        DialogModule,
     ],
     exports: [AppLayoutComponent]
 })

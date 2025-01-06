@@ -13,7 +13,7 @@
         <i class="pi pi-ellipsis-v"></i>
     </button>
 
-    <div #topbarmenu class="layout-topbar-menu"
+    <div #topbarmenu class="layout-topbar-menu align-items-center"
         [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
         <!-- <button class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
@@ -27,6 +27,17 @@
             <i class="pi pi-cog"></i>
             <span>Settings</span>
         </button> -->
+
+        <i class="pi pi-bell mr-2 p-text-secondary" pBadge style="font-size: 1.5rem"
+        (click)="showPositionDialog('top-right')" label="TopRight"></i>
+
+        <p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+            <ul class="p-0 mx-0 mt-0 mb-4 list-none">
+
+                <div *ngIf="leaveRequestMessage" [innerHTML]="leaveRequestMessage"></div>
+
+            </ul>
+        </p-dialog>
 
         <button class="p-link layout-topbar-button" (click)="toggleMenu($event)">
             <i class="pi pi-user"></i>
