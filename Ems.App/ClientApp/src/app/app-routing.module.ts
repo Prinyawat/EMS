@@ -7,14 +7,23 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
     imports: [
         RouterModule.forRoot([
             {
-                path: '', redirectTo: 'auth/login', pathMatch: 'full'
+                path: '', redirectTo: 'account/login', pathMatch: 'full'
             },
             {
-                path: 'auth',
+                path: 'account',
                 children: [
-                    { path: 'login', loadChildren: () => import('./demo/components/auth/login/login.module').then(m => m.LoginModule) },
+                    { path: 'login', loadChildren: () => import('./pages/account/login/login.module').then(m => m.LoginModule) },
                 ]
             },
+            // {
+            //     path: '', redirectTo: 'auth/login', pathMatch: 'full'
+            // },
+            // {
+            //     path: 'auth',
+            //     children: [
+            //         { path: 'login', loadChildren: () => import('./demo/components/auth/login/login.module').then(m => m.LoginModule) },
+            //     ]
+            // },
             {
                 path: '', component: AppLayoutComponent,
                 children: [
