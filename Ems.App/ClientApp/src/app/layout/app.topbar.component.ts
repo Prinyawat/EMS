@@ -88,7 +88,7 @@ export class AppTopBarComponent {
         // Implement logout logic, e.g., clear localStorage and redirect to login
         localStorage.clear();
         // Navigate to login page
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/account/login']);
     }
 
 }
