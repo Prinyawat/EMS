@@ -17,7 +17,7 @@
                             <p-inputGroupAddon>
                                 <i class="pi pi-stopwatch"></i>
                             </p-inputGroupAddon>
-                            <input pInputText type="text" placeholder="Time In" [disabled]="true"/>
+                            <input pInputText type="text" placeholder="Time In" [value]="checkInTime1 || checkInTime2" [disabled]="true"/>
                         </p-inputGroup>
                     </div>
                     <div class="field col-12 md:col mr-auto">
@@ -25,7 +25,7 @@
                             <p-inputGroupAddon>
                                 <i class="pi pi-stopwatch"></i>
                             </p-inputGroupAddon>
-                            <input pInputText type="text" placeholder="Time Out" [disabled]="true" />
+                            <input pInputText type="text" [value]="checkOutTime1 || checkOutTime2" placeholder="Time Out" [disabled]="true" />
                         </p-inputGroup>
                     </div>
 

@@ -33,6 +33,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         InputGroupModule,
         InputGroupAddonModule,
         BreadcrumbModule,
+
     ],
         declarations: [CheckingComponent]
 })

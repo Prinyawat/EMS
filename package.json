@@ -1,8 +1,13 @@
 {
   "dependencies": {
+    "@zxing/ngx-scanner": "^19.0.0",
     "file-saver": "^2.0.5",
     "jspdf-autotable": "^3.8.4",
     "leaflet": "^1.9.4",
+    "primeicons": "^7.0.0",
+    "primeng": "^19.0.2",
+    "qrcode": "^1.5.4",
+    "twilio": "^5.4.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

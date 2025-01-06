@@ -8,6 +8,13 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 })
 export class CheckingComponent {
 
+    checkInTime1: string | null = null;
+    checkOutTime1: string | null = null;
+    checkInTime2: string | null = null;
+    checkOutTime2: string | null = null;
+    isCheckInDone: boolean = false;  // ติดตามสถานะการเช็คอิน
+    isCheckOutDone: boolean = false;
+
     currentDateTime: string = '';
 
     hours: string = '00';
@@ -33,6 +40,7 @@ export class CheckingComponent {
     private circle: L.Circle | null = null;
 constructor(private confirmationService: ConfirmationService,
     private messageService: MessageService){}
+
 
     ngOnInit(): void {
         this.breadcrumbItems = [];
@@ -118,7 +126,28 @@ constructor(private confirmationService: ConfirmationService,
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+                const now = new Date();
+                if (!this.isCheckInDone) {
+                    // เช็คอินครั้งแรก
+                    this.checkInTime1 = now.toLocaleTimeString('en-GB', { hour12: false });
+                    this.isCheckInDone = true;
+                    this.messageService.add({ severity: 'info', summary: 'Check-In Accepted', detail: `Check-In Time: ${this.checkInTime1}` });
+                } else if (this.isCheckInDone && !this.isCheckOutDone) {
+                    // เช็คเอาท์ครั้งแรก
+                    this.checkOutTime1 = now.toLocaleTimeString('en-GB', { hour12: false });
+                    this.isCheckOutDone = true;
+                    this.messageService.add({ severity: 'info', summary: 'Check-Out Accepted', detail: `Check-Out Time: ${this.checkOutTime1}` });
+                } else if (this.isCheckInDone && this.isCheckOutDone && !this.checkInTime2) {
+                    // เช็คอินครั้งที่ 2
+                    this.checkInTime2 = now.toLocaleTimeString('en-GB', { hour12: false });
+                    this.messageService.add({ severity: 'info', summary: 'Check-In Accepted', detail: `Check-In Time: ${this.checkInTime2}` });
+                } else if (this.checkInTime2 && !this.checkOutTime2) {
+                    // เช็คเอาท์ครั้งที่ 2
+                    this.checkOutTime2 = now.toLocaleTimeString('en-GB', { hour12: false });
+                    this.messageService.add({ severity: 'info', summary: 'Check-Out Accepted', detail: `Check-Out Time: ${this.checkOutTime2}` });
+                }
+
+                // this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
             },
             reject: () => {
                 this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
