@@ -24,7 +24,7 @@ export class HistoryCourseComponent {
     this.breadcrumbItems = [];
     this.breadcrumbItems.push({ label: 'Course'});
     this.breadcrumbItems.push({ label: 'ประวัติ'});
-    this.breadcrumbItems.push({ label: 'ประวัติการเรียน/อบรบ', styleClass: 'custom-register'});
+    this.breadcrumbItems.push({ label: 'ประวัติการเรียน', styleClass: 'custom-register'});
 
     this.filteredCourses = this.courseService.getCompletedCourses();
     }

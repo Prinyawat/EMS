@@ -34,6 +34,20 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenu') menu!: ElementRef;
 
     @ViewChild('profileMenu') profileMenu!: Menu;
+
+    user = {
+        firstname: 'John',
+        lastname: 'Doe',
+        phone: '1234567890',
+        email: 'john_doe@email.com' 
+    };
+
+    dropdownItems = [
+        { name: 'Frontend Developer', code: 'Option 1' },
+        { name: 'Backend Developer', code: 'Option 2' },
+        { name: 'Fullstack Developer', code: 'Option 3' }
+    ];
+
     profileItems = [
         { label: 'Firstname Lastname', icon: 'pi pi-user' },
         {label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true},

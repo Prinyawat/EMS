@@ -40,18 +40,55 @@
     </div>
 </div>
 
-<!-- Edit User -->
-<p-dialog header="Dialog" [(visible)]="edit" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
-    <p class="line-height-3 m-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-        in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
+<!-- Profile Edit -->
+<p-dialog header="Profile Edit" [(visible)]="edit" [modal]="true" showEffect="fade" [style]="{width: '60vw'}" [breakpoints]="{'960px': '80vw'}">
+    <div class="p-fluid p-formgrid grid">
+        <!-- Firstname -->
+        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
+            <label htmlFor="firstname2">Firstname</label>
+            <input pInputText id="firstname2" type="text" placeholder="Enter your firstname" [(ngModel)]="user.firstname"/>
+        </div>
+        <!-- Lastname -->
+        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
+            <label htmlFor="lastname2">Lastname</label>
+            <input pInputText id="lastname2" type="text" placeholder="Enter your lastname" [(ngModel)]="user.lastname"/>
+        </div>
+        <!-- Phone -->
+        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
+            <label htmlFor="phone">Phone</label>
+            <input pInputText id="phone" type="text" placeholder="Enter your phone number" [(ngModel)]="user.phone"/>
+        </div>
+        <!-- Position -->
+        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
+            <label htmlFor="Position">Position</label>
+            <p-dropdown 
+                [options]="dropdownItems" 
+                optionLabel="name" 
+                placeholder="Select a position" 
+                [disabled]="true"
+            ></p-dropdown>
+        </div>
+        <!-- Email -->
+        <div class="field col-12" style="margin-bottom: 1rem;">
+            <label htmlFor="Email">Email</label>
+            <input 
+                pInputText 
+                id="Email" 
+                type="email" 
+                placeholder="Enter your email" 
+                [disabled]="true"
+                [(ngModel)]="user.email"
+            />
+        </div>
+    </div>
     <ng-template pTemplate="footer">
-            <button pButton icon="pi pi-check" (click)="edit=false" label="Ok" class="p-button-outlined"></button>
+        <div class="flex justify-content-end gap-2">
+            <button pButton label="Edit" class="p-button-primary"></button>
+            <button pButton  (click)="edit=false" label="Cancel" class="p-button-outlined"></button>
+        </div>
     </ng-template>
 </p-dialog>
+
 
 <!-- Notifications -->
 <p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">

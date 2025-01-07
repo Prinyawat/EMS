@@ -2,12 +2,19 @@
 
 <h1 class="p-d-flex p-ai-center">
   {{ course?.title }}
-  <!-- <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']"></button> -->
   <ng-container *ngIf="course?.status === 'เสร็จสิ้น'; else quizButton">
-    <button pButton pRipple type="button" label="ดูผลลัพธ์" class="p-button-outlined" (click)="showResultDialog = true"></button>
+    <span class="p-tag p-tag-success ml-3">สถานะ: เสร็จสิ้น</span>
   </ng-container>
   <ng-template #quizButton>
-    <button pButton pRipple type="button" label="แบบทดสอบ" class="p-button-outlined" [routerLink]="['quiz']" [disabled]="course?.status === 'เสร็จสิ้น'"></button>
+    <button
+      pButton
+      pRipple
+      type="button"
+      label="แบบทดสอบ"
+      class="p-button-outlined"
+      [routerLink]="['quiz']"
+      [disabled]="course?.status === 'เสร็จสิ้น'"
+    ></button>
   </ng-template>
 </h1>
 <h3>{{ course?.subtitle }}</h3>
