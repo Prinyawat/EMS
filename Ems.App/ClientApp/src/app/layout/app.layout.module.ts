@@ -22,6 +22,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
     declarations: [
@@ -50,6 +51,7 @@ import { DialogModule } from 'primeng/dialog';
         ToastModule,
         ButtonModule,
         DialogModule,
+        DropdownModule,
     ],
     exports: [AppLayoutComponent]
 })
