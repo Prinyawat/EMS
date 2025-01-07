@@ -57,16 +57,16 @@
             <div class="grid formgrid mt-3 justify-content-center">
                 <div class="col-12 md:col-3 ">
                     <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1">
+                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" [disabled]="isCheckInDone">
                         </p-radioButton>
                         <label for="city1">Check In</label>
                     </div>
                 </div>
                 <div class="col-12 md:col-3 ">
                     <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2">
+                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2" [disabled]="isCheckOutDone">
                         </p-radioButton>
-                        <label for="city2">Check Out</label>
+                        <label for="city2" >Check Out</label>
                     </div>
                 </div>
             </div>

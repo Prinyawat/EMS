@@ -1,12 +1,12 @@
 export const customeragenda = [
   {
     id: 1,
-    name: 'Phuritat Hongjik',
+    name: 'Phanthakit PhanthakitPatamakul',
     days: 'Monday',
     checkin: '8:58',
     checkout: '17:30',
     date: new Date(2024,11,23),
-    status: 'None',
+    status: 'WorkIn',
   },
   {
     id: 2,
@@ -15,34 +15,34 @@ export const customeragenda = [
     checkin: '8:40',
     checkout: '17:30',
     date: new Date(2024,11,24),
-    status: 'WorkFromHome'
+    status: 'WorkIn',
   },
   {
     id: 3,
-    name: 'Sophia Bennett',
+    name: 'Phanthakit PhanthakitPatamakul',
     days: 'Wednesday',
     checkin: '8:40',
     checkout: '17:30',
     date: new Date(2024,11,25),
-    status: 'WorkIn'
+    status: 'WorkIn',
   },
   {
     id: 4,
-    name: 'James Walker',
+    name: 'Phanthakit PhanthakitPatamakul',
     days: 'Thursday',
     checkin: '8:30',
     checkout: '18:00',
     date: new Date(2024,11,26),
-    status: 'WorkIn'
+    status: 'WorkIn',
   },
   {
     id: 5,
-    name: 'Elijah Robinson',
+    name: 'Phanthakit PhanthakitPatamakul',
     days: 'Friday',
     checkin: '8:15',
     checkout: '17:30',
     date: new Date(2024,11,27),
-    status: 'LeaveRequest'
+    status: 'LeaveRequest',
   },
 
 ];

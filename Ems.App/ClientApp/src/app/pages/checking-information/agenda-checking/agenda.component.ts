@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
+import { Representative } from 'src/app/demo/api/customer';
 
 @Component({
     selector: 'app-agenda',
@@ -23,6 +24,11 @@ export class AgendaComponent {
 
     exportColumns: any[];
 
+    representatives: Representative[] = [];
+
+    rowGroupMetadata: any;
+
+
     @ViewChild('filter') filter!: ElementRef;
 
     constructor() { }
@@ -36,9 +42,9 @@ export class AgendaComponent {
         this.cols = [
             { field: 'name', header: 'Name'},
             { field: 'days', header: 'Days' },
+            { field: 'date', header: 'Date' },
             { field: 'checkin', header: 'Check In' },
             { field: 'checkout', header: 'Check Out' },
-            { field: 'date', header: 'Date' },
             { field: 'status', header: 'Status' },
         ];
 

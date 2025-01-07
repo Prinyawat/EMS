@@ -5,19 +5,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class CheckingService {
-    // public submittedData: any = null;
 
-    // saveData(data: any): void {
-    //   this.submittedData = data;
-    //   console.log('Data saved:', this.submittedData);
-    // }
-
-    // getSavedData(): any {
-    //   return this.submittedData;
-    // }
+    sendLeaveRequestDate(date: any): void {
+        console.log('Sending date to service:', date);
+    }
 
     private submittedDataSubject = new BehaviorSubject<any>(null);
-    submittedData$ = this.submittedDataSubject.asObservable(); 
+    submittedData$ = this.submittedDataSubject.asObservable();
 
     saveData(data: any): void {
       this.submittedDataSubject.next(data);

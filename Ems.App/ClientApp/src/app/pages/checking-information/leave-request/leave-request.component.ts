@@ -12,6 +12,8 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 })
 export class LeaveRequestComponent {
 
+    today: Date;
+
     breadcrumbItems: MenuItem[] = [];
 
     menuItems: MenuItem[] = [];
@@ -108,6 +110,8 @@ export class LeaveRequestComponent {
 
         this.initChart();
         this.productService.getProductsSmall().then(data => this.products = data);
+
+        this.today = new Date();
 
         this.items = [
             { label: 'Add New', icon: 'pi pi-fw pi-plus' },

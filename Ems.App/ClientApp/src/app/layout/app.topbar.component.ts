@@ -13,6 +13,8 @@ import { ListDemoComponent } from '../demo/components/uikit/list/listdemo.compon
 })
 export class AppTopBarComponent {
 
+    sendLeaveRequestDate: string;
+
     leaveRequestMessages: string[] = [];
 
     submittedData: string | null = null;
@@ -40,7 +42,9 @@ export class AppTopBarComponent {
     ];
 
     constructor(public layoutService: LayoutService, private router: Router,
-        public checkingService: CheckingService) { }
+        public checkingService: CheckingService,
+
+        ) { }
 
     toggleMenu(event: Event) {
         this.profileMenu.toggle(event); // เรียกใช้ toggle บน p-menu โดยตรง
@@ -63,7 +67,7 @@ export class AppTopBarComponent {
     createLeaveRequestMessage(): void {
         if (this.submittedData) {
 
-            const date = new Date(this.submittedData);  // ถ้า submittedData เป็น string ที่สามารถแปลงได้
+            const date = new Date(this.submittedData);
             const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 
             const message = `
@@ -79,7 +83,17 @@ export class AppTopBarComponent {
                     </span>
                 </li>
             `;
-            this.leaveRequestMessages.push(message);
+
+            const isDuplicate = this.leaveRequestMessages.some(existingMessage => existingMessage === message);
+
+            if (!isDuplicate) {
+                this.leaveRequestMessages.push(message);
+
+                this.checkingService.sendLeaveRequestDate(formattedDate);
+            } else {
+                console.log('ข้อความซ้ำ: ไม่เพิ่มเข้าไปใน leaveRequestMessages');
+            }
+
         }
     }
 

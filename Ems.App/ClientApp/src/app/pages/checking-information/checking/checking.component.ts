@@ -119,10 +119,10 @@ constructor(private confirmationService: ConfirmationService,
 
     }
 
-      confirm2(event: Event) {
+    confirm2(event: Event) {
         this.confirmationService.confirm({
             key: 'confirm2',
-            target: event.target || new EventTarget,
+            target: event.target || new EventTarget(),
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
@@ -146,14 +146,13 @@ constructor(private confirmationService: ConfirmationService,
                     this.checkOutTime2 = now.toLocaleTimeString('en-GB', { hour12: false });
                     this.messageService.add({ severity: 'info', summary: 'Check-Out Accepted', detail: `Check-Out Time: ${this.checkOutTime2}` });
                 }
-
-                // this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
             },
             reject: () => {
                 this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
             }
         });
     }
+
 
 
 }

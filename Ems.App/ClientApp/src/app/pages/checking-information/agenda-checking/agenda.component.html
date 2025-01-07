@@ -19,7 +19,7 @@
             </p-toolbar>
 
 			<p-table #ca1 [value]="customeragenda" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
-            [globalFilterFields]="['country.name','name','days','status']">
+            [globalFilterFields]="['name','days','status']">
 				<ng-template pTemplate="caption">
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
@@ -28,9 +28,9 @@
                          icon="pi pi-filter-slash" (click)="clear(ca1)"></button>
                         </div>
                         <div>
-                            <span class="p-input-icon-left mb-2">
+                            <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(ca1, $event)" placeholder="Search Keyword" class="w-full"/>
+                                <input pInputText type="text" #filter (input)="onGlobalFilter(ca1, $event)" placeholder="Name, Day, Status" class="w-full"/>
                             </span>
                         </div>
 
@@ -45,10 +45,16 @@
                                 <p-sortIcon field="name"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 12rem" pSortableColumn="days">
+						<th style="min-width: 8rem" pSortableColumn="days">
 							<div class="flex justify-content-center ">
 								Days
                                 <p-sortIcon field="days"></p-sortIcon>
+							</div>
+						</th>
+                        <th style="min-width: 10rem" pSortableColumn="date">
+							<div class="flex justify-content-center ">
+								Date
+                                <p-sortIcon field="date"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 10rem" pSortableColumn="checkin">
@@ -61,12 +67,6 @@
 							<div class="flex justify-content-center ">
 								Check Out
                                 <p-sortIcon field="checkout"></p-sortIcon>
-							</div>
-						</th>
-						<th style="min-width: 10rem" pSortableColumn="date">
-							<div class="flex justify-content-center ">
-								Date
-                                <p-sortIcon field="date"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 10rem">
@@ -95,13 +95,15 @@
 							<span>{{agenda.days}}</span>
 						</td>
 						<td>
+                            <div class="flex justify-content-center align-items-center">
+							    <span>{{agenda.date | date: 'dd/MM/yyyy'}}</span>
+                            </div>
+						</td>
+						<td>
 							<span>{{agenda.checkin}}</span>
 						</td>
 						<td>
-							<span>{{agenda.checkout}}</span>
-						</td>
-						<td>
-							{{agenda.date | date: 'dd/MM/yyyy'}}
+							{{agenda.checkout}}
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">

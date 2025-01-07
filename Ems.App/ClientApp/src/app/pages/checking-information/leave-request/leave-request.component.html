@@ -13,7 +13,7 @@
 
             <div class="grid formgrid col justify-content-center">
                 <p-calendar #calendar [showIcon]="true" inputId="icon" [(ngModel)]="selectedDate" dateFormat="dd/mm/yy" class="p-button-warning"
-                placeholder="Selected Date"></p-calendar>
+                placeholder="Selected Date" [minDate]="today"></p-calendar>
                 <div *ngIf="!selectedDate"  class="p-error"  style="font-size: 20px;">*</div>
             </div>
 
