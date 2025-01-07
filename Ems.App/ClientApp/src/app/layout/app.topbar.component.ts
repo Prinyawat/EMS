@@ -21,6 +21,8 @@ export class AppTopBarComponent {
 
     displayPosition: boolean;
 
+    edit: boolean = false;
+
     position: string;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
@@ -31,7 +33,9 @@ export class AppTopBarComponent {
 
     @ViewChild('profileMenu') profileMenu!: Menu;
     profileItems = [
-        { label: 'Hi Firstname Lastname', icon: 'pi pi-user' },
+        { label: 'Firstname Lastname', icon: 'pi pi-user' },
+        {label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true},
+        { separator: true },
         { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
     ];
 

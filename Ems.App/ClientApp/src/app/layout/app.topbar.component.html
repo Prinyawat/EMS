@@ -31,18 +31,6 @@
         <i class="pi pi-bell mr-2 p-text-secondary" pBadge style="font-size: 1.5rem"
         (click)="showPositionDialog('top-right')" label="TopRight"></i>
 
-        <p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
-            <ul class="p-0 mx-0 mt-0 mb-4 list-none">
-
-                <!-- <div *ngIf="leaveRequestMessage" [innerHTML]="leaveRequestMessage"></div> -->
-
-                <ng-container *ngFor="let message of leaveRequestMessages">
-                    <div [innerHTML]="message"></div>
-                </ng-container>
-
-            </ul>
-        </p-dialog>
-
         <button class="p-link layout-topbar-button" (click)="toggleMenu($event)">
             <i class="pi pi-user"></i>
             <span>Profile</span>
@@ -50,3 +38,29 @@
         <p-menu #profileMenu [popup]="true" [model]="profileItems"></p-menu>
     </div>
 </div>
+
+<!-- Edit User -->
+<p-dialog header="Dialog" [(visible)]="edit" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+    <p class="line-height-3 m-0">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+        in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <ng-template pTemplate="footer">
+            <button pButton icon="pi pi-check" (click)="edit=false" label="Ok" class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- Notifications -->
+<p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+    <ul class="p-0 mx-0 mt-0 mb-4 list-none">
+
+        <!-- <div *ngIf="leaveRequestMessage" [innerHTML]="leaveRequestMessage"></div> -->
+
+        <ng-container *ngFor="let message of leaveRequestMessages">
+            <div [innerHTML]="message"></div>
+        </ng-container>
+
+    </ul>
+</p-dialog>
