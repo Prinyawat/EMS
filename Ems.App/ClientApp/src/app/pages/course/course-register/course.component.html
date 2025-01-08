@@ -22,14 +22,15 @@
                     <strong>วันที่ปิด:</strong> {{ course.closeDate | date:'dd/MM/yyyy' }} เวลา: {{ course.closeTime }}
                 </p>
                 <ng-template pTemplate="footer">
-                    <button type="button" pButton [disabled]="course.status === 'ลงทะเบียนแล้ว'" (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
+                    <button *ngIf="course.status !== 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
                     <button pButton icon="pi pi-check" (click)="course.display = false" label="ปิด" class="p-button-outlined"></button>
                 </ng-template>
             </p-dialog>
             <div class="grid">
                 <div class="col-12">
                     <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2"></button>
-                    <button type="button" pButton [disabled]="course.status === 'ลงทะเบียนแล้ว'" (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
+                    <button *ngIf="course.status !== 'ลงทะเบียนแล้ว'" type="button" pButton  (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
+                    <button *ngIf="course.status === 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกลงทะเบียน" class="p-button-danger"></button>
                 </div>
             </div> 
         </div>
