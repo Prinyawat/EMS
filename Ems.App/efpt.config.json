@@ -15,7 +15,43 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "public.StatusColors",
+         "Name": "ems.check_in_out",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.course",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.leave_request",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.position",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.quiz",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.registration",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.status",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_agenda",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_quiz",
          "ObjectType": 0
       }
    ],
@@ -24,6 +60,7 @@
    "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
    "UseDateOnlyTimeOnly": true,
    "UseDbContextSplitting": false,
    "UseDecimalDataAnnotationForSprocResult": true,
@@ -42,5 +79,6 @@
    "UseSchemaFolders": false,
    "UseSchemaNamespaces": false,
    "UseSpatial": false,
-   "UseT4": false
+   "UseT4": false,
+   "UseT4Split": false
 }
