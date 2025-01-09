@@ -8,7 +8,7 @@ export const Course = [
     closeDate: new Date(2024, 0, 20),
     openTime: '09:00',
     closeTime: '17:00',
-    status: 'ลงทะเบียนแล้ว',
+    status: '',
     score: null, 
     passStatus: null, 
     chapters: [
@@ -190,7 +190,7 @@ export const Course = [
     openTime: '09:00',
     closeTime: '17:00',
     display: false,
-    status: 'ลงทะเบียนแล้ว',
+    status: '',
     score: null, 
     passStatus: null, 
     chapters: [
