@@ -49,9 +49,9 @@ export class AgendaComponent {
         ];
 
         this.statuses = [
-            {label: 'None', value: 'none'},
+            // {label: 'None', value: 'none'},
             {label: 'LeaveRequest', value: 'leaverequest'},
-            {label: 'WorkFromHome', value: 'workfromhome'},
+            // {label: 'WorkFromHome', value: 'workfromhome'},
             {label: 'WorkIn', value: 'workin'}
         ]
 
