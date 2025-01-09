@@ -2,5 +2,6 @@
 {
     public class ExampleModel
     {
+        string a;
     }
 }
