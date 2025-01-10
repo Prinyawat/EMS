@@ -100,12 +100,10 @@ public partial class EmsContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_date");
             entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.EndDate)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("end_date");
-            entity.Property(e => e.StartDate)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("start_date");
+            entity.Property(e => e.EndDate).HasColumnName("end_date");
+            entity.Property(e => e.EndTime).HasColumnName("end_time");
+            entity.Property(e => e.StartDate).HasColumnName("start_date");
+            entity.Property(e => e.StartTime).HasColumnName("start_time");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(100)
                 .HasColumnName("updated_by");
@@ -189,10 +187,7 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.QuizId)
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("quiz_id");
-            entity.Property(e => e.CorrectAnswer)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasColumnName("correct_answer");
+            entity.Property(e => e.CorrectAnswer).HasColumnName("correct_answer");
             entity.Property(e => e.CourseId).HasColumnName("course_id");
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(100)
@@ -203,6 +198,7 @@ public partial class EmsContext : DbContext
                 .HasColumnName("created_date");
             entity.Property(e => e.Options)
                 .IsRequired()
+                .HasColumnType("jsonb")
                 .HasColumnName("options");
             entity.Property(e => e.Question)
                 .IsRequired()

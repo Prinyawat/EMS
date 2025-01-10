@@ -15,7 +15,7 @@ public partial class Quiz
 
     public string Options { get; set; }
 
-    public string CorrectAnswer { get; set; }
+    public int CorrectAnswer { get; set; }
 
     public string CreatedBy { get; set; }
 
