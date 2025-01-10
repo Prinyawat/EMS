@@ -39,5 +39,5 @@ public partial class User
 
     public virtual ICollection<UserAgendum> UserAgenda { get; set; } = new List<UserAgendum>();
 
-    public virtual ICollection<UserQuiz> UserQuizzes { get; set; } = new List<UserQuiz>();
+    public virtual ICollection<UserQuestion> UserQuestions { get; set; } = new List<UserQuestion>();
 }

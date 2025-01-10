@@ -5,19 +5,15 @@ using System.Collections.Generic;
 
 namespace Ems.App.Entities;
 
-public partial class Registration
+public partial class Question
 {
-    public Guid RegistrationId { get; set; }
-
-    public Guid UserId { get; set; }
+    public Guid QuestionId { get; set; }
 
     public Guid CourseId { get; set; }
 
-    public Guid StatusId { get; set; }
+    public string QuestionText { get; set; }
 
-    public int? Score { get; set; }
-
-    public bool? PassStatus { get; set; }
+    public int CorrectAnswer { get; set; }
 
     public string CreatedBy { get; set; }
 
@@ -29,7 +25,7 @@ public partial class Registration
 
     public virtual Course Course { get; set; }
 
-    public virtual Status Status { get; set; }
+    public virtual ICollection<Option> Options { get; set; } = new List<Option>();
 
-    public virtual User User { get; set; }
+    public virtual ICollection<UserQuestion> UserQuestions { get; set; } = new List<UserQuestion>();
 }

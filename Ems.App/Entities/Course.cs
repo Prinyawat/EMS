@@ -11,11 +11,17 @@ public partial class Course
 
     public string CourseName { get; set; }
 
+    public string Subtitle { get; set; }
+
     public string Description { get; set; }
 
     public DateOnly StartDate { get; set; }
 
     public DateOnly EndDate { get; set; }
+
+    public TimeOnly StartTime { get; set; }
+
+    public TimeOnly EndTime { get; set; }
 
     public string CreatedBy { get; set; }
 
@@ -25,11 +31,9 @@ public partial class Course
 
     public DateTime? UpdatedDate { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 
-    public TimeOnly EndTime { get; set; }
-
-    public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+    public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
 
     public virtual ICollection<Registration> Registrations { get; set; } = new List<Registration>();
 }

@@ -13,15 +13,21 @@ public partial class EmsContext : DbContext
     {
     }
 
+    public virtual DbSet<Chapter> Chapters { get; set; }
+
+    public virtual DbSet<ChapterContent> ChapterContents { get; set; }
+
     public virtual DbSet<CheckInOut> CheckInOuts { get; set; }
 
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<LeaveRequest> LeaveRequests { get; set; }
 
+    public virtual DbSet<Option> Options { get; set; }
+
     public virtual DbSet<Position> Positions { get; set; }
 
-    public virtual DbSet<Quiz> Quizzes { get; set; }
+    public virtual DbSet<Question> Questions { get; set; }
 
     public virtual DbSet<Registration> Registrations { get; set; }
 
@@ -31,13 +37,89 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<UserAgendum> UserAgenda { get; set; }
 
-    public virtual DbSet<UserQuiz> UserQuizzes { get; set; }
+    public virtual DbSet<UserQuestion> UserQuestions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .HasPostgresEnum("lang", new[] { "th", "en" })
             .HasPostgresExtension("uuid-ossp");
+
+        modelBuilder.Entity<Chapter>(entity =>
+        {
+            entity.HasKey(e => e.ChapterId).HasName("chapter_pkey");
+
+            entity.ToTable("chapter", "ems");
+
+            entity.Property(e => e.ChapterId)
+                .HasDefaultValueSql("uuid_generate_v4()")
+                .HasColumnName("chapter_id");
+            entity.Property(e => e.ChapterTitle)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasColumnName("chapter_title");
+            entity.Property(e => e.CourseId).HasColumnName("course_id");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("created_by");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_date");
+            entity.Property(e => e.UpdatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("updated_by");
+            entity.Property(e => e.UpdatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_date");
+
+            entity.HasOne(d => d.Course).WithMany(p => p.Chapters)
+                .HasForeignKey(d => d.CourseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_course");
+        });
+
+        modelBuilder.Entity<ChapterContent>(entity =>
+        {
+            entity.HasKey(e => e.ContentId).HasName("chapter_content_pkey");
+
+            entity.ToTable("chapter_content", "ems");
+
+            entity.Property(e => e.ContentId)
+                .HasDefaultValueSql("uuid_generate_v4()")
+                .HasColumnName("content_id");
+            entity.Property(e => e.ChapterId).HasColumnName("chapter_id");
+            entity.Property(e => e.ContentBody)
+                .IsRequired()
+                .HasColumnName("content_body");
+            entity.Property(e => e.ContentTitle)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasColumnName("content_title");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("created_by");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_date");
+            entity.Property(e => e.Read)
+                .HasDefaultValue(false)
+                .HasColumnName("read");
+            entity.Property(e => e.UpdatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("updated_by");
+            entity.Property(e => e.UpdatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_date");
+
+            entity.HasOne(d => d.Chapter).WithMany(p => p.ChapterContents)
+                .HasForeignKey(d => d.ChapterId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_chapter");
+        });
 
         modelBuilder.Entity<CheckInOut>(entity =>
         {
@@ -104,6 +186,10 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.EndTime).HasColumnName("end_time");
             entity.Property(e => e.StartDate).HasColumnName("start_date");
             entity.Property(e => e.StartTime).HasColumnName("start_time");
+            entity.Property(e => e.Subtitle)
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnName("subtitle");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(100)
                 .HasColumnName("updated_by");
@@ -149,6 +235,40 @@ public partial class EmsContext : DbContext
                 .HasConstraintName("leave_request_user_id_fkey");
         });
 
+        modelBuilder.Entity<Option>(entity =>
+        {
+            entity.HasKey(e => e.OptionId).HasName("option_pkey");
+
+            entity.ToTable("option", "ems");
+
+            entity.Property(e => e.OptionId)
+                .HasDefaultValueSql("uuid_generate_v4()")
+                .HasColumnName("option_id");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("created_by");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_date");
+            entity.Property(e => e.OptionText)
+                .IsRequired()
+                .HasColumnName("option_text");
+            entity.Property(e => e.QuestionId).HasColumnName("question_id");
+            entity.Property(e => e.UpdatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("updated_by");
+            entity.Property(e => e.UpdatedDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_date");
+
+            entity.HasOne(d => d.Question).WithMany(p => p.Options)
+                .HasForeignKey(d => d.QuestionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_question");
+        });
+
         modelBuilder.Entity<Position>(entity =>
         {
             entity.HasKey(e => e.PositionId).HasName("positions_pkey");
@@ -178,15 +298,15 @@ public partial class EmsContext : DbContext
                 .HasColumnName("updated_date");
         });
 
-        modelBuilder.Entity<Quiz>(entity =>
+        modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.QuizId).HasName("quiz_pkey");
+            entity.HasKey(e => e.QuestionId).HasName("question_pkey");
 
-            entity.ToTable("quiz", "ems");
+            entity.ToTable("question", "ems");
 
-            entity.Property(e => e.QuizId)
+            entity.Property(e => e.QuestionId)
                 .HasDefaultValueSql("uuid_generate_v4()")
-                .HasColumnName("quiz_id");
+                .HasColumnName("question_id");
             entity.Property(e => e.CorrectAnswer).HasColumnName("correct_answer");
             entity.Property(e => e.CourseId).HasColumnName("course_id");
             entity.Property(e => e.CreatedBy)
@@ -196,13 +316,9 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_date");
-            entity.Property(e => e.Options)
+            entity.Property(e => e.QuestionText)
                 .IsRequired()
-                .HasColumnType("jsonb")
-                .HasColumnName("options");
-            entity.Property(e => e.Question)
-                .IsRequired()
-                .HasColumnName("question");
+                .HasColumnName("question_text");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(100)
                 .HasColumnName("updated_by");
@@ -211,15 +327,15 @@ public partial class EmsContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_date");
 
-            entity.HasOne(d => d.Course).WithMany(p => p.Quizzes)
+            entity.HasOne(d => d.Course).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_quiz_course");
+                .HasConstraintName("fk_course");
         });
 
         modelBuilder.Entity<Registration>(entity =>
         {
-            entity.HasKey(e => e.RegistrationId).HasName("registrations_pkey");
+            entity.HasKey(e => e.RegistrationId).HasName("registration_pkey");
 
             entity.ToTable("registration", "ems");
 
@@ -234,10 +350,8 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_date");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("registration_date");
+            entity.Property(e => e.PassStatus).HasColumnName("pass_status");
+            entity.Property(e => e.Score).HasColumnName("score");
             entity.Property(e => e.StatusId).HasColumnName("status_id");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(100)
@@ -251,17 +365,17 @@ public partial class EmsContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.Registrations)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_registrations_course");
+                .HasConstraintName("fk_course");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Registrations)
                 .HasForeignKey(d => d.StatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_registrations_status");
+                .HasConstraintName("fk_status");
 
             entity.HasOne(d => d.User).WithMany(p => p.Registrations)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_registrations_user");
+                .HasConstraintName("fk_user");
         });
 
         modelBuilder.Entity<Status>(entity =>
@@ -269,6 +383,8 @@ public partial class EmsContext : DbContext
             entity.HasKey(e => e.StatusId).HasName("status_pkey");
 
             entity.ToTable("status", "ems");
+
+            entity.HasIndex(e => e.StatusName, "status_status_name_key").IsUnique();
 
             entity.Property(e => e.StatusId)
                 .HasDefaultValueSql("uuid_generate_v4()")
@@ -388,19 +504,15 @@ public partial class EmsContext : DbContext
                 .HasConstraintName("user_agenda_user_id_fkey");
         });
 
-        modelBuilder.Entity<UserQuiz>(entity =>
+        modelBuilder.Entity<UserQuestion>(entity =>
         {
-            entity.HasKey(e => e.UserQuizId).HasName("user_quiz_pkey");
+            entity.HasKey(e => e.UserQuestionId).HasName("user_question_pkey");
 
-            entity.ToTable("user_quiz", "ems");
+            entity.ToTable("user_question", "ems");
 
-            entity.Property(e => e.UserQuizId)
+            entity.Property(e => e.UserQuestionId)
                 .HasDefaultValueSql("uuid_generate_v4()")
-                .HasColumnName("user_quiz_id");
-            entity.Property(e => e.AttemptDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("attempt_date");
+                .HasColumnName("user_question_id");
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(100)
                 .HasColumnName("created_by");
@@ -408,11 +520,8 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_date");
-            entity.Property(e => e.Passed)
-                .HasDefaultValue(false)
-                .HasColumnName("passed");
-            entity.Property(e => e.QuizId).HasColumnName("quiz_id");
-            entity.Property(e => e.Score).HasColumnName("score");
+            entity.Property(e => e.QuestionId).HasColumnName("question_id");
+            entity.Property(e => e.SelectedOptionId).HasColumnName("selected_option_id");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(100)
                 .HasColumnName("updated_by");
@@ -422,12 +531,16 @@ public partial class EmsContext : DbContext
                 .HasColumnName("updated_date");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Quiz).WithMany(p => p.UserQuizzes)
-                .HasForeignKey(d => d.QuizId)
+            entity.HasOne(d => d.Question).WithMany(p => p.UserQuestions)
+                .HasForeignKey(d => d.QuestionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_quiz");
+                .HasConstraintName("fk_question");
 
-            entity.HasOne(d => d.User).WithMany(p => p.UserQuizzes)
+            entity.HasOne(d => d.SelectedOption).WithMany(p => p.UserQuestions)
+                .HasForeignKey(d => d.SelectedOptionId)
+                .HasConstraintName("fk_option");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserQuestions)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_user");

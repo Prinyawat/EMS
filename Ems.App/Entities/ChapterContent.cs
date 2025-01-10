@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace Ems.App.Entities;
 
-public partial class Quiz
+public partial class ChapterContent
 {
-    public Guid QuizId { get; set; }
+    public Guid ContentId { get; set; }
 
-    public Guid CourseId { get; set; }
+    public Guid ChapterId { get; set; }
 
-    public string Question { get; set; }
+    public string ContentTitle { get; set; }
 
-    public string Options { get; set; }
+    public string ContentBody { get; set; }
 
-    public int CorrectAnswer { get; set; }
+    public bool? Read { get; set; }
 
     public string CreatedBy { get; set; }
 
@@ -25,7 +25,5 @@ public partial class Quiz
 
     public DateTime? UpdatedDate { get; set; }
 
-    public virtual Course Course { get; set; }
-
-    public virtual ICollection<UserQuiz> UserQuizzes { get; set; } = new List<UserQuiz>();
+    public virtual Chapter Chapter { get; set; }
 }
