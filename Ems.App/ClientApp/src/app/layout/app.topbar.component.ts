@@ -1,4 +1,5 @@
-import { CheckingService } from './../shared/services/checking.service';
+import { NotificationService } from './../shared/services/notification.service';
+
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
@@ -57,7 +58,7 @@ export class AppTopBarComponent {
     ];
 
     constructor(public layoutService: LayoutService, private router: Router,
-        public checkingService: CheckingService,
+        public NotificationService: NotificationService,
         private authService: AuthService
 
     ) { }
@@ -72,7 +73,7 @@ export class AppTopBarComponent {
     // }
 
     ngOnInit(): void {
-        this.checkingService.submittedData$.subscribe((data) => {
+        this.NotificationService.submittedData$.subscribe((data) => {
             this.submittedData = data;
             console.log('Retrieved data from service:', this.submittedData);
 
@@ -105,7 +106,7 @@ export class AppTopBarComponent {
             if (!isDuplicate) {
                 this.leaveRequestMessages.push(message);
 
-                this.checkingService.sendLeaveRequestDate(formattedDate);
+                this.NotificationService.sendLeaveRequestDate(formattedDate);
             } else {
                 console.log('ข้อความซ้ำ: ไม่เพิ่มเข้าไปใน leaveRequestMessages');
             }

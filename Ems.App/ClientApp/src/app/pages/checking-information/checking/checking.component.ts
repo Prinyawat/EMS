@@ -1,4 +1,5 @@
 import { CheckingService } from './../../../shared/services/checking.service';
+
 import { Component, Type} from '@angular/core';
 import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
@@ -40,7 +41,7 @@ export class CheckingComponent {
 
     private circle: L.Circle | null = null;
 constructor(private confirmationService: ConfirmationService,
-    private messageService: MessageService,public CheckingService: CheckingService){}
+    private messageService: MessageService,private CheckingService: CheckingService){}
 
 
     ngOnInit(): void {
