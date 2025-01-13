@@ -1,5 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { UserModel } from 'src/app/shared/models/user.modal';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -18,6 +22,31 @@ export class LoginComponent {
     valCheck: string[] = ['remember'];
 
     password!: string;
+    user: UserModel = new UserModel();
+    isError: boolean = false;
+    errorMessage: string = null;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(private authService: AuthService,
+        private router: Router
+    ) { }
+
+    signIn() {
+        console.log('signIn', this.user)
+        this.isError = false;
+        this.authService.signIn(this.user).subscribe((res: UserModel) => {
+            console.log('res', res);
+            sessionStorage.setItem('UserInfo', JSON.stringify(res));
+            this.setTokenStorage(res.token);
+            this.router.navigate(['/home'])
+        }, (error) => {
+            console.log('err', error);
+            this.isError = true;
+        })
+    }
+
+
+    setTokenStorage(token) {
+        sessionStorage.setItem('app.token', token);
+        localStorage.setItem('app.token', token);
+    }
 }
