@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Course } from 'src/app/pages/course/mock-course';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +10,14 @@ export class CourseService {
     private course = Course;
 
     constructor(
+      private http: HttpClient
     ) {}
 
+    env: string = `${environment.apiUrl}/api/Course`;
+
     getCourses() {
-      return this.course;
+      // return this.course;
+      return this.http.get(this.env + "/getCourses");
     }
 
     getCourseById(courseId: number) {

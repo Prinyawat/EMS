@@ -11,7 +11,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
 builder.Services.AddTransient<InterfaceCheckingService, NotificationService>();
 
-
+builder.Services.AddTransient<ICourseService, CourseService>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
