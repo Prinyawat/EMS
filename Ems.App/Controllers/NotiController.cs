@@ -11,9 +11,9 @@ namespace Ems.App.Controllers
     [ApiController]
     public class NotiController : ControllerBase
     {
-        private readonly INotiService _notiService;
+        private readonly InterfaceCheckingService _notiService;
 
-        public NotiController(INotiService notiService)
+        public NotiController(InterfaceCheckingService notiService)
         {
             _notiService = notiService;
         }
