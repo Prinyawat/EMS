@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
 
-
+builder.Services.AddTransient<ICourseService, CourseService>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
