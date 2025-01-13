@@ -18,8 +18,6 @@ namespace Ems.App.Servies
             check_in_out checkinout = new check_in_out()
             {
                 check_dates = DateTime.Parse(date),
-                create_by = "Dev Asia",
-                create_date = DateTime.Now
             };
 
             _emsContext.check_in_out.Add(checkinout);
