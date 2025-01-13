@@ -11,6 +11,7 @@ export class HomeService {
     env: string = `${environment.apiUrl}/api/Home`;
 
     getItems() {
+        console.log(this.env + "/getItems")
         return this.http.get(this.env + "/getItems");
     }
 }

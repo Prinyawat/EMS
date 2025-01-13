@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
+builder.Services.AddTransient<InterfaceCheckingService, NotificationService>();
 
 
 
