@@ -1,8 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Models;
-using Ems.App.Servies;
+﻿using Ems.App.Models;
 using Ems.App.Servies.IServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ems.App.Controllers

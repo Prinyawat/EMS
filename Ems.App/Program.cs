@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Ems.App.Entities;
 using Ems.App.Servies.IServices;
 using Ems.App.Servies;
 using Ems.App;
+using Ems.Data.Entities;
+using Ems.App.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +53,9 @@ if (app.Environment.IsDevelopment())
 //options.WithOrigins("http://localhost:4200")
 //.AllowAnyMethod()
 //.AllowAnyHeader());
+
+app.UseMiddleware<AuthorizationMiddleware>();
+
 app.UseCors("KnownOrigin");
 app.UseRouting();
 app.MapControllers();

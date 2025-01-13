@@ -1,7 +1,7 @@
-﻿using Ems.App.Entities;
-using Ems.App.Enums;
+﻿using Ems.App.Enums;
 using Ems.App.Models;
 using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin.Security.DataHandler.Encoder;
@@ -112,12 +112,12 @@ namespace Ems.App.Servies
         private UserModel GetUser(Guid userId)
         {
 
-            UserModel userData = _emsContext.Users
-                                .Where(x => x.UserId == userId)
+            UserModel userData = _emsContext.user
+                                .Where(x => x.user_id == userId)
                                 .Select(x => new UserModel()
                                 {
-                                    UserId = x.UserId,
-                                    Email = x.Email
+                                    UserId = x.user_id,
+                                    Email = x.email
                                 }).FirstOrDefault();
             return userData;
         }

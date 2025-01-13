@@ -1,5 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Servies.IServices;
+﻿using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 
 namespace Ems.App.Servies
 {
@@ -14,15 +14,15 @@ namespace Ems.App.Servies
 
         public List<string> getItems()
         {
-            int count = _emsContext.Positions.Count();
-            Position position = new Position()
+            int count = _emsContext.position.Count();
+            position position = new position()
             {
-                PositionName = "Dev" + (count + 1),
+                position_name = "Dev" + (count + 1),
             };
-            _emsContext.Positions.Add(position);
+            _emsContext.position.Add(position);
             _emsContext.SaveChanges();
 
-            List<string> strings = _emsContext.Positions.Select(x => x.PositionName).ToList();
+            List<string> strings = _emsContext.position.Select(x => x.position_name).ToList();
 
             return strings;
         }

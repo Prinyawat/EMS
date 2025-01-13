@@ -1,6 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Servies.IServices;
-using Microsoft.EntityFrameworkCore;
+﻿using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 
 namespace Ems.App.Servies
 {
@@ -13,9 +12,9 @@ namespace Ems.App.Servies
             _emsContext = emsContext;
         }
 
-        public List<Course> GetCourses()
+        public List<course> GetCourses()
         {
-            return _emsContext.Courses.ToList();
+            return _emsContext.course.ToList();
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Servies.IServices;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+﻿using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 
 namespace Ems.App.Servies
 {
@@ -15,8 +14,8 @@ namespace Ems.App.Servies
         public List<int> saveChecking(DateTime datetime)
         {
 
-            var sortedByDate = _emsContext.CheckInOuts.OrderBy(co => co.CheckIn).ToList();
-            CheckInOut checkinout = new CheckInOut()
+            var sortedByDate = _emsContext.check_in_out.OrderBy(co => co.check_in).ToList();
+            check_in_out checkinout = new check_in_out()
             {
                 //    CheckDates = DateTime.Parse(date), 
                 //    CreateBy = "Dev Asia",
@@ -30,9 +29,9 @@ namespace Ems.App.Servies
                 //                              .Select(x => x.CheckDates.ToString("yyyy-MM-dd"))
                 //                              .ToList();
                 //return strings;
-               
+
             };
             return new List<int>();
-    }
+        }
     }
 }

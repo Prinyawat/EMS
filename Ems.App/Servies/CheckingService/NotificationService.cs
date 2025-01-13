@@ -1,6 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Servies.IServices;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+﻿using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 
 namespace Ems.App.Servies
 {
@@ -15,19 +14,19 @@ namespace Ems.App.Servies
         public List<string> saveData(string date)
         {
 
-            int count = _emsContext.CheckInOuts.Count();  
-            CheckInOut checkinout = new CheckInOut()
+            int count = _emsContext.check_in_out.Count();
+            check_in_out checkinout = new check_in_out()
             {
-                CheckDates = DateTime.Parse(date), 
-                CreateBy = "Dev Asia",
-                CreateDate = DateTime.Now
+                check_dates = DateTime.Parse(date),
+                create_by = "Dev Asia",
+                create_date = DateTime.Now
             };
 
-            _emsContext.CheckInOuts.Add(checkinout); 
-            _emsContext.SaveChanges();  
+            _emsContext.check_in_out.Add(checkinout);
+            _emsContext.SaveChanges();
 
-            List<string> strings = _emsContext.CheckInOuts
-                                          .Select(x => x.CheckDates.ToString("yyyy-MM-dd"))
+            List<string> strings = _emsContext.check_in_out
+                                          .Select(x => x.check_dates.ToString("yyyy-MM-dd"))
                                           .ToList();
             return strings;
         }

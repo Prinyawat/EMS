@@ -1,7 +1,5 @@
-﻿using Ems.App.Entities;
-using Ems.App.Servies;
-using Ems.App.Servies.IServices;
-using Microsoft.AspNetCore.Http;
+﻿using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ems.App.Controllers
@@ -18,7 +16,7 @@ namespace Ems.App.Controllers
 
         [HttpGet]
         [Route("getCourses")]
-        public List<Course> GetCourses()
+        public List<course> GetCourses()
         {
             return _courseService.GetCourses();
         }

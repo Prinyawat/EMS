@@ -1,0 +1,94 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "EmsContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Ems.Data",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "ems.chapter",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.chapter_content",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.check_in_out",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.course",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.leave_request",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.option",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.position",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.question",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.registration",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.status",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_agenda",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_question",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
