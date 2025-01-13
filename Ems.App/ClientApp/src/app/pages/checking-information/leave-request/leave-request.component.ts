@@ -1,4 +1,5 @@
-import { CheckingService } from './../../../shared/services/checking.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+
 import { Component, ViewChild} from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { debounceTime, Subscription } from 'rxjs';
@@ -36,7 +37,7 @@ export class LeaveRequestComponent {
         public layoutService: LayoutService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private checkingService: CheckingService
+        private NotificationService: NotificationService
         ) {
                 this.subscription = this.layoutService.configUpdate$
                         .pipe(debounceTime(25))
@@ -64,7 +65,7 @@ export class LeaveRequestComponent {
             accept: () => {
                 const formattedDate = this.formatDate(this.selectedDate);
 
-                this.checkingService.saveData(formattedDate).subscribe({
+                this.NotificationService.saveData(formattedDate).subscribe({
                     next: (response) => {
                         this.messageService.add({
                             severity: 'success',

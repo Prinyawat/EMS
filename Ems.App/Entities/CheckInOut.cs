@@ -11,9 +11,9 @@ public partial class CheckInOut
 
     public Guid UserId { get; set; }
 
-    public DateTime CheckIn { get; set; }
+    public DateTime? CheckIn { get; set; }
 
-    public DateTime CheckOut { get; set; }
+    public DateTime? CheckOut { get; set; }
 
     public DateTime CheckDates { get; set; }
 
@@ -23,7 +23,7 @@ public partial class CheckInOut
 
     public string UpdateBy { get; set; }
 
-    public DateTime UpdateDate { get; set; }
+    public DateTime? UpdateDate { get; set; }
 
     public virtual User User { get; set; }
 

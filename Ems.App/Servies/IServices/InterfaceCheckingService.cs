@@ -2,6 +2,6 @@
 {
     public interface InterfaceCheckingService
     {
-        List<int> saveChecking(DateTime dateTime);
+        List<DateTime> saveChecking(DateTime DateTime);
     }
 }

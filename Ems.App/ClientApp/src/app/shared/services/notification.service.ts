@@ -6,13 +6,14 @@ import { environment } from 'src/environments/environment';
 @Injectable({
     providedIn: 'root',
 })
-export class CheckingService {
+export class NotificationService {
     constructor(private http: HttpClient) { }
 
-    env: string = `${environment.apiUrl}/api/Checking`;
-    saveChecking(data: { timestamp: Date }) {
-        const timestamp = data.timestamp.toLocaleTimeString('en-GB', { hour12: false });
-        return this.http.post(this.env + "/saveChecking", timestamp);
+    env: string = `${environment.apiUrl}/api/Noti`;
+
+    // Function เตรียมส่งข้อมูลไป service backend
+    saveData(data: any): Observable<any> {
+        return this.http.post(this.env + "/saveData", { date: data })
     }
 
     //---------------------------------------------------------------------------------------------

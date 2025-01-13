@@ -128,9 +128,10 @@ public partial class EmsContext : DbContext
             entity.ToTable("check_in_out", "ems");
 
             entity.Property(e => e.CheckInoutId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("check_inout_id");
             entity.Property(e => e.CheckDates)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("check_dates");
             entity.Property(e => e.CheckIn)
