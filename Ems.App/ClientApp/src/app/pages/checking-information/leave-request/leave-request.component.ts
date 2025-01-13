@@ -48,52 +48,55 @@ export class LeaveRequestComponent {
         for (const file of event.files) {
             this.uploadedFiles.push(file);
         }
-
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     }
 
     confirm2(event: Event) {
         if (!this.selectedDate) {
-            // console.log('No date selected');
             this.showWarnViaToast();
             return;
         }
-        const formattedDate = this.formatDate(this.selectedDate);
-
         this.confirmationService.confirm({
             key: 'confirm2',
             target: event.target || new EventTarget(),
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                // console.log('Selected Date:', this.selectedDate);
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Data has been submitted successfully.'
-                  });
+                const formattedDate = this.formatDate(this.selectedDate);
 
-                  this.checkingService.saveData(this.selectedDate)
+                this.checkingService.saveData(formattedDate).subscribe({
+                    next: (response) => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'ส่งคำขอสำเร็จแล้ว.',
+                        });
+                    },
+                    error: (err) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'เกิดข้อผิดพลาดในการส่งคำขอ',
+                        });
+                    },
+                });
             },
             reject: () => {
-                // console.log('User rejected');
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Cancelled',
-                    detail: 'Data submission has been cancelled.'
-                  });
             }
         });
+
     }
 
+    // function เช็คการเลือก วันที่
     showWarnViaToast(): void {
         this.messageService.add({
           severity: 'warn',
           summary: 'Warning',
-          detail: 'Please select a date before proceeding.'
+          detail: 'กรุณาเลือกวันที่ต้องการจะส่งคำขอ'
         });
       }
 
+    //function แปลงค่าของวันที่
     formatDate(date: Date): string {
         const utcDate = new Date(date).toISOString(); // แปลงวันที่เป็น UTC
         const year = utcDate.substring(0, 4); // ปี

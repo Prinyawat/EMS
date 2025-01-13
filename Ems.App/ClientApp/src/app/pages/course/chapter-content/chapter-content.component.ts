@@ -17,10 +17,10 @@ export class ChapterContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const courseId = Number(this.route.snapshot.params['courseId']);
-    const chapterId = Number(this.route.snapshot.params['chapterId']);
-    this.course = this.courseService.getCourses().find((c) => c.id === courseId);
-    this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
+    // const courseId = Number(this.route.snapshot.params['courseId']);
+    // const chapterId = Number(this.route.snapshot.params['chapterId']);
+    // this.course = this.courseService.getCourses().find((c) => c.id === courseId);
+    // this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
   }
   
 }
