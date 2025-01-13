@@ -2,13 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using Ems.App.Entities;
 using Ems.App.Servies.IServices;
 using Ems.App.Servies;
+using Ems.App;
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 
 // Add services to the container.
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 
 

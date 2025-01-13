@@ -5,11 +5,12 @@ import { LayoutService } from "./service/app.layout.service";
 import { Router } from '@angular/router';
 import { Menu } from 'primeng/menu';
 import { ListDemoComponent } from '../demo/components/uikit/list/listdemo.component';
+import { AuthService } from '../shared/services/auth.service';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
     providers: [
-      ],
+    ],
 })
 export class AppTopBarComponent {
 
@@ -39,7 +40,7 @@ export class AppTopBarComponent {
         firstname: 'John',
         lastname: 'Doe',
         phone: '1234567890',
-        email: 'john_doe@email.com' 
+        email: 'john_doe@email.com'
     };
 
     dropdownItems = [
@@ -50,15 +51,16 @@ export class AppTopBarComponent {
 
     profileItems = [
         { label: 'Firstname Lastname', icon: 'pi pi-user' },
-        {label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true},
+        { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
         { separator: true },
         { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
     ];
 
     constructor(public layoutService: LayoutService, private router: Router,
         public checkingService: CheckingService,
+        private authService: AuthService
 
-        ) { }
+    ) { }
 
     toggleMenu(event: Event) {
         this.profileMenu.toggle(event); // เรียกใช้ toggle บน p-menu โดยตรง
@@ -75,7 +77,7 @@ export class AppTopBarComponent {
             console.log('Retrieved data from service:', this.submittedData);
 
             this.createLeaveRequestMessage();
-          });
+        });
     }
 
     createLeaveRequestMessage(): void {
@@ -118,10 +120,13 @@ export class AppTopBarComponent {
 
     logout() {
         console.log('Logging out...');
-        // Implement logout logic, e.g., clear localStorage and redirect to login
-        localStorage.clear();
-        // Navigate to login page
-        this.router.navigate(['/account/login']);
+        localStorage.removeItem('app.token');
+        sessionStorage.removeItem('app.token');
+        sessionStorage.removeItem('UserInfo');
+        this.authService.signOut().subscribe(() => {
+            this.router.navigate(['account/login']);
+        });
+
     }
 
 }
