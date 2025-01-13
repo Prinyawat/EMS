@@ -17,13 +17,13 @@ public partial class check_in_out
 
     public DateTime check_dates { get; set; }
 
-    public string create_by { get; set; }
+    public string created_by { get; set; }
 
-    public DateTime create_date { get; set; }
+    public DateTime created_date { get; set; }
 
-    public string update_by { get; set; }
+    public string updated_by { get; set; }
 
-    public DateTime? update_date { get; set; }
+    public DateTime? updated_date { get; set; }
 
     public virtual user user { get; set; }
 

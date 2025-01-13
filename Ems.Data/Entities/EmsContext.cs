@@ -109,14 +109,14 @@ public partial class EmsContext : DbContext
                 .HasColumnType("timestamp without time zone");
             entity.Property(e => e.check_in).HasColumnType("timestamp without time zone");
             entity.Property(e => e.check_out).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.create_by)
+            entity.Property(e => e.created_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.create_date).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.update_by)
+            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.update_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.user).WithMany(p => p.check_in_out)
                 .HasForeignKey(d => d.user_id)
