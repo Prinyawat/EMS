@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace Ems.App.Servies
 {
-    public class NotificationService : InterfaceCheckingService
+    public class NotificationService : InterfaceNotificationService
     {
         private readonly EmsContext _emsContext;
 

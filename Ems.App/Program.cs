@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
-builder.Services.AddTransient<InterfaceCheckingService, NotificationService>();
 
+// Check In Out Service
+builder.Services.AddTransient<InterfaceNotificationService, NotificationService>();
+builder.Services.AddTransient<InterfaceCheckingService, CheckingTimeService>();
+
+// Course Service
 builder.Services.AddTransient<ICourseService, CourseService>();
 
 builder.Services.AddControllers();

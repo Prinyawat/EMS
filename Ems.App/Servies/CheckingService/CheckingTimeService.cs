@@ -15,21 +15,21 @@ namespace Ems.App.Servies
         public List<int> saveChecking(DateTime datetime)
         {
 
-            //int count = _emsContext.CheckInOuts.Count();  
-            //CheckInOut checkinout = new CheckInOut()
-            //{
-            //    CheckDates = DateTime.Parse(date), 
-            //    CreateBy = "Dev Asia",
-            //    CreateDate = DateTime.Now
-            //};
+            var sortedByDate = _emsContext.CheckInOuts.OrderBy(co => co.CheckIn).ToList();
+            CheckInOut checkinout = new CheckInOut()
+            {
+                //    CheckDates = DateTime.Parse(date), 
+                //    CreateBy = "Dev Asia",
+                //    CreateDate = DateTime.Now
+                //};
 
-            //_emsContext.CheckInOuts.Add(checkinout); 
-            //_emsContext.SaveChanges();  
+                //_emsContext.CheckInOuts.Add(checkinout); 
+                //_emsContext.SaveChanges();  
 
-            //List<string> strings = _emsContext.CheckInOuts
-            //                              .Select(x => x.CheckDates.ToString("yyyy-MM-dd"))
-            //                              .ToList();
-            //return strings;
-        }
+                //List<string> strings = _emsContext.CheckInOuts
+                //                              .Select(x => x.CheckDates.ToString("yyyy-MM-dd"))
+                //                              .ToList();
+                //return strings;
+            }
     }
 }
