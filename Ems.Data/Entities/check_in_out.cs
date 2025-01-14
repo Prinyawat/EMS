@@ -15,7 +15,7 @@ public partial class check_in_out
 
     public DateTime? check_out { get; set; }
 
-    public DateTime check_dates { get; set; }
+    public DateTime? check_dates { get; set; }
 
     public string created_by { get; set; }
 

@@ -154,17 +154,17 @@ public partial class EmsContext : DbContext
             entity.ToTable("leave_request", "ems");
 
             entity.Property(e => e.lreq_id).ValueGeneratedNever();
-            entity.Property(e => e.create_by)
+            entity.Property(e => e.created_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.create_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
             entity.Property(e => e.lreq_description)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.update_by)
+            entity.Property(e => e.updated_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.update_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.user).WithMany(p => p.leave_request)
                 .HasForeignKey(d => d.user_id)
@@ -337,14 +337,14 @@ public partial class EmsContext : DbContext
             entity.ToTable("user_agenda", "ems");
 
             entity.Property(e => e.users_ag_id).ValueGeneratedNever();
-            entity.Property(e => e.create_by)
+            entity.Property(e => e.created_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.create_date).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.update_by)
+            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.update_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.check_inout).WithMany(p => p.user_agenda)
                 .HasForeignKey(d => d.check_inout_id)

@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="efpt.config.json.user" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Ems.Data\Ems.Data.csproj" />
   </ItemGroup>
 
