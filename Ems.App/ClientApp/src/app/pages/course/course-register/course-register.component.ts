@@ -5,12 +5,12 @@ import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
   selector: 'app-course-register',
-  templateUrl: './course.component.html',
+  templateUrl: './course-register.component.html',
   styleUrls:['./course-register.component.scss'],
   providers: [MessageService]
 
 })
-export class CourseComponent implements OnInit{ 
+export class CourseRegisterComponent implements OnInit{ 
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];

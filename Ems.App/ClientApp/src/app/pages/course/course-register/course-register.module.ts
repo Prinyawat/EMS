@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseRegisterRoutingModule } from './course-register-routing.module';
-import { CourseComponent } from './course.component';
+import { CourseRegisterComponent } from './course-register.component';
 
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +19,6 @@ import { TagModule } from 'primeng/tag';
     BreadcrumbModule,
     TagModule
   ],
-  declarations: [CourseComponent,]
+  declarations: [CourseRegisterComponent,]
 })
 export class CourseRegisterModule {}
