@@ -1,9 +1,10 @@
-﻿using Ems.Data.Entities;
+﻿using Ems.App.Models;
+using Ems.Data.Entities;
 
 namespace Ems.App.Servies.IServices
 {
     public interface ICourseService
     {
-        List<course> GetCourses();
+        List<CourseModel> GetCourses();
     }
 }

@@ -1,4 +1,6 @@
-﻿using Ems.App.Servies.IServices;
+﻿using Ems.App.Models;
+using Ems.App.Servies;
+using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +18,20 @@ namespace Ems.App.Controllers
 
         [HttpGet]
         [Route("getCourses")]
-        public List<course> GetCourses()
+        public IActionResult GetCourses()
         {
-            return _courseService.GetCourses();
+            var courses = _courseService.GetCourses();
+            return Ok(courses.Select(c => new CourseModel
+            {
+                courseId = c.courseId,
+                courseName = c.courseName,
+                subtitle = c.subtitle,
+                description = c.description,
+                startDate = c.startDate,
+                endDate = c.endDate,
+                startTime = c.startTime,
+                endTime = c.endTime
+            }).ToList());
         }
     }
 }
