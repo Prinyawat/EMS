@@ -1,49 +1,39 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import {
+    HttpClient
+} from '@angular/common/http';
+import {
+    Injectable
+} from '@angular/core';
+import {
+    BehaviorSubject,
+    catchError,
+    Observable,
+    tap
+} from 'rxjs';
+import {
+    environment
+} from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CheckingService {
+
     constructor(private http: HttpClient) { }
 
     env: string = `${environment.apiUrl}/api/Checking`;
-    saveChecking(data: { timestamp: Date }) {
+    saveChecking(data: { timestamp: Date, status: string;}){
         const timestamp = data.timestamp.toLocaleTimeString('en-GB', { hour12: false });
-        return this.http.post(this.env + "/saveChecking", timestamp);
+
+        return this.http.post(this.env + "/saveChecking", {timestamp: timestamp, status: data.status}).pipe(
+            tap((result: any) => {
+                this.summittedChecking.next(result);
+            })
+        );
     }
 
-    //---------------------------------------------------------------------------------------------
+    private summittedChecking = new BehaviorSubject<any>(null);
+    submittedData$ = this.summittedChecking.asObservable();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    sendLeaveRequestDate(date: any): void {
-        console.log('Sending date to service:', date);
-    }
-
-    private submittedDataSubject = new BehaviorSubject<any>(null);
-    submittedData$ = this.submittedDataSubject.asObservable();
-
-    getSavedData(): any {
-        return this.submittedDataSubject.value;
-    }
 }
+

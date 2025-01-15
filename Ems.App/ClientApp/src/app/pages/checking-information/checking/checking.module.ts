@@ -14,6 +14,8 @@ import { ToastModule } from 'primeng/toast';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 
@@ -33,6 +35,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         InputGroupModule,
         InputGroupAddonModule,
         BreadcrumbModule,
+        TableModule,
+        DropdownModule,
 
     ],
         declarations: [CheckingComponent]

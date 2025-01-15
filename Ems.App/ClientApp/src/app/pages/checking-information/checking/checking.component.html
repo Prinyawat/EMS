@@ -17,7 +17,7 @@
                             <p-inputGroupAddon>
                                 <i class="pi pi-stopwatch"></i>
                             </p-inputGroupAddon>
-                            <input pInputText type="text" placeholder="Time In" [value]="checkInTime1 || checkInTime2" [disabled]="true"/>
+                            <input pInputText type="text" placeholder="{{hours}}:{{minutes}}:{{seconds}}" label="Check-In / Check-Out" [value]="checkInTime" [disabled]="true"/>
                         </p-inputGroup>
                     </div>
                     <div class="field col-12 md:col mr-auto">
@@ -25,46 +25,37 @@
                             <p-inputGroupAddon>
                                 <i class="pi pi-stopwatch"></i>
                             </p-inputGroupAddon>
-                            <input pInputText type="text" [value]="checkOutTime1 || checkOutTime2" placeholder="Time Out" [disabled]="true" />
+                            <input pInputText type="text" [value]="checkOutTime" placeholder="{{hours}}:{{minutes}}:{{seconds}}" [disabled]="true" />
                         </p-inputGroup>
                     </div>
 
                 </div>
             </div>
 
-            <div class="grid formgrid col-12 justify-content-center ml-2 md-2">
-                <div class="formgroup-inline justify-content-center">
-                    <button pButton pRipple type="button" icon="pi pi-calendar" class="p-button-rounded p-button-warning p-button-outlined justify-content-center gap-2"> {{currentDateTime}} </button>
-                </div>
+            <div class="flex justify-content-center align-items-center">
+
+                <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="Select Status" [ngStyle]="{'width': '200px'}" >
+                    <ng-template let-option pTemplate="item">
+                        <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
+                        [class]="'customer-badge status-' + option.value" [style.color]="'white'">
+                        {{ option.label }}</span>
+                    </ng-template>
+                </p-dropdown>
+
             </div>
 
-            <div class="grid formgrid justify-content-center">
-                <div class="formgroup-inline justify-content-center">
-
-                    <div class="field col-12 md:col-3 ml-auto">
-                        <button pButton pRipple type="button" class="p-button-rounded p-button-text justify-content-center ">{{ hours }} Hours</button>
-                    </div>
-                    <div class="field col-12 md:col-3 ml-auto">
-                        <button pButton pRipple type="button" class="p-button-rounded p-button-success p-button-text justify-content-center ">{{ minutes }} Minutes</button>
-                    </div>
-                    <div class="field col-12 md:col-3 ml-auto">
-                        <button pButton pRipple type="button" class="p-button-rounded p-button-info p-button-text justify-content-center align-item-center ">{{ seconds }} Seconds</button>
-                    </div>
-
-                </div>
-            </div>
 
             <div class="grid formgrid mt-3 justify-content-center">
                 <div class="col-12 md:col-3 ">
                     <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" [disabled]="isCheckInDone">
+                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" >
                         </p-radioButton>
                         <label for="city1">Check In</label>
                     </div>
                 </div>
                 <div class="col-12 md:col-3 ">
                     <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2" [disabled]="isCheckOutDone">
+                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2">
                         </p-radioButton>
                         <label for="city2" >Check Out</label>
                     </div>

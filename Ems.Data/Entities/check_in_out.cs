@@ -11,6 +11,10 @@ public partial class check_in_out
 
     public Guid user_id { get; set; }
 
+    public Guid checking_status_id { get; set; }
+
+    public Guid leave_request_id { get; set; }
+
     public DateTime? check_in { get; set; }
 
     public DateTime? check_out { get; set; }
@@ -19,11 +23,15 @@ public partial class check_in_out
 
     public string created_by { get; set; }
 
-    public DateTime created_date { get; set; }
+    public DateTime? created_date { get; set; }
 
     public string updated_by { get; set; }
 
     public DateTime? updated_date { get; set; }
+
+    public virtual checking_status checking_status { get; set; }
+
+    public virtual leave_request leave_request { get; set; }
 
     public virtual user user { get; set; }
 

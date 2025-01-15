@@ -25,7 +25,5 @@ public partial class user_agenda
 
     public virtual check_in_out check_inout { get; set; }
 
-    public virtual leave_request lreq { get; set; }
-
     public virtual user user { get; set; }
 }

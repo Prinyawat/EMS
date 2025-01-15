@@ -19,9 +19,13 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<check_in_out> check_in_out { get; set; }
 
+    public virtual DbSet<checking_status> checking_status { get; set; }
+
     public virtual DbSet<course> course { get; set; }
 
     public virtual DbSet<leave_request> leave_request { get; set; }
+
+    public virtual DbSet<leave_request_status> leave_request_status { get; set; }
 
     public virtual DbSet<option> option { get; set; }
 
@@ -107,21 +111,53 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.check_dates)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
-            entity.Property(e => e.check_in).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.check_out).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.created_by)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.updated_by)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.check_in)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.check_out)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.checking_status).WithMany(p => p.check_in_out)
+                .HasForeignKey(d => d.checking_status_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_checking_status_id");
+
+            entity.HasOne(d => d.leave_request).WithMany(p => p.check_in_out)
+                .HasForeignKey(d => d.leave_request_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_leave_request_id");
 
             entity.HasOne(d => d.user).WithMany(p => p.check_in_out)
                 .HasForeignKey(d => d.user_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("check_in_out_user_id_fkey");
+                .HasConstraintName("fk_user_id");
+        });
+
+        modelBuilder.Entity<checking_status>(entity =>
+        {
+            entity.HasKey(e => e.checking_status_id).HasName("checking_status_pkey");
+
+            entity.ToTable("checking_status", "ems");
+
+            entity.Property(e => e.checking_status_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.checking_status_name).HasMaxLength(100);
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
         });
 
         modelBuilder.Entity<course>(entity =>
@@ -149,27 +185,56 @@ public partial class EmsContext : DbContext
 
         modelBuilder.Entity<leave_request>(entity =>
         {
-            entity.HasKey(e => e.lreq_id).HasName("leave_request_pkey");
+            entity.HasKey(e => e.leave_request_id).HasName("leave_request_pkey");
 
             entity.ToTable("leave_request", "ems");
 
-            entity.Property(e => e.lreq_id).ValueGeneratedNever();
-            entity.Property(e => e.created_by)
+            entity.HasIndex(e => e.status_name, "leave_request_status_name_key").IsUnique();
+
+            entity.Property(e => e.leave_request_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.leave_request_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.leave_request_description).HasMaxLength(100);
+            entity.Property(e => e.status_name)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.lreq_description)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.updated_by)
-                .IsRequired()
-                .HasMaxLength(100);
-            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.leave_request_status).WithMany(p => p.leave_request)
+                .HasForeignKey(d => d.leave_request_status_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_leave_request_status_id");
 
             entity.HasOne(d => d.user).WithMany(p => p.leave_request)
                 .HasForeignKey(d => d.user_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("leave_request_user_id_fkey");
+                .HasConstraintName("fk_user_id");
+        });
+
+        modelBuilder.Entity<leave_request_status>(entity =>
+        {
+            entity.HasKey(e => e.leave_request_status_id).HasName("leave_request_status_pkey");
+
+            entity.ToTable("leave_request_status", "ems");
+
+            entity.Property(e => e.leave_request_status_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.leave_request_status_name).HasMaxLength(100);
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
         });
 
         modelBuilder.Entity<option>(entity =>
@@ -349,12 +414,7 @@ public partial class EmsContext : DbContext
             entity.HasOne(d => d.check_inout).WithMany(p => p.user_agenda)
                 .HasForeignKey(d => d.check_inout_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_agenda_check_inout_id_fkey");
-
-            entity.HasOne(d => d.lreq).WithMany(p => p.user_agenda)
-                .HasForeignKey(d => d.lreq_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("user_agenda_lreq_id_fkey");
+                .HasConstraintName("fk_check_inout_id");
 
             entity.HasOne(d => d.user).WithMany(p => p.user_agenda)
                 .HasForeignKey(d => d.user_id)

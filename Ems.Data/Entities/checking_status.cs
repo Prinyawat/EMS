@@ -5,19 +5,11 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class leave_request
+public partial class checking_status
 {
-    public Guid leave_request_id { get; set; }
+    public Guid checking_status_id { get; set; }
 
-    public Guid user_id { get; set; }
-
-    public Guid leave_request_status_id { get; set; }
-
-    public DateTime? leave_request_date { get; set; }
-
-    public string leave_request_description { get; set; }
-
-    public string status_name { get; set; }
+    public string checking_status_name { get; set; }
 
     public string created_by { get; set; }
 
@@ -28,8 +20,4 @@ public partial class leave_request
     public DateTime? updated_date { get; set; }
 
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
-
-    public virtual leave_request_status leave_request_status { get; set; }
-
-    public virtual user user { get; set; }
 }

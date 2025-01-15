@@ -1,8 +1,8 @@
 import { CheckingService } from './../../../shared/services/checking.service';
-
-import { Component, Type} from '@angular/core';
+import { Component, Type } from '@angular/core';
 import * as L from 'leaflet';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { Table } from 'primeng/table';
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
@@ -10,12 +10,17 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 })
 export class CheckingComponent {
 
-    checkInTime1: string | null = null;
-    checkOutTime1: string | null = null;
-    checkInTime2: string | null = null;
-    checkOutTime2: string | null = null;
-    isCheckInDone: boolean = false;  // ติดตามสถานะการเช็คอิน
-    isCheckOutDone: boolean = false;
+    selectedItem: string;
+
+    workStatus: any[];
+
+    checkInTime: string = '';
+
+    checkOutTime: string = '';
+
+    private isCheckIn: boolean = true;
+
+    dataFromBackend: any;
 
     currentDateTime: string = '';
 
@@ -40,9 +45,8 @@ export class CheckingComponent {
     private marker: L.Marker | null = null;
 
     private circle: L.Circle | null = null;
-constructor(private confirmationService: ConfirmationService,
-    private messageService: MessageService,private CheckingService: CheckingService){}
-
+    constructor(private confirmationService: ConfirmationService,
+        private messageService: MessageService, private CheckingService: CheckingService) { }
 
     ngOnInit(): void {
         this.breadcrumbItems = [];
@@ -53,11 +57,28 @@ constructor(private confirmationService: ConfirmationService,
         this.initializeMap();
         this.displaySpecificLocation();
         this.startClock();
-      }
+
+        this.workStatus = [
+            { label: 'WorkIn', value: 'workin' },
+            { label: 'WorkFromHome', value: 'workfromhome' },
+        ];
+    }
+
+    getStatusColor(status: string): string {
+        const statuses = status.toLowerCase();
+        switch (statuses) {
+            case 'workin':
+                return 'green';
+            case 'workfromhome':
+                return 'blue';
+            default:
+                return 'gray';
+        }
+    }
 
     ngOnDestroy(): void {
         if (this.interval) {
-          clearInterval(this.interval);
+            clearInterval(this.interval);
         }
     }
     //
@@ -72,15 +93,15 @@ constructor(private confirmationService: ConfirmationService,
         const year = now.getFullYear();
 
         this.interval = setInterval(() => {
-          const now = new Date();
-          const hours = String(now.getHours()).padStart(2, '0');
-          const minutes = String(now.getMinutes()).padStart(2, '0');
-          const seconds = String(now.getSeconds()).padStart(2, '0');
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
 
-          this.currentDateTime = `${day} ${date} ${month} ${year}`;
-          this.hours = hours;
-          this.minutes = minutes;
-          this.seconds = seconds;
+            this.currentDateTime = `${day} ${date} ${month} ${year}`;
+            this.hours = hours;
+            this.minutes = minutes;
+            this.seconds = seconds;
         }, 1000);
     }
 
@@ -89,11 +110,11 @@ constructor(private confirmationService: ConfirmationService,
         this.map = L.map('map').setView([18.7953, 98.9989], 13); // พิกัดของเชียงใหม่
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.map);
-      }
+    }
 
-      async displaySpecificLocation() {
+    async displaySpecificLocation() {
         const latitude = 18.740493;
         const longitude = 98.940390;
 
@@ -122,6 +143,19 @@ constructor(private confirmationService: ConfirmationService,
     }
 
     confirm2(event: Event) {
+
+        const action = this.isCheckIn ? 'Check-In' : 'Check-Out';
+        const successMessage = this.isCheckIn ? 'เช็คอินสำเร็จ' : 'เช็คเอาท์สำเร็จ';
+
+        if (!this.selectedItem) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'เกิดข้อผิดพลาด',
+                detail: 'กรุณาเลือกสถานะการเข้างาน',
+            });
+            return;
+        }
+
         this.confirmationService.confirm({
             key: 'confirm2',
             target: event.target || new EventTarget(),
@@ -131,24 +165,47 @@ constructor(private confirmationService: ConfirmationService,
                 const now = new Date();
                 const timestamp = now.toLocaleTimeString('en-GB', { hour12: false });
 
-                this.CheckingService.saveChecking({
-                    timestamp: now
-                }).subscribe(() => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'You have Success' });
+                this.CheckingService.saveChecking({ timestamp: now, status: this.selectedItem}).subscribe({
+                    next: () => {
+                        if (this.isCheckIn) {
+                            this.checkInTime = timestamp;
+                        } else {
+                            this.checkOutTime = timestamp;
+                        }
+
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'สำเร็จ',
+                            detail: successMessage,
+                        });
+
+                        this.isCheckIn = !this.isCheckIn;
+                    },
+                    error: () => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'เกิดข้อผิดพลาด',
+                            detail: 'ไม่สามารถส่งข้อมูลได้',
+                        });
+                    },
                 });
             },
             reject: () => {
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Rejected',
-                    detail: 'You have rejected' });
+                    summary: 'ยกเลิก',
+                    detail: 'คุณยกเลิกการส่งข้อมูล',
+                });
+            },
+        });
+
+        this.CheckingService.submittedData$.subscribe((data) => {
+            if (data) {
+                const changeTime = data?.timestamp
+                    ? new Date(data.timestamp).toLocaleTimeString('en-GB', { hour12: false }) : 'Invalid timestamp';
+                this.dataFromBackend = data;
             }
         });
+
     }
-
-
-
 }
