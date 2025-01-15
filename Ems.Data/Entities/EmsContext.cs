@@ -133,7 +133,6 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.leave_request).WithMany(p => p.check_in_out)
                 .HasForeignKey(d => d.leave_request_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_leave_request_id");
 
             entity.HasOne(d => d.user).WithMany(p => p.check_in_out)

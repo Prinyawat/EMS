@@ -1,5 +1,6 @@
-﻿using Ems.App.Servies.IServices;
-using Microsoft.AspNetCore.Http;
+﻿using System;
+using Ems.App.Models;
+using Ems.App.Servies.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ems.App.Controllers
@@ -8,17 +9,21 @@ namespace Ems.App.Controllers
     [ApiController]
     public class CheckingController : ControllerBase
     {
-        private readonly InterfaceCheckingService _checkingservice;
-        public CheckingController(InterfaceCheckingService checkingservice)
+        private readonly ICheckingService _checkingservice;
+        public CheckingController(ICheckingService checkingservice)
         {
             _checkingservice = checkingservice;
         }
 
         [HttpPost]
         [Route("saveChecking")]
-        public List<DateTime> saveChecking(DateTime timestamp)
+        public IActionResult saveChecking(CheckingModel data)
         {
-            return _checkingservice.saveChecking(timestamp);
+            var checkingData = _checkingservice.saveChecking(data);
+
+            return Ok(new CheckingModel()
+            {              
+            });
         }
     }
 }

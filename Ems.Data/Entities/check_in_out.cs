@@ -13,7 +13,7 @@ public partial class check_in_out
 
     public Guid checking_status_id { get; set; }
 
-    public Guid leave_request_id { get; set; }
+    public Guid? leave_request_id { get; set; }
 
     public DateTime? check_in { get; set; }
 

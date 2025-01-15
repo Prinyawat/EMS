@@ -7,7 +7,6 @@ export class Course {
   endDate: string;
   startTime: string;
   endTime: string;
-  status: string;              
-  display?: boolean;           
+  status: string;
+  display?: boolean; 
   }
-  

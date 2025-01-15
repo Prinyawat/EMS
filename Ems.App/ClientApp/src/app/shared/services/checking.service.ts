@@ -23,9 +23,9 @@ export class CheckingService {
 
     env: string = `${environment.apiUrl}/api/Checking`;
     saveChecking(data: { timestamp: Date, status: string;}){
-        const timestamp = data.timestamp.toLocaleTimeString('en-GB', { hour12: false });
+        // const timestamp = data.timestamp.toLocaleTimeString('en-GB', { hour12: false });
 
-        return this.http.post(this.env + "/saveChecking", {timestamp: timestamp, status: data.status}).pipe(
+        return this.http.post(this.env + "/saveChecking", {timestamp: Date, status: data.status}).pipe(
             tap((result: any) => {
                 this.summittedChecking.next(result);
             })
@@ -34,6 +34,5 @@ export class CheckingService {
 
     private summittedChecking = new BehaviorSubject<any>(null);
     submittedData$ = this.summittedChecking.asObservable();
-
 }
 

@@ -17,8 +17,7 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 // Check In Out Service
-builder.Services.AddTransient<InterfaceNotificationService, NotificationService>();
-builder.Services.AddTransient<InterfaceCheckingService, CheckingTimeService>();
+builder.Services.AddTransient<ICheckingService, CheckingTimeService>();
 
 // Course Service
 builder.Services.AddTransient<ICourseService, CourseService>();
