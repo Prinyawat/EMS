@@ -15,6 +15,7 @@ namespace Ems.App.Servies
         }
         public CheckingModel saveChecking(CheckingModel data)
         {
+            // เช็คสถานะการเช็คอิน
             var validStatus = _emsContext.checking_status.FirstOrDefault(s => s.checking_status_name == data.status);
             if (validStatus == null)
             {
@@ -22,43 +23,43 @@ namespace Ems.App.Servies
             }
 
             var checkingStatusId = validStatus.checking_status_id;
-            var relatedCheckInOut = _emsContext.check_in_out
-            .Where(co => co.checking_status_id == checkingStatusId)
-            .ToList();
 
+            // ตรวจสอบการเช็คเอาต์ก่อนหน้านี้
             var validCheckOut = _emsContext.check_in_out
-    .FirstOrDefault(co => co.check_out == null && co.user_id == new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"));
+                .FirstOrDefault(co => co.check_out == null && co.user_id == new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"));
 
-            if (validCheckOut == null)
+            // ถ้าไม่มีการเช็คเอาต์ให้เพิ่มแถวใหม่สำหรับการเช็คอิน
+            var newCheckInOut = new check_in_out
             {
-                var newCheckInOut = new check_in_out
-                {
-                    check_inout_id = Guid.NewGuid(), // กำหนด ID ใหม่
-                    user_id = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"), // กำหนด user_id
-                    checking_status_id = checkingStatusId, // กำหนด checking_status_id
-                    check_in = DateTime.Now, // กำหนดเวลาที่เช็คอิน
-                    created_by = "system", // กำหนดผู้ที่สร้างรายการ
-                    created_date = DateTime.Now // กำหนดวันที่สร้างรายการ
-                };
+                check_inout_id = Guid.NewGuid(),
+                user_id = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"),
+                checking_status_id = checkingStatusId,
+                check_in = DateTime.Now, // เวลาที่เช็คอิน
+                created_by = "system", // ผู้สร้าง
+                created_date = DateTime.Now // วันที่สร้าง
+            };
 
-                _emsContext.check_in_out.Add(newCheckInOut);
-                _emsContext.SaveChanges(); 
-            }
-            else
+            // หากมีการเช็คเอาต์แล้ว (มีค่า check_out)
+            if (validCheckOut != null)
             {
-                validCheckOut.check_out = DateTime.Now; // กำหนดเวลาเช็คเอาต์
-                _emsContext.SaveChanges(); // บันทึกการเปลี่ยนแปลง
+                newCheckInOut.check_out = DateTime.Now; // กำหนดเวลาเช็คเอาต์
             }
 
+            // เพิ่มแถวใหม่เข้าฐานข้อมูล
+            _emsContext.check_in_out.Add(newCheckInOut);
+            _emsContext.SaveChanges();
 
+            // ดึงเวลาเช็คอินล่าสุดจากฐานข้อมูล
             List<DateTime> datetimes = _emsContext.check_in_out
-                                              .Where(x => x.check_in.HasValue)
-                                              .Select(x => x.check_in.Value)
-                                              .ToList();
-            data.timeStamp = datetimes.LastOrDefault();
+                .Where(x => x.check_in.HasValue)
+                .Select(x => x.check_in.Value)
+                .ToList();
+
+            data.timeStamp = datetimes.LastOrDefault(); // ส่งค่า timeStamp กลับ
 
             return data;
         }
+
     }
 
 }
