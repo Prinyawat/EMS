@@ -9,4 +9,10 @@ export class Course {
   endTime: string;
   statusName: string;
   display?: boolean; 
+  chapters: Chapter[];
+  }
+
+  export class Chapter {
+    chapterId: string;
+    title: string;
   }

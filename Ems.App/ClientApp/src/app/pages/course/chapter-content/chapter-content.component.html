@@ -1,7 +1,7 @@
 <p-breadcrumb [model]="[
   {label: 'Home', routerLink: '/home'}, 
   {label: 'Course'}, 
-  {label: course?.title, routerLink: '/course/course-open/' + course?.id}, 
+  {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId}, 
   {label: chapter?.title}]">
 </p-breadcrumb>
 
@@ -14,6 +14,6 @@
 </ul>
 
 <div class="navigation-container">
-  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course.id]"></button>
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].id]"></button>
+  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course.courseId]"></button>
+  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].chapterId]"></button>
 </div>

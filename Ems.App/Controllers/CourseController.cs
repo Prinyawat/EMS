@@ -39,8 +39,16 @@ namespace Ems.App.Controllers
         [Route("getRegisteredCourses")]
         public IActionResult GetRegisteredCourses()
         {
-            var courses = _courseService.GetRegisteredCourses();
-            return Ok(courses);
+            var registercourse = _courseService.GetRegisteredCourses();
+            return Ok(registercourse);
+        }
+
+        [HttpGet]
+        [Route("getCourseById/{courseId}")]
+        public IActionResult GetCourseById(Guid courseId)
+        {
+            var coursebyid = _courseService.GetCourseById(courseId);
+            return Ok(coursebyid);
         }
 
         [HttpPost]

@@ -11,7 +11,7 @@ export const Course = [
     status: '',
     score: null, 
     passStatus: null, 
-    chapters: [
+    chapter: [
       {
         id: 1,
         title: 'introduction',

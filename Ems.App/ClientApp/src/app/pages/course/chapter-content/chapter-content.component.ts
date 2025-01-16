@@ -21,6 +21,15 @@ export class ChapterContentComponent implements OnInit {
     // const chapterId = Number(this.route.snapshot.params['chapterId']);
     // this.course = this.courseService.getCourses().find((c) => c.id === courseId);
     // this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
+
+    const courseId = this.route.snapshot.params['courseId'];
+    const chapterId = this.route.snapshot.params['chapterId'];
+    const contentId = this.route.snapshot.params['contentId'];
+
+    this.courseService.getCourseById(courseId).subscribe((course) => {
+      this.course = course;
+      this.chapter = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
+    });
   }
   
 }

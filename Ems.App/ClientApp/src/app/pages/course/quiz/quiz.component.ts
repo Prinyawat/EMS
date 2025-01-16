@@ -21,7 +21,7 @@ export class QuizComponent implements OnInit {
 
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.params['courseId']);
-    this.course = this.courseService.getCourseById(courseId);
+    this.course = this.courseService.getCourseByIds(courseId);
   }
 
   

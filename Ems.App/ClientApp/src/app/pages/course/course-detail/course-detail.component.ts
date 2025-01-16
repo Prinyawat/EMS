@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, } from '@angular/router';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
@@ -17,10 +17,10 @@ export class CourseDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // const courseId = Number(this.route.snapshot.params['courseId']); 
-    // this.course =  this.courseService.getCourses().find((c) => c.id === courseId);
-    const courseId = Number(this.route.snapshot.params['courseId']); 
-    this.course = this.courseService.getCourseById(courseId);
+    const courseId = this.route.snapshot.params['courseId'];
+    this.courseService.getCourseById(courseId).subscribe((course) => {
+      this.course = course;
+    });
   }
   
 }

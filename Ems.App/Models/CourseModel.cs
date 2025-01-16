@@ -14,5 +14,12 @@ namespace Ems.App.Models
         public TimeOnly endTime { get; set; }
         public string statusName { get; set; }
         public bool IsRegistered => statusName == "ลงทะเบียนแล้ว";
+        public List<ChapterModel> chapters { get; set; } = new List<ChapterModel>();
+    }
+
+    public class ChapterModel
+    {
+        public Guid chapterId { get; set; }
+        public string title { get; set; }
     }
 }

@@ -33,28 +33,32 @@ export class CourseService {
       // return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
     }
     
-    getCourseById(courseId: number) {
+    getCourseById(courseId: string) {
+      return this.http.get<typeof Course>(`${this.env}/getCourseById/${courseId}`);
+    }    
+
+    getCourseByIds(courseId: number) {
       return this.course.find((c) => c.id === courseId);
     }
-    
+
     getCompletedCourses() {
       return this.course.filter((c) => c.status === 'เสร็จสิ้น');
     }
 
     getCurrentQuestion(courseId: number, questionIndex: number) {
-      const course = this.getCourseById(courseId);
+      const course = this.getCourseByIds(courseId);
       return course?.questions[questionIndex];
     }
     
     updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
-      const course = this.getCourseById(courseId);
+      const course = this.getCourseByIds(courseId);
       if (course && course.questions[questionIndex]) {
         course.questions[questionIndex].selectedOptionId = selectedOptionId;
       }
     }
     
     updateQuizResult(courseId: number, score: number, passStatus: boolean): void {
-      const course = this.getCourseById(courseId);
+      const course = this.getCourseByIds(courseId);
       if (course) {
         course.score = score;
         course.passStatus = passStatus;
@@ -62,7 +66,7 @@ export class CourseService {
     }
       
     updateCourseStatus(courseId: number, status: string): void {
-      const course = this.getCourseById(courseId);
+      const course = this.getCourseByIds(courseId);
       if (course) {
         course.status = status;
       }

@@ -7,6 +7,7 @@ namespace Ems.App.Servies.IServices
     {
         List<CourseModel> GetCourses();
         List<CourseModel> GetRegisteredCourses();
+        CourseModel GetCourseById(Guid courseId);
         RegistrationCourseModel RegisterCourse(RegistrationCourseModel model);
         void CancelRegistration(Guid userId, Guid courseId);
 

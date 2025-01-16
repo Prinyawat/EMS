@@ -33,9 +33,34 @@ namespace Ems.App.Servies
             }).ToList();
         }
 
+        public CourseModel GetCourseById(Guid courseId)
+        {
+            var course = _emsContext.course
+                .Where(c => c.course_id == courseId)
+                .Select(c => new CourseModel
+                {
+                    courseId = c.course_id,
+                    courseName = c.course_name,
+                    subtitle = c.subtitle,
+                    description = c.description,
+                    startDate = c.start_date,
+                    endDate = c.end_date,
+                    startTime = c.start_time,
+                    endTime = c.end_time,
+                    statusName = "", 
+                    chapters = c.chapter.Select(ch => new ChapterModel
+                    {
+                        chapterId = ch.chapter_id,
+                        title = ch.chapter_title
+                    }).ToList()
+                }).FirstOrDefault();
+
+            return course;
+        }
+
         public List<CourseModel> GetRegisteredCourses()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); // เปลี่ยนเป็น userId ที่ใช้จริง
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
             return _emsContext.registration
                 .Where(r => r.user_id == userId && r.status.status_name == "ลงทะเบียนแล้ว")
                 .Select(r => new CourseModel
