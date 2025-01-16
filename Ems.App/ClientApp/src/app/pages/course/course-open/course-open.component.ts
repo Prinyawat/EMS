@@ -26,7 +26,10 @@ export class CourseOpenComponent implements OnInit{
     this.breadcrumbItems.push({ label: 'Course'});
     this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
 
-    this.filteredCourses = this.courseService.getRegisteredCourses();
+    // this.filteredCourses = this.courseService.getRegisteredCourses();
+    this.courseService.getRegisteredCourses().subscribe((courses: any[]) => {
+      this.filteredCourses = courses;
+    });
   }
 
   

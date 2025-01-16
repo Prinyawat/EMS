@@ -28,21 +28,15 @@ export class CourseService {
       return this.http.delete(`${this.env}/cancelRegistration/${courseId}`);
     }
     
+    getRegisteredCourses() {
+      return this.http.get(this.env + "/getRegisteredCourses");
+      // return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
+    }
+    
     getCourseById(courseId: number) {
       return this.course.find((c) => c.id === courseId);
     }
-
-    getRegisteredCourses() {
-      return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
-    }
-      
-    // cancelRegistration(courseId: number) {
-    //   const course = this.course.find((c) => c.id === courseId);
-    //   if (course) {
-    //     course.status = ''; 
-    //   }
-    // }
-
+    
     getCompletedCourses() {
       return this.course.filter((c) => c.status === 'เสร็จสิ้น');
     }

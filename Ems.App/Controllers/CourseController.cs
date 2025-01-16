@@ -35,6 +35,14 @@ namespace Ems.App.Controllers
             }).ToList());
         }
 
+        [HttpGet]
+        [Route("getRegisteredCourses")]
+        public IActionResult GetRegisteredCourses()
+        {
+            var courses = _courseService.GetRegisteredCourses();
+            return Ok(courses);
+        }
+
         [HttpPost]
         [Route("registerCourse")]
         public IActionResult RegisterCourse([FromBody] RegistrationCourseModel model)

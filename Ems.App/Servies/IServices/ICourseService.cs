@@ -6,6 +6,7 @@ namespace Ems.App.Servies.IServices
     public interface ICourseService
     {
         List<CourseModel> GetCourses();
+        List<CourseModel> GetRegisteredCourses();
         RegistrationCourseModel RegisterCourse(RegistrationCourseModel model);
         void CancelRegistration(Guid userId, Guid courseId);
 

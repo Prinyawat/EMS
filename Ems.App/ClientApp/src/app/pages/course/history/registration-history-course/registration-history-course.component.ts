@@ -25,7 +25,7 @@ export class RegistrationHistoryCourseComponent {
     this.breadcrumbItems.push({ label: 'ประวัติ'});
     this.breadcrumbItems.push({ label: 'ประวัติการลงทะเบียน', styleClass: 'custom-register'});
 
-    this.filteredCourses = this.courseService.getRegisteredCourses();
+    // this.filteredCourses = this.courseService.getRegisteredCourses();
     }
 
 //   showCanCelViaToast(courseId: number) {
