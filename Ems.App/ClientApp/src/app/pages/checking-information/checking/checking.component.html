@@ -11,30 +11,21 @@
 
             <h5>Check Information</h5>
             <div class="grid formgrid justify-content-center">
-                <div class="formgroup-inline ">
+                <div class="formgroup-inline justify-content-center">
                     <div class="field col-12 md:col">
                         <p-inputGroup>
                             <p-inputGroupAddon>
                                 <i class="pi pi-stopwatch"></i>
                             </p-inputGroupAddon>
-                            <input pInputText type="text" placeholder="{{hours}}:{{minutes}}:{{seconds}}" label="Check-In / Check-Out" [value]="checkInTime" [disabled]="true"/>
+                            <input pInputText type="text" placeholder="{{hours}}:{{minutes}}:{{seconds}}" label="Check-In / Check-Out" [value]="checkInTime" [disabled]="true" [disabled]="isCheckInTimeFrozen"/>
                         </p-inputGroup>
                     </div>
-                    <div class="field col-12 md:col mr-auto">
-                        <p-inputGroup>
-                            <p-inputGroupAddon>
-                                <i class="pi pi-stopwatch"></i>
-                            </p-inputGroupAddon>
-                            <input pInputText type="text" [value]="checkOutTime" placeholder="{{hours}}:{{minutes}}:{{seconds}}" [disabled]="true" />
-                        </p-inputGroup>
-                    </div>
-
                 </div>
             </div>
 
             <div class="flex justify-content-center align-items-center">
 
-                <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="Select Status" [ngStyle]="{'width': '200px'}" >
+                <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="Select Status" [ngStyle]="{'width': '200px'}" [disabled]="isCheckInTimeFrozen">
                     <ng-template let-option pTemplate="item">
                         <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
                         [class]="'customer-badge status-' + option.value" [style.color]="'white'">
@@ -46,18 +37,19 @@
 
 
             <div class="grid formgrid mt-3 justify-content-center">
-                <div class="col-12 md:col-3 ">
-                    <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" >
+                <div class="col-12 md:col-3 align-items-center">
+                    <div class="field-radiobutton justify-content-center gap-1">
+                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" [disabled]="isCheckInTimeFrozen">
                         </p-radioButton>
-                        <label for="city1">Check In</label>
+                        <p-tag severity="success" value="Check In"></p-tag>
+
                     </div>
                 </div>
                 <div class="col-12 md:col-3 ">
-                    <div class="field-radiobutton justify-content-center">
-                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2">
+                    <div class="field-radiobutton justify-content-center gap-1">
+                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2"[disabled]="isCheckOutTimeFrozen" >
                         </p-radioButton>
-                        <label for="city2" >Check Out</label>
+                        <p-tag severity="info" value="Check Out"></p-tag>
                     </div>
                 </div>
             </div>

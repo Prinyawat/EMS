@@ -16,6 +16,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { TagModule } from 'primeng/tag';
 
 
 
@@ -37,7 +40,9 @@ import { DropdownModule } from 'primeng/dropdown';
         BreadcrumbModule,
         TableModule,
         DropdownModule,
-
+        MessagesModule,
+        MessageModule,
+        TagModule,
     ],
         declarations: [CheckingComponent]
 })

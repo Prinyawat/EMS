@@ -21,8 +21,9 @@ namespace Ems.App.Controllers
         {
             var checkingData = _checkingservice.saveChecking(data);
 
-            return Ok(new CheckingModel()
-            {              
+            return Ok(new CheckingModel(){
+                timeStamp = data.timeStamp,
+                status = data.status
             });
         }
     }

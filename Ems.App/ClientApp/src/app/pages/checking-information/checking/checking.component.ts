@@ -1,7 +1,7 @@
 import { CheckingService } from './../../../shared/services/checking.service';
 import { Component, Type } from '@angular/core';
 import * as L from 'leaflet';
-import { ConfirmationService, MenuItem, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 @Component({
     selector: 'app-checking',
@@ -9,6 +9,12 @@ import { Table } from 'primeng/table';
     providers: [ConfirmationService, MessageService]
 })
 export class CheckingComponent {
+
+    isCheckInDisabled: boolean = false;
+
+    isCheckOutDisabled: boolean = true;
+
+    isCheckOutCompleted: boolean = false;
 
     selectedItem: string;
 
@@ -18,11 +24,13 @@ export class CheckingComponent {
 
     checkOutTime: string = '';
 
+    isCheckInTimeFrozen = false;
+
+    isCheckOutTimeFrozen: boolean = false;
+
     private isCheckIn: boolean = true;
 
     dataFromBackend: any;
-
-    currentDateTime: string = '';
 
     hours: string = '00';
 
@@ -81,24 +89,14 @@ export class CheckingComponent {
             clearInterval(this.interval);
         }
     }
-    //
+
     startClock(): void {
-        const now = new Date();
-        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-        const day = dayNames[now.getDay()]; // Day
-        const date = now.getDate(); // Date
-        const month = monthNames[now.getMonth()]; // Month
-        const year = now.getFullYear();
-
         this.interval = setInterval(() => {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            this.currentDateTime = `${day} ${date} ${month} ${year}`;
             this.hours = hours;
             this.minutes = minutes;
             this.seconds = seconds;
@@ -139,7 +137,6 @@ export class CheckingComponent {
         }).addTo(this.map);
 
         this.map.setView([latitude, longitude], 20);
-
     }
 
     confirm2(event: Event) {
@@ -169,8 +166,16 @@ export class CheckingComponent {
                     next: () => {
                         if (this.isCheckIn) {
                             this.checkInTime = timestamp;
+                            this.isCheckInDisabled = true;
+                            this.isCheckOutDisabled = false;
+                            this.valRadio = 'CheckOut';
+                            this.isCheckInTimeFrozen = true;
                         } else {
-                            this.checkOutTime = timestamp;
+                            this.checkInTime = timestamp;
+                            this.isCheckInTimeFrozen = true;
+                            this.isCheckOutCompleted = true;
+                            this.valRadio = '';
+
                         }
 
                         this.messageService.add({
