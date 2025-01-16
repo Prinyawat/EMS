@@ -15,6 +15,7 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetCourses()
         {
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
             return _emsContext.course.Select(c => new CourseModel
             {
                 courseId = c.course_id,
@@ -24,9 +25,39 @@ namespace Ems.App.Servies
                 startDate = c.start_date,
                 endDate = c.end_date,
                 startTime = c.start_time,
-                endTime = c.end_time
+                endTime = c.end_time,
+                statusName = _emsContext.registration
+                    .Where(r => r.course_id == c.course_id && r.user_id == userId)
+                    .Select(r => r.status.status_name)
+                    .FirstOrDefault() ?? ""
             }).ToList();
         }
+
+        public RegistrationCourseModel RegisterCourse(RegistrationCourseModel model)
+        {
+            var registeredStatus = _emsContext.status
+                .FirstOrDefault(s => s.status_name == "ลงทะเบียนแล้ว");
+
+            var registration = new registration
+            {
+                registration_id = Guid.NewGuid(),
+                user_id = model.userId,
+                course_id = model.courseId,
+                status_id = registeredStatus.status_id
+            };
+
+            _emsContext.registration.Add(registration);
+            _emsContext.SaveChanges();
+
+            return new RegistrationCourseModel
+            {
+                registrationId = registration.registration_id,
+                userId = registration.user_id,
+                courseId = registration.course_id,
+                statusId = registration.status_id
+            };
+        }
+
 
     }
 }

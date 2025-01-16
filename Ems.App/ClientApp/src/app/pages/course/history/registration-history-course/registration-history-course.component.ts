@@ -28,11 +28,11 @@ export class RegistrationHistoryCourseComponent {
     this.filteredCourses = this.courseService.getRegisteredCourses();
     }
 
-  showCanCelViaToast(courseId: number) {
-    console.log('ยกเลิกการลงทะเบียน:', courseId);
-    this.courseService.cancelRegistration(courseId); 
-    this.filteredCourses = this.courseService.getRegisteredCourses();
-    this.messageService.add({ key: 'tst', severity: 'error', summary: 'ยกเลิกการลงทะเบียน', detail: 'คุณได้ยกเลิกการลงทะเบียนแล้ว' });
-}
+//   showCanCelViaToast(courseId: number) {
+//     console.log('ยกเลิกการลงทะเบียน:', courseId);
+//     this.courseService.cancelRegistration(courseId); 
+//     this.filteredCourses = this.courseService.getRegisteredCourses();
+//     this.messageService.add({ key: 'tst', severity: 'error', summary: 'ยกเลิกการลงทะเบียน', detail: 'คุณได้ยกเลิกการลงทะเบียนแล้ว' });
+// }
 
 }

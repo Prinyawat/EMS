@@ -16,9 +16,18 @@ export class CourseService {
     env: string = `${environment.apiUrl}/api/Course`;
 
     getCourses() {
-      // return this.course;
       return this.http.get(this.env + "/getCourses");
     }
+
+    registerCourse(courseId: string) {
+      const payload = { courseId };
+      return this.http.post(this.env + "/registerCourse", payload);
+    }
+
+    cancelRegistration(courseId: string) {
+      return this.http.delete(`${this.env}/cancel/${courseId}`);
+    }
+    
 
     getCourseById(courseId: number) {
       return this.course.find((c) => c.id === courseId);
@@ -28,20 +37,12 @@ export class CourseService {
       return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
     }
       
-
-    registerCourse(courseId: number) {
-      const course = this.course.find((c) => c.id === courseId);
-      if (course) {
-          course.status = 'ลงทะเบียนแล้ว';
-      }
-    }
-
-    cancelRegistration(courseId: number) {
-      const course = this.course.find((c) => c.id === courseId);
-      if (course) {
-        course.status = ''; 
-      }
-    }
+    // cancelRegistration(courseId: number) {
+    //   const course = this.course.find((c) => c.id === courseId);
+    //   if (course) {
+    //     course.status = ''; 
+    //   }
+    // }
 
     getCompletedCourses() {
       return this.course.filter((c) => c.status === 'เสร็จสิ้น');

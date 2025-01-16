@@ -6,7 +6,7 @@
         <div class="card" >
             <h1 class="p-d-flex p-ai-center">
                 {{ course.courseName }}
-                <p-tag *ngIf="course.status !== ''" icon="pi pi-check" severity="success" value="{{ course.status }}" class="ml-2"></p-tag>
+                <p-tag *ngIf="course.statusName !== ''" icon="pi pi-check" severity="success" value="{{ course.statusName }}" class="ml-2"></p-tag>
             </h1>
             <h5>{{ course.subtitle }}</h5>
             <p class="mt-3" style="font-size: 12px;">
@@ -29,8 +29,16 @@
             <div class="grid">
                 <div class="col-12">
                     <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2"></button>
-                    <button *ngIf="course.status !== 'ลงทะเบียนแล้ว'" type="button" pButton  (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
-                    <button *ngIf="course.status === 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกลงทะเบียน" class="p-button-danger"></button>
+                    <!-- <button *ngIf="course.status !== 'ลงทะเบียนแล้ว'" type="button" pButton  (click)="showSuccessViaToast(course.id)" label="ลงทะเบียนเรียน" class="p-button-success"></button>
+                    <button *ngIf="course.status === 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showCanCelViaToast(course.id)" label="ยกเลิกลงทะเบียน" class="p-button-danger"></button> -->
+                    <button *ngIf="course.status !== 'ลงทะเบียนแล้ว'" 
+                        pButton (click)="showSuccessViaToast(course.courseId)" 
+                        label="ลงทะเบียนเรียน" 
+                        class="p-button-success"></button>
+                    <button *ngIf="course.status === 'ลงทะเบียนแล้ว'" 
+                        pButton (click)="showCanCelViaToast(course.courseId)" 
+                        label="ยกเลิกลงทะเบียน" 
+                        class="p-button-danger"></button>
                 </div>
             </div> 
         </div>

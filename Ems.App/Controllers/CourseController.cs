@@ -30,8 +30,33 @@ namespace Ems.App.Controllers
                 startDate = c.startDate,
                 endDate = c.endDate,
                 startTime = c.startTime,
-                endTime = c.endTime
+                endTime = c.endTime,
+                statusName = c.statusName
             }).ToList());
         }
+
+        [HttpPost]
+        [Route("registerCourse")]
+        public IActionResult RegisterCourse([FromBody] RegistrationCourseModel model)
+        {
+            model.userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var result = _courseService.RegisterCourse(model);
+            return Ok(result);
+        }
+
+        //[HttpDelete]
+        //[Route("cancel/{courseId}")]
+        //public IActionResult CancelRegistration(Guid courseId)
+        //{
+        //    var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+        //    var result = _courseService.CancelRegistration(userId, courseId);
+        //    if (result)
+        //    {
+        //        return Ok(new { message = "ยกเลิกการลงทะเบียนสำเร็จ" });
+        //    }
+        //    return NotFound(new { message = "ไม่พบข้อมูลการลงทะเบียน" });
+        //}
+
+
     }
 }

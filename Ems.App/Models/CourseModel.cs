@@ -1,4 +1,6 @@
-﻿namespace Ems.App.Models
+﻿using Ems.Data.Entities;
+
+namespace Ems.App.Models
 {
     public class CourseModel
     {
@@ -10,5 +12,7 @@
         public DateOnly endDate { get; set; }
         public TimeOnly startTime { get; set; }
         public TimeOnly endTime { get; set; }
+        public string statusName { get; set; }
+        public bool IsRegistered => statusName == "ลงทะเบียนแล้ว";
     }
 }

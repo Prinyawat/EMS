@@ -7,6 +7,6 @@ export class Course {
   endDate: string;
   startTime: string;
   endTime: string;
-  status: string;
+  statusName: string;
   display?: boolean; 
   }

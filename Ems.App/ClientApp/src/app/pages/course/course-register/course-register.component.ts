@@ -27,10 +27,6 @@ export class CourseRegisterComponent implements OnInit{
   this.breadcrumbItems.push({ label: 'Course'});
   this.breadcrumbItems.push({ label: 'ลงทะเบียน', styleClass: 'custom-register'});
 
-  // this.filteredCourses = this.courseService
-  //     .getCourses()
-  //     .filter((c) => c.status !== 'เสร็จสิ้น')
-  //     .sort((a, b) => (b.status === 'ลงทะเบียนแล้ว' ? 1 : 0) - (a.status === 'ลงทะเบียนแล้ว' ? 1 : 0));
   this.fetchCourses();
   }
 
@@ -40,6 +36,29 @@ export class CourseRegisterComponent implements OnInit{
     });
   }
 
+  showSuccessViaToast(courseId: string) {
+    this.courseService.registerCourse(courseId).subscribe(() => {
+      this.messageService.add({
+        key: 'tst',
+        severity: 'success',
+        summary: 'ลงทะเบียนสำเร็จ',
+        detail: 'คุณได้ลงทะเบียนอบรบเรียนเสร็จสิ้น'
+      });
+      this.fetchCourses();
+    });
+  }
+
+  showCanCelViaToast(courseId: string) {
+    this.courseService.cancelRegistration(courseId).subscribe(() => {
+      this.messageService.add({
+        key: 'tst',
+        severity: 'error',
+        summary: 'ยกเลิกการลงทะเบียน',
+        detail: 'คุณได้ยกเลิกการลงทะเบียนแล้ว'
+      });
+      this.fetchCourses();
+    });
+  }
   // showSuccessViaToast(courseId: number) {
   //   console.log('ลงทะเบียนคอร์ส:', courseId);
   //   this.courseService.registerCourse(courseId); 
