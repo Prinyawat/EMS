@@ -32,9 +32,16 @@ export class CourseRegisterComponent implements OnInit{
 
   fetchCourses() {
     this.courseService.getCourses().subscribe((data: Course[]) => {
-      this.filteredCourses = data
+      this.filteredCourses = data.sort((a, b) => {
+        if (a.statusName === "ลงทะเบียนแล้ว" && b.statusName !== "ลงทะเบียนแล้ว") {
+          return -1; 
+        } else if (a.statusName !== "ลงทะเบียนแล้ว" && b.statusName === "ลงทะเบียนแล้ว") {
+          return 1; 
+        }
+        return 0; 
+      });
     });
-  }
+  }  
 
   showSuccessViaToast(courseId: string) {
     this.courseService.registerCourse(courseId).subscribe(() => {
