@@ -25,10 +25,9 @@ export class CourseService {
     }
 
     cancelRegistration(courseId: string) {
-      return this.http.delete(`${this.env}/cancel/${courseId}`);
+      return this.http.delete(`${this.env}/cancelRegistration/${courseId}`);
     }
     
-
     getCourseById(courseId: number) {
       return this.course.find((c) => c.id === courseId);
     }

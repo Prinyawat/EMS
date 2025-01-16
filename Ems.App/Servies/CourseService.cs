@@ -58,6 +58,21 @@ namespace Ems.App.Servies
             };
         }
 
+        public void CancelRegistration(Guid userId, Guid courseId)
+        {
+            var registration = _emsContext.registration
+                .FirstOrDefault(r => r.user_id == userId && r.course_id == courseId);
+
+            if (registration != null)
+            {
+                _emsContext.registration.Remove(registration);
+                _emsContext.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("ไม่พบการลงทะเบียน.");
+            }
+        }
 
     }
 }

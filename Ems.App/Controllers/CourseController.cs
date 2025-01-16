@@ -44,18 +44,14 @@ namespace Ems.App.Controllers
             return Ok(result);
         }
 
-        //[HttpDelete]
-        //[Route("cancel/{courseId}")]
-        //public IActionResult CancelRegistration(Guid courseId)
-        //{
-        //    var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-        //    var result = _courseService.CancelRegistration(userId, courseId);
-        //    if (result)
-        //    {
-        //        return Ok(new { message = "ยกเลิกการลงทะเบียนสำเร็จ" });
-        //    }
-        //    return NotFound(new { message = "ไม่พบข้อมูลการลงทะเบียน" });
-        //}
+        [HttpDelete]
+        [Route("cancelRegistration/{courseId}")]
+        public IActionResult CancelRegistration(Guid courseId)
+        {
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+            _courseService.CancelRegistration(userId, courseId);
+            return Ok(new { message = "ยกเลิกลงทะเบียนเสร็จสิ้น." });
+        }
 
 
     }
