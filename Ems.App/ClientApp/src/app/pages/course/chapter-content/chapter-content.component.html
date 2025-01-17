@@ -2,18 +2,18 @@
   {label: 'Home', routerLink: '/home'}, 
   {label: 'Course'}, 
   {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId}, 
-  {label: chapter?.title}]">
+  {label: chapters?.title}]">
 </p-breadcrumb>
 
-<h2>{{ chapter?.title }}</h2>
+<h2>{{ chapters?.title }}</h2>
 
 <ul>
-  <li *ngFor="let content of chapter?.contents">
-    <a [routerLink]="[content.id]">{{ content.title }}</a>
+  <li *ngFor="let contents of chapters?.contents">
+    <a [routerLink]="[contents.contentId]">{{ contents.contentTitle }}</a>
   </li>
 </ul>
 
 <div class="navigation-container">
-  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course.courseId]"></button>
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].chapterId]"></button>
+  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course?.courseId]"></button>
+  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[chapters?.contents[0]?.contentId]"></button>
 </div>

@@ -9,8 +9,8 @@ import { CourseService } from 'src/app/shared/services/course.service';
 })
 export class ContentDetailComponent implements OnInit {
   course: any;
-  chapter: any;
-  content: any;
+  chapters: any;
+  contents: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,12 +18,26 @@ export class ContentDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const courseId = Number(this.route.snapshot.params['courseId']);
-    const chapterId = Number(this.route.snapshot.params['chapterId']);
-    const contentId = Number(this.route.snapshot.params['contentId']);
+    // const courseId = Number(this.route.snapshot.params['courseId']);
+    // const chapterId = Number(this.route.snapshot.params['chapterId']);
+    // const contentId = Number(this.route.snapshot.params['contentId']);
 
     // this.course = this.courseService.getCourses().find((c) => c.id === courseId);
     // this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
     // this.content = this.chapter?.contents.find((co) => co.id === contentId);
+
+    const courseId = this.route.snapshot.params['courseId'];
+    const chapterId = this.route.snapshot.params['chapterId'];
+    const contentId = this.route.snapshot.params['contentId'];
+
+    this.courseService.getCourseById(courseId).subscribe((course) => {
+      this.course = course;
+      const chapters = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
+    
+      if (chapters) {
+        this.chapters = chapters; 
+        this.contents = chapters.contents.find((content) => content.contentId === contentId);
+      }
+    });
   }
 }

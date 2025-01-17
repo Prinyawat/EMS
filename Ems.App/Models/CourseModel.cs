@@ -21,5 +21,13 @@ namespace Ems.App.Models
     {
         public Guid chapterId { get; set; }
         public string title { get; set; }
+        public List<ContentModel> contents { get; set; } = new List<ContentModel>();
+    }
+
+    public class ContentModel
+    {
+        public Guid contentId { get; set; }
+        public string contentTitle { get; set; }
+        public string body { get; set; }
     }
 }

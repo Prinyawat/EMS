@@ -1,16 +1,16 @@
 <p-breadcrumb [model]="[
     {label: 'Home', routerLink: '/home'},
     {label: 'Course'}, 
-    {label: course?.title, routerLink: '/course/course-open/' + course?.id},
-    {label: chapter?.title, routerLink: '/course/course-open/' + course?.id + '/' + chapter?.id},
-    {label: content?.title}]">
+    {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
+    {label: chapters?.title, routerLink: '/course/course-open/' + course?.courseId + '/' + chapters?.chapterId},
+    {label: contents?.contentTitle}]">
 </p-breadcrumb>
 
-<h2>{{ content?.title }}</h2>
-<p>{{ content?.body }}</p>
+<h2>{{ contents?.contentTitle }}</h2>
+<p>{{ contents?.body }}</p>
 
 <div class="navigation-container">
-    <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.id + '/' + chapter?.id]"></button>
+    <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.courseId + '/' + chapters?.chapterId]"></button>
 </div>
 
 

@@ -29,12 +29,12 @@
       <th class="text-center">เอกสาร</th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-chapter let-i="rowIndex">
+  <ng-template pTemplate="body" let-chapters let-i="rowIndex">
     <tr>
       <td>{{ i + 1 }}</td>
-      <td>{{ chapter.title }}</td>
+      <td>{{ chapters.title }}</td>
       <td class="text-center">
-        <button pButton pRipple type="button" label="อ่าน" class="p-button-text" [routerLink]="[chapter.chapterId]"></button>
+        <button pButton pRipple type="button" label="อ่าน" class="p-button-text" [routerLink]="[chapters?.chapterId]"></button>
       </td>
     </tr>
   </ng-template>
@@ -49,8 +49,8 @@
   </ng-template>
 </p-dialog> -->
 
-<div class="navigation-container">
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0].chapterId]"></button>
+<div *ngIf="course?.chapters" class="navigation-container">
+  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0]?.chapterId]"></button>
 </div>
 
 

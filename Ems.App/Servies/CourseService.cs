@@ -47,11 +47,17 @@ namespace Ems.App.Servies
                     endDate = c.end_date,
                     startTime = c.start_time,
                     endTime = c.end_time,
-                    statusName = "", 
+                    statusName = "",
                     chapters = c.chapter.Select(ch => new ChapterModel
                     {
                         chapterId = ch.chapter_id,
-                        title = ch.chapter_title
+                        title = ch.chapter_title,
+                        contents = ch.chapter_content.Select(ct => new ContentModel
+                        {
+                            contentId = ct.content_id,
+                            contentTitle = ct.content_title,
+                            body = ct.content_body
+                        }).ToList()
                     }).ToList()
                 }).FirstOrDefault();
 

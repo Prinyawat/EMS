@@ -15,4 +15,11 @@ export class Course {
   export class Chapter {
     chapterId: string;
     title: string;
+    contents: Content[];
+  }
+
+  export class Content {
+    contentId: string;
+    contentTitle: string;
+    body: string;
   }

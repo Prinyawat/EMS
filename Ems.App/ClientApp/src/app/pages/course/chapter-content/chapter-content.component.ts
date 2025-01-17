@@ -9,7 +9,7 @@ import { CourseService } from 'src/app/shared/services/course.service';
 })
 export class ChapterContentComponent implements OnInit {
   course: any;
-  chapter: any;
+  chapters: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +28,9 @@ export class ChapterContentComponent implements OnInit {
 
     this.courseService.getCourseById(courseId).subscribe((course) => {
       this.course = course;
-      this.chapter = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
+      this.chapters = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
+
+      
     });
   }
   
