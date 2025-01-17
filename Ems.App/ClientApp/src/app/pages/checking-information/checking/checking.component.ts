@@ -3,12 +3,15 @@ import { Component, Type } from '@angular/core';
 import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { AgendaComponent } from '../agenda-checking/agenda.component';
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService, AgendaComponent]
 })
 export class CheckingComponent {
+
+    agendas: any[] = [];
 
     isCheckInDisabled: boolean = false;
 
@@ -54,7 +57,8 @@ export class CheckingComponent {
 
     private circle: L.Circle | null = null;
     constructor(private confirmationService: ConfirmationService,
-        private messageService: MessageService, private CheckingService: CheckingService) { }
+        private messageService: MessageService,
+        private CheckingService: CheckingService,) { }
 
     ngOnInit(): void {
         this.breadcrumbItems = [];

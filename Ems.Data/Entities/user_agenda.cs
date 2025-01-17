@@ -13,7 +13,7 @@ public partial class user_agenda
 
     public Guid check_inout_id { get; set; }
 
-    public Guid lreq_id { get; set; }
+    public Guid? lreq_id { get; set; }
 
     public string created_by { get; set; }
 

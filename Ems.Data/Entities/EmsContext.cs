@@ -398,15 +398,20 @@ public partial class EmsContext : DbContext
 
             entity.ToTable("user_agenda", "ems");
 
-            entity.Property(e => e.users_ag_id).ValueGeneratedNever();
+            entity.Property(e => e.users_ag_id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.created_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
             entity.Property(e => e.updated_by)
                 .IsRequired()
                 .HasMaxLength(100);
-            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.user_id).HasDefaultValueSql("uuid_generate_v4()");
 
             entity.HasOne(d => d.check_inout).WithMany(p => p.user_agenda)
                 .HasForeignKey(d => d.check_inout_id)
