@@ -66,14 +66,16 @@
 						<th style="min-width: 10rem">
 							<div class="flex justify-content-center align-items-center">
 								Status
-                                <p-columnFilter field="status" display="menu">
+                                <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                        <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Any">
+
+                                        <p-dropdown [ngModel]="value" [options]="workStatus" (onChange)="filter($event.value)" placeholder="Any Status">
                                             <ng-template let-option pTemplate="item">
                                                 <span [style.background-color]="getStatusColor(option.value)" [style.color]="'white'"
                                                 [class]="'customer-badge status-' + option.value">{{option.label}}</span>
                                             </ng-template>
                                         </p-dropdown>
+
                                     </ng-template>
                                 </p-columnFilter>
 							</div>

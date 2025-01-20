@@ -36,5 +36,13 @@ export class CheckingService {
         return this.http.get(this.env + "/getAgendas");
     }
 
+    workStatus = [
+        { label: 'WorkIn', value: 'workin' },
+        { label: 'WorkFromHome', value: 'workfromhome' },
+      ];
+      
+      getWorkStatus() {
+        return this.workStatus;
+      }
 }
 

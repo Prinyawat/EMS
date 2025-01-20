@@ -15,6 +15,8 @@ import { AgendaData } from 'src/app/shared/models/agenda.model';
 })
 export class AgendaComponent {
 
+    workStatus: any[] = [];
+
     breadcrumbItems: MenuItem[] = [];
 
     statuses: any[];
@@ -33,7 +35,8 @@ export class AgendaComponent {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor(private AgendaService: AgendaService,private CheckingService: CheckingService) { }
+    constructor(private AgendaService: AgendaService,
+        private CheckingService: CheckingService) { }
 
     ngOnInit() {
         this.breadcrumbItems = [];
@@ -51,22 +54,20 @@ export class AgendaComponent {
         ];
 
         this.statuses = [
-
-            {label: 'LeaveRequest', value: 'leaverequest'},
+            {label: 'WorkFromHome', value: 'workfromhome'},
             {label: 'WorkIn', value: 'workin'}
         ]
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
+        this.workStatus = this.CheckingService.getWorkStatus();
+
     }
 
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
                 this.agendas = data;
-            },
-            error: (error) => {
-                console.error('Error fetching agendas:', error);
             }
         });
     }

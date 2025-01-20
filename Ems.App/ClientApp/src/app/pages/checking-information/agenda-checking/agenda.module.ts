@@ -26,6 +26,7 @@ import { DropdownModule } from 'primeng/dropdown';
         InputTextModule,
         ToastModule,
         DropdownModule,
+
     ],
         declarations: [AgendaComponent]
 })
