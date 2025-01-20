@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Course } from 'src/app/shared/models/course.model';
 import { CourseService } from 'src/app/shared/services/course.service';
 
@@ -15,11 +15,16 @@ export class CourseRegisterComponent implements OnInit{
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   registrationOrder: number[] = [];
-  filteredCourses: Course[] = [];
+  // filteredCourses: Course[] = [];
+
+  registeredCourses: Course[] = [];
+  unregisteredCourses: Course[] = [];
+  showRegisteredCourses: boolean = false;
   
   constructor(
     private messageService: MessageService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private confirmationService: ConfirmationService
   ){}
 
   ngOnInit() {
@@ -30,18 +35,26 @@ export class CourseRegisterComponent implements OnInit{
   this.fetchCourses();
   }
 
+  // fetchCourses() {
+  //   this.courseService.getCourses().subscribe((data: Course[]) => {
+  //     this.filteredCourses = data.sort((a, b) => {
+  //       if (a.statusName === "ลงทะเบียนแล้ว" && b.statusName !== "ลงทะเบียนแล้ว") {
+  //         return -1; 
+  //       } else if (a.statusName !== "ลงทะเบียนแล้ว" && b.statusName === "ลงทะเบียนแล้ว") {
+  //         return 1; 
+  //       }
+  //       return 0; 
+  //     });
+  //   });
+  // }  
+
   fetchCourses() {
     this.courseService.getCourses().subscribe((data: Course[]) => {
-      this.filteredCourses = data.sort((a, b) => {
-        if (a.statusName === "ลงทะเบียนแล้ว" && b.statusName !== "ลงทะเบียนแล้ว") {
-          return -1; 
-        } else if (a.statusName !== "ลงทะเบียนแล้ว" && b.statusName === "ลงทะเบียนแล้ว") {
-          return 1; 
-        }
-        return 0; 
-      });
+      this.registeredCourses = data.filter(course => course.statusName === 'ลงทะเบียนแล้ว');
+      this.unregisteredCourses = data.filter(course => course.statusName !== 'ลงทะเบียนแล้ว');
+      this.showRegisteredCourses = this.registeredCourses.length > 0;
     });
-  }  
+  }
 
   showSuccessViaToast(courseId: string) {
     this.courseService.registerCourse(courseId).subscribe(() => {
@@ -52,6 +65,7 @@ export class CourseRegisterComponent implements OnInit{
         detail: 'คุณได้ลงทะเบียนอบรบเรียนเสร็จสิ้น'
       });
       this.fetchCourses();
+      this.showRegisteredCourses = true;
     });
   }
 
@@ -66,4 +80,19 @@ export class CourseRegisterComponent implements OnInit{
       this.fetchCourses();
     });
   }
+
+//   confirm2(event: Event) {
+//     this.confirmationService.confirm({
+//         key: 'confirm2',
+//         target: event.target || new EventTarget,
+//         message: 'Are you sure that you want to proceed?',
+//         icon: 'pi pi-exclamation-triangle',
+//         accept: () => {
+//             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+//         },
+//         reject: () => {
+//             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+//         }
+//     });
+// }
 }

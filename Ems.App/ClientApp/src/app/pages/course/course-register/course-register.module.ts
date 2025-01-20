@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TagModule } from 'primeng/tag';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -17,8 +19,10 @@ import { TagModule } from 'primeng/tag';
     ButtonModule,
     ToastModule,
     BreadcrumbModule,
-    TagModule
+    TagModule,
+    ConfirmPopupModule
   ],
-  declarations: [CourseRegisterComponent,]
+  declarations: [CourseRegisterComponent,],
+  providers: [ConfirmationService]
 })
 export class CourseRegisterModule {}

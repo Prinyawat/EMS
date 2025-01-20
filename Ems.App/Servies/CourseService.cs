@@ -29,7 +29,7 @@ namespace Ems.App.Servies
                 statusName = _emsContext.registration
                     .Where(r => r.course_id == c.course_id && r.user_id == userId)
                     .Select(r => r.status.status_name)
-                    .FirstOrDefault() ?? ""
+                    .SingleOrDefault() ?? ""
             }).ToList();
         }
 
@@ -117,10 +117,6 @@ namespace Ems.App.Servies
             {
                 _emsContext.registration.Remove(registration);
                 _emsContext.SaveChanges();
-            }
-            else
-            {
-                throw new Exception("ไม่พบการลงทะเบียน.");
             }
         }
 
