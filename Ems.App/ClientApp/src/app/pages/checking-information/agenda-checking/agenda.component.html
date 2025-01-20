@@ -18,19 +18,19 @@
 
             </p-toolbar>
 
-			<p-table #ca1 [value]="customeragenda" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
-            [globalFilterFields]="['name','days','status']">
+			<p-table #agendaSerch [value]="agendas" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+            [globalFilterFields]="['firstName','lastName','checkingStatus'] " >
 				<ng-template pTemplate="caption">
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
                             <button pButton label="Clear" class="p-button-outlined mb-2"
-                         icon="pi pi-filter-slash" (click)="clear(ca1)"></button>
+                         icon="pi pi-filter-slash" (click)="clear(agendaSerch)"></button>
                         </div>
                         <div>
                             <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(ca1, $event)" placeholder="Name, Day, Status" class="w-full"/>
+                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="Name, Day, Status" class="w-full"/>
                             </span>
                         </div>
 
@@ -39,34 +39,28 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th style="min-width: 12rem" pSortableColumn="name">
+						<th style="min-width: 12rem" pSortableColumn="firstName">
 							<div class="flex justify-content-center ">
 								Name
-                                <p-sortIcon field="name"></p-sortIcon>
+                                <p-sortIcon field="firstName"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 8rem" pSortableColumn="days">
-							<div class="flex justify-content-center ">
-								Days
-                                <p-sortIcon field="days"></p-sortIcon>
-							</div>
-						</th>
-                        <th style="min-width: 10rem" pSortableColumn="date">
+                        <th style="min-width: 10rem" pSortableColumn="checkingDate">
 							<div class="flex justify-content-center ">
 								Date
-                                <p-sortIcon field="date"></p-sortIcon>
+                                <p-sortIcon field="checkingDate"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 10rem" pSortableColumn="checkin">
+						<th style="min-width: 10rem" pSortableColumn="checkIn">
 							<div class="flex justify-content-center ">
 								Check In
-                                <p-sortIcon field="checkin"></p-sortIcon>
+                                <p-sortIcon field="checkIn"></p-sortIcon>
 							</div>
 						</th>
-                        <th style="min-width: 10rem" pSortableColumn="checkout">
+                        <th style="min-width: 10rem" pSortableColumn="checkOut">
 							<div class="flex justify-content-center ">
 								Check Out
-                                <p-sortIcon field="checkout"></p-sortIcon>
+                                <p-sortIcon field="checkOut"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 10rem">
@@ -89,26 +83,29 @@
 				<ng-template pTemplate="body" let-agenda>
 					<tr>
 						<td>
-							{{agenda.name}}
-						</td>
-						<td>
-							<span>{{agenda.days}}</span>
+                            <div class="flex justify-content-center align-items-center">
+							    {{agenda?.firstName + ' ' + agenda?.lastName}}
+                                </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span>{{agenda.date | date: 'dd/MM/yyyy'}}</span>
+							    <span>{{agenda?.checkingDate | date: 'dd/MM/yyyy'}}</span>
                             </div>
 						</td>
 						<td>
-							<span>{{agenda.checkin}}</span>
-						</td>
-						<td>
-							{{agenda.checkout}}
+                            <div class="flex justify-content-center align-items-center">
+							    <span>{{agenda?.checkIn | date: 'shortTime' }}</span>
+                            </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span [class]="'customer-badge status-' + agenda.status" [style.background-color]="getStatusColor(agenda.status)"
-                                [style.color]="'white'">{{agenda.status}}</span>
+							    {{agenda?.checkOut | date: 'shortTime' }}
+                            </div>
+						</td>
+						<td>
+                            <div class="flex justify-content-center align-items-center">
+							    <span [class]="'customer-badge status-' + agenda?.checkingStatus" [style.background-color]="getStatusColor(agenda?.checkingStatus)"
+                                [style.color]="'white'">{{agenda?.checkingStatus}}</span>
                             </div>
 						</td>
 					</tr>

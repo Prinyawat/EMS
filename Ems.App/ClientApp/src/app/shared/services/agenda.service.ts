@@ -19,11 +19,7 @@ import {
 })
 export class AgendaService {
 
-    constructor(private http: HttpClient, ) { }
+    constructor(private http: HttpClient) { }
 
-    env: string = `${environment.apiUrl}/api/Agenda`;
-    getAgendas() {
-        return this.http.get(this.env + "/Agendas");
-    }
 }
 

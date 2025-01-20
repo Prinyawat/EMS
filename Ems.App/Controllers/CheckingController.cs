@@ -1,6 +1,8 @@
 ﻿using System;
 using Ems.App.Models;
+using Ems.App.Servies;
 using Ems.App.Servies.IServices;
+using Ems.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ems.App.Controllers
@@ -25,6 +27,14 @@ namespace Ems.App.Controllers
                 timeStamp = data.timeStamp,
                 status = data.status
             });
+        }
+
+        [HttpGet]
+        [Route("getAgendas")]
+        public IActionResult getAgendas()
+        {
+            var modelData = _checkingservice.getAgendas();
+            return Ok(modelData);
         }
     }
 }

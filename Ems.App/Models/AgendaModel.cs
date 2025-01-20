@@ -1,15 +1,14 @@
-﻿using NuGet.Packaging.Signing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Ems.App.Models
+﻿namespace Ems.App.Models
 {
     public class AgendaModel
     {
-        public string name { get; set; }
-        public string day { get; set; }
-        public Date checkdate { get; set; }
-        public Date checkin { get; set; }
-        public Date dacheckout { get; set; }
-        public string status { get; set; }
+        public string firstName { get; set; }
+        public string lastName {  get; set; }
+        public DateTime? checkingDate { get; set; }
+        public DateTime? checkIn { get; set; }
+        public DateTime? checkOut { get; set; }
+        public string checkingStatus { get; set; }
+
     }
+
 }

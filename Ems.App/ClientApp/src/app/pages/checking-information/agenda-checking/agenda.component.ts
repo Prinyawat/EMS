@@ -1,9 +1,12 @@
+import { CheckingService } from './../../../shared/services/checking.service';
+import { AgendaService } from './../../../shared/services/agenda.service';
 import { Component, ElementRef, ViewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
+import { AgendaData } from 'src/app/shared/models/agenda.model';
 
 @Component({
     selector: 'app-agenda',
@@ -18,7 +21,7 @@ export class AgendaComponent {
 
     loading: boolean = true;
 
-    customeragenda = customeragenda;
+    agendas: AgendaData[] = [];
 
     cols: any[];
 
@@ -28,10 +31,9 @@ export class AgendaComponent {
 
     rowGroupMetadata: any;
 
-
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor() { }
+    constructor(private AgendaService: AgendaService,private CheckingService: CheckingService) { }
 
     ngOnInit() {
         this.breadcrumbItems = [];
@@ -40,12 +42,12 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'User Agenda' });
 
         this.cols = [
-            { field: 'name', header: 'Name'},
-            { field: 'days', header: 'Days' },
-            { field: 'date', header: 'Date' },
-            { field: 'checkin', header: 'Check In' },
-            { field: 'checkout', header: 'Check Out' },
-            { field: 'status', header: 'Status' },
+            { field: 'firstName', header: 'firstName',},
+            { field: 'lastName', header: 'lastName' },
+            { field: 'checkingDate', header: 'checkingDate' },
+            { field: 'checkIn', header: 'checkIn' },
+            { field: 'checkOut', header: 'checkOut' },
+            { field: 'checkingStatus', header: 'checkingStatus' },
         ];
 
         this.statuses = [
@@ -55,33 +57,50 @@ export class AgendaComponent {
         ]
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
+        this.fetchAgenda();
     }
 
-    getStatusColor(status: string): string {
-        const normalizedStatus = status.toLowerCase();
-        switch (normalizedStatus) {
-            case 'none':
-                return 'gray';
-            case 'leaverequest':
+    fetchAgenda() {
+        this.CheckingService.getAgendas().subscribe({
+            next: (data: AgendaData[]) => {
+                this.agendas = data;
+            },
+            error: (error) => {
+                console.error('Error fetching agendas:', error);
+            }
+        });
+    }
+
+    getStatusColor(status: string | null): string {
+        if (!status) {
+            return 'transparent'; // หรือกำหนดสีเริ่มต้นสำหรับสถานะที่ไม่มีค่า
+        }
+        switch (status.toLowerCase()) {
+            case 'approved':
+                return 'green';
+            case 'pending':
+                return 'orange';
+            case 'rejected':
                 return 'red';
-            case 'workfromhome':
-                return 'blue';
             case 'workin':
                 return 'green';
+            case 'workfromhome':
+                return 'blue';
             default:
                 return 'gray';
         }
     }
+
 
     exportExcel() {
         import("xlsx").then(xlsx => {
             // เตรียมหัวตารางจาก this.cols
             const headers = this.cols.map(col => col.header);
             // เตรียมข้อมูลที่สัมพันธ์กับฟิลด์ใน this.cols
-            const dataToExport = this.customeragenda.map(item => {
+            const dataToExport = this.agendas.map(item => {
                 const row: any = {};
                 this.cols.forEach(col => {
-                    row[col.header] = item[col.field]; // ใช้ header เป็นคีย์
+                    row[col.header] = item[col.field];
                 });
                 return row;
             });

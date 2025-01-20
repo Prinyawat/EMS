@@ -26,12 +26,14 @@ export class CheckingService {
     private summittedChecking = new BehaviorSubject<any>(null);
     submittedData$ = this.summittedChecking.asObservable();
     saveChecking(data: { timestamp: Date, status: string;}){
-        // const timestamp = data.timestamp.toLocaleTimeString('en-GB', { hour12: false });
         return this.http.post(this.env + "/saveChecking", {timestamp: Date, status: data.status}).pipe(
             tap((result: any) => {
                 this.summittedChecking.next(result);
             })
         );
+    }
+    getAgendas() {
+        return this.http.get(this.env + "/getAgendas");
     }
 
 }

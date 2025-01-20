@@ -1,8 +1,9 @@
 export class AgendaData {
-    name: string;
-    day: string;
-    checkdate: Date;
-    checkin: Date;
-    checkout: Date;
-    status: string;
+    fristName: string;
+    lastName: string;
+    checkingDate?: Date;
+    checkIn: Date;
+    checkOut: Date;
+    checkingStatus: string;
 }
+
