@@ -1,7 +1,7 @@
 import { CheckingService } from './../../../shared/services/checking.service';
 
 import { Component, ElementRef, ViewChild} from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
@@ -12,9 +12,11 @@ import { AgendaService } from 'src/app/shared/services/agenda.service';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
-    providers: []
+    providers: [MessageService]
 })
 export class AgendaComponent {
+
+    selectedAgendas = [];
 
     workStatus: any[] = [];
 
@@ -37,7 +39,8 @@ export class AgendaComponent {
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(private AgendaService: AgendaService,
-        private CheckingService: CheckingService) { }
+        private CheckingService: CheckingService,
+        private messageService: MessageService) { }
 
     ngOnInit() {
         this.breadcrumbItems = [];
@@ -48,6 +51,7 @@ export class AgendaComponent {
         this.cols = [
             { field: 'firstName', header: 'firstName',},
             { field: 'lastName', header: 'lastName' },
+            { field: 'monthName', header: 'month' },
             { field: 'checkingDate', header: 'checkingDate' },
             { field: 'checkIn', header: 'checkIn' },
             { field: 'checkOut', header: 'checkOut' },
@@ -62,20 +66,28 @@ export class AgendaComponent {
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
         this.workStatus = this.CheckingService.getWorkStatus();
-
     }
 
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
-                this.agendas = data;
+                // แปลง checkingDate เป็นชื่อเดือน และเพิ่มลงใน agendas
+                this.agendas = data.map(agenda => ({
+                    ...agenda,
+                    monthName: this.getMonthNameFromDate(agenda.checkingDate) // แปลง checkingDate เป็นชื่อเดือน
+                }));
+            },
+            error: err => {
+                console.error('Error fetching agendas:', err);
             }
         });
     }
 
+
     getStatusColor(status: string | null): string {
+
         if (!status) {
-            return 'transparent'; // หรือกำหนดสีเริ่มต้นสำหรับสถานะที่ไม่มีค่า
+            return 'transparent';
         }
         switch (status.toLowerCase()) {
             case 'approved':
@@ -93,30 +105,55 @@ export class AgendaComponent {
         }
     }
 
+    getMonthNameFromDate(date: Date | string | null | undefined): string {
+        if (!date) return 'Invalid date';
+
+        try {
+            // หากเป็นประเภท Date ให้แปลงเป็น string
+            const dateStr = (date instanceof Date) ? date.toISOString() : date;
+
+            const parts = dateStr.split('T')[0].split('-');
+            if (parts.length !== 3) return 'Invalid date';
+
+            const day = parseInt(parts[2], 10); // ปรับเปลี่ยนการเข้าถึง
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[0], 10);
+
+            const formattedDate = new Date(year, month, day);
+            if (isNaN(formattedDate.getTime())) return 'Invalid date';
+
+            const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(formattedDate);
+            return monthName;
+        } catch (error) {
+            console.error('Error converting date:', error);
+            return 'Invalid date';
+        }
+    }
 
     exportExcel() {
         import("xlsx").then(xlsx => {
-            // เตรียมหัวตารางจาก this.cols
             const headers = this.cols.map(col => col.header);
-            // เตรียมข้อมูลที่สัมพันธ์กับฟิลด์ใน this.cols
-            const dataToExport = this.agendas.map(item => {
+
+            const dataToExport = this.selectedAgendas.map(item => {
                 const row: any = {};
                 this.cols.forEach(col => {
-                    row[col.header] = item[col.field];
+                    if (col.field === 'month') {
+                        row[col.header] = this.getMonthNameFromDate(item['checkingDate']);
+                    } else {
+                        row[col.header] = item[col.field];
+                    }
                 });
                 return row;
             });
 
-            // สร้าง worksheet โดยใส่หัวตารางและข้อมูล
             const worksheet = xlsx.utils.json_to_sheet(dataToExport, { header: headers });
-            // สร้าง workbook และเพิ่ม worksheet ลงไป
             const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-            // แปลง workbook เป็นไฟล์ Excel
             const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-            // บันทึกไฟล์ Excel
-            this.saveAsExcelFile(excelBuffer, "products");
+
+            this.saveAsExcelFile(excelBuffer, "user_agendas");
         });
     }
+
 
     saveAsExcelFile(buffer: any, fileName: string): void {
         let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
