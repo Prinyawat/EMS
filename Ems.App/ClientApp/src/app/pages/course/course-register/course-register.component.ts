@@ -81,18 +81,24 @@ export class CourseRegisterComponent implements OnInit{
     });
   }
 
-//   confirm2(event: Event) {
-//     this.confirmationService.confirm({
-//         key: 'confirm2',
-//         target: event.target || new EventTarget,
-//         message: 'Are you sure that you want to proceed?',
-//         icon: 'pi pi-exclamation-triangle',
-//         accept: () => {
-//             this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-//         },
-//         reject: () => {
-//             this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-//         }
-//     });
-// }
+  confirmCanCelViaToast(event: Event, courseId: string) {
+    this.confirmationService.confirm({
+      key: 'confirmCanCelViaToast',
+      target: event.target || new EventTarget(),
+      message: 'คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการลงทะเบียน?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.showCanCelViaToast(courseId); 
+      },
+      // reject: () => {
+      //   this.messageService.add({
+      //     key: 'tst',
+      //     severity: 'info',
+      //     summary: 'ถูกยกเลิก',
+      //     detail: 'การยกเลิกถูกยกเลิก'
+      //   });
+      // }
+    });
+  }
+  
 }

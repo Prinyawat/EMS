@@ -30,7 +30,8 @@
                 <div class="col-12">
                     <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2 mb-2"></button>
                     <button *ngIf="course.statusName !== 'ลงทะเบียนแล้ว'" type="button" pButton  (click)="showSuccessViaToast(course.courseId)" label="ลงทะเบียนเรียน" class="p-button-success mb-2"></button>
-                    <button *ngIf="course.statusName === 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showCanCelViaToast(course.courseId)" label="ยกเลิกลงทะเบียน" class="p-button-danger mb-2"></button>
+                    <button *ngIf="course.statusName === 'ลงทะเบียนแล้ว'" (click)="confirmCanCelViaToast($event, course.courseId)" pButton label="ยกเลิกลงทะเบียน" class="p-button-danger mb-2"></button>
+                    <p-confirmPopup key="confirmCanCelViaToast"></p-confirmPopup> 
                 </div>
             </div> 
         </div>
@@ -67,7 +68,6 @@
                 <div class="col-12">
                     <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2 mb-2"></button>
                     <button *ngIf="course.statusName !== 'ลงทะเบียนแล้ว'" type="button" pButton  (click)="showSuccessViaToast(course.courseId)" label="ลงทะเบียนเรียน" class="p-button-success mb-2"></button>
-                    <!-- <button *ngIf="course.statusName === 'ลงทะเบียนแล้ว'" type="button" pButton (click)="showCanCelViaToast(course.courseId)" label="ยกเลิกลงทะเบียน" class="p-button-danger mb-2"></button> -->
                 </div>
             </div> 
         </div>
@@ -75,12 +75,7 @@
 </div>
 <p-toast key="tst"></p-toast>
 
-<!-- <div class="col-12 lg:col-6">
-    <div class="card">
-        <h5>ConfirmPopup</h5>
 
-        <p-toast></p-toast>
-        <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"></button>
-        <p-confirmPopup key="confirm2"></p-confirmPopup>
-    </div>
-</div> -->
+
+
+        
