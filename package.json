@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "@zxing/ngx-scanner": "^19.0.0",
     "file-saver": "^2.0.5",
     "jspdf-autotable": "^3.8.4",

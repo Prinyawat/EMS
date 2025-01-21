@@ -1,5 +1,5 @@
 import { CheckingService } from './../../../shared/services/checking.service';
-import { AgendaService } from './../../../shared/services/agenda.service';
+
 import { Component, ElementRef, ViewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Table } from 'primeng/table/table';
@@ -7,6 +7,7 @@ import { customeragenda } from 'src/app/pages/checking-information/customer-chec
 import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData } from 'src/app/shared/models/agenda.model';
+import { AgendaService } from 'src/app/shared/services/agenda.service';
 
 @Component({
     selector: 'app-agenda',

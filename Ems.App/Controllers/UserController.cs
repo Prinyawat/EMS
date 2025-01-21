@@ -16,10 +16,10 @@ namespace Ems.App.Controllers
 
         [Route("login")]
         [HttpPost]
-        public IActionResult Login(UserModel user)
+        public IActionResult Login(DataHubs user)
         {
             var res = _userService.Login(user);
-            return Ok(new UserModel()
+            return Ok(new DataHubs()
             {
                 UserId = res.UserId,
                 Firstname = res.Firstname,
