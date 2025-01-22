@@ -17,6 +17,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { TagModule } from 'primeng/tag';
     TableModule,
     CheckboxModule,
     RadioButtonModule,
-    TagModule
+    TagModule,
+    DataViewModule
   ],
   declarations: [
     CourseOpenComponent,

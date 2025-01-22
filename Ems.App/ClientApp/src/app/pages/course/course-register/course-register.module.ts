@@ -10,6 +10,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ConfirmationService } from 'primeng/api';
     ToastModule,
     BreadcrumbModule,
     TagModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    DataViewModule
   ],
   declarations: [CourseRegisterComponent,],
   providers: [ConfirmationService]
