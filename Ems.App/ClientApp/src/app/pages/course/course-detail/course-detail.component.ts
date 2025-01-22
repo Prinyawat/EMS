@@ -27,4 +27,28 @@ export class CourseDetailComponent implements OnInit {
     return chapter.contents.every((content: any) => content.recordRead);
   }
   
+  getNextChapterRouterLink(): string | any[] {
+    if (!this.course?.chapters) return null;
+  
+    const nextIncompleteChapter = this.course.chapters.find(
+      (chapter: any) => !this.isChapterCompleted(chapter)
+    );
+  
+    if (!nextIncompleteChapter) {
+      const firstCompletedChapter = this.course.chapters.find((chapter: any) =>
+        this.isChapterCompleted(chapter)
+      );
+      return firstCompletedChapter ? [firstCompletedChapter.chapterId] : null;
+    }
+  
+    return [nextIncompleteChapter.chapterId];
+  }
+  
+  canNavigateNext(): boolean {
+    return (
+      this.course?.chapters?.length > 0 &&
+      (this.course.chapters.some((chapter: any) => !this.isChapterCompleted(chapter)) ||
+        this.course.chapters.some((chapter: any) => this.isChapterCompleted(chapter)))
+    );
+  }
 }

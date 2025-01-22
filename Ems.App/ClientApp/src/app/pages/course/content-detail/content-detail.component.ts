@@ -39,7 +39,6 @@ export class ContentDetailComponent implements OnInit {
         this.contents = chapters.contents.find((content) => content.contentId === contentId);
 
         this.courseService.recordProgress(courseId, chapterId, contentId).subscribe(() => {
-          console.log('ความคืบหน้าถูกบันทึกแล้ว');
         });
       }
     });

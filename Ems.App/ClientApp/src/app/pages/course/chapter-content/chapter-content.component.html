@@ -40,6 +40,7 @@
 </p-table>
 
 <div class="navigation-container">
-  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course?.courseId]"></button>
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[chapters?.contents[0]?.contentId]"></button>
+  <button pButton pRipple type="button" label="กลับ" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open', course?.courseId]"></button>
+  <!-- <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[chapters?.contents[0]?.contentId]"></button> -->
+  <button pButton pRipple type="button" [label]="isAllContentRead() ? 'ไปหน้า Chapter' : 'ถัดไป'" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="getNextContentRouterLink()" [disabled]="!canNavigateNext()"></button>
 </div>

@@ -17,21 +17,30 @@ export class ChapterContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // const courseId = Number(this.route.snapshot.params['courseId']);
-    // const chapterId = Number(this.route.snapshot.params['chapterId']);
-    // this.course = this.courseService.getCourses().find((c) => c.id === courseId);
-    // this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
-
     const courseId = this.route.snapshot.params['courseId'];
     const chapterId = this.route.snapshot.params['chapterId'];
-    const contentId = this.route.snapshot.params['contentId'];
-
+    
     this.courseService.getCourseById(courseId).subscribe((course) => {
       this.course = course;
       this.chapters = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
 
-      
     });
   }
   
+  getNextContentRouterLink(): string | any[] {
+    if (this.isAllContentRead()) {
+      return ['/course/course-open', this.course?.courseId];
+    }
+  
+    const nextContent = this.chapters?.contents.find((content: any) => !content.recordRead);
+    return nextContent ? [nextContent.contentId] : null;
+  }
+  
+  canNavigateNext(): boolean {
+    return this.isAllContentRead() || this.chapters?.contents.some((content: any) => !content.recordRead);
+  }
+  
+  isAllContentRead(): boolean {
+    return this.chapters?.contents?.every((content: any) => content.recordRead);
+  }
 }

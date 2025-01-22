@@ -71,7 +71,8 @@
 </p-dialog> -->
 
 <div *ngIf="course?.chapters" class="navigation-container">
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0]?.chapterId]"></button>
+  <!-- <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0]?.chapterId]"></button> -->
+  <button pButton pRipple type="button" label="ถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="getNextChapterRouterLink()" [disabled]="!canNavigateNext()"></button>
 </div>
 
 
