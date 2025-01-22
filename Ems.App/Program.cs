@@ -1,9 +1,10 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Ems.App.Servies.IServices;
 using Ems.App.Servies;
 using Ems.App;
 using Ems.Data.Entities;
 using Ems.App.Middleware;
+using YourNamespace;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,23 @@ builder.Services.AddTransient<IHomeService, HomeService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
+//SignalR
+builder.Services.AddSignalR();
+
+//CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
+});
+
+
+
 // Check In Out Service
 builder.Services.AddTransient<ICheckingService, CheckingTimeService>();
 
@@ -26,7 +44,7 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("KnownOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
+        builder => builder.WithOrigins("http://localhost")
         .AllowCredentials()
         .AllowAnyHeader()
         .AllowAnyMethod()
@@ -47,6 +65,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseCors("CorsPolicy");
 }
 
 //app.UseCors(options =>
@@ -66,4 +86,5 @@ app.UseAuthorization();
 
 //app.MapControllers();
 
+app.MapHub<DataHub>("/datahub");
 app.Run();

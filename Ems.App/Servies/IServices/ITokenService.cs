@@ -7,6 +7,6 @@ namespace Ems.App.Servies.IServices
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();
-        UserModel GetUserByToken(string token);
+        DataHubs GetUserByToken(string token);
     }
 }

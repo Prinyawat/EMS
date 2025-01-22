@@ -16,7 +16,7 @@ namespace Ems.App.Servies
             _tokenService = tokenService;
         }
 
-        public UserModel Login(UserModel userModel)
+        public DataHubs Login(DataHubs userModel)
         {
             user user = this._emsContext.user.Where(x => (x.email + "").ToLower() == (userModel.Email + "").ToLower() && x.password == userModel.Password).FirstOrDefault();
             if (user == null)

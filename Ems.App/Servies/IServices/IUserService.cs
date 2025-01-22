@@ -4,6 +4,6 @@ namespace Ems.App.Servies.IServices
 {
     public interface IUserService
     {
-        UserModel Login(UserModel user);
+        DataHubs Login(DataHubs user);
     }
 }

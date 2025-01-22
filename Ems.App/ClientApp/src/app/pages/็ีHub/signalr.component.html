@@ -1,0 +1,11 @@
+<div>
+    <h1>SignalR Chat</h1>
+    <input [(ngModel)]="username" placeholder="Enter your name" />
+    <input [(ngModel)]="message" placeholder="Enter your message" />
+    <button (click)="sendMessage()">Send</button>
+    <ul>
+        <li *ngFor="let msg of messages">
+            {{ msg }}
+        </li>
+    </ul>
+</div>

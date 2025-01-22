@@ -50,9 +50,9 @@ namespace Ems.App.Servies
             }
         }
 
-        public UserModel GetUserByToken(string token)
+        public DataHubs GetUserByToken(string token)
         {
-            UserModel userData = null;
+            DataHubs userData = null;
 
             if (ValidateToken(token))
             {
@@ -109,12 +109,12 @@ namespace Ems.App.Servies
         }
 
 
-        private UserModel GetUser(Guid userId)
+        private DataHubs GetUser(Guid userId)
         {
 
-            UserModel userData = _emsContext.user
+            DataHubs userData = _emsContext.user
                                 .Where(x => x.user_id == userId)
-                                .Select(x => new UserModel()
+                                .Select(x => new DataHubs()
                                 {
                                     UserId = x.user_id,
                                     Email = x.email

@@ -1,6 +1,6 @@
 ﻿namespace Ems.App.Models
 {
-    public class UserModel
+    public class DataHubs
     {
         public Guid UserId { get; set; }
         public string Firstname { get; set; }

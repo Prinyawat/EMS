@@ -18,8 +18,8 @@
 
             </p-toolbar>
 
-			<p-table #agendaSerch [value]="agendas" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
-            [globalFilterFields]="['firstName','lastName','checkingStatus'] " >
+			<p-table #agendaSerch [value]="agendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+            [globalFilterFields]="['firstName','lastName','monthName','checkingDate','checkingStatus'] " >
 				<ng-template pTemplate="caption">
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
@@ -39,10 +39,21 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
+                        <th style="min-width: 4rem">
+                            <div class="flex justify-content-center">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </div>
+                        </th>
 						<th style="min-width: 12rem" pSortableColumn="firstName">
 							<div class="flex justify-content-center ">
 								Name
                                 <p-sortIcon field="firstName"></p-sortIcon>
+							</div>
+						</th>
+                        <th style="min-width: 6rem" pSortableColumn="month">
+							<div class="flex justify-content-center ">
+								Month
+                                <p-sortIcon field="month"></p-sortIcon>
 							</div>
 						</th>
                         <th style="min-width: 10rem" pSortableColumn="checkingDate">
@@ -84,10 +95,20 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-agenda>
 					<tr>
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                <p-tableCheckbox [value]="agenda"></p-tableCheckbox>
+                            </div>
+                        </td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
 							    {{agenda?.firstName + ' ' + agenda?.lastName}}
-                                </div>
+                            </div>
+						</td>
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+							    <span>{{ getMonthNameFromDate(agenda?.checkingDate) }}</span>
+                            </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
