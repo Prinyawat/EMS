@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MenuModule } from 'primeng/menu';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
     imports: [
@@ -25,6 +26,8 @@ import { FormsModule } from '@angular/forms';
         MenuModule,
         BreadcrumbModule,
         FormsModule,
+        DropdownModule,
+
 
     ],
         declarations: [LeaveRequestComponent]

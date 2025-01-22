@@ -25,14 +25,14 @@ namespace Ems.App.Servies
 
             var checkingStatusId = validStatus.checking_status_id;
             var existingCheckIn = _emsContext.check_in_out
-                .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"));
+                .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"));
 
             if (existingCheckIn == null)
             {
                 var newCheckInOut = new check_in_out
                 {
                     check_inout_id = Guid.NewGuid(),
-                    user_id = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"),
+                    user_id = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"),
                     checking_status_id = checkingStatusId,
                     check_in = DateTime.Now,
                     created_date = DateTime.Now
@@ -58,10 +58,11 @@ namespace Ems.App.Servies
 
         public List<AgendaModel> getAgendas()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var userId1 = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b");
+            var userId2 = new Guid("289a03f8-182f-46ad-b885-2a6de22bbca8");
 
             return _emsContext.check_in_out
-                .Where(r => r.user_id == userId)
+                .Where(r => r.user_id == userId1 || r.user_id == userId2)
                 .Select(r => new AgendaModel
                 {
                     firstName = r.user.first_name,

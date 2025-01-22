@@ -40,9 +40,9 @@ export class CheckingService {
         { label: 'WorkIn', value: 'workin' },
         { label: 'WorkFromHome', value: 'workfromhome' },
       ];
-      
-      getWorkStatus() {
+
+    getWorkStatus() {
         return this.workStatus;
-      }
+    }
 }
 

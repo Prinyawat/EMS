@@ -11,6 +11,9 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -26,6 +29,9 @@ import { DropdownModule } from 'primeng/dropdown';
         InputTextModule,
         ToastModule,
         DropdownModule,
+        TabMenuModule,
+        TieredMenuModule,
+        MultiSelectModule,
 
     ],
         declarations: [AgendaComponent]

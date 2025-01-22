@@ -18,7 +18,7 @@
 
             </p-toolbar>
 
-			<p-table #agendaSerch [value]="agendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+			<p-table #agendaSerch [value]="agendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
             [globalFilterFields]="['firstName','lastName','monthName','checkingDate','checkingStatus'] " >
 				<ng-template pTemplate="caption">
 
@@ -30,7 +30,7 @@
                         <div>
                             <span class="p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="Name, Day, Status" class="w-full"/>
+                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="Name, Month, Year, Status" class="w-full"/>
                             </span>
                         </div>
 
@@ -44,22 +44,32 @@
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </div>
                         </th>
-						<th style="min-width: 12rem" pSortableColumn="firstName">
-							<div class="flex justify-content-center ">
+						<th style="min-width: 12rem">
+							<div class="flex justify-content-center align-items-center">
 								Name
-                                <p-sortIcon field="firstName"></p-sortIcon>
+                                <p-columnFilter type="text" field="firstName" display="menu" />
 							</div>
 						</th>
-                        <th style="min-width: 6rem" pSortableColumn="month">
-							<div class="flex justify-content-center ">
+                        <th style="min-width:10rem" >
+                            <div class="flex justify-content-center align-items-center">
 								Month
-                                <p-sortIcon field="month"></p-sortIcon>
+                                <p-columnFilter field="monthName" display="menu">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+
+                                        <p-dropdown [ngModel]="value" [options]="monthOfYear" (onChange)="filter($event.value)" placeholder="Any Status">
+                                            <ng-template let-option pTemplate="item">
+                                                <span>{{option.label}}</span>
+                                            </ng-template>
+                                        </p-dropdown>
+
+                                    </ng-template>
+                                </p-columnFilter>
 							</div>
 						</th>
-                        <th style="min-width: 10rem" pSortableColumn="checkingDate">
-							<div class="flex justify-content-center ">
+                        <th style="min-width: 10rem" >
+							<div class="flex justify-content-center align-items-center">
 								Date
-                                <p-sortIcon field="checkingDate"></p-sortIcon>
+                                <p-columnFilter type="date" field="checkingDate" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th style="min-width: 10rem" pSortableColumn="checkIn">
@@ -80,7 +90,7 @@
                                 <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 
-                                        <p-dropdown [ngModel]="value" [options]="workStatus" (onChange)="filter($event.value)" placeholder="Any Status">
+                                        <p-dropdown [ngModel]="value" [options]="allStatusOptions" (onChange)="filter($event.value)" placeholder="Any Status">
                                             <ng-template let-option pTemplate="item">
                                                 <span [style.background-color]="getStatusColor(option.value)" [style.color]="'white'"
                                                 [class]="'customer-badge status-' + option.value">{{option.label}}</span>

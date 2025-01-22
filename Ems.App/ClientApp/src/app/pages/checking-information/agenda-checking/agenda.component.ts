@@ -1,3 +1,4 @@
+import { LeaveRequestService } from './../../../shared/services/leaveequest.service';
 import { CheckingService } from './../../../shared/services/checking.service';
 
 import { Component, ElementRef, ViewChild} from '@angular/core';
@@ -6,15 +7,20 @@ import { Table } from 'primeng/table/table';
 import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
-import { AgendaData } from 'src/app/shared/models/agenda.model';
+import { AgendaData} from 'src/app/shared/models/agenda.model';
 import { AgendaService } from 'src/app/shared/services/agenda.service';
-
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
     providers: [MessageService]
 })
 export class AgendaComponent {
+
+    filteredAgendas: AgendaData[] = [];
+
+    allStatusOptions: any[] = [];
+
+    leaveStatus: any[];
 
     selectedAgendas = [];
 
@@ -23,6 +29,12 @@ export class AgendaComponent {
     breadcrumbItems: MenuItem[] = [];
 
     statuses: any[];
+
+    monthOfYear: any[];
+
+    selectedMonths: any[];
+
+    leaveRequestStatus: any[];
 
     loading: boolean = true;
 
@@ -40,6 +52,7 @@ export class AgendaComponent {
 
     constructor(private AgendaService: AgendaService,
         private CheckingService: CheckingService,
+        private LeaveRequestService: LeaveRequestService,
         private messageService: MessageService) { }
 
     ngOnInit() {
@@ -59,23 +72,55 @@ export class AgendaComponent {
         ];
 
         this.statuses = [
-            {label: 'WorkFromHome', value: 'workfromhome'},
-            {label: 'WorkIn', value: 'workin'}
+            {label: 'WorkIn', value: 'workin'},
+            {label: 'WorkFromHome', value: 'workfromhome'}
         ]
+
+        this.monthOfYear = [
+            {label: 'January', value: 'january'},
+            {label: 'February', value: 'february'},
+            {label: 'March', value: 'march'},
+            {label: 'April', value: 'april'},
+            {label: 'May', value: 'may'},
+            {label: 'June', value: 'june'},
+            {label: 'July', value: 'july'},
+            {label: 'August', value: 'august'},
+            {label: 'September', value: 'september'},
+            {label: 'October', value: 'october'},
+            {label: 'November', value: 'november'},
+            {label: 'December', value: 'december'}
+        ]
+
+        this.leaveRequestStatus = [
+            { label: 'SickLeave', value: 'sickleave' },
+            { label: 'StudyLeave', value: 'studyleave' },
+            { label: 'AnnualLeave', value: 'annualleave' },
+            { label: 'PersonalLeave', value: 'personalleave' },
+            { label: 'MaternityLeave', value: 'maternityleave'},
+        ];
+
+        this.allStatusOptions = [
+            ...this.statuses,
+            ...this.leaveRequestStatus
+          ];
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
         this.workStatus = this.CheckingService.getWorkStatus();
+        this.leaveStatus = this.LeaveRequestService.getLeaveRequestStatus();
     }
 
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
-                // แปลง checkingDate เป็นชื่อเดือน และเพิ่มลงใน agendas
                 this.agendas = data.map(agenda => ({
                     ...agenda,
+                    checkingDate: new Date(agenda.checkingDate), // แปลง checkingDate เป็น Date object
                     monthName: this.getMonthNameFromDate(agenda.checkingDate) // แปลง checkingDate เป็นชื่อเดือน
                 }));
+
+                // อัปเดต filteredAgendas
+                this.filteredAgendas = [...this.agendas];
             },
             error: err => {
                 console.error('Error fetching agendas:', err);
@@ -84,22 +129,26 @@ export class AgendaComponent {
     }
 
 
-    getStatusColor(status: string | null): string {
 
+    getStatusColor(status: string | null): string {
         if (!status) {
             return 'transparent';
         }
         switch (status.toLowerCase()) {
-            case 'approved':
-                return 'green';
-            case 'pending':
-                return 'orange';
-            case 'rejected':
-                return 'red';
             case 'workin':
                 return 'green';
             case 'workfromhome':
                 return 'blue';
+            case 'sickleave':
+                return 'purple';
+            case 'studyleave':
+                return '#4D96FF';
+            case 'annualleave':
+                    return '#FFD93D';
+            case 'personalleave':
+                return '#8D99AE';
+            case 'maternityleave':
+                return '#F39AC4';
             default:
                 return 'gray';
         }
@@ -109,13 +158,12 @@ export class AgendaComponent {
         if (!date) return 'Invalid date';
 
         try {
-            // หากเป็นประเภท Date ให้แปลงเป็น string
             const dateStr = (date instanceof Date) ? date.toISOString() : date;
 
             const parts = dateStr.split('T')[0].split('-');
             if (parts.length !== 3) return 'Invalid date';
 
-            const day = parseInt(parts[2], 10); // ปรับเปลี่ยนการเข้าถึง
+            const day = parseInt(parts[2], 10);
             const month = parseInt(parts[1], 10) - 1;
             const year = parseInt(parts[0], 10);
 

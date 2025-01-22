@@ -181,7 +181,6 @@ export class CheckingComponent {
                             this.valRadio = '';
 
                         }
-
                         this.messageService.add({
                             severity: 'success',
                             summary: 'สำเร็จ',

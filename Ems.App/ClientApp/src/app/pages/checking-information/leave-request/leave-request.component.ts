@@ -1,3 +1,4 @@
+import { LeaveRequestService } from './../../../shared/services/leaveequest.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 
 import { Component, ViewChild} from '@angular/core';
@@ -12,6 +13,12 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
     providers: [MessageService, ConfirmationService, ProductService, LayoutService]
 })
 export class LeaveRequestComponent {
+
+    dateRange: string[] = [];
+
+    selectedItem: string;
+
+    leaveRequestStatus: any[];
 
     today: Date;
 
@@ -37,13 +44,13 @@ export class LeaveRequestComponent {
         public layoutService: LayoutService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private NotificationService: NotificationService
-        ) {
-                this.subscription = this.layoutService.configUpdate$
-                        .pipe(debounceTime(25))
-                        .subscribe((config) => {
-                            this.initChart();
-                        });
+        private NotificationService: NotificationService,
+        private LeaveRequestService: LeaveRequestService) {
+            this.subscription = this.layoutService.configUpdate$
+                .pipe(debounceTime(25))
+                .subscribe((config) => {
+                    this.initChart();
+                    });
             }
     onUpload(event: any) {
         for (const file of event.files) {
@@ -52,9 +59,45 @@ export class LeaveRequestComponent {
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     }
 
+    formatRangeDate(date: Date): string {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear() + 543;
+        return `${day}/${month}/${year}`;
+      }
+
+    generateDateRange(): string[] {
+        if (!Array.isArray(this.selectedDate) || this.selectedDate.length !== 2) {
+          return [];
+        }
+        const startDate = this.selectedDate[0];
+        const endDate = this.selectedDate[1];
+
+        const dateList: string[] = [];
+        let currentDate = new Date(startDate);
+
+        while (currentDate <= endDate) {
+          dateList.push(this.formatDate(currentDate));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return dateList;
+    }
+
+
+    onGenerateDateRange() {
+        this.dateRange = this.generateDateRange();
+    }
+
+
     confirm2(event: Event) {
-        if (!this.selectedDate) {
-            this.showWarnViaToast();
+        if (!Array.isArray(this.selectedDate) || this.selectedDate.length !== 2 ||
+        !(this.selectedDate[0] instanceof Date) || !(this.selectedDate[1] instanceof Date) ||
+        !this.selectedItem) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'กรุณาเลือกวันที่และสถานะ',
+                detail: 'โปรดเลือกทั้งช่วงวันที่และสถานะการลาหยุด'
+            });
             return;
         }
         this.confirmationService.confirm({
@@ -63,9 +106,16 @@ export class LeaveRequestComponent {
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                const formattedDate = this.formatDate(this.selectedDate);
+                const startDate = this.selectedDate[0];
+                const endDate = this.selectedDate[1];
 
-                this.NotificationService.saveData(formattedDate).subscribe({
+                const startDateString = this.formatDate(startDate);
+                const endDateString = this.formatDate(endDate);
+
+                this.LeaveRequestService.saveleaveRequest({
+                    startDate: startDateString,
+                    endDate: endDateString,
+                    status: this.selectedItem }).subscribe({
                     next: (response) => {
                         this.messageService.add({
                             severity: 'success',
@@ -85,10 +135,8 @@ export class LeaveRequestComponent {
             reject: () => {
             }
         });
-
     }
 
-    // function เช็คการเลือก วันที่
     showWarnViaToast(): void {
         this.messageService.add({
           severity: 'warn',
@@ -96,6 +144,14 @@ export class LeaveRequestComponent {
           detail: 'กรุณาเลือกวันที่ต้องการจะส่งคำขอ'
         });
       }
+
+    showWarnStatusToast(): void {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'กรุณาเลือกประเภทคำลา'
+        });
+    }
 
     //function แปลงค่าของวันที่
     formatDate(date: Date): string {
@@ -121,6 +177,32 @@ export class LeaveRequestComponent {
             { label: 'Add New', icon: 'pi pi-fw pi-plus' },
             { label: 'Remove', icon: 'pi pi-fw pi-minus' }
         ];
+
+        this.leaveRequestStatus = [
+            { label: 'SickLeave', value: 'sickleave' },
+            { label: 'StudyLeave', value: 'studyleave' },
+            { label: 'AnnualLeave', value: 'annualleave' },
+            { label: 'PersonalLeave', value: 'personalleave' },
+            { label: 'MaternityLeave', value: 'maternityleave'},
+        ];
+    }
+
+    getStatusColor(status: string): string {
+        const leavestatus = status.toLowerCase();
+        switch (leavestatus) {
+            case 'sickleave':
+                return 'purple';
+            case 'studyleave':
+                return '#4D96FF';
+            case 'annualleave':
+                    return '#FFD93D';
+            case 'personalleave':
+                return '#8D99AE';
+            case 'maternityleave':
+                return '#F39AC4';
+            default:
+                return 'black';
+        }
     }
 
     initChart() {

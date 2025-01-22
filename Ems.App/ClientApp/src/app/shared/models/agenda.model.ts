@@ -6,4 +6,3 @@ export class AgendaData {
     checkOut: Date;
     checkingStatus: string;
 }
-
