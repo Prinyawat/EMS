@@ -22,4 +22,5 @@ export class Course {
     contentId: string;
     contentTitle: string;
     body: string;
+    recordRead: boolean;
   }

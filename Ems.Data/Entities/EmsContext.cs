@@ -41,6 +41,8 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<user_agenda> user_agenda { get; set; }
 
+    public virtual DbSet<user_progress> user_progress { get; set; }
+
     public virtual DbSet<user_question> user_question { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -89,7 +91,6 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
-            entity.Property(e => e.read).HasDefaultValue(false);
             entity.Property(e => e.updated_by).HasMaxLength(100);
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -424,6 +425,44 @@ public partial class EmsContext : DbContext
                 .HasConstraintName("user_agenda_user_id_fkey");
         });
 
+        modelBuilder.Entity<user_progress>(entity =>
+        {
+            entity.HasKey(e => e.user_progress_id).HasName("user_progress_pkey");
+
+            entity.ToTable("user_progress", "ems");
+
+            entity.Property(e => e.user_progress_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.record_read).HasDefaultValue(false);
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.chapter).WithMany(p => p.user_progress)
+                .HasForeignKey(d => d.chapter_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_chapter");
+
+            entity.HasOne(d => d.content).WithMany(p => p.user_progress)
+                .HasForeignKey(d => d.content_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_content");
+
+            entity.HasOne(d => d.course).WithMany(p => p.user_progress)
+                .HasForeignKey(d => d.course_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_course");
+
+            entity.HasOne(d => d.user).WithMany(p => p.user_progress)
+                .HasForeignKey(d => d.user_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_user");
+        });
+
         modelBuilder.Entity<user_question>(entity =>
         {
             entity.HasKey(e => e.user_question_id).HasName("user_question_pkey");
@@ -440,14 +479,14 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
 
+            entity.HasOne(d => d.option).WithMany(p => p.user_question)
+                .HasForeignKey(d => d.option_id)
+                .HasConstraintName("fk_option");
+
             entity.HasOne(d => d.question).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.question_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_question");
-
-            entity.HasOne(d => d.selected_option).WithMany(p => p.user_question)
-                .HasForeignKey(d => d.selected_option_id)
-                .HasConstraintName("fk_option");
 
             entity.HasOne(d => d.user).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.user_id)

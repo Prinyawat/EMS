@@ -35,6 +35,7 @@ namespace Ems.App.Servies
 
         public CourseModel GetCourseById(Guid courseId)
         {
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
             var course = _emsContext.course
                 .Where(c => c.course_id == courseId)
                 .Select(c => new CourseModel
@@ -47,7 +48,6 @@ namespace Ems.App.Servies
                     endDate = c.end_date,
                     startTime = c.start_time,
                     endTime = c.end_time,
-                    statusName = "",
                     chapters = c.chapter.Select(ch => new ChapterModel
                     {
                         chapterId = ch.chapter_id,
@@ -56,7 +56,12 @@ namespace Ems.App.Servies
                         {
                             contentId = ct.content_id,
                             contentTitle = ct.content_title,
-                            body = ct.content_body
+                            body = ct.content_body,
+                            recordRead = _emsContext.user_progress
+                                .Any(up => up.user_id == userId &&
+                                           up.course_id == courseId &&
+                                           up.chapter_id == ch.chapter_id &&
+                                           up.content_id == ct.content_id)
                         }).ToList()
                     }).ToList()
                 }).FirstOrDefault();
@@ -116,6 +121,35 @@ namespace Ems.App.Servies
             if (registration != null)
             {
                 _emsContext.registration.Remove(registration);
+                _emsContext.SaveChanges();
+            }
+        }
+
+        public void RecordProgress(Guid userId, Guid courseId, Guid chapterId, Guid contentId)
+        {
+            // ตรวจสอบว่าไม่มี record ซ้ำใน user_progress
+            var existingProgress = _emsContext.user_progress
+                .Any(up => up.user_id == userId &&
+                           up.course_id == courseId &&
+                           up.chapter_id == chapterId &&
+                           up.content_id == contentId);
+
+            if (!existingProgress)
+            {
+                // สร้าง record ใหม่
+                var progress = new user_progress
+                {
+                    user_progress_id = Guid.NewGuid(),
+                    user_id = userId,
+                    course_id = courseId,
+                    chapter_id = chapterId,
+                    content_id = contentId,
+                    record_read = true,
+                    created_by = userId.ToString(),
+                    created_date = DateTime.UtcNow
+                };
+
+                _emsContext.user_progress.Add(progress);
                 _emsContext.SaveChanges();
             }
         }

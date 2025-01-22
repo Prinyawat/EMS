@@ -71,6 +71,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "ems.user_progress",
+         "ObjectType": 0
+      },
+      {
          "Name": "ems.user_question",
          "ObjectType": 0
       }

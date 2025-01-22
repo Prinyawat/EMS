@@ -29,5 +29,14 @@ namespace Ems.App.Models
         public Guid contentId { get; set; }
         public string contentTitle { get; set; }
         public string body { get; set; }
+        public bool recordRead { get; set; }
     }
+
+    public class RecordProgressModel
+    {
+        public Guid CourseId { get; set; }
+        public Guid ChapterId { get; set; }
+        public Guid ContentId { get; set; }
+    }
+
 }

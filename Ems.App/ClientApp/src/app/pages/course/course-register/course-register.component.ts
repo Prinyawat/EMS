@@ -14,8 +14,7 @@ export class CourseRegisterComponent implements OnInit{
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
-  registrationOrder: number[] = [];
-  // filteredCourses: Course[] = [];
+  // registrationOrder: number[] = [];
 
   registeredCourses: Course[] = [];
   unregisteredCourses: Course[] = [];
@@ -34,19 +33,6 @@ export class CourseRegisterComponent implements OnInit{
 
   this.fetchCourses();
   }
-
-  // fetchCourses() {
-  //   this.courseService.getCourses().subscribe((data: Course[]) => {
-  //     this.filteredCourses = data.sort((a, b) => {
-  //       if (a.statusName === "ลงทะเบียนแล้ว" && b.statusName !== "ลงทะเบียนแล้ว") {
-  //         return -1; 
-  //       } else if (a.statusName !== "ลงทะเบียนแล้ว" && b.statusName === "ลงทะเบียนแล้ว") {
-  //         return 1; 
-  //       }
-  //       return 0; 
-  //     });
-  //   });
-  // }  
 
   fetchCourses() {
     this.courseService.getCourses().subscribe((data: Course[]) => {
@@ -90,14 +76,6 @@ export class CourseRegisterComponent implements OnInit{
       accept: () => {
         this.showCanCelViaToast(courseId); 
       },
-      // reject: () => {
-      //   this.messageService.add({
-      //     key: 'tst',
-      //     severity: 'info',
-      //     summary: 'ถูกยกเลิก',
-      //     detail: 'การยกเลิกถูกยกเลิก'
-      //   });
-      // }
     });
   }
   

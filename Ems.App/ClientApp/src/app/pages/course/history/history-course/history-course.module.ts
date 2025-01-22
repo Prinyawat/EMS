@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TagModule } from 'primeng/tag';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { TagModule } from 'primeng/tag';
     ButtonModule,
     ToastModule,
     BreadcrumbModule,
-    TagModule
+    TagModule,
+    DataViewModule
   ],
   declarations: [HistoryCourseComponent]
 })

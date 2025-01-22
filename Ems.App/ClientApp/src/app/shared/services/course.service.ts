@@ -36,13 +36,18 @@ export class CourseService {
     getCourseById(courseId: string) {
       return this.http.get<typeof Course>(`${this.env}/getCourseById/${courseId}`);
     }    
-
-    getCourseByIds(courseId: number) {
-      return this.course.find((c) => c.id === courseId);
+    
+    recordProgress(courseId: string, chapterId: string, contentId: string) {
+      const payload = { courseId, chapterId, contentId };
+      return this.http.post(this.env +"/recordProgress", payload);
     }
-
+    
     getCompletedCourses() {
       return this.course.filter((c) => c.status === 'เสร็จสิ้น');
+    }
+    
+    getCourseByIds(courseId: number) {
+    return this.course.find((c) => c.id === courseId);
     }
 
     getCurrentQuestion(courseId: number, questionIndex: number) {

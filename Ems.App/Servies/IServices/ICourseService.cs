@@ -10,7 +10,7 @@ namespace Ems.App.Servies.IServices
         CourseModel GetCourseById(Guid courseId);
         RegistrationCourseModel RegisterCourse(RegistrationCourseModel model);
         void CancelRegistration(Guid userId, Guid courseId);
-
+        void RecordProgress(Guid userId, Guid courseId, Guid chapterId, Guid contentId);
 
     }
 }

@@ -21,11 +21,16 @@
 <p>{{ course?.description }}</p>
 
 <h2>Chapters</h2>
-<p-table [value]="course?.chapters" styleClass="p-datatable-gridlines custom-table" responsiveLayout="scroll">
+<p-table
+  [value]="course?.chapters"
+  styleClass="p-datatable-gridlines custom-table"
+  responsiveLayout="scroll"
+>
   <ng-template pTemplate="header">
     <tr>
       <th>ตอนที่</th>
       <th class="text-center">หัวข้อ</th>
+      <th class="text-center">สถานะ</th>
       <th class="text-center">เอกสาร</th>
     </tr>
   </ng-template>
@@ -34,11 +39,27 @@
       <td>{{ i + 1 }}</td>
       <td>{{ chapters.title }}</td>
       <td class="text-center">
-        <button pButton pRipple type="button" label="อ่าน" class="p-button-text" [routerLink]="[chapters?.chapterId]"></button>
+        <p-tag
+          *ngIf="isChapterCompleted(chapters)"
+          icon="pi pi-check"
+          severity="success"
+          value="อ่านครบแล้ว"
+        ></p-tag>
+      </td>
+      <td class="text-center">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="อ่าน"
+          class="p-button-text"
+          [routerLink]="[chapters?.chapterId]"
+        ></button>
       </td>
     </tr>
   </ng-template>
 </p-table>
+
 
 <!-- <p-dialog [(visible)]="showResultDialog" header="ผลการทดสอบ"
   showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">

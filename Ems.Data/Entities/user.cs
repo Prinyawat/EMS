@@ -39,5 +39,7 @@ public partial class user
 
     public virtual ICollection<user_agenda> user_agenda { get; set; } = new List<user_agenda>();
 
+    public virtual ICollection<user_progress> user_progress { get; set; } = new List<user_progress>();
+
     public virtual ICollection<user_question> user_question { get; set; } = new List<user_question>();
 }

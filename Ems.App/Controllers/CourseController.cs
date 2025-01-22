@@ -69,6 +69,17 @@ namespace Ems.App.Controllers
             return Ok(new { message = "ยกเลิกลงทะเบียนเสร็จสิ้น." });
         }
 
+        [HttpPost]
+        [Route("recordProgress")]
+        public IActionResult RecordProgress([FromBody] RecordProgressModel model)
+        {
+         
+                var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+                _courseService.RecordProgress(userId, model.CourseId, model.ChapterId, model.ContentId);
+                return Ok(new { message = "บันทึกความคืบหน้าเรียบร้อยแล้ว." });
+        
+        }
+
 
     }
 }

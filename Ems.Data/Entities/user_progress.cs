@@ -5,13 +5,19 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class chapter
+public partial class user_progress
 {
-    public Guid chapter_id { get; set; }
+    public Guid user_progress_id { get; set; }
+
+    public Guid user_id { get; set; }
 
     public Guid course_id { get; set; }
 
-    public string chapter_title { get; set; }
+    public Guid chapter_id { get; set; }
+
+    public Guid content_id { get; set; }
+
+    public bool? record_read { get; set; }
 
     public string created_by { get; set; }
 
@@ -21,9 +27,11 @@ public partial class chapter
 
     public DateTime? updated_date { get; set; }
 
-    public virtual ICollection<chapter_content> chapter_content { get; set; } = new List<chapter_content>();
+    public virtual chapter chapter { get; set; }
+
+    public virtual chapter_content content { get; set; }
 
     public virtual course course { get; set; }
 
-    public virtual ICollection<user_progress> user_progress { get; set; } = new List<user_progress>();
+    public virtual user user { get; set; }
 }

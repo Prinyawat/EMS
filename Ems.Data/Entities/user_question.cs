@@ -13,7 +13,7 @@ public partial class user_question
 
     public Guid question_id { get; set; }
 
-    public Guid? selected_option_id { get; set; }
+    public Guid? option_id { get; set; }
 
     public string created_by { get; set; }
 
@@ -23,9 +23,9 @@ public partial class user_question
 
     public DateTime? updated_date { get; set; }
 
-    public virtual question question { get; set; }
+    public virtual option option { get; set; }
 
-    public virtual option selected_option { get; set; }
+    public virtual question question { get; set; }
 
     public virtual user user { get; set; }
 }

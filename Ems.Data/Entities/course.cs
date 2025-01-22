@@ -36,4 +36,6 @@ public partial class course
     public virtual ICollection<question> question { get; set; } = new List<question>();
 
     public virtual ICollection<registration> registration { get; set; } = new List<registration>();
+
+    public virtual ICollection<user_progress> user_progress { get; set; } = new List<user_progress>();
 }

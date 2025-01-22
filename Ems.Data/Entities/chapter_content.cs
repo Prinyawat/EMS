@@ -15,8 +15,6 @@ public partial class chapter_content
 
     public string content_body { get; set; }
 
-    public bool? read { get; set; }
-
     public string created_by { get; set; }
 
     public DateTime? created_date { get; set; }
@@ -26,4 +24,6 @@ public partial class chapter_content
     public DateTime? updated_date { get; set; }
 
     public virtual chapter chapter { get; set; }
+
+    public virtual ICollection<user_progress> user_progress { get; set; } = new List<user_progress>();
 }

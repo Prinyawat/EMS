@@ -22,5 +22,9 @@ export class CourseDetailComponent implements OnInit {
       this.course = course;
     });
   }
+
+  isChapterCompleted(chapter: any): boolean {
+    return chapter.contents.every((content: any) => content.recordRead);
+  }
   
 }
