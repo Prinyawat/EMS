@@ -190,7 +190,15 @@ public partial class EmsContext : DbContext
             entity.ToTable("leave_half", "ems");
 
             entity.Property(e => e.leave_half_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
             entity.Property(e => e.leave_type_name).HasMaxLength(50);
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
         });
 
         modelBuilder.Entity<leave_request>(entity =>
@@ -310,6 +318,11 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.course).WithMany(p => p.question)
+                .HasForeignKey(d => d.course_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_question_course");
         });
 
         modelBuilder.Entity<registration>(entity =>

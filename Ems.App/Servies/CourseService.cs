@@ -36,6 +36,7 @@ namespace Ems.App.Servies
         public CourseModel GetCourseById(Guid courseId)
         {
             var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+
             var course = _emsContext.course
                 .Where(c => c.course_id == courseId)
                 .Select(c => new CourseModel
@@ -62,6 +63,19 @@ namespace Ems.App.Servies
                                            up.course_id == courseId &&
                                            up.chapter_id == ch.chapter_id &&
                                            up.content_id == ct.content_id)
+                        }).ToList()
+                    }).ToList(),
+                    questions = c.question
+                    .OrderBy(q => q.created_date) // เรียงลำดับคำถามตามวันที่สร้าง
+                    .Select(q => new QuestionModel
+                    {
+                        questionId = q.question_id,
+                        questionText = q.question_text,
+                        options = q.option.Select(o => new OptionModel
+                        {
+                            optionId = o.option_id,
+                            optionText = o.option_text,
+                            isCorrect = o.is_correct ?? false
                         }).ToList()
                     }).ToList()
                 }).FirstOrDefault();

@@ -21,6 +21,8 @@ public partial class question
 
     public DateTime? updated_date { get; set; }
 
+    public virtual course course { get; set; }
+
     public virtual ICollection<option> option { get; set; } = new List<option>();
 
     public virtual ICollection<user_question> user_question { get; set; } = new List<user_question>();

@@ -10,6 +10,7 @@ export class Course {
   statusName: string;
   display?: boolean; 
   chapters: Chapter[];
+  questions: Question[];
   }
 
   export class Chapter {
@@ -23,4 +24,16 @@ export class Course {
     contentTitle: string;
     body: string;
     recordRead: boolean;
+  }
+
+  export class Question {
+    questionId: string;
+    questionText: string;
+    options: Option[];
+  }
+  
+  export class Option {
+    optionId: string;
+    optionText: string;
+    isCorrect: boolean;
   }

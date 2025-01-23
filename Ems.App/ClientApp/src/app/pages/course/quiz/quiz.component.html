@@ -1,27 +1,35 @@
 <p-breadcrumb 
   [model]="[
     {label: 'Home', routerLink: '/home'},
-    {label: 'Course', routerLink: '/course'},
-    {label: course?.title, routerLink: '/course/course-open/' + course?.id},
-    {label: 'Quiz', routerLink: '/course/course-open/' + course?.id + '/quiz'},
+    {label: 'Course'},
+    {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
+    {label: 'Quiz'},
     {label: 'Question ' + (currentQuestionIndex + 1)}
   ]">
 </p-breadcrumb>
 
-<h2 *ngIf="!showResult">{{ currentQuestion.question }}</h2>
+<h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
 <div *ngIf="!showResult && currentQuestion">
   <div *ngFor="let option of currentQuestion.options">
     <div class="field-radiobutton">
-      <p-radioButton 
-        [inputId]="option.id" 
-        [value]="option.id" 
+      <p-radioButton
+        [inputId]="option.optionId"
+        [value]="option.optionId"
         [(ngModel)]="currentQuestion.selectedOptionId"
-        (onChange)="onOptionSelect(option.id)">
+        (onChange)="onOptionSelect(option.optionId)"
+      >
       </p-radioButton>
-      <label [for]="option.id">{{ option.text }}</label>
+      <label>{{ option.optionText }}</label>
     </div>
   </div>
 </div>
+
+<p-dialog [(visible)]="showAnswerRequiredDialog" header="คำเตือน" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+  <p>กรุณาเลือกคำตอบก่อนที่จะไปยังคำถามถัดไป</p>
+  <ng-template pTemplate="footer">
+    <button pButton label="ตกลง" icon="pi pi-check" class="p-button-outlined" (click)="showAnswerRequiredDialog = false"></button>
+  </ng-template>
+</p-dialog>
 
 <div *ngIf="!showResult" class="navigation-container">
   <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"></button>
@@ -47,3 +55,5 @@ showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
     </div>
   </div>
 </div>
+
+

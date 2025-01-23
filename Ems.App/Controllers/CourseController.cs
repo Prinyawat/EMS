@@ -75,7 +75,7 @@ namespace Ems.App.Controllers
         {
          
                 var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
-                _courseService.RecordProgress(userId, model.CourseId, model.ChapterId, model.ContentId);
+                _courseService.RecordProgress(userId, model.courseId, model.chapterId, model.contentId);
                 return Ok(new { message = "บันทึกความคืบหน้าเรียบร้อยแล้ว." });
         
         }

@@ -17,15 +17,34 @@ export class QuizComponent implements OnInit {
     score: number = 0;
     passStatus: boolean = false;
 
+    showAnswerRequiredDialog: boolean = false;
+
   constructor(private route: ActivatedRoute, private courseService: CourseService) {}
 
   ngOnInit(): void {
-    const courseId = Number(this.route.snapshot.params['courseId']);
-    this.course = this.courseService.getCourseByIds(courseId);
+    const courseId = this.route.snapshot.params['courseId'];
+    this.courseService.getCourseById(courseId).subscribe((course) => {
+    this.course = course;
+    this.currentQuestionIndex = 0;
+  });
   }
 
+  get currentQuestion() {
+    return this.course?.questions[this.currentQuestionIndex];
+  }
+  
+  onOptionSelect(optionId: string): void {
+    const question = this.course.questions[this.currentQuestionIndex];
+    question.selectedOptionId = optionId;
+  }
   
   nextQuestion(): void {
+    const question = this.currentQuestion;
+    if (!question.selectedOptionId) {
+      this.showAnswerRequiredDialog = true;
+      return;
+    }
+
     if (this.currentQuestionIndex === this.course.questions.length - 1) {
       this.showSubmitDialog = true;
     } else {
@@ -33,28 +52,20 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  
   previousQuestion(): void {
     if (this.currentQuestionIndex > 0) {
       this.currentQuestionIndex--;
     }
   }
   
-  get currentQuestion() {
-    return this.courseService.getCurrentQuestion(this.course.id, this.currentQuestionIndex);
-  }
-
-  onOptionSelect(optionId: number): void {
-    this.courseService.updateSelectedOption(this.course.id, this.currentQuestionIndex, optionId);
-  }
 
   submitQuiz(): void {
     this.calculateScore();
     this.showSubmitDialog = false;
     this.showResult = true;
-    if (this.passStatus) {
-      this.courseService.updateCourseStatus(this.course.id, 'เสร็จสิ้น');
-    }
+    // if (this.passStatus) {
+    //   this.courseService.updateCourseStatus(this.course.id, 'เสร็จสิ้น');
+    // }
   }
   
   calculateScore(): void {
@@ -65,7 +76,7 @@ export class QuizComponent implements OnInit {
 
     this.score = correctAnswers;
     this.passStatus = this.score >= Math.ceil(totalQuestions / 2);
-    this.courseService.updateQuizResult(this.course.id, this.score, this.passStatus);
+    // this.courseService.updateQuizResult(this.course.id, this.score, this.passStatus);
   }  
 
   resetQuiz(): void {
