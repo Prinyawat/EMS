@@ -1,4 +1,4 @@
-import { LeaveRequestService } from './../../../shared/services/leaveequest.service';
+import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 
 import { Component, ViewChild} from '@angular/core';
@@ -16,7 +16,11 @@ export class LeaveRequestComponent {
 
     dateRange: string[] = [];
 
+    selectedHalf: string;
+
     selectedItem: string;
+
+    leaveHalfStatus: any[];
 
     leaveRequestStatus: any[];
 
@@ -45,7 +49,8 @@ export class LeaveRequestComponent {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private NotificationService: NotificationService,
-        private LeaveRequestService: LeaveRequestService) {
+        private LeaveRequestService: LeaveRequestService
+        ) {
             this.subscription = this.layoutService.configUpdate$
                 .pipe(debounceTime(25))
                 .subscribe((config) => {
@@ -66,33 +71,10 @@ export class LeaveRequestComponent {
         return `${day}/${month}/${year}`;
       }
 
-    generateDateRange(): string[] {
-        if (!Array.isArray(this.selectedDate) || this.selectedDate.length !== 2) {
-          return [];
-        }
-        const startDate = this.selectedDate[0];
-        const endDate = this.selectedDate[1];
-
-        const dateList: string[] = [];
-        let currentDate = new Date(startDate);
-
-        while (currentDate <= endDate) {
-          dateList.push(this.formatDate(currentDate));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        return dateList;
-    }
-
-
-    onGenerateDateRange() {
-        this.dateRange = this.generateDateRange();
-    }
-
-
     confirm2(event: Event) {
         if (!Array.isArray(this.selectedDate) || this.selectedDate.length !== 2 ||
-        !(this.selectedDate[0] instanceof Date) || !(this.selectedDate[1] instanceof Date) ||
-        !this.selectedItem) {
+            !(this.selectedDate[0] instanceof Date) || !(this.selectedDate[1] instanceof Date) ||
+            !this.selectedItem) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'กรุณาเลือกวันที่และสถานะ',
@@ -100,14 +82,19 @@ export class LeaveRequestComponent {
             });
             return;
         }
+
         this.confirmationService.confirm({
             key: 'confirm2',
             target: event.target || new EventTarget(),
             message: 'Are you sure that you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                const startDate = this.selectedDate[0];
-                const endDate = this.selectedDate[1];
+                const startDate = new Date(this.selectedDate[0]);
+
+                const endDate = new Date(this.selectedDate[1]);
+                console.log(this.selectedHalf);
+                startDate.setHours(0, 0, 0, 0);
+                endDate.setHours(23, 59, 59, 999);
 
                 const startDateString = this.formatDate(startDate);
                 const endDateString = this.formatDate(endDate);
@@ -115,27 +102,53 @@ export class LeaveRequestComponent {
                 this.LeaveRequestService.saveleaveRequest({
                     startDate: startDateString,
                     endDate: endDateString,
-                    status: this.selectedItem }).subscribe({
+                    status: this.selectedItem,
+                }).subscribe({
                     next: (response) => {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Success',
                             detail: 'ส่งคำขอสำเร็จแล้ว.',
                         });
+
+                        if (this.selectedHalf) {
+                            this.LeaveRequestService.saveleaveHalf({
+
+                                halfStatus: this.selectedHalf,
+                            }).subscribe({
+                                next: (response) => {
+                                    this.messageService.add({
+                                        severity: 'success',
+                                        summary: 'Success',
+                                        detail: 'บันทึกข้อมูลลาครึ่งวันสำเร็จแล้ว.',
+                                    });
+                                },
+                                error: (err) => {
+                                    this.messageService.add({
+                                        severity: 'error',
+                                        summary: 'Error',
+                                        detail: 'เกิดข้อผิดพลาดในการบันทึกข้อมูลลาครึ่งวัน',
+                                    });
+                                },
+                            });
+                        }
                     },
                     error: (err) => {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Error',
-                            detail: 'เกิดข้อผิดพลาดในการส่งคำขอ',
+                            detail: 'เกิดข้อผิดพลาดในการส่งคำขอหลัก',
                         });
                     },
                 });
             },
             reject: () => {
+                // Handle rejection if necessary
             }
         });
     }
+
+
 
     showWarnViaToast(): void {
         this.messageService.add({
@@ -159,7 +172,7 @@ export class LeaveRequestComponent {
         const year = utcDate.substring(0, 4); // ปี
         const month = utcDate.substring(5, 7); // เดือน
         const day = utcDate.substring(8, 10); // วัน
-        return `${year}-${month}-${day}`; // แสดงแค่วัน เดือน ปี
+        return `${year}-${month}-${day}`;
     }
 
     ngOnInit() {
@@ -185,6 +198,11 @@ export class LeaveRequestComponent {
             { label: 'PersonalLeave', value: 'personalleave' },
             { label: 'MaternityLeave', value: 'maternityleave'},
         ];
+
+        this.leaveHalfStatus = [
+            { label: 'MorningLeave', value: 'morningleave' },
+            { label: 'AfternoonLeave', value: 'afternoonleave' },
+        ];
     }
 
     getStatusColor(status: string): string {
@@ -200,10 +218,15 @@ export class LeaveRequestComponent {
                 return '#8D99AE';
             case 'maternityleave':
                 return '#F39AC4';
+            case 'morningleave':
+                return '#90EE90';
+            case 'afternoonleave':
+                return '#FFD700';
             default:
                 return 'black';
         }
     }
+
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);

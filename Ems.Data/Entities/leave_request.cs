@@ -13,7 +13,7 @@ public partial class leave_request
 
     public Guid leave_request_status_id { get; set; }
 
-    public DateTime? leave_request_date { get; set; }
+    public string leave_request_date { get; set; }
 
     public string leave_request_description { get; set; }
 

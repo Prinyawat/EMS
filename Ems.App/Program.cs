@@ -32,7 +32,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-
+//LeaveRequest Service
+builder.Services.AddTransient<ILeaveRequestService, LeaveRequestService>();
 
 // Check In Out Service
 builder.Services.AddTransient<ICheckingService, CheckingTimeService>();

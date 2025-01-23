@@ -11,5 +11,13 @@ public partial class leave_half
 
     public string leave_type_name { get; set; }
 
+    public string created_by { get; set; }
+
+    public DateTime? created_date { get; set; }
+
+    public string updated_by { get; set; }
+
+    public DateTime? updated_date { get; set; }
+
     public virtual ICollection<leave_request> leave_request { get; set; } = new List<leave_request>();
 }

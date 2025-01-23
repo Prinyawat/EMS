@@ -1,4 +1,4 @@
-import { LeaveRequestService } from './../../../shared/services/leaveequest.service';
+import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
 import { CheckingService } from './../../../shared/services/checking.service';
 
 import { Component, ElementRef, ViewChild} from '@angular/core';
