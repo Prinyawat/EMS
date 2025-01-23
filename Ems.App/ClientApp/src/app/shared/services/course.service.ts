@@ -45,36 +45,31 @@ export class CourseService {
     getCompletedCourses() {
       return this.course.filter((c) => c.status === 'เสร็จสิ้น');
     }
-    
-    getCourseByIds(courseId: number) {
-    return this.course.find((c) => c.id === courseId);
-    }
 
-    getCurrentQuestion(courseId: number, questionIndex: number) {
-      const course = this.getCourseByIds(courseId);
-      return course?.questions[questionIndex];
-    }
+    // getCourseByIds(courseId: number) {
+    //   return this.course.find((c) => c.id === courseId);
+    //   }
     
-    updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
-      const course = this.getCourseByIds(courseId);
-      if (course && course.questions[questionIndex]) {
-        course.questions[questionIndex].selectedOptionId = selectedOptionId;
-      }
-    }
+    // updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
+    //   const course = this.getCourseById(courseId);
+    //   if (course && course.questions[questionIndex]) {
+    //     course.questions[questionIndex].selectedOptionId = selectedOptionId;
+    //   }
+    // }
     
-    updateQuizResult(courseId: number, score: number, passStatus: boolean): void {
-      const course = this.getCourseByIds(courseId);
-      if (course) {
-        course.score = score;
-        course.passStatus = passStatus;
-      }
-    }
+    // updateQuizResult(courseId: number, score: number, passStatus: boolean): void {
+    //   const course = this.getCourseById(courseId);
+    //   if (course) {
+    //     course.score = score;
+    //     course.passStatus = passStatus;
+    //   }
+    // }
       
-    updateCourseStatus(courseId: number, status: string): void {
-      const course = this.getCourseByIds(courseId);
-      if (course) {
-        course.status = status;
-      }
-    }
+    // updateCourseStatus(courseId: number, status: string): void {
+    //   const course = this.getCourseById(courseId);
+    //   if (course) {
+    //     course.status = status;
+    //   }
+    // }
       
 } 

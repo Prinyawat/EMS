@@ -2,7 +2,7 @@
 
 <h1 class="p-d-flex p-ai-center">
   {{ course?.courseName }}
-  <!-- <ng-container *ngIf="course?.status === 'เสร็จสิ้น'; else quizButton">
+  <ng-container *ngIf="course?.status === 'เสร็จสิ้น'; else quizButton">
     <span class="p-tag p-tag-success ml-3">สถานะ: เสร็จสิ้น</span>
   </ng-container>
   <ng-template #quizButton>
@@ -15,7 +15,7 @@
       [routerLink]="['quiz']"
       [disabled]="course?.status === 'เสร็จสิ้น'"
     ></button>
-  </ng-template> -->
+  </ng-template>
 </h1>
 <h3>{{ course?.subtitle }}</h3>
 <p>{{ course?.description }}</p>
@@ -70,7 +70,7 @@
   </ng-template>
 </p-dialog> -->
 
-<div *ngIf="course?.chapters" class="navigation-container">
+<div  class="navigation-container">
   <!-- <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="[course.chapters[0]?.chapterId]"></button> -->
   <button pButton pRipple type="button" label="ถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="getNextChapterRouterLink()" [disabled]="!canNavigateNext()"></button>
 </div>

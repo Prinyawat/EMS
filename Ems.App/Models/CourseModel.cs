@@ -15,6 +15,7 @@ namespace Ems.App.Models
         public string statusName { get; set; }
         public bool IsRegistered => statusName == "ลงทะเบียนแล้ว";
         public List<ChapterModel> chapters { get; set; } = new List<ChapterModel>();
+        public List<QuestionModel> questions { get; set; } = new List<QuestionModel>();
     }
 
     public class ChapterModel
@@ -34,9 +35,23 @@ namespace Ems.App.Models
 
     public class RecordProgressModel
     {
-        public Guid CourseId { get; set; }
-        public Guid ChapterId { get; set; }
-        public Guid ContentId { get; set; }
+        public Guid courseId { get; set; }
+        public Guid chapterId { get; set; }
+        public Guid contentId { get; set; }
+    }
+
+    public class QuestionModel
+    {
+        public Guid questionId { get; set; }
+        public string questionText { get; set; }
+        public List<OptionModel> options { get; set; } = new List<OptionModel>();
+    }
+
+    public class OptionModel
+    {
+        public Guid optionId { get; set; }
+        public string optionText { get; set; }
+        public bool isCorrect { get; set; }
     }
 
 }
