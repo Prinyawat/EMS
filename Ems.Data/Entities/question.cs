@@ -13,8 +13,6 @@ public partial class question
 
     public string question_text { get; set; }
 
-    public int correct_answer { get; set; }
-
     public string created_by { get; set; }
 
     public DateTime? created_date { get; set; }
@@ -22,8 +20,6 @@ public partial class question
     public string updated_by { get; set; }
 
     public DateTime? updated_date { get; set; }
-
-    public virtual course course { get; set; }
 
     public virtual ICollection<option> option { get; set; } = new List<option>();
 

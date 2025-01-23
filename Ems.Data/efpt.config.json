@@ -35,6 +35,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "ems.leave_half",
+         "ObjectType": 0
+      },
+      {
          "Name": "ems.leave_request",
          "ObjectType": 0
       },

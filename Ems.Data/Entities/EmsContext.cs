@@ -23,6 +23,8 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<course> course { get; set; }
 
+    public virtual DbSet<leave_half> leave_half { get; set; }
+
     public virtual DbSet<leave_request> leave_request { get; set; }
 
     public virtual DbSet<leave_request_status> leave_request_status { get; set; }
@@ -181,6 +183,16 @@ public partial class EmsContext : DbContext
                 .HasColumnType("timestamp without time zone");
         });
 
+        modelBuilder.Entity<leave_half>(entity =>
+        {
+            entity.HasKey(e => e.leave_half_id).HasName("leave_half_pkey");
+
+            entity.ToTable("leave_half", "ems");
+
+            entity.Property(e => e.leave_half_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.leave_type_name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<leave_request>(entity =>
         {
             entity.HasKey(e => e.leave_request_id).HasName("leave_request_pkey");
@@ -205,6 +217,10 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.leave_half).WithMany(p => p.leave_request)
+                .HasForeignKey(d => d.leave_half_id)
+                .HasConstraintName("fk_leave_half_id");
 
             entity.HasOne(d => d.leave_request_status).WithMany(p => p.leave_request)
                 .HasForeignKey(d => d.leave_request_status_id)
@@ -246,6 +262,7 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.is_correct).HasDefaultValue(false);
             entity.Property(e => e.option_text).IsRequired();
             entity.Property(e => e.updated_by).HasMaxLength(100);
             entity.Property(e => e.updated_date)
@@ -254,8 +271,7 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.question).WithMany(p => p.option)
                 .HasForeignKey(d => d.question_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_question");
+                .HasConstraintName("fk_option_question");
         });
 
         modelBuilder.Entity<position>(entity =>
@@ -294,11 +310,6 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
-
-            entity.HasOne(d => d.course).WithMany(p => p.question)
-                .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_course");
         });
 
         modelBuilder.Entity<registration>(entity =>
@@ -479,19 +490,21 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
 
+            entity.HasOne(d => d.course).WithMany(p => p.user_question)
+                .HasForeignKey(d => d.course_id)
+                .HasConstraintName("fk_user_question_course");
+
             entity.HasOne(d => d.option).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.option_id)
-                .HasConstraintName("fk_option");
+                .HasConstraintName("fk_user_question_option");
 
             entity.HasOne(d => d.question).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.question_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_question");
+                .HasConstraintName("fk_user_question_question");
 
             entity.HasOne(d => d.user).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.user_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_user");
+                .HasConstraintName("fk_user_question_user");
         });
         modelBuilder.HasSequence("db_district_district_code_seq");
         modelBuilder.HasSequence("db_district_district_id_seq");

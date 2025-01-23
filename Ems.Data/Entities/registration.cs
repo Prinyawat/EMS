@@ -15,10 +15,6 @@ public partial class registration
 
     public Guid status_id { get; set; }
 
-    public int? score { get; set; }
-
-    public bool? pass_status { get; set; }
-
     public string created_by { get; set; }
 
     public DateTime? created_date { get; set; }

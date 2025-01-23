@@ -13,6 +13,8 @@ public partial class option
 
     public string option_text { get; set; }
 
+    public bool? is_correct { get; set; }
+
     public string created_by { get; set; }
 
     public DateTime? created_date { get; set; }
