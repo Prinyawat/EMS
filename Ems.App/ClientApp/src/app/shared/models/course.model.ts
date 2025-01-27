@@ -30,10 +30,18 @@ export class Course {
     questionId: string;
     questionText: string;
     options: Option[];
+    selectedOptionId?: string;
   }
-  
   export class Option {
     optionId: string;
     optionText: string;
     isCorrect: boolean;
+  }  
+  export class UserResultModel {
+    resultId: string;
+    userId: string;
+    courseId: string;
+    score: number;
+    totalQuestions: number;
+    passStatus: boolean; 
   }

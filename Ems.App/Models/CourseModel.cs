@@ -54,4 +54,23 @@ namespace Ems.App.Models
         public bool isCorrect { get; set; }
     }
 
+    public class UserQuestionModel
+    {
+        public Guid userquestionId { get; set; }
+        public Guid userId { get; set; }
+        public Guid courseId { get; set; }
+        public Guid questionId { get; set; }
+        public Guid optionId { get; set; }
+    }
+
+    public class UserResultModel
+    {
+        public Guid resultId { get; set; }
+        public Guid userId { get; set; }
+        public Guid courseId { get; set; }
+        public int score { get; set; }
+        public int totalQuestions { get; set; }
+        public bool passStatus { get; set; }
+    }
+
 }

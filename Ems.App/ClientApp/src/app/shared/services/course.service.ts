@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Course } from 'src/app/pages/course/mock-course';
 import { environment } from 'src/environments/environment';
+import { Course, Question} from '../models/course.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CourseService {
-    private course = Course;
 
     constructor(
       private http: HttpClient
@@ -32,24 +32,21 @@ export class CourseService {
       return this.http.get(this.env + "/getRegisteredCourses");
       // return this.course.filter((c) => c.status === 'ลงทะเบียนแล้ว' || c.status === 'เสร็จสิ้น');
     }
-    
+       
     getCourseById(courseId: string) {
-      return this.http.get<typeof Course>(`${this.env}/getCourseById/${courseId}`);
-    }    
-    
+      return this.http.get<Course>(`${this.env}/getCourseById/${courseId}`);
+    } 
+
     recordProgress(courseId: string, chapterId: string, contentId: string) {
       const payload = { courseId, chapterId, contentId };
       return this.http.post(this.env +"/recordProgress", payload);
     }
     
-    getCompletedCourses() {
-      return this.course.filter((c) => c.status === 'เสร็จสิ้น');
+    saveUserAnswers(answers: { courseId: string; questionId: string; optionId: string }[]) {
+      return this.http.post(`${this.env}/saveAnswers`, answers);
     }
-
-    // getCourseByIds(courseId: number) {
-    //   return this.course.find((c) => c.id === courseId);
-    //   }
     
+
     // updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
     //   const course = this.getCourseById(courseId);
     //   if (course && course.questions[questionIndex]) {
@@ -71,5 +68,8 @@ export class CourseService {
     //     course.status = status;
     //   }
     // }
-      
+
+    // getCompletedCourses() {
+    //   return this.course.filter((c) => c.status === 'เสร็จสิ้น');
+    // }
 } 

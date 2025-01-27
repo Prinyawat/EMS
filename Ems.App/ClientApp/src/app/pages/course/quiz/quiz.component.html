@@ -41,13 +41,18 @@ showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
   <p>คุณต้องการส่งคำตอบหรือไม่</p>
   <ng-template pTemplate="footer">
     <button pButton label="ยกเลิก" icon="pi pi-times" class="p-button-outlined" (click)="showSubmitDialog = false"></button>
-    <button pButton label="ส่งคำตอบ" icon="pi pi-check" class="p-button-outlined" (click)="submitQuiz()"></button>
+    <button pButton label="ส่งคำตอบ" icon="pi pi-check" class="p-button-outlined" (click)="saveAnswers()"></button>
   </ng-template>
 </p-dialog>
 
 <div *ngIf="showResult" class="result-container mt-5">
-  <h2>คะแนนของคุณ: {{ score }}/{{ course.questions.length }}</h2>
-  <h3>สถานะ: {{ passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}</h3>
+  <h2>คะแนนของคุณ: {{ result.score }}/{{ result.totalQuestions }}</h2>
+  <p>
+    สถานะ: 
+    <span [ngClass]="{ 'pass': result.passStatus, 'fail': !result.passStatus }">
+      {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
+    </span>
+  </p>
   <div class="flex gap-2">
     <div class="ml-auto flex gap-2">
         <button pButton pRipple type="button" label="กลับไปหน้าหลัก" class="p-button-outlined p-button-primary" routerLink="/course/course-open"></button>
@@ -55,5 +60,3 @@ showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
     </div>
   </div>
 </div>
-
-

@@ -47,6 +47,8 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<user_question> user_question { get; set; }
 
+    public virtual DbSet<user_result> user_result { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -207,16 +209,12 @@ public partial class EmsContext : DbContext
 
             entity.ToTable("leave_request", "ems");
 
-            entity.HasIndex(e => e.status_name, "leave_request_status_name_key").IsUnique();
-
             entity.Property(e => e.leave_request_id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.created_by).HasMaxLength(100);
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
-            entity.Property(e => e.leave_request_date)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.leave_request_date).HasMaxLength(100);
             entity.Property(e => e.leave_request_description).HasMaxLength(100);
             entity.Property(e => e.status_name)
                 .IsRequired()
@@ -518,6 +516,31 @@ public partial class EmsContext : DbContext
             entity.HasOne(d => d.user).WithMany(p => p.user_question)
                 .HasForeignKey(d => d.user_id)
                 .HasConstraintName("fk_user_question_user");
+        });
+
+        modelBuilder.Entity<user_result>(entity =>
+        {
+            entity.HasKey(e => e.result_id).HasName("user_result_pkey");
+
+            entity.ToTable("user_result", "ems");
+
+            entity.Property(e => e.result_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.course).WithMany(p => p.user_result)
+                .HasForeignKey(d => d.course_id)
+                .HasConstraintName("fk_user_result_course");
+
+            entity.HasOne(d => d.user).WithMany(p => p.user_result)
+                .HasForeignKey(d => d.user_id)
+                .HasConstraintName("fk_user_result_user");
         });
         modelBuilder.HasSequence("db_district_district_code_seq");
         modelBuilder.HasSequence("db_district_district_id_seq");

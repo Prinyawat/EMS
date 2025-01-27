@@ -5,17 +5,19 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class user_question
+public partial class user_result
 {
-    public Guid user_question_id { get; set; }
+    public Guid result_id { get; set; }
 
     public Guid user_id { get; set; }
 
     public Guid course_id { get; set; }
 
-    public Guid question_id { get; set; }
+    public int score { get; set; }
 
-    public Guid option_id { get; set; }
+    public int total_questions { get; set; }
+
+    public bool pass_status { get; set; }
 
     public string created_by { get; set; }
 
@@ -26,10 +28,6 @@ public partial class user_question
     public DateTime? updated_date { get; set; }
 
     public virtual course course { get; set; }
-
-    public virtual option option { get; set; }
-
-    public virtual question question { get; set; }
 
     public virtual user user { get; set; }
 }

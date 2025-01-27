@@ -81,6 +81,10 @@
       {
          "Name": "ems.user_question",
          "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_result",
+         "ObjectType": 0
       }
    ],
    "UiHint": null,

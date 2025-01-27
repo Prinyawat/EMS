@@ -80,6 +80,32 @@ namespace Ems.App.Controllers
         
         }
 
+        [HttpPost]
+        [Route("saveAnswers")]
+        public IActionResult SaveUserAnswers([FromBody] List<UserQuestionModel> answers)
+        {
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+
+            foreach (var answer in answers)
+            {
+                answer.userId = userId;
+            }
+
+            _courseService.SaveUserAnswers(answers);
+            return Ok(new { message = "บันทึกคำตอบเรียบร้อยแล้ว" });
+        }
+
+
+
+
+        //[HttpGet]
+        //[Route("calculateResult/{courseId}")]
+        //public IActionResult CalculateUserResult(Guid courseId)
+        //{
+        //    var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+        //    var result = _courseService.CalculateUserResult(userId, courseId);
+        //    return Ok(result);
+        //}
 
     }
 }

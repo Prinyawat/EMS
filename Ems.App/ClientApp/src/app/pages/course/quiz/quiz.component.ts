@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Course, Question } from 'src/app/shared/models/course.model';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 
@@ -10,14 +11,26 @@ import { CourseService } from 'src/app/shared/services/course.service';
 })
 export class QuizComponent implements OnInit {
 
-    course: any;
+    questions: Question[] = [];
+    course: Course;
     currentQuestionIndex: number = 0;
-    showSubmitDialog: boolean = false;
-    showResult: boolean = false;
+
     score: number = 0;
     passStatus: boolean = false;
-
+    
+    showResult: boolean = false;
+    showSubmitDialog: boolean = false;
     showAnswerRequiredDialog: boolean = false;
+
+    result: {
+      score: number;
+      totalQuestions: number;
+      passStatus: boolean;
+    } = {
+      score: 0,
+      totalQuestions: 0,
+      passStatus: false,
+    };
 
   constructor(private route: ActivatedRoute, private courseService: CourseService) {}
 
@@ -57,33 +70,26 @@ export class QuizComponent implements OnInit {
       this.currentQuestionIndex--;
     }
   }
-  
 
-  submitQuiz(): void {
-    this.calculateScore();
-    this.showSubmitDialog = false;
-    this.showResult = true;
-    // if (this.passStatus) {
-    //   this.courseService.updateCourseStatus(this.course.id, 'เสร็จสิ้น');
-    // }
+  saveAnswers() {
+    const answers = this.course.questions.map((question) => ({
+      courseId: this.course.courseId,
+      questionId: question.questionId,
+      optionId: question.selectedOptionId,
+    }));
+  
+    this.courseService.saveUserAnswers(answers).subscribe({
+      next: (response) => {
+      },
+    });
   }
   
-  calculateScore(): void {
-    const totalQuestions = this.course.questions.length;
-    const correctAnswers = this.course.questions.filter(
-      (q: any) => q.selectedOptionId === q.correctAnswer
-    ).length;
 
-    this.score = correctAnswers;
-    this.passStatus = this.score >= Math.ceil(totalQuestions / 2);
-    // this.courseService.updateQuizResult(this.course.id, this.score, this.passStatus);
-  }  
-
-  resetQuiz(): void {
-    this.currentQuestionIndex = 0;
-    this.course.questions.forEach((q: any) => (q.selectedOptionId = null));
-    this.showResult = false;
-    this.score = 0;
-    this.passStatus = false;
-  }
+  // resetQuiz(): void {
+  //   this.currentQuestionIndex = 0;
+  //   this.course.questions.forEach((q: any) => (q.selectedOptionId = null));
+  //   this.showResult = false;
+  //   this.score = 0;
+  //   this.passStatus = false;
+  // }
 }
