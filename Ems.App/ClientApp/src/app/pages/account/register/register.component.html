@@ -7,47 +7,123 @@
                     <span class="text-600 font-medium">Sign up to continue</span>
                 </div>
 
-                <div class="grid">
-                    <!-- First Name -->
+                <div class="grid p-fluid">
                     <div class="col-12 md:col-6">
-                        <label for="firstName" class="block text-900 text-xl font-medium mb-2">First Name</label>
-                        <input id="firstName" type="text" placeholder="First Name" pInputText class="w-full" style="padding:1rem">
+                        <div class="field mt-3">
+                            <label for="firstName" class="block text-900 text-xl font-medium mb-2">
+                                First Name <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                            type="text" 
+                            id="firstName" 
+                            placeholder="First Name" 
+                            pInputText 
+                            [(ngModel)]="firstName" 
+                            
+                            class="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty': firstNameDirty}"
+                        >
+                        <small *ngIf="firstNameDirty" class="text-red-500 block">First name is required.</small>
+                        </div>
+
+                        <div class="field mt-3">
+                            <label for="phone" class="block text-900 text-xl font-medium mb-2">
+                                Phone <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="phone" 
+                                placeholder="Phone" 
+                                pInputText 
+                                [(ngModel)]="phone" 
+                                
+                                required 
+                                class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': phoneDirty}"
+                            >
+                            <small *ngIf="phoneDirty" class="text-red-500 block">Phone is required.</small>
+                        </div>
                     </div>
 
-                    <!-- Last Name -->
                     <div class="col-12 md:col-6">
-                        <label for="lastName" class="block text-900 text-xl font-medium mb-2">Last Name</label>
-                        <input id="lastName" type="text" placeholder="Last Name" pInputText class="w-full" style="padding:1rem">
+                        <div class="field mt-3">
+                            <label for="lastName" class="block text-900 text-xl font-medium mb-2">
+                                Last Name <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                placeholder="Last Name" 
+                                pInputText 
+                                [(ngModel)]="lastName" 
+                                
+                                required 
+                                class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': lastNameDirty}"
+                            >
+                            <small *ngIf="lastNameDirty" class="text-red-500 block">Last name is required.</small>
+                        </div>
+
+                        <div class="field mt-3">
+                            <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
+                            <p-dropdown 
+                                [options]="positions" 
+                                placeholder="Select a Position" 
+                                [(ngModel)]="position" 
+                                class="w-full">
+                            </p-dropdown>
+                        </div>
                     </div>
                 </div>
+                <div class="grid p-fluid">
+                    <div class="col-12">
+                        <div class="field mt-3">
+                            <label for="email1" class="block text-900 text-xl font-medium mb-2">
+                                Email <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                id="email1" 
+                                type="email" 
+                                placeholder="Email address" 
+                                pInputText 
+                                [(ngModel)]="email" 
+                                 
+                                required 
+                                class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': emailDirty}"
+                            >
+                            <small *ngIf="emailDirty" class="text-red-500 block">Valid email is required.</small>
+                        </div>
 
-                <div class="grid">
-                    <!-- Phone -->
-                    <div class="col-12 md:col-6">
-                        <label for="phone" class="block text-900 text-xl font-medium mb-2">Phone</label>
-                        <input id="phone" type="text" placeholder="Phone number" pInputText class="w-full" style="padding:1rem">
-                    </div>
-                
-                    <!-- Position -->
-                    <div class="col-12 md:col-6">
-                        <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
-                        <p-dropdown id="position" [options]="positions" placeholder="Select Position" class="w-full" ></p-dropdown>
+                        <div class="field ">
+                            <label for="password1" class="block text-900 text-xl font-medium mb-2">
+                                Password <span class="text-red-500">*</span>
+                            </label>
+                            <p-password 
+                                id="password1" 
+                                [(ngModel)]="password" 
+                                 
+                                placeholder="Password" 
+                                [toggleMask]="true" 
+                                required 
+                                styleClass="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"
+                            ></p-password>
+                            <small *ngIf="passwordDirty" class="text-red-500 block">Password is required.</small>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Email -->
-                <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
-                <input id="email" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
-
-                <!-- Password -->
-                <label for="password" class="block text-900 font-medium text-xl mb-2">Password</label>
-                <p-password id="password" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
-
 
                 <div class="text-center">
-                    <button pButton pRipple label="Sign Up" class="w-full p-3 text-xl p-button-outlined"></button>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Sign Up" 
+                        class="w-full p-3 text-xl p-button-outlined"
+                        (click)="validateForm()">
+                    </button>
                     <p-button label="Already have an account?" styleClass="p-button-link" routerLink="/account/login"></p-button>
-                </div>
+                </div>                                
             </div>
         </div>
     </div>

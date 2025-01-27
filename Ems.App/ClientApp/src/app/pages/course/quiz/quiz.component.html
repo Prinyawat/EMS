@@ -8,7 +8,7 @@
   ]">
 </p-breadcrumb>
 
-<h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
+<!-- <h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
 <div *ngIf="!showResult && currentQuestion">
   <div *ngFor="let option of currentQuestion.options">
     <div class="field-radiobutton">
@@ -22,18 +22,27 @@
       <label>{{ option.optionText }}</label>
     </div>
   </div>
+</div> -->
+
+<h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
+<div *ngIf="!showResult && currentQuestion">
+  <div *ngFor="let option of currentQuestion.options">
+    <div class="field-radiobutton" >
+      <p-radioButton
+        [inputId]="option.optionId"
+        [value]="option.optionId"
+        [(ngModel)]="currentQuestion.selectedOptionId"
+        (ngModelChange)="onOptionSelect(option.optionId)"
+      ></p-radioButton>
+      <label>{{ option.optionText }}</label>
+    </div>
+  </div>
+  <small *ngIf="!currentQuestion?.selectedOptionId && isDirty" class="p-error">* กรุณาเลือกคำตอบก่อนที่จะไปยังคำถามถัดไป. *</small>
 </div>
 
-<p-dialog [(visible)]="showAnswerRequiredDialog" header="คำเตือน" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
-  <p>กรุณาเลือกคำตอบก่อนที่จะไปยังคำถามถัดไป</p>
-  <ng-template pTemplate="footer">
-    <button pButton label="ตกลง" icon="pi pi-check" class="p-button-outlined" (click)="showAnswerRequiredDialog = false"></button>
-  </ng-template>
-</p-dialog>
-
 <div *ngIf="!showResult" class="navigation-container">
-  <button pButton pRipple type="button" label="Back" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"></button>
-  <button pButton pRipple type="button" label="Next" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" (click)="nextQuestion()"></button>
+  <button pButton pRipple type="button" label="ข้อก่อนหน้า" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"></button>
+  <button pButton pRipple type="button" label="ข้อถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" (click)="nextQuestion()" ></button>
 </div>
 
 <p-dialog [(visible)]="showSubmitDialog" header="ส่งแบบทดสอบ"

@@ -43,12 +43,20 @@ export class CourseDetailComponent implements OnInit {
   
     return [nextIncompleteChapter.chapterId];
   }
-  
-  canNavigateNext(): boolean {
-    return (
-      this.course?.chapters?.length > 0 &&
-      (this.course.chapters.some((chapter: any) => !this.isChapterCompleted(chapter)) ||
-        this.course.chapters.some((chapter: any) => this.isChapterCompleted(chapter)))
+
+  isAllChaptersCompleted(): boolean {
+    if (!this.course?.chapters) return false;
+    return this.course.chapters.every((chapter: any) =>
+      this.isChapterCompleted(chapter)
     );
   }
+  
+  
+  // canNavigateNext(): boolean {
+  //   return (
+  //     this.course?.chapters?.length > 0 &&
+  //     (this.course.chapters.some((chapter: any) => !this.isChapterCompleted(chapter)) ||
+  //       this.course.chapters.some((chapter: any) => this.isChapterCompleted(chapter)))
+  //   );
+  // }
 }

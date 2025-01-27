@@ -18,6 +18,7 @@ export class QuizComponent implements OnInit {
     score: number = 0;
     passStatus: boolean = false;
     
+    isDirty: boolean = false;
     showResult: boolean = false;
     showSubmitDialog: boolean = false;
     showAnswerRequiredDialog: boolean = false;
@@ -49,15 +50,17 @@ export class QuizComponent implements OnInit {
   onOptionSelect(optionId: string): void {
     const question = this.course.questions[this.currentQuestionIndex];
     question.selectedOptionId = optionId;
+    this.isDirty = false;
   }
   
   nextQuestion(): void {
     const question = this.currentQuestion;
-    if (!question.selectedOptionId) {
-      this.showAnswerRequiredDialog = true;
+    if (!question?.selectedOptionId) {
+      this.isDirty = true;
       return;
     }
 
+    this.isDirty = false;
     if (this.currentQuestionIndex === this.course.questions.length - 1) {
       this.showSubmitDialog = true;
     } else {
