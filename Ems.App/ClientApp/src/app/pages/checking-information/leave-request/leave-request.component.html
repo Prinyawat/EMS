@@ -10,7 +10,18 @@
         <div class="card">
 
             <h5>Leave Request</h5>
+
             <div class="grid formgrid col justify-content-center gap-2">
+
+                <p-dropdown [options]="leaveHalfStatus" [(ngModel)]="selectedHalf"
+                placeholder="Select Leave Half" [ngStyle]="{'width': '200px'}">
+                    <ng-template let-option pTemplate="item">
+                        <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
+                        [class]="'customer-badge status-' + option.value" [style.color]="'white'">
+                        {{ option.label }}</span>
+                    </ng-template>
+                </p-dropdown>
+
                 <p-calendar  #calendar [showButtonBar]="true" [showIcon]="true" inputId="icon" [(ngModel)]="selectedDate" dateFormat="dd/mm/yy" class="p-button-warning"
                 placeholder="Selected Date" selectionMode="range"></p-calendar>
 
