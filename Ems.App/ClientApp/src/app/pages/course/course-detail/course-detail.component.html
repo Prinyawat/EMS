@@ -18,7 +18,7 @@
   </ng-template>
 </h1>
 <h3>{{ course?.subtitle }}</h3>
-<p>{{ course?.description }}</p>
+<p [innerHTML]="course.description"></p>
 
 <h2>Chapters</h2>
 <p-table
