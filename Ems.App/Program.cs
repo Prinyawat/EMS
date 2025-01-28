@@ -88,4 +88,5 @@ app.UseAuthorization();
 //app.MapControllers();
 
 app.MapHub<DataHub>("/datahub");
+app.MapHub<NotificationHub>("/notificationHub");
 app.Run();

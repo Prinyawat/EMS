@@ -9,6 +9,7 @@ import { Menu } from 'primeng/menu';
 import { ListDemoComponent } from '../demo/components/uikit/list/listdemo.component';
 import { AuthService } from '../shared/services/auth.service';
 import { LeaveRequest } from '../shared/models/leaverequest.model';
+import { NotificationCourseService } from '../shared/services/notification-course.service';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
@@ -34,6 +35,8 @@ export class AppTopBarComponent {
     edit: boolean = false;
 
     position: string;
+
+    notifications: string[] = [];
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -66,7 +69,7 @@ export class AppTopBarComponent {
     constructor(public layoutService: LayoutService, private router: Router,
         private authService: AuthService,
         private LeaveRequestService: LeaveRequestService,
-
+        private notificationService: NotificationCourseService
     ) { }
 
     toggleMenu(event: Event) {
@@ -83,6 +86,19 @@ export class AppTopBarComponent {
                 this.createLeaveRequestMessage();
             }
         );
+
+        // CourseNotification
+        const storedNotifications = localStorage.getItem('notifications');
+        if (storedNotifications) {
+            this.notifications = JSON.parse(storedNotifications);
+        }
+
+        this.notificationService.startConnection();
+        this.notificationService.listenNotifications((message: string) => {
+        this.notifications.push(message);
+
+        localStorage.setItem('notifications', JSON.stringify(this.notifications));
+    });
     }
 
     createLeaveRequestMessage(): void {
@@ -122,6 +138,7 @@ export class AppTopBarComponent {
 
     logout() {
         console.log('Logging out...');
+        localStorage.removeItem('notifications'); // แปะไว้ก่อน* ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ 
         localStorage.removeItem('app.token');
         sessionStorage.removeItem('app.token');
         sessionStorage.removeItem('UserInfo');

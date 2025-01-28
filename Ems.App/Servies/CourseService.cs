@@ -1,6 +1,7 @@
 ﻿using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ems.App.Servies
@@ -8,10 +9,12 @@ namespace Ems.App.Servies
     public class CourseService : ICourseService
     {
         private readonly EmsContext _emsContext;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public CourseService(EmsContext emsContext)
+        public CourseService(EmsContext emsContext, IHubContext<NotificationHub> hubContext)
         {
             _emsContext = emsContext;
+            _hubContext = hubContext;
         }
 
         public List<CourseModel> GetCourses()
@@ -127,6 +130,12 @@ namespace Ems.App.Servies
             var registeredStatus = _emsContext.status
                 .FirstOrDefault(s => s.status_name == "ลงทะเบียนแล้ว");
 
+            var user = _emsContext.user.FirstOrDefault(u => u.user_id == model.userId);
+            var course = _emsContext.course.FirstOrDefault(c => c.course_id == model.courseId);
+
+            if (user == null || course == null || registeredStatus == null)
+                throw new Exception("ข้อมูลไม่ถูกต้อง");
+
             var registration = new registration
             {
                 registration_id = Guid.NewGuid(),
@@ -137,6 +146,9 @@ namespace Ems.App.Servies
 
             _emsContext.registration.Add(registration);
             _emsContext.SaveChanges();
+
+            var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name}";
+            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
 
             return new RegistrationCourseModel
             {
@@ -150,12 +162,19 @@ namespace Ems.App.Servies
         public void CancelRegistration(Guid userId, Guid courseId)
         {
             var registration = _emsContext.registration
+                .Include(r => r.course)
                 .FirstOrDefault(r => r.user_id == userId && r.course_id == courseId);
 
             if (registration != null)
             {
+                var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
+                var course = _emsContext.course.FirstOrDefault(c => c.course_id == courseId);
+
                 _emsContext.registration.Remove(registration);
                 _emsContext.SaveChanges();
+
+                var message = $"{user.first_name} ได้ยกเลิกการลงทะเบียนคอร์ส {course.course_name}";
+                _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
             }
         }
 
