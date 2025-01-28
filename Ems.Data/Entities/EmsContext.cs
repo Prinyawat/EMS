@@ -114,10 +114,6 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.check_dates)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
-            entity.Property(e => e.check_in)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone");
-            entity.Property(e => e.check_out).HasColumnType("timestamp without time zone");
             entity.Property(e => e.created_by).HasMaxLength(100);
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

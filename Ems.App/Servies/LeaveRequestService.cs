@@ -78,6 +78,36 @@ namespace Ems.App.Servies
             return leavestatusData;
         }
 
+        public List<LeaveRequestModel> getLeaveRequestNoti()
+        {
+            var leaveRequests = _emsContext.leave_request
+                .Select(lr => new
+                {
+                    leave_request_date = lr.leave_request_date,
+                    status = lr.status_name
+                 })
+                .ToList();
 
+            // สร้าง List สำหรับการเก็บข้อมูล LeaveRequestModel
+            List<LeaveRequestModel> notifications = new List<LeaveRequestModel>();
+
+            // แยกค่าออกจาก leave_request_date หลังจากดึงข้อมูลแล้ว
+            foreach (var leaveRequest in leaveRequests)
+            {
+                var dateRange = leaveRequest.leave_request_date?.Split(" - "); 
+
+                if (dateRange != null && dateRange.Length == 2)
+                {
+                    notifications.Add(new LeaveRequestModel
+                    {
+                        startDate = dateRange[0].Trim(),
+                        endDate = dateRange[1].Trim(),
+                        status = leaveRequest.status
+                    });
+                }
+            }
+
+            return notifications;
+        }
     }
 }

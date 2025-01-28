@@ -13,48 +13,55 @@ namespace Ems.App.Servies
         {
             _emsContext = emsContext;
         }
-        public CheckingModel saveChecking(CheckingModel data)
+        public CheckingTimeDataModel saveChecking(CheckingTimeDataModel checkingdata)
         {
+            // ค้นหาข้อมูลสถานะ
             var validStatus = _emsContext.checking_status
-                .FirstOrDefault(s => s.checking_status_name == data.status);
+                .FirstOrDefault(s => s.checking_status_name == checkingdata.status);
 
-            if (validStatus == null)
-            {
-                throw new Exception("Invalid status provided.");
-            }
-
+            // ถ้าพบสถานะที่ตรงกับค่าที่ส่งมา
             var checkingStatusId = validStatus.checking_status_id;
+
+            // ค้นหาว่าผู้ใช้ได้เช็คอินแล้วแต่ยังไม่ได้เช็คเอาท์หรือไม่
             var existingCheckIn = _emsContext.check_in_out
                 .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"));
 
-            if (existingCheckIn == null)
+            // แปลงวันที่ให้เป็น UTC
+            var utcCheckIn = checkingdata.checkin?.ToUniversalTime();
+            var utcCheckOut = checkingdata.checkout?.ToUniversalTime();
+
+            if (existingCheckIn != null && checkingdata.checkout.HasValue)
             {
+                // กรณีที่มีข้อมูลเช็คอินอยู่แล้ว แต่ผู้ใช้ส่งค่า check_out มา
+                existingCheckIn.check_out = utcCheckOut;  // อัปเดต check_out
+                existingCheckIn.checking_status_id = checkingStatusId;  // อัปเดตสถานะ
+                _emsContext.SaveChanges();  // บันทึกการเปลี่ยนแปลง
+            }
+            else if (existingCheckIn == null && checkingdata.checkin.HasValue)
+            {
+                // กรณีที่ยังไม่มีการเช็คอิน (ไม่พบข้อมูลที่ยังไม่ได้เช็คเอาท์)
                 var newCheckInOut = new check_in_out
                 {
                     check_inout_id = Guid.NewGuid(),
                     user_id = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"),
                     checking_status_id = checkingStatusId,
-                    check_in = DateTime.Now,
-                    created_date = DateTime.Now
+                    check_in = utcCheckIn,  // บันทึก check_in
+                    check_out = utcCheckOut,  // บันทึก check_out
+                    created_date = DateTime.Now  // บันทึกเวลาที่สร้างข้อมูล
                 };
 
-                _emsContext.check_in_out.Add(newCheckInOut);
-                _emsContext.SaveChanges();
-
-                data.timeStamp = newCheckInOut.check_in.Value;
-                data.status = data.status;
-            }
-            else
-            {
-                existingCheckIn.check_out = DateTime.Now; 
-                _emsContext.SaveChanges();
-
-                data.timeStamp = existingCheckIn.check_out.Value;
-                data.status = data.status;
+                _emsContext.check_in_out.Add(newCheckInOut);  // เพิ่มแถวใหม่
+                _emsContext.SaveChanges();  // บันทึกการเปลี่ยนแปลง
             }
 
-            return data;
+            // คืนค่า model ที่ได้รับการอัปเดต
+            checkingdata.checkin = checkingdata.checkin;
+            checkingdata.checkout = checkingdata.checkout;
+            checkingdata.status = checkingdata.status;
+
+            return checkingdata;
         }
+
 
         public List<AgendaModel> getAgendas()
         {
@@ -72,6 +79,16 @@ namespace Ems.App.Servies
                     checkOut = r.check_out,
                     checkingStatus = r.checking_status.checking_status_name
 
+                }).ToList();
+        }
+
+        public List<CheckingStatusModel> getCheckinStatus()
+        {
+
+            return _emsContext.checking_status
+                .Select(r => new CheckingStatusModel
+                {
+                    status = r.checking_status_name
                 }).ToList();
         }
 

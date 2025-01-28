@@ -29,6 +29,8 @@ public partial class leave_request
 
     public Guid? leave_half_id { get; set; }
 
+    public byte[] upload_file { get; set; }
+
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
 
     public virtual leave_half leave_half { get; set; }

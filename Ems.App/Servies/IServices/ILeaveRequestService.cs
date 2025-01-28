@@ -7,6 +7,8 @@ namespace Ems.App.Servies.IServices
         LeaveRequestModel saveleaveRequest(LeaveRequestModel data);
 
         LeaveStatusModel saveLeaveHalf(LeaveStatusModel statusData);
+
+        List<LeaveRequestModel> getLeaveRequestNoti();
     }
 
 }

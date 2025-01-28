@@ -37,7 +37,7 @@
             </div>
 
             <h5>Additional proof</h5>
-            <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)"
+            <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"
                           [multiple]="true" accept="image/*" [maxFileSize]="1000000">
                 <ng-template pTemplate="content">
                     <ul *ngIf="uploadedFiles.length">

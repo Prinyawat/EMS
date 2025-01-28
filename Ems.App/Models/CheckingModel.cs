@@ -2,11 +2,19 @@
 
 namespace Ems.App.Models
 {
-    public class CheckingModel
+    public class CheckingStatusModel
     {
-        public DateTime timeStamp { get; set; }
+        public string status { get; set; }
+    }
+
+    public class CheckingTimeDataModel
+    {
+        public DateTime? checkin { get; set; }
+        public DateTime? checkout { get; set; }
         public string status { get; set; }
 
     }
+
+
 
 }

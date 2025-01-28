@@ -92,7 +92,6 @@ export class LeaveRequestComponent {
                 const startDate = new Date(this.selectedDate[0]);
 
                 const endDate = new Date(this.selectedDate[1]);
-                console.log(this.selectedHalf);
                 startDate.setHours(0, 0, 0, 0);
                 endDate.setHours(23, 59, 59, 999);
 
@@ -147,8 +146,6 @@ export class LeaveRequestComponent {
             }
         });
     }
-
-
 
     showWarnViaToast(): void {
         this.messageService.add({

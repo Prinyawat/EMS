@@ -19,14 +19,11 @@ namespace Ems.App.Controllers
 
         [HttpPost]
         [Route("saveChecking")]
-        public IActionResult saveChecking(CheckingModel data)
+        public IActionResult saveChecking([FromBody] CheckingTimeDataModel checkingdata)
         {
-            var checkingData = _checkingservice.saveChecking(data);
+            var timeCheckingData = _checkingservice.saveChecking(checkingdata);
 
-            return Ok(new CheckingModel(){
-                timeStamp = data.timeStamp,
-                status = data.status
-            });
+            return Ok(timeCheckingData);
         }
 
         [HttpGet]
@@ -35,6 +32,14 @@ namespace Ems.App.Controllers
         {
             var modelData = _checkingservice.getAgendas();
             return Ok(modelData);
+        }
+
+        [HttpGet]
+        [Route("getCheckinStatus")]
+        public IActionResult getCheckinStatus()
+        {
+            var StstusData = _checkingservice.getCheckinStatus();
+            return Ok(StstusData);
         }
     }
 }

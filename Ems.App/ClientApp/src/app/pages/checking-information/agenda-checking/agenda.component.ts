@@ -106,7 +106,6 @@ export class AgendaComponent {
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
-        this.workStatus = this.CheckingService.getWorkStatus();
         this.leaveStatus = this.LeaveRequestService.getLeaveRequestStatus();
     }
 
@@ -127,8 +126,6 @@ export class AgendaComponent {
             }
         });
     }
-
-
 
     getStatusColor(status: string | null): string {
         if (!status) {

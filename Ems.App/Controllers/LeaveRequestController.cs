@@ -41,5 +41,13 @@ namespace Ems.App.Controllers
                 halfStatus = leavestatusData.halfStatus
             });
         }
+
+        [HttpGet]
+        [Route("getLeaveRequestNoti")]
+        public ActionResult<List<LeaveRequestModel>> getLeaveRequestNoti()
+        {
+            var leaveRequestChoice = _leaverequestservice.getLeaveRequestNoti();
+            return Ok(leaveRequestChoice);
+        }
     }
 }

@@ -4,9 +4,11 @@ namespace Ems.App.Servies.IServices
 {
     public interface ICheckingService
     {
-        CheckingModel saveChecking(CheckingModel data);
+        CheckingTimeDataModel saveChecking(CheckingTimeDataModel checkingdata);
 
         List<AgendaModel> getAgendas();
+
+        List<CheckingStatusModel> getCheckinStatus();
     }
 
 }

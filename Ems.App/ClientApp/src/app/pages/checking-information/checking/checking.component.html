@@ -7,66 +7,56 @@
     </div>
 
     <div class="col-12 md:col-12">
-        <div class="card">
+        <div class="flex card md:col-12">
+            <div class="col-12 md:col-5">
+                <h5>Check Information</h5>
+                <div class="grid formgrid justify-content-center align-items-center">
+                    <div class="flex gap-2 field col-12 md:col justify-content-center align-items-center">
+                        <div class="justify-content-center align-items-center">
 
-            <h5>Check Information</h5>
-            <div class="grid formgrid justify-content-center">
-                <div class="formgroup-inline justify-content-center">
-                    <div class="field col-12 md:col">
-                        <p-inputGroup>
-                            <p-inputGroupAddon>
-                                <i class="pi pi-stopwatch"></i>
-                            </p-inputGroupAddon>
-                            <input pInputText type="text" placeholder="{{hours}}:{{minutes}}:{{seconds}}" label="Check-In / Check-Out" [value]="checkInTime" [disabled]="true" [disabled]="isCheckInTimeFrozen"/>
-                        </p-inputGroup>
+                            <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="กรุณาเลือกสถานะเข้างาน" [ngStyle]="{'width': '200px'}" optionLabel="status" [disabled]="isCheckIn === false">
+                                <ng-template let-option pTemplate="item">
+                                    <span [ngStyle]="{'background-color': getStatusColor(option.status)}"
+                                        [class]="'customer-badge status-' + option.status" [style.color]="'white'">
+                                        {{ option.status }}</span>
+                                </ng-template>
+                            </p-dropdown>
+
+                            <div class="mt-3">
+                                <button pButton pRipple type="button" label="{{day}} {{month}} {{year}}" class="p-button-outlined p-button-info"></button>
+                            </div>
+
+                            <div class="mt-2 md:col-12">
+                                    <button pButton pRipple type="button" class="p-button-rounded p-button-success p-button-outlined"
+                                    label="{{time}}"></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="justify-content-center">
+                        <div class="field-radiobutton justify-content-center gap-3">
+                            <p-tag severity="success" value="เช็คอิน : {{ checkInTime | date: 'short' }}"></p-tag>
+                        </div>
+                        <div class="field-radiobutton justify-content-center gap-3">
+                            <p-tag  severity="success" value="เช็คเอาท์ : {{ checkOutTime | date: 'short' }}"></p-tag>
+                        </div>
+                </div>
+
+                <div class="grid formgrid mt-3 justify-content-center">
+                    <div class="col-12 md:col-5">
+                        <p-toast></p-toast>
+                        <button  pButton icon="pi pi-check" [label]="isCheckIn ? 'เช็คอิน' : 'เช็คเอาท์'" (click)="confirm2($event)" [disabled]="disableButtons"></button>
+                        <p-confirmPopup key="confirm2"></p-confirmPopup>
                     </div>
                 </div>
             </div>
+            <div class="col-12 md:col-7">
 
-            <div class="flex justify-content-center align-items-center">
-
-                <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="Select Status" [ngStyle]="{'width': '200px'}" [disabled]="isCheckInTimeFrozen">
-                    <ng-template let-option pTemplate="item">
-                        <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
-                        [class]="'customer-badge status-' + option.value" [style.color]="'white'">
-                        {{ option.label }}</span>
-                    </ng-template>
-                </p-dropdown>
-
-            </div>
-
-
-            <div class="grid formgrid mt-3 justify-content-center">
-                <div class="col-12 md:col-3 align-items-center">
-                    <div class="field-radiobutton justify-content-center gap-1">
-                        <p-radioButton name="city" value="CheckIn" [(ngModel)]="valRadio" id="city1" [disabled]="isCheckInTimeFrozen">
-                        </p-radioButton>
-                        <p-tag severity="success" value="Check In"></p-tag>
-
-                    </div>
-                </div>
-                <div class="col-12 md:col-3 ">
-                    <div class="field-radiobutton justify-content-center gap-1">
-                        <p-radioButton name="city" value="CheckOut" [(ngModel)]="valRadio" id="city2"[disabled]="isCheckOutTimeFrozen" >
-                        </p-radioButton>
-                        <p-tag severity="info" value="Check Out"></p-tag>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid formgrid mt-3 justify-content-center">
-                <div class="col-12 md:col-3">
-                    <p-toast></p-toast>
-                    <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"></button>
-                    <p-confirmPopup key="confirm2"></p-confirmPopup>
-                </div>
-            </div>
-
-            <div class="col-12">
-                <div class="card">
                     <h5>Mapping</h5>
-                    <div id="map" style="height: 500px;"></div>
-                </div>
+                    <div id="map" style="height: 350px;"></div>
+
             </div>
 
         </div>

@@ -4,6 +4,8 @@ import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AgendaComponent } from '../agenda-checking/agenda.component';
+import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
+
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
@@ -11,45 +13,51 @@ import { AgendaComponent } from '../agenda-checking/agenda.component';
 })
 export class CheckingComponent {
 
+    canUseSystem: boolean = true;
+
+    disableButtons: boolean = false;
+
+    isCheckedOut: boolean = false;
+
+    lastCheckOutTime: Date | null = null;
+
+    resetTime: Date = new Date(new Date().setHours(8, 0, 0, 0));
+
+    isButtonDisabled: boolean = false;
+
+    checkInTimeLabel: Date | null = null;
+
+    checkOutTimeLabel: Date | null = null;
+
+    isCheckIn: boolean = true;
+
+    clickCount: number = 0;
+
     agendas: any[] = [];
 
-    isCheckInDisabled: boolean = false;
+    selectedItem: CheckingStatus | null = null;
 
-    isCheckOutDisabled: boolean = true;
-
-    isCheckOutCompleted: boolean = false;
-
-    selectedItem: string;
-
-    workStatus: any[];
+    workStatus: CheckingStatus[] = [];
 
     checkInTime: string = '';
 
     checkOutTime: string = '';
 
-    isCheckInTimeFrozen = false;
-
-    isCheckOutTimeFrozen: boolean = false;
-
-    private isCheckIn: boolean = true;
-
     dataFromBackend: any;
 
-    hours: string = '00';
+    year: string = '';
 
-    minutes: string = '00';
+    month: string = '';
 
-    seconds: string = '00';
+    day: string = '';
+
+    time: string = '';
 
     private interval: any;
 
     breadcrumbItems: MenuItem[] = [];
 
     menuItems: MenuItem[] = [];
-
-    valRadio: string = 'CheckIn';
-
-    display: boolean = false;
 
     private map!: L.Map;
 
@@ -61,6 +69,13 @@ export class CheckingComponent {
         private CheckingService: CheckingService,) { }
 
     ngOnInit(): void {
+        const lastCheckOutTime = localStorage.getItem('lastCheckOutTime');
+
+        if (lastCheckOutTime) {
+            this.lastCheckOutTime = new Date(lastCheckOutTime);
+            this.checkTimeForReactivation(); // ตรวจสอบว่าตอนนี้สามารถใช้งานได้หรือยัง
+        }
+
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
         this.breadcrumbItems.push({ label: 'Checking' });
@@ -70,18 +85,25 @@ export class CheckingComponent {
         this.displaySpecificLocation();
         this.startClock();
 
-        this.workStatus = [
-            { label: 'WorkIn', value: 'workin' },
-            { label: 'WorkFromHome', value: 'workfromhome' },
-        ];
+        this.CheckingService.getCheckinStatus().subscribe({
+            next: (data) => {
+              if (Array.isArray(data)) {
+                this.workStatus = data.map(item => ({
+                  status: item.status || ''
+                }));
+                this.selectedItem = this.workStatus.find(status => status.status === 'ปฏิบัติงานที่สำนักงาน') || this.workStatus[0] || null;
+              }
+            },
+          });
+
     }
 
     getStatusColor(status: string): string {
         const statuses = status.toLowerCase();
         switch (statuses) {
-            case 'workin':
+            case 'ปฏิบัติงานที่สำนักงาน':
                 return 'green';
-            case 'workfromhome':
+            case 'ปฏิบัติงานจากที่บ้าน':
                 return 'blue';
             default:
                 return 'gray';
@@ -95,15 +117,38 @@ export class CheckingComponent {
     }
 
     startClock(): void {
+        const daysOfWeek = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+        const months = [
+            'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+            'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+        ];
+
         this.interval = setInterval(() => {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
+
+            const day = String(now.getDate()).padStart(2, '0');
+            const dayOfWeek = daysOfWeek[now.getDay()];
+            const month = months[now.getMonth()];
+            const year = String(now.getFullYear());
+
+            let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
+            let ampm = 'AM';
 
-            this.hours = hours;
-            this.minutes = minutes;
-            this.seconds = seconds;
+            if (hours >= 12) {
+                ampm = 'PM';
+                    if (hours > 12) hours -= 12;
+                        } else if (hours === 0) {
+                            hours = 12;
+            }
+
+
+        const formattedHours = String(hours).padStart(2, '0');
+            this.time = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+            this.day = `วัน${dayOfWeek}ที่ ${day}`;
+            this.month = month;
+            this.year = year;
         }, 1000);
     }
 
@@ -143,77 +188,71 @@ export class CheckingComponent {
         this.map.setView([latitude, longitude], 20);
     }
 
-    confirm2(event: Event) {
-
+    confirm2(event: Event): void {
         const action = this.isCheckIn ? 'Check-In' : 'Check-Out';
         const successMessage = this.isCheckIn ? 'เช็คอินสำเร็จ' : 'เช็คเอาท์สำเร็จ';
 
-        if (!this.selectedItem) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'เกิดข้อผิดพลาด',
-                detail: 'กรุณาเลือกสถานะการเข้างาน',
-            });
-            return;
-        }
+        const now = new Date();
+        const saveData = this.isCheckIn
+            ? { checkIn: now, checkOut: null, status: this.selectedItem.status }
+            : { checkIn: null, checkOut: now, status: this.selectedItem.status };
 
-        this.confirmationService.confirm({
-            key: 'confirm2',
-            target: event.target || new EventTarget(),
-            message: 'Are you sure that you want to proceed?',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                const now = new Date();
-                const timestamp = now.toLocaleTimeString('en-GB', { hour12: false });
+        console.log(saveData);
 
-                this.CheckingService.saveChecking({ timestamp: now, status: this.selectedItem}).subscribe({
-                    next: () => {
-                        if (this.isCheckIn) {
-                            this.checkInTime = timestamp;
-                            this.isCheckInDisabled = true;
-                            this.isCheckOutDisabled = false;
-                            this.valRadio = 'CheckOut';
-                            this.isCheckInTimeFrozen = true;
-                        } else {
-                            this.checkInTime = timestamp;
-                            this.isCheckInTimeFrozen = true;
-                            this.isCheckOutCompleted = true;
-                            this.valRadio = '';
+        this.CheckingService.saveChecking({
+            checkin: saveData.checkIn,
+            checkout: saveData.checkOut,
+            status: saveData.status
+        }).subscribe({
+            next: () => {
+                // หากเป็นการเช็คอิน
+                if (this.isCheckIn) {
+                    this.isCheckIn = false;
+                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
+                } else {
 
-                        }
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'สำเร็จ',
-                            detail: successMessage,
-                        });
+                    this.isCheckIn = true;
+                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
+                }
 
-                        this.isCheckIn = !this.isCheckIn;
-                    },
-                    error: () => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'เกิดข้อผิดพลาด',
-                            detail: 'ไม่สามารถส่งข้อมูลได้',
-                        });
-                    },
+                if (saveData.checkIn) {
+                    this.checkInTime = saveData.checkIn;
+                }
+                if (saveData.checkOut) {
+                    this.checkOutTime = saveData.checkOut;
+                    this.lastCheckOutTime = now;
+                    this.disableButtons = true;
+                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
+                }
+
+                // สถานะสำเร็จ
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'สำเร็จ',
+                    detail: successMessage,
                 });
+                this.checkTimeForReactivation();
             },
-            reject: () => {
+            error: () => {
+                // แสดงข้อผิดพลาด
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'ยกเลิก',
-                    detail: 'คุณยกเลิกการส่งข้อมูล',
+                    summary: 'เกิดข้อผิดพลาด',
+                    detail: 'ไม่สามารถบันทึกข้อมูลได้',
                 });
             },
         });
+    }
 
-        this.CheckingService.submittedData$.subscribe((data) => {
-            if (data) {
-                const changeTime = data?.timestamp
-                    ? new Date(data.timestamp).toLocaleTimeString('en-GB', { hour12: false }) : 'Invalid timestamp';
-                this.dataFromBackend = data;
-            }
-        });
+    checkTimeForReactivation() {
+        const now = new Date();
+        const currentTime = now.getHours();
 
+        if (currentTime >= 8) {
+            this.canUseSystem = true; // อนุญาตให้ใช้ระบบได้อีกหลังจาก 8 โมง
+            this.disableButtons = false; // ปลดล็อกปุ่ม
+            localStorage.removeItem('lastCheckOutTime'); // ลบเวลาของ check-out ที่บันทึกไว้แล้ว
+        }
     }
 }
+

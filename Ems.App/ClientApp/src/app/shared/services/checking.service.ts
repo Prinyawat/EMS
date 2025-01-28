@@ -25,24 +25,25 @@ export class CheckingService {
 
     private summittedChecking = new BehaviorSubject<any>(null);
     submittedData$ = this.summittedChecking.asObservable();
-    saveChecking(data: { timestamp: Date, status: string;}){
-        return this.http.post(this.env + "/saveChecking", {timestamp: Date, status: data.status}).pipe(
+    saveChecking(data: { checkin: Date | null, checkout: Date | null, status: string;}){
+        return this.http.post(this.env + "/saveChecking", {
+            checkin: data.checkin,
+            checkout: data.checkout,
+            status: data.status
+        }).pipe(
             tap((result: any) => {
                 this.summittedChecking.next(result);
             })
         );
     }
+
+    getCheckinStatus() {
+        return this.http.get(this.env + "/getCheckinStatus");
+    }
+
     getAgendas() {
         return this.http.get(this.env + "/getAgendas");
     }
 
-    workStatus = [
-        { label: 'WorkIn', value: 'workin' },
-        { label: 'WorkFromHome', value: 'workfromhome' },
-      ];
-
-    getWorkStatus() {
-        return this.workStatus;
-    }
 }
 

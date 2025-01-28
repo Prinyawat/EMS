@@ -23,7 +23,7 @@ export class LeaveRequestService {
     env: string = `${environment.apiUrl}/api/LeaveRequest`;
 
     private summittedLeaveRequest = new BehaviorSubject<any>(null);
-    submittedData$ = this.summittedLeaveRequest.asObservable();
+    submittedLeaveData$ = this.summittedLeaveRequest.asObservable();
 
     private LeaveHalfStatus = new BehaviorSubject<any>(null);
     LeaveHalfStatus$ = this.LeaveHalfStatus.asObservable();
@@ -50,6 +50,13 @@ export class LeaveRequestService {
                 this.summittedLeaveRequest.next(result);
             })
         );
+    }
+
+    sendLeaveRequestDate(request: any): void {
+    }
+
+    getLeaveRequestNoti() {
+        return this.http.get(this.env + "/getLeaveRequestNoti");
     }
 
     saveleaveHalf(request: {halfStatus: string}){
