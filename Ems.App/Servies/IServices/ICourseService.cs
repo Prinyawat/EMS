@@ -14,7 +14,7 @@ namespace Ems.App.Servies.IServices
 
         void SaveUserAnswers(List<UserQuestionModel> answers);
 
-        //UserResultModel CalculateUserResult(Guid userId, Guid courseId);
+        UserResultModel CalculateUserResult(Guid userId, Guid courseId);
 
     }
 }

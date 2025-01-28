@@ -92,20 +92,19 @@ namespace Ems.App.Controllers
             }
 
             _courseService.SaveUserAnswers(answers);
-            return Ok(new { message = "บันทึกคำตอบเรียบร้อยแล้ว" });
+            var courseId = answers.First().courseId;
+            var result = _courseService.CalculateUserResult(userId, courseId); 
+            return Ok(result); 
         }
 
 
-
-
-        //[HttpGet]
-        //[Route("calculateResult/{courseId}")]
-        //public IActionResult CalculateUserResult(Guid courseId)
-        //{
-        //    var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-        //    var result = _courseService.CalculateUserResult(userId, courseId);
-        //    return Ok(result);
-        //}
-
+        [HttpGet]
+        [Route("calculateResult/{courseId}")]
+        public IActionResult CalculateUserResult(Guid courseId)
+        {
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var result = _courseService.CalculateUserResult(userId, courseId);
+            return Ok(result);
+        }
     }
 }

@@ -8,22 +8,6 @@
   ]">
 </p-breadcrumb>
 
-<!-- <h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
-<div *ngIf="!showResult && currentQuestion">
-  <div *ngFor="let option of currentQuestion.options">
-    <div class="field-radiobutton">
-      <p-radioButton
-        [inputId]="option.optionId"
-        [value]="option.optionId"
-        [(ngModel)]="currentQuestion.selectedOptionId"
-        (onChange)="onOptionSelect(option.optionId)"
-      >
-      </p-radioButton>
-      <label>{{ option.optionText }}</label>
-    </div>
-  </div>
-</div> -->
-
 <h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
 <div *ngIf="!showResult && currentQuestion">
   <div *ngFor="let option of currentQuestion.options">
@@ -65,7 +49,7 @@ showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
   <div class="flex gap-2">
     <div class="ml-auto flex gap-2">
         <button pButton pRipple type="button" label="กลับไปหน้าหลัก" class="p-button-outlined p-button-primary" routerLink="/course/course-open"></button>
-        <button pButton pRipple type="button" label="เริ่มทำใหม่อีกครั้ง" class="p-button-outlined p-button-secondary" (click)="resetQuiz()"></button>
+        <button pButton pRipple type="button" [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' " class="p-button-outlined p-button-secondary" (click)="resetQuiz()" [disabled]="attemptsLeft === 0"></button>
     </div>
   </div>
 </div>

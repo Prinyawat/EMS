@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Course, Question } from 'src/app/shared/models/course.model';
+import { UserModel } from 'src/app/shared/models/user.modal';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 
@@ -13,7 +14,9 @@ export class QuizComponent implements OnInit {
 
     questions: Question[] = [];
     course: Course;
+    user: UserModel;
     currentQuestionIndex: number = 0;
+    attemptsLeft: number = 2;
 
     score: number = 0;
     passStatus: boolean = false;
@@ -82,17 +85,37 @@ export class QuizComponent implements OnInit {
     }));
   
     this.courseService.saveUserAnswers(answers).subscribe({
-      next: (response) => {
+      next: (result) => {
+        this.result = result; 
+        this.showResult = true; 
+        this.showSubmitDialog = false;
+      },
+      error: (err) => {
+        console.error('Error saving answers:', err);
+      },
+    });
+  }
+
+  calculateResult() {
+    this.courseService.calculateResult(this.course.courseId).subscribe({
+      next: (result) => {
+        this.result = result;
+        this.showResult = true;
+      },
+      error: (err) => {
+        console.error('Error calculating result:', err);
       },
     });
   }
   
-
-  // resetQuiz(): void {
-  //   this.currentQuestionIndex = 0;
-  //   this.course.questions.forEach((q: any) => (q.selectedOptionId = null));
-  //   this.showResult = false;
-  //   this.score = 0;
-  //   this.passStatus = false;
-  // }
+  resetQuiz(): void {
+    if (this.attemptsLeft > 0) {
+      this.attemptsLeft--;
+      this.currentQuestionIndex = 0;
+      this.course.questions.forEach((q: any) => (q.selectedOptionId = null));
+      this.showResult = false;
+      this.score = 0;
+      this.passStatus = false;
+    }
+  }
 }

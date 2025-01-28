@@ -43,32 +43,14 @@ export class CourseService {
     }
     
     saveUserAnswers(answers: { courseId: string; questionId: string; optionId: string }[]) {
-      return this.http.post(`${this.env}/saveAnswers`, answers);
+      return this.http.post<{ score: number; totalQuestions: number; passStatus: boolean }>
+      (`${this.env}/saveAnswers`, answers);
+    }
+
+    calculateResult(courseId: string) {
+      return this.http.get<any>(`${this.env}/api/Course/calculateResult/${courseId}`);
     }
     
-
-    // updateSelectedOption(courseId: number, questionIndex: number, selectedOptionId: number): void {
-    //   const course = this.getCourseById(courseId);
-    //   if (course && course.questions[questionIndex]) {
-    //     course.questions[questionIndex].selectedOptionId = selectedOptionId;
-    //   }
-    // }
-    
-    // updateQuizResult(courseId: number, score: number, passStatus: boolean): void {
-    //   const course = this.getCourseById(courseId);
-    //   if (course) {
-    //     course.score = score;
-    //     course.passStatus = passStatus;
-    //   }
-    // }
-      
-    // updateCourseStatus(courseId: number, status: string): void {
-    //   const course = this.getCourseById(courseId);
-    //   if (course) {
-    //     course.status = status;
-    //   }
-    // }
-
     // getCompletedCourses() {
     //   return this.course.filter((c) => c.status === 'เสร็จสิ้น');
     // }
