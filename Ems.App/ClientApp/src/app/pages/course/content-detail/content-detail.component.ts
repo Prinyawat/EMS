@@ -18,13 +18,6 @@ export class ContentDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // const courseId = Number(this.route.snapshot.params['courseId']);
-    // const chapterId = Number(this.route.snapshot.params['chapterId']);
-    // const contentId = Number(this.route.snapshot.params['contentId']);
-
-    // this.course = this.courseService.getCourses().find((c) => c.id === courseId);
-    // this.chapter = this.course?.chapters.find((ch) => ch.id === chapterId);
-    // this.content = this.chapter?.contents.find((co) => co.id === contentId);
 
     const courseId = this.route.snapshot.params['courseId'];
     const chapterId = this.route.snapshot.params['chapterId'];

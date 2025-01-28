@@ -1,6 +1,7 @@
 ﻿using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ems.App.Servies
 {
@@ -66,7 +67,7 @@ namespace Ems.App.Servies
                         }).ToList()
                     }).ToList(),
                     questions = c.question
-                    .OrderBy(q => q.created_date) // เรียงลำดับคำถามตามวันที่สร้าง
+                    .OrderBy(q => q.created_date) 
                     .Select(q => new QuestionModel
                     {
                         questionId = q.question_id,
@@ -141,7 +142,6 @@ namespace Ems.App.Servies
 
         public void RecordProgress(Guid userId, Guid courseId, Guid chapterId, Guid contentId)
         {
-            // ตรวจสอบว่าไม่มี record ซ้ำใน user_progress
             var existingProgress = _emsContext.user_progress
                 .Any(up => up.user_id == userId &&
                            up.course_id == courseId &&
@@ -150,7 +150,6 @@ namespace Ems.App.Servies
 
             if (!existingProgress)
             {
-                // สร้าง record ใหม่
                 var progress = new user_progress
                 {
                     user_progress_id = Guid.NewGuid(),
@@ -167,6 +166,101 @@ namespace Ems.App.Servies
                 _emsContext.SaveChanges();
             }
         }
+        public void SaveUserAnswers(List<UserQuestionModel> answers)
+        {
+            foreach (var answer in answers)
+            {
+                var existingAnswer = _emsContext.user_question
+                    .FirstOrDefault(uq => uq.user_id == answer.userId &&
+                                          uq.course_id == answer.courseId &&
+                                          uq.question_id == answer.questionId);
 
+                if (existingAnswer == null)
+                {
+                    var newAnswer = new user_question
+                    {
+                        user_question_id = Guid.NewGuid(),
+                        user_id = answer.userId,
+                        course_id = answer.courseId,
+                        question_id = answer.questionId,
+                        option_id = answer.optionId,
+                        created_by = answer.userId.ToString(),
+                        created_date = DateTime.UtcNow
+                    };
+
+                    _emsContext.user_question.Add(newAnswer);
+                }
+                else
+                {
+                    
+                    existingAnswer.option_id = answer.optionId;
+                    existingAnswer.updated_by = answer.userId.ToString();
+                    existingAnswer.updated_date = DateTime.UtcNow;
+
+                    _emsContext.user_question.Update(existingAnswer);
+                }
+            }
+
+            _emsContext.SaveChanges();
+        }
+
+
+
+        //public UserResultModel CalculateUserResult(Guid userId, Guid courseId)
+        //{
+        //    var totalQuestions = _emsContext.question
+        //        .Where(q => q.course_id == courseId)
+        //        .Count();
+
+        //    var correctAnswers = _emsContext.user_question
+        //        .Where(uq => uq.user_id == userId && uq.course_id == courseId)
+        //        .Join(_emsContext.option,
+        //            uq => uq.option_id,
+        //            o => o.option_id,
+        //            (uq, o) => new { o.is_correct })
+        //        .Count(o => o.is_correct == true);
+
+        //    var passStatus = correctAnswers >= (totalQuestions / 2);
+
+        //    var existingResult = _emsContext.user_result
+        //        .FirstOrDefault(r => r.user_id == userId && r.course_id == courseId);
+
+        //    if (existingResult == null)
+        //    {
+        //        var result = new user_result
+        //        {
+        //            result_id = Guid.NewGuid(),
+        //            user_id = userId,
+        //            course_id = courseId,
+        //            score = correctAnswers,
+        //            total_questions = totalQuestions,
+        //            pass_status = passStatus,
+        //            created_date = DateTime.UtcNow
+        //        };
+
+        //        _emsContext.user_result.Add(result);
+        //        _emsContext.SaveChanges();
+
+        //        return new UserResultModel
+        //        {
+        //            resultId = result.result_id,
+        //            userId = result.user_id,
+        //            courseId = result.course_id,
+        //            score = result.score,
+        //            totalQuestions = result.total_questions,
+        //            passStatus = result.pass_status
+        //        };
+        //    }
+
+        //    return new UserResultModel
+        //    {
+        //        resultId = existingResult.result_id,
+        //        userId = existingResult.user_id,
+        //        courseId = existingResult.course_id,
+        //        score = existingResult.score,
+        //        totalQuestions = existingResult.total_questions,
+        //        passStatus = existingResult.pass_status
+        //    };
+        //}
     }
 }

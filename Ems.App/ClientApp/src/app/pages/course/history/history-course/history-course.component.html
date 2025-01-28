@@ -41,24 +41,23 @@
         <div class="card">
             <h2>ประวัติการเรียน</h2>
             <hr>
-            <p-dataView [value]="filteredCourses" [paginator]="true" [rows]="6" layout="grid">
+            <p-dataView [value]="filteredCourses" [paginator]="filteredCourses.length > 0" [rows]="6" layout="grid">
                 <ng-template let-filteredCourses pTemplate="gridItem">
                     <div class="grid grid-nogutter">
                         <div class="col-12 md:col-4" *ngFor="let course of filteredCourses">
-                            <div class="card m-3 border-1 surface-border" >
-                                <div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
-                                    <div class="flex align-items-center">
-                                        <h2 class="font-semibold p-d-flex p-ai-center">
-                                            {{course.courseName}}
-                                            <p-tag *ngIf="course.status === 'เสร็จสิ้น'" icon="pi pi-check" severity="success" value="{{ course.status }}" class="ml-2"></p-tag>
-                                        </h2>
-                                    </div>
+                            <div class="card m-3 border-1 surface-border flex flex-column justify-content-between" style="height: 400px;">
+                                <div>
+                                    <h2 class="font-semibold p-d-flex p-ai-center">
+                                        {{course.courseName}}
+                                        <p-tag *ngIf="course.status === 'เสร็จสิ้น'" icon="pi pi-check" severity="success" value="{{ course.status }}" class="ml-2"></p-tag>
+                                    </h2>
+                                    <h5>{{course.subtitle}}</h5>
+                                    <p class="mt-3" style="font-size: 11px;">
+                                        <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ course.startTime }} น.<br>
+                                        <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ course.endTime }} น.
+                                    </p>
+                                    <span (click)="course.display = true" class="underline cursor-pointer text-primary" style="font-style: italic;">อ่านเพิ่มเติม</span>
                                 </div>
-                                <h5 >{{course.subtitle}}</h5>
-                                <p class="mt-3" style="font-size: 11px;">
-                                    <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ course.startTime }} น.<br>
-                                    <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ course.endTime }} น.
-                                </p>
                                 <p-dialog header="รายละเอียดคอร์ส" [(visible)]="course.display" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
                                     <p class="line-height-3 m-0">
                                         {{ course.description }}
@@ -71,11 +70,11 @@
                                         <button pButton icon="pi pi-check" (click)="course.display = false" label="ปิด" class="p-button-outlined"></button>
                                     </ng-template>
                                 </p-dialog>
-                                <div class="grid">
+                                <!-- <div class="grid">
                                     <div class="col-12">
                                         <button (click)="course.display = true" pButton icon="pi pi-external-link" label="อ่านเพิ่มเติม" class="mr-2 mb-2"></button>
                                     </div>
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
                     </div>
@@ -84,3 +83,5 @@
         </div>
     </div>
 </div>
+
+

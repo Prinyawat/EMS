@@ -12,5 +12,9 @@ namespace Ems.App.Servies.IServices
         void CancelRegistration(Guid userId, Guid courseId);
         void RecordProgress(Guid userId, Guid courseId, Guid chapterId, Guid contentId);
 
+        void SaveUserAnswers(List<UserQuestionModel> answers);
+
+        //UserResultModel CalculateUserResult(Guid userId, Guid courseId);
+
     }
 }

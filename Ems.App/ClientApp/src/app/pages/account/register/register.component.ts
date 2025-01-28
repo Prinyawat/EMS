@@ -17,7 +17,18 @@ export class RegisterComponent {
 
     valCheck: string[] = ['remember'];
 
+    firstName!: string;
+    lastName!: string;
+    phone!: string;
+    email!: string;
     password!: string;
+    position!: string;
+
+    firstNameDirty: boolean = false;
+    lastNameDirty: boolean = false;
+    phoneDirty: boolean = false;
+    emailDirty: boolean = false;
+    passwordDirty: boolean = false;
 
     positions = [
         { label: 'Frontend Developer', value: 'frontend' },
@@ -29,5 +40,14 @@ export class RegisterComponent {
 
     constructor(public layoutService: LayoutService) { }
 
-    
+    validateForm() {
+        this.firstNameDirty = !this.firstName;
+        this.lastNameDirty = !this.lastName;
+        this.phoneDirty = !this.phone;
+        this.emailDirty = !this.email;
+        this.passwordDirty = !this.password;
+
+        if (!this.firstName || !this.lastName || !this.phone || !this.email || !this.password) {
+        } 
+    }
 }
