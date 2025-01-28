@@ -25,12 +25,26 @@ export class LoginComponent {
     user: UserModel = new UserModel();
     isError: boolean = false;
     errorMessage: string = null;
+    isDirty: boolean = false; 
+    emailDirty: boolean = false; // สำหรับ email
+    passwordDirty: boolean = false; // สำหรับ password
+    
+
 
     constructor(private authService: AuthService,
         private router: Router
     ) { }
 
     signIn() {
+        this.isError = false;
+        this.isDirty = true;
+        this.emailDirty = this.isInvalid(this.user.email); // ตรวจสอบว่าช่อง Email ว่าง
+        this.passwordDirty = this.isInvalid(this.user.password); // ตรวจสอบว่าช่อง Password ว่าง
+        
+        if (!this.user.email || !this.user.password) {
+            this.isError = true;
+            return;
+        }
         console.log('signIn', this.user)
         this.isError = false;
         this.authService.signIn(this.user).subscribe((res: UserModel) => {
@@ -48,5 +62,9 @@ export class LoginComponent {
     setTokenStorage(token) {
         sessionStorage.setItem('app.token', token);
         localStorage.setItem('app.token', token);
+    }
+
+    isInvalid(value: string): boolean {
+        return !value || value.trim().length === 0;
     }
 }

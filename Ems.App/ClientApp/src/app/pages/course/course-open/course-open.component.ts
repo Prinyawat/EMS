@@ -26,10 +26,17 @@ export class CourseOpenComponent implements OnInit{
     this.breadcrumbItems = [];
     this.breadcrumbItems.push({ label: 'Course'});
     this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
-
-    // this.filteredCourses = this.courseService.getRegisteredCourses();
-    this.courseService.getRegisteredCourses().subscribe((courses: Course[]) => {
-      this.filteredCourses = courses;
+    
+    this.courseService.getRegisteredCourses().subscribe((registeredCourses: Course[]) => {
+      this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
+        this.filteredCourses = registeredCourses.map((course) => {
+          const completedCourse = completedCourses.find((c) => c.courseId === course.courseId);
+          if (completedCourse) {
+            course.statusName = completedCourse.statusName; 
+          }
+          return course;
+        });
+      });
     });
   }
 

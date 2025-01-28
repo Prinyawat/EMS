@@ -48,8 +48,8 @@ showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
   </p>
   <div class="flex gap-2">
     <div class="ml-auto flex gap-2">
-        <button pButton pRipple type="button" label="กลับไปหน้าหลัก" class="p-button-outlined p-button-primary" routerLink="/course/course-open"></button>
-        <button pButton pRipple type="button" [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' " class="p-button-outlined p-button-secondary" (click)="resetQuiz()" [disabled]="attemptsLeft === 0"></button>
+        <button *ngIf="shouldShowBackToHomeButton()" pButton pRipple type="button" label="กลับไปหน้าหลัก" class="p-button-outlined p-button-primary" routerLink="/course/course-open"></button>
+        <button *ngIf="shouldShowRetryButton()" pButton pRipple type="button" [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' " class="p-button-outlined p-button-secondary" (click)="resetQuiz()" [disabled]="attemptsLeft === 0"></button>
     </div>
   </div>
 </div>

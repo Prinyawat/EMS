@@ -33,6 +33,8 @@ public partial class course
 
     public virtual ICollection<chapter> chapter { get; set; } = new List<chapter>();
 
+    public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();
+
     public virtual ICollection<question> question { get; set; } = new List<question>();
 
     public virtual ICollection<registration> registration { get; set; } = new List<registration>();

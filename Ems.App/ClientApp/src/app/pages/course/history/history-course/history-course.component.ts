@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
+import { Course } from 'src/app/shared/models/course.model';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 
@@ -13,7 +14,7 @@ export class HistoryCourseComponent {
   
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
-  filteredCourses: any[] = [];
+  filteredCourses: Course[] = [];
 
   constructor(
     private courseService: CourseService
@@ -26,7 +27,9 @@ export class HistoryCourseComponent {
     this.breadcrumbItems.push({ label: 'ประวัติ'});
     this.breadcrumbItems.push({ label: 'ประวัติการเรียน', styleClass: 'custom-register'});
 
-    // this.filteredCourses = this.courseService.getCompletedCourses();
+    this.courseService.getCompletedCourses().subscribe((courses: Course[]) => {
+          this.filteredCourses = courses;
+        });
     }
 
 }

@@ -23,6 +23,8 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<course> course { get; set; }
 
+    public virtual DbSet<coursecomplete> coursecomplete { get; set; }
+
     public virtual DbSet<leave_half> leave_half { get; set; }
 
     public virtual DbSet<leave_request> leave_request { get; set; }
@@ -179,6 +181,38 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+        });
+
+        modelBuilder.Entity<coursecomplete>(entity =>
+        {
+            entity.HasKey(e => e.coursecomplete_id).HasName("coursecomplate_pkey");
+
+            entity.ToTable("coursecomplete", "ems");
+
+            entity.Property(e => e.coursecomplete_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.course).WithMany(p => p.coursecomplete)
+                .HasForeignKey(d => d.course_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_coursecomplete_course");
+
+            entity.HasOne(d => d.status).WithMany(p => p.coursecomplete)
+                .HasForeignKey(d => d.status_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_coursecomplete_status");
+
+            entity.HasOne(d => d.user).WithMany(p => p.coursecomplete)
+                .HasForeignKey(d => d.user_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_coursecomplete_user");
         });
 
         modelBuilder.Entity<leave_half>(entity =>

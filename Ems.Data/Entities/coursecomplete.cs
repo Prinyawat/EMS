@@ -5,11 +5,15 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class status
+public partial class coursecomplete
 {
-    public Guid status_id { get; set; }
+    public Guid coursecomplete_id { get; set; }
 
-    public string status_name { get; set; }
+    public Guid user_id { get; set; }
+
+    public Guid course_id { get; set; }
+
+    public Guid status_id { get; set; }
 
     public string created_by { get; set; }
 
@@ -19,7 +23,9 @@ public partial class status
 
     public DateTime? updated_date { get; set; }
 
-    public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();
+    public virtual course course { get; set; }
 
-    public virtual ICollection<registration> registration { get; set; } = new List<registration>();
+    public virtual status status { get; set; }
+
+    public virtual user user { get; set; }
 }

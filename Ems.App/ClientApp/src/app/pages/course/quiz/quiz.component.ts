@@ -112,10 +112,23 @@ export class QuizComponent implements OnInit {
     if (this.attemptsLeft > 0) {
       this.attemptsLeft--;
       this.currentQuestionIndex = 0;
-      this.course.questions.forEach((q: any) => (q.selectedOptionId = null));
+      this.course.questions.forEach((q) => (q.selectedOptionId = null));
       this.showResult = false;
-      this.score = 0;
-      this.passStatus = false;
+      this.result = {
+        score: 0,
+        totalQuestions: this.course.questions.length,
+        passStatus: false,
+      };
     }
   }
+  
+
+  shouldShowRetryButton(): boolean {
+    return !this.result.passStatus && this.attemptsLeft > 0;
+  }
+  
+  shouldShowBackToHomeButton(): boolean {
+    return this.result.passStatus || this.attemptsLeft === 0;
+  }
+  
 }

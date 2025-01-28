@@ -44,6 +44,14 @@ namespace Ems.App.Controllers
         }
 
         [HttpGet]
+        [Route("getCompletedCourses")]
+        public IActionResult GetCompletedCourses()
+        {
+            var completedcourse = _courseService.GetCompletedCourses();
+            return Ok(completedcourse);
+        }
+
+        [HttpGet]
         [Route("getCourseById/{courseId}")]
         public IActionResult GetCourseById(Guid courseId)
         {
@@ -93,8 +101,8 @@ namespace Ems.App.Controllers
 
             _courseService.SaveUserAnswers(answers);
             var courseId = answers.First().courseId;
-            var result = _courseService.CalculateUserResult(userId, courseId); 
-            return Ok(result); 
+            var result = _courseService.CalculateUserResult(userId, courseId);
+            return Ok(result);
         }
 
 
