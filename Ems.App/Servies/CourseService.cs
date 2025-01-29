@@ -144,7 +144,7 @@ namespace Ems.App.Servies
                 status_id = registeredStatus.status_id
             };
 
-            _emsContext.registration.Add(registration);
+            _emsContext.registration.Add(registration); 
             _emsContext.SaveChanges();
 
             var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name}";

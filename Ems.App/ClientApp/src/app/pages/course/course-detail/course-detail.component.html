@@ -2,19 +2,23 @@
 
 <h1 class="p-d-flex p-ai-center">
   {{ course?.courseName }}
-  <ng-container *ngIf="course?.status === 'เสร็จสิ้น'; else quizButton">
-    <span class="p-tag p-tag-success ml-3">สถานะ: เสร็จสิ้น</span>
+  <ng-container *ngIf="course?.statusName === 'เสร็จสิ้น' || course?.statusName === 'ไม่ผ่าน'; else quizButton">
+    <span 
+      class="p-tag" 
+      [ngClass]="{'p-tag-success': course?.statusName === 'เสร็จสิ้น', 'p-tag-danger': course?.statusName === 'ไม่ผ่าน'}"
+      >สถานะ: {{ course?.statusName }}</span>
   </ng-container>
   <ng-template #quizButton>
     <button
       pButton
       pRipple
       type="button"
-      label="แบบทดสอบ"
+      label="แบบทดสอบหลังเรียน"
       class="p-button-outlined"
       [routerLink]="['quiz']"
-      [disabled]="course?.status === 'เสร็จสิ้น'"
+      [disabled]="!isAllChaptersCompleted()"
     ></button>
+    <p-tag severity="warning" value="* กรุณาอ่านทุกบทให้ครบก่อนจึงจะสามารถทำแบบทดสอบได้"  class="ml-2" *ngIf="!isAllChaptersCompleted()"></p-tag> 
   </ng-template>
 </h1>
 <h3>{{ course?.subtitle }}</h3>
@@ -63,6 +67,7 @@
 <div  class="navigation-container">
   <button *ngIf="!isAllChaptersCompleted()" pButton pRipple type="button" label="ถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="getNextChapterRouterLink()" ></button>
 </div>
+
 
 
 

@@ -36,7 +36,7 @@ export class AppTopBarComponent {
 
     position: string;
 
-    notifications: string[] = [];
+    notificationcourse: string[] = [];
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -88,16 +88,16 @@ export class AppTopBarComponent {
         );
 
         // CourseNotification
-        const storedNotifications = localStorage.getItem('notifications');
+        const storedNotifications = localStorage.getItem('notificationcourse');
         if (storedNotifications) {
-            this.notifications = JSON.parse(storedNotifications);
+            this.notificationcourse = JSON.parse(storedNotifications);
         }
 
         this.notificationService.startConnection();
         this.notificationService.listenNotifications((message: string) => {
-        this.notifications.push(message);
+        this.notificationcourse.push(message);
 
-        localStorage.setItem('notifications', JSON.stringify(this.notifications));
+        localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
     });
     }
 
@@ -138,7 +138,7 @@ export class AppTopBarComponent {
 
     logout() {
         console.log('Logging out...');
-        localStorage.removeItem('notifications'); // แปะไว้ก่อน* ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ 
+        localStorage.removeItem('notificationcourse'); //ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ 
         localStorage.removeItem('app.token');
         sessionStorage.removeItem('app.token');
         sessionStorage.removeItem('UserInfo');

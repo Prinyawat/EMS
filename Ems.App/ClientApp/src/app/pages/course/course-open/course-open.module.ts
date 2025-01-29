@@ -18,6 +18,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { DataViewModule } from 'primeng/dataview';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { DataViewModule } from 'primeng/dataview';
     CheckboxModule,
     RadioButtonModule,
     TagModule,
-    DataViewModule
+    DataViewModule,
+    MessageModule 
   ],
   declarations: [
     CourseOpenComponent,

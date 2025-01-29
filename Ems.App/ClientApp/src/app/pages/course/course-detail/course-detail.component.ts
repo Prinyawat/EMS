@@ -20,6 +20,16 @@ export class CourseDetailComponent implements OnInit {
     const courseId = this.route.snapshot.params['courseId'];
     this.courseService.getCourseById(courseId).subscribe((course) => {
       this.course = course;
+      this.loadCourseStatus(courseId);
+    });
+  }
+
+  loadCourseStatus(courseId: string): void {
+    this.courseService.getCompletedCourses().subscribe((completedCourses: any[]) => {
+      const completedCourse = completedCourses.find(c => c.courseId === courseId);
+      if (completedCourse) {
+        this.course.statusName = completedCourse.statusName;
+      }
     });
   }
 
