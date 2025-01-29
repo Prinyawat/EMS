@@ -147,7 +147,7 @@ namespace Ems.App.Servies
             _emsContext.registration.Add(registration); 
             _emsContext.SaveChanges();
 
-            var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name}";
+            var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name} แล้ว!";
             _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
 
             return new RegistrationCourseModel
@@ -173,7 +173,7 @@ namespace Ems.App.Servies
                 _emsContext.registration.Remove(registration);
                 _emsContext.SaveChanges();
 
-                var message = $"{user.first_name} ได้ยกเลิกการลงทะเบียนคอร์ส {course.course_name}";
+                var message = $"{user.first_name} ได้ยกเลิกการลงทะเบียนคอร์ส {course.course_name} แล้ว!";
                 _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
             }
         }

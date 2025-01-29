@@ -124,7 +124,6 @@ namespace Ems.App.Servies
                 positionName = user.position?.position_name
             };
 
-            // ✅ แจ้งให้ทุก Client ทราบว่ามีการอัปเดต
             _hubContext.Clients.All.SendAsync("UserUpdated", response);
 
             return response;
