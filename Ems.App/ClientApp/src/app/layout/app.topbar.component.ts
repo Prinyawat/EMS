@@ -73,8 +73,27 @@ export class AppTopBarComponent {
         this.profileMenu.toggle(event);
     }
     ngOnInit(): void {
+        // Update Proflie user SignalR
         this.loadUserData();
+        this.notificationService.userUpdated$.subscribe((updatedUser: any) => {
+            if (updatedUser.userId === this.user.userId) {
+            this.user = updatedUser;
+            this.updateProfileItems(); 
+            }
+        });
 
+        // CourseNotification
+        const storedNotifications = localStorage.getItem('notificationcourse');
+            if (storedNotifications) {
+                this.notificationcourse = JSON.parse(storedNotifications);
+        }
+        this.notificationService.startConnection();
+        this.notificationService.listenNotifications((message: string) => {
+            this.notificationcourse.push(message);
+            localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
+        });
+
+        // LeaveRequestNotification
         this.LeaveRequestService.submittedLeaveData$.subscribe((request) => {
             this.submittedLeaveData = request;
         });
@@ -85,19 +104,6 @@ export class AppTopBarComponent {
                 this.createLeaveRequestMessage();
             }
         );
-
-        // CourseNotification
-        const storedNotifications = localStorage.getItem('notificationcourse');
-        if (storedNotifications) {
-            this.notificationcourse = JSON.parse(storedNotifications);
-        }
-
-        this.notificationService.startConnection();
-        this.notificationService.listenNotifications((message: string) => {
-        this.notificationcourse.push(message);
-
-        localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
-    });
     }
 
     loadUserData() {

@@ -2,6 +2,7 @@
 using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -11,10 +12,14 @@ namespace Ems.App.Servies
     {
         private readonly EmsContext _emsContext;
         private readonly ITokenService _tokenService;
-        public UserService(EmsContext emsContext, ITokenService tokenService)
+
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public UserService(EmsContext emsContext, ITokenService tokenService, IHubContext<NotificationHub> hubContext)
         {
             _emsContext = emsContext;
             _tokenService = tokenService;
+
+            _hubContext = hubContext;
         }
 
         public DataHubs Login(DataHubs userModel)
@@ -64,6 +69,34 @@ namespace Ems.App.Servies
             };
         }
 
+        //public DataHubs UpdateUser(Guid userId, DataHubs updatedUser)
+        //{
+        //    var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
+
+        //    if (user == null)
+        //    {
+        //        throw new Exception("User not found");
+        //    }
+
+        //    user.first_name = updatedUser.Firstname ?? user.first_name;
+        //    user.last_name = updatedUser.Lastname ?? user.last_name;
+        //    user.email = updatedUser.Email ?? user.email;
+        //    user.phone = updatedUser.phone ?? user.phone;
+        //    user.updated_by = userId.ToString(); 
+
+        //    _emsContext.SaveChanges(); 
+
+        //    return new DataHubs
+        //    {
+        //        UserId = user.user_id,
+        //        Firstname = user.first_name,
+        //        Lastname = user.last_name,
+        //        Email = user.email,
+        //        phone = user.phone,
+        //        positionName = user.position?.position_name
+        //    };
+        //}
+
         public DataHubs UpdateUser(Guid userId, DataHubs updatedUser)
         {
             var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
@@ -77,12 +110,11 @@ namespace Ems.App.Servies
             user.last_name = updatedUser.Lastname ?? user.last_name;
             user.email = updatedUser.Email ?? user.email;
             user.phone = updatedUser.phone ?? user.phone;
-            user.updated_by = userId.ToString(); 
-            //user.updated_date = DateTime.UtcNow; 
+            user.updated_by = userId.ToString();
 
-            _emsContext.SaveChanges(); 
+            _emsContext.SaveChanges();
 
-            return new DataHubs
+            var response = new DataHubs
             {
                 UserId = user.user_id,
                 Firstname = user.first_name,
@@ -91,6 +123,11 @@ namespace Ems.App.Servies
                 phone = user.phone,
                 positionName = user.position?.position_name
             };
+
+            // ✅ แจ้งให้ทุก Client ทราบว่ามีการอัปเดต
+            _hubContext.Clients.All.SendAsync("UserUpdated", response);
+
+            return response;
         }
     }
 }
