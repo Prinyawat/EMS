@@ -29,5 +29,21 @@ namespace Ems.App.Controllers
                 RefreshToken = res.RefreshToken
             });
         }
+
+        [Route("getUser/{userId}")]
+        [HttpGet]
+        public IActionResult GetUser(Guid userId)
+        {
+            var res = _userService.GetUser(userId);
+            return Ok(res);
+        }
+
+        [Route("updateUser/{userId}")]
+        [HttpPut]
+        public IActionResult UpdateUser(Guid userId, [FromBody] DataHubs updatedUser)
+        {
+            var res = _userService.UpdateUser(userId, updatedUser);
+            return Ok(res);
+        }
     }
 }

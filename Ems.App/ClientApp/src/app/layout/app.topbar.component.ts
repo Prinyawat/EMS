@@ -10,6 +10,7 @@ import { ListDemoComponent } from '../demo/components/uikit/list/listdemo.compon
 import { AuthService } from '../shared/services/auth.service';
 import { LeaveRequest } from '../shared/models/leaverequest.model';
 import { NotificationCourseService } from '../shared/services/notification-course.service';
+import { UserModel } from '../shared/models/user.modal';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
@@ -38,6 +39,9 @@ export class AppTopBarComponent {
 
     notificationcourse: string[] = [];
 
+    user: UserModel = new UserModel();
+    profileItems: any[] = [];
+
     @ViewChild('menubutton') menuButton!: ElementRef;
 
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
@@ -46,25 +50,18 @@ export class AppTopBarComponent {
 
     @ViewChild('profileMenu') profileMenu!: Menu;
 
-    user = {
-        firstname: 'John',
-        lastname: 'Doe',
-        phone: '1234567890',
-        email: 'john_doe@email.com'
-    };
+    // dropdownItems = [
+    //     { name: 'Frontend Developer', code: 'Option 1' },
+    //     { name: 'Backend Developer', code: 'Option 2' },
+    //     { name: 'Fullstack Developer', code: 'Option 3' }
+    // ];
 
-    dropdownItems = [
-        { name: 'Frontend Developer', code: 'Option 1' },
-        { name: 'Backend Developer', code: 'Option 2' },
-        { name: 'Fullstack Developer', code: 'Option 3' }
-    ];
-
-    profileItems = [
-        { label: 'Firstname Lastname', icon: 'pi pi-user' },
-        { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
-        { separator: true },
-        { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
-    ];
+    // profileItems = [
+    //     { label: 'Firstname Lastname', icon: 'pi pi-user' },
+    //     { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
+    //     { separator: true },
+    //     { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
+    // ];
 
     constructor(public layoutService: LayoutService, private router: Router,
         private authService: AuthService,
@@ -76,6 +73,8 @@ export class AppTopBarComponent {
         this.profileMenu.toggle(event);
     }
     ngOnInit(): void {
+        this.loadUserData();
+
         this.LeaveRequestService.submittedLeaveData$.subscribe((request) => {
             this.submittedLeaveData = request;
         });
@@ -99,6 +98,44 @@ export class AppTopBarComponent {
 
         localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
     });
+    }
+
+    loadUserData() {
+        const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad"; 
+        this.authService.getUser(userId).subscribe({
+          next: (data: any) => {
+            this.user = data;
+            this.updateProfileItems();
+          },
+          error: (err) => {
+            console.error("Error fetching user data", err);
+          }
+        });
+    }
+
+    updateProfileItems() {
+        this.profileItems = [
+            { label: `${this.user.firstname} ${this.user.lastname}`, icon: 'pi pi-user' },
+            { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
+            { separator: true },
+            { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
+        ];
+    }
+
+    saveUserData() {
+        if (!this.user || !this.user.userId) {
+            return;
+        }
+    
+        this.authService.updateUser(this.user.userId, this.user).subscribe({
+            next: (response: any) => {
+                console.log("User updated successfully", response);
+                this.edit = false; 
+            },
+            error: (err) => {
+                console.error("Error updating user", err);
+            }
+        });
     }
 
     createLeaveRequestMessage(): void {

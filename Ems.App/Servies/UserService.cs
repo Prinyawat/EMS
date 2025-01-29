@@ -2,6 +2,7 @@
 using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Ems.App.Servies
@@ -39,6 +40,57 @@ namespace Ems.App.Servies
                 userModel.RefreshToken = refreshToken;
                 return userModel;
             }
+        }
+
+        public DataHubs GetUser(Guid userId)
+        {
+            var user = _emsContext.user
+                .Include(u => u.position) 
+                .FirstOrDefault(u => u.user_id == userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return new DataHubs
+            {
+                UserId = user.user_id,
+                Firstname = user.first_name,
+                Lastname = user.last_name,
+                Email = user.email,
+                phone = user.phone,
+                positionName = user.position?.position_name
+            };
+        }
+
+        public DataHubs UpdateUser(Guid userId, DataHubs updatedUser)
+        {
+            var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            user.first_name = updatedUser.Firstname ?? user.first_name;
+            user.last_name = updatedUser.Lastname ?? user.last_name;
+            user.email = updatedUser.Email ?? user.email;
+            user.phone = updatedUser.phone ?? user.phone;
+            user.updated_by = userId.ToString(); 
+            //user.updated_date = DateTime.UtcNow; 
+
+            _emsContext.SaveChanges(); 
+
+            return new DataHubs
+            {
+                UserId = user.user_id,
+                Firstname = user.first_name,
+                Lastname = user.last_name,
+                Email = user.email,
+                phone = user.phone,
+                positionName = user.position?.position_name
+            };
         }
     }
 }

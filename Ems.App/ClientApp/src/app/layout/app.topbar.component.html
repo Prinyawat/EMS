@@ -61,12 +61,13 @@
         <!-- Position -->
         <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
             <label htmlFor="Position">Position</label>
-            <p-dropdown
-                [options]="dropdownItems"
-                optionLabel="name"
-                placeholder="Select a position"
+            <input
+                pInputText
+                id="position"
+                type="position"
                 [disabled]="true"
-            ></p-dropdown>
+                [(ngModel)]="user.positionName"
+            />
         </div>
         <!-- Email -->
         <div class="field col-12" style="margin-bottom: 1rem;">
@@ -83,7 +84,7 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="flex justify-content-end gap-2">
-            <button pButton label="Edit" class="p-button-primary"></button>
+            <button pButton label="Edit" class="p-button-primary" (click)="saveUserData()"></button>
             <button pButton  (click)="edit=false" label="Cancel" class="p-button-outlined"></button>
         </div>
     </ng-template>

@@ -5,5 +5,7 @@ namespace Ems.App.Servies.IServices
     public interface IUserService
     {
         DataHubs Login(DataHubs user);
+        DataHubs GetUser(Guid userId);
+        DataHubs UpdateUser(Guid userId, DataHubs updatedUser);
     }
 }
