@@ -29,8 +29,6 @@ public partial class user
 
     public DateTime? updated_date { get; set; }
 
-    public string role { get; set; }
-
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
 
     public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();
@@ -48,4 +46,6 @@ public partial class user
     public virtual ICollection<user_question> user_question { get; set; } = new List<user_question>();
 
     public virtual ICollection<user_result> user_result { get; set; } = new List<user_result>();
+
+    public virtual ICollection<user_role> user_role { get; set; } = new List<user_role>();
 }
