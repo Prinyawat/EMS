@@ -29,6 +29,8 @@ public partial class user
 
     public DateTime? updated_date { get; set; }
 
+    public string role { get; set; }
+
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
 
     public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();

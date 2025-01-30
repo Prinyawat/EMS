@@ -244,8 +244,10 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.leave_end_time).HasMaxLength(20);
             entity.Property(e => e.leave_request_date).HasMaxLength(100);
             entity.Property(e => e.leave_request_description).HasMaxLength(100);
+            entity.Property(e => e.leave_start_time).HasMaxLength(20);
             entity.Property(e => e.status_name)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -435,6 +437,9 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.phone)
                 .IsRequired()
                 .HasMaxLength(10);
+            entity.Property(e => e.role)
+                .HasMaxLength(10)
+                .HasDefaultValueSql("'user'::character varying");
             entity.Property(e => e.updated_by).HasMaxLength(100);
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
