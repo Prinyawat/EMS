@@ -7,7 +7,7 @@ namespace Ems.Data.Entities;
 
 public partial class chapter_content
 {
-    public Guid content_id { get; set; }
+    public Guid chapter_content_id { get; set; }
 
     public Guid chapter_id { get; set; }
 

@@ -23,7 +23,7 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<course> course { get; set; }
 
-    public virtual DbSet<coursecomplete> coursecomplete { get; set; }
+    public virtual DbSet<course_complete> course_complete { get; set; }
 
     public virtual DbSet<leave_half> leave_half { get; set; }
 
@@ -92,11 +92,11 @@ public partial class EmsContext : DbContext
 
         modelBuilder.Entity<chapter_content>(entity =>
         {
-            entity.HasKey(e => e.content_id).HasName("chapter_content_pkey");
+            entity.HasKey(e => e.chapter_content_id).HasName("chapter_content_pkey");
 
             entity.ToTable("chapter_content", "ems");
 
-            entity.Property(e => e.content_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.chapter_content_id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.content_body).IsRequired();
             entity.Property(e => e.content_title)
                 .IsRequired()
@@ -191,13 +191,13 @@ public partial class EmsContext : DbContext
                 .HasColumnType("timestamp without time zone");
         });
 
-        modelBuilder.Entity<coursecomplete>(entity =>
+        modelBuilder.Entity<course_complete>(entity =>
         {
-            entity.HasKey(e => e.coursecomplete_id).HasName("coursecomplate_pkey");
+            entity.HasKey(e => e.course_complete_id).HasName("coursecomplate_pkey");
 
-            entity.ToTable("coursecomplete", "ems");
+            entity.ToTable("course_complete", "ems");
 
-            entity.Property(e => e.coursecomplete_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.course_complete_id).HasDefaultValueSql("uuid_generate_v4()");
             entity.Property(e => e.created_by).HasMaxLength(100);
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -207,17 +207,17 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
 
-            entity.HasOne(d => d.course).WithMany(p => p.coursecomplete)
+            entity.HasOne(d => d.course).WithMany(p => p.course_complete)
                 .HasForeignKey(d => d.course_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_coursecomplete_course");
 
-            entity.HasOne(d => d.status).WithMany(p => p.coursecomplete)
+            entity.HasOne(d => d.status).WithMany(p => p.course_complete)
                 .HasForeignKey(d => d.status_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_coursecomplete_status");
 
-            entity.HasOne(d => d.user).WithMany(p => p.coursecomplete)
+            entity.HasOne(d => d.user).WithMany(p => p.course_complete)
                 .HasForeignKey(d => d.user_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_coursecomplete_user");
@@ -568,15 +568,15 @@ public partial class EmsContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
 
+            entity.HasOne(d => d.chapter_content).WithMany(p => p.user_progress)
+                .HasForeignKey(d => d.chapter_content_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_content");
+
             entity.HasOne(d => d.chapter).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.chapter_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_chapter");
-
-            entity.HasOne(d => d.content).WithMany(p => p.user_progress)
-                .HasForeignKey(d => d.content_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_content");
 
             entity.HasOne(d => d.course).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.course_id)

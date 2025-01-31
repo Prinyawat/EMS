@@ -37,6 +37,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
                     { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CourseModule) },
                     { path: 'checkinginformation', loadChildren: () => import('./pages/checking-information/checking-information.module').then(m => m.CheckingInformationModule) },
+                    { path: 'admin', loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule) },
                 ]
             },
             // { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
