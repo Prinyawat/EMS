@@ -41,45 +41,84 @@
 </div>
 
 <!-- Profile Edit -->
-<p-dialog header="Profile Edit" [(visible)]="edit" [modal]="true" showEffect="fade" [style]="{width: '60vw'}" [breakpoints]="{'960px': '80vw'}">
-    <div class="p-fluid p-formgrid grid">
-        <!-- Firstname -->
-        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
-            <label htmlFor="firstname2">Firstname</label>
-            <input pInputText id="firstname2" type="text" placeholder="Enter your firstname" [(ngModel)]="user.firstname"/>
+<p-dialog header="แก้ไขข้อมูลโปรไฟล์" [(visible)]="edit" [modal]="true" showEffect="fade" [style]="{width: '60vw'}" [breakpoints]="{'900px': '80vw'}">
+    <div class="grid p-fluid">
+        <div class="col-12 md:col-6">
+            <div class="field mt-3">
+                <label for="firstName" class="block text-900 text-xl font-medium mb-2">
+                    First Name
+                </label>
+                <input 
+                type="text" 
+                id="firstName" 
+                placeholder="First Name" 
+                pInputText 
+                [(ngModel)]="user.firstname" 
+                class="w-full"
+            >
+            </div>
+
+            <div class="field mt-3">
+                <label for="phone" class="block text-900 text-xl font-medium mb-2">
+                    Phone 
+                </label>
+                <input 
+                    type="text" 
+                    id="phone" 
+                    placeholder="Phone" 
+                    pInputText 
+                    [(ngModel)]="user.phone" 
+                    required 
+                    class="w-full"
+                >
+            </div>
         </div>
-        <!-- Lastname -->
-        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
-            <label htmlFor="lastname2">Lastname</label>
-            <input pInputText id="lastname2" type="text" placeholder="Enter your lastname" [(ngModel)]="user.lastname"/>
-        </div>
-        <!-- Phone -->
-        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
-            <label htmlFor="phone">Phone</label>
-            <input pInputText id="phone" type="text" placeholder="Enter your phone number" [(ngModel)]="user.phone"/>
-        </div>
-        <!-- Position -->
-        <div class="field col-12 md:col-6" style="margin-bottom: 1rem;">
-            <label htmlFor="Position">Position</label>
-            <input
+
+        <div class="col-12 md:col-6">
+            <div class="field mt-3">
+                <label for="lastName" class="block text-900 text-xl font-medium mb-2">
+                    Last Name 
+                </label>
+                <input 
+                    type="text" 
+                    id="lastName" 
+                    placeholder="Last Name" 
+                    pInputText 
+                    [(ngModel)]="user.lastname" 
+                    required 
+                    class="w-full"
+                >
+            </div>
+
+            <div class="field mt-3">
+                <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
+                <input
                 pInputText
                 id="position"
                 type="position"
                 [disabled]="true"
                 [(ngModel)]="user.positionName"
+                class="w-full"
             />
+            </div>
         </div>
-        <!-- Email -->
-        <div class="field col-12" style="margin-bottom: 1rem;">
-            <label htmlFor="Email">Email</label>
-            <input
-                pInputText
-                id="Email"
-                type="email"
-                placeholder="Enter your email"
-                [disabled]="true"
-                [(ngModel)]="user.email"
-            />
+    </div>
+    <div class="grid p-fluid">
+        <div class="col-12">
+            <div class="field mt-3">
+                <label for="email1" class="block text-900 text-xl font-medium mb-2">
+                    Email 
+                </label>
+                <input 
+                    id="email1" 
+                    type="email" 
+                    placeholder="Email address" 
+                    pInputText 
+                    [(ngModel)]="user.email"
+                    [disabled]="true"
+                    class="w-full"
+                >
+            </div>
         </div>
     </div>
     <ng-template pTemplate="footer">

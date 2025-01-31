@@ -39,6 +39,8 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<registration> registration { get; set; }
 
+    public virtual DbSet<role> role { get; set; }
+
     public virtual DbSet<status> status { get; set; }
 
     public virtual DbSet<user> user { get; set; }
@@ -50,6 +52,8 @@ public partial class EmsContext : DbContext
     public virtual DbSet<user_question> user_question { get; set; }
 
     public virtual DbSet<user_result> user_result { get; set; }
+
+    public virtual DbSet<user_role> user_role { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -387,6 +391,26 @@ public partial class EmsContext : DbContext
                 .HasConstraintName("fk_user");
         });
 
+        modelBuilder.Entity<role>(entity =>
+        {
+            entity.HasKey(e => e.role_id).HasName("role_pkey");
+
+            entity.ToTable("role", "ems");
+
+            entity.Property(e => e.role_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.role_name)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+        });
+
         modelBuilder.Entity<status>(entity =>
         {
             entity.HasKey(e => e.status_id).HasName("status_pkey");
@@ -573,6 +597,33 @@ public partial class EmsContext : DbContext
             entity.HasOne(d => d.user).WithMany(p => p.user_result)
                 .HasForeignKey(d => d.user_id)
                 .HasConstraintName("fk_user_result_user");
+        });
+
+        modelBuilder.Entity<user_role>(entity =>
+        {
+            entity.HasKey(e => e.user_role_id).HasName("user_role_pkey");
+
+            entity.ToTable("user_role", "ems");
+
+            entity.Property(e => e.user_role_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.role).WithMany(p => p.user_role)
+                .HasForeignKey(d => d.role_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_role");
+
+            entity.HasOne(d => d.user).WithMany(p => p.user_role)
+                .HasForeignKey(d => d.user_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_user_role");
         });
         modelBuilder.HasSequence("db_district_district_code_seq");
         modelBuilder.HasSequence("db_district_district_id_seq");

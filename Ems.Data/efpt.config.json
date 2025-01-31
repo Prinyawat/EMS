@@ -67,6 +67,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "ems.role",
+         "ObjectType": 0
+      },
+      {
          "Name": "ems.status",
          "ObjectType": 0
       },
@@ -88,6 +92,10 @@
       },
       {
          "Name": "ems.user_result",
+         "ObjectType": 0
+      },
+      {
+         "Name": "ems.user_role",
          "ObjectType": 0
       }
    ],

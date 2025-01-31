@@ -46,4 +46,6 @@ public partial class user
     public virtual ICollection<user_question> user_question { get; set; } = new List<user_question>();
 
     public virtual ICollection<user_result> user_result { get; set; } = new List<user_result>();
+
+    public virtual ICollection<user_role> user_role { get; set; } = new List<user_role>();
 }
