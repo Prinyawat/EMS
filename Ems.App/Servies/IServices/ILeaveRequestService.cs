@@ -4,7 +4,7 @@ namespace Ems.App.Servies.IServices
 {
     public interface ILeaveRequestService
     {
-        void saveleaveRequest(LeaveRequestModel leaveingData);
+        LeaveRequestModel saveleaveRequest(LeaveRequestModel leaveingData);
 
         List<LeaveHalfStatusModel> getLeaveRequestHalfStatus();
 

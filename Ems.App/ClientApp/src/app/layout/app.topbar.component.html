@@ -48,27 +48,27 @@
                 <label for="firstName" class="block text-900 text-xl font-medium mb-2">
                     First Name
                 </label>
-                <input 
-                type="text" 
-                id="firstName" 
-                placeholder="First Name" 
-                pInputText 
-                [(ngModel)]="user.firstname" 
+                <input
+                type="text"
+                id="firstName"
+                placeholder="First Name"
+                pInputText
+                [(ngModel)]="user.firstname"
                 class="w-full"
             >
             </div>
 
             <div class="field mt-3">
                 <label for="phone" class="block text-900 text-xl font-medium mb-2">
-                    Phone 
+                    Phone
                 </label>
-                <input 
-                    type="text" 
-                    id="phone" 
-                    placeholder="Phone" 
-                    pInputText 
-                    [(ngModel)]="user.phone" 
-                    required 
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Phone"
+                    pInputText
+                    [(ngModel)]="user.phone"
+                    required
                     class="w-full"
                 >
             </div>
@@ -77,15 +77,15 @@
         <div class="col-12 md:col-6">
             <div class="field mt-3">
                 <label for="lastName" class="block text-900 text-xl font-medium mb-2">
-                    Last Name 
+                    Last Name
                 </label>
-                <input 
-                    type="text" 
-                    id="lastName" 
-                    placeholder="Last Name" 
-                    pInputText 
-                    [(ngModel)]="user.lastname" 
-                    required 
+                <input
+                    type="text"
+                    id="lastName"
+                    placeholder="Last Name"
+                    pInputText
+                    [(ngModel)]="user.lastname"
+                    required
                     class="w-full"
                 >
             </div>
@@ -107,13 +107,13 @@
         <div class="col-12">
             <div class="field mt-3">
                 <label for="email1" class="block text-900 text-xl font-medium mb-2">
-                    Email 
+                    Email
                 </label>
-                <input 
-                    id="email1" 
-                    type="email" 
-                    placeholder="Email address" 
-                    pInputText 
+                <input
+                    id="email1"
+                    type="email"
+                    placeholder="Email address"
+                    pInputText
                     [(ngModel)]="user.email"
                     [disabled]="true"
                     class="w-full"
@@ -134,8 +134,15 @@
 <p-dialog header="Notifications" [(visible)]="displayPosition" [position]="position" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
     <ul class="p-0 mx-0 mt-0 mb-4 list-none">
         <!-- leaveRequest -->
-        <ng-container *ngFor="let message of leaveRequestMessages">
-            <div [innerHTML]="message"></div>
+        <ng-container *ngFor="let message of notificationleave">
+            <li class="flex align-items-center py-2 border-bottom-1 surface-border">
+                <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
+                    <i class="pi pi-user text-xl text-blue-500"></i>
+                </div>
+                <span class="text-900 line-height-3">
+                    {{ message }}
+                </span>
+            </li>
         </ng-container>
 
         <!-- CourseNotification -->
@@ -151,5 +158,6 @@
         </ng-container>
 
     </ul>
+
 </p-dialog>
 

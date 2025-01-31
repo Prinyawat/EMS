@@ -7,7 +7,7 @@ import { debounceTime, Subscription } from 'rxjs';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { LeaveHalfStatus, LeaveStatusData } from 'src/app/shared/models/leaverequest.model';
+import { LeaveHalfStatus, LeaveRequest, LeaveStatusData } from 'src/app/shared/models/leaverequest.model';
 import { FileUpload } from 'primeng/fileupload';
 
 @Component({
@@ -359,7 +359,6 @@ export class LeaveRequestComponent {
         const startTime = this.startTime ? new Date(this.startTime).toLocaleTimeString() : null;
         const endTime = this.endTime ? new Date(this.endTime).toLocaleTimeString() : null;
         const additionalDescription = this.additionalDescription;
-        const uploadedFiles = this.uploadedFiles;
 
         this.InvselectedDates = !this.InvselectedDates;
         this.InvselectedLeaveHalfStatus = !this.InvselectedLeaveHalfStatus;
@@ -384,7 +383,6 @@ export class LeaveRequestComponent {
             startTime,
             endTime,
             additionalDescription,
-            uploadedFiles
         };
 
         this.LeaveRequestService.saveleaveRequest(formData).subscribe({

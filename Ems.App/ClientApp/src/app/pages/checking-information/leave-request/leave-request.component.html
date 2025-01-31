@@ -11,7 +11,7 @@
             <h5>Leave Request</h5>
             <!-- <div class="flex col-12 md:col-12"> -->
                 <div class="col-12 md:col-12 ">
-                    <div class="flex flex-wrap gap-3 mt-5 justify-content-center">
+                    <div class="flex flex-wrap gap-3 mt-5 justify-content-center align-">
 
                         <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
                         (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
@@ -46,8 +46,6 @@
                                 <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"></p-calendar>
                                 <label for="float-input">เวลาสิ้นสุดของวัน</label>
                             </span>
-
-                            <button pButton type="button" label="" icon="pi pi-folder-open" class="p-button-secondary mr-2" [ngStyle]="{'width': '70px'}"></button>
                         </div>
 
                     </div>
@@ -56,15 +54,7 @@
                         <textarea rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription"></textarea>
 
                     </div>
-                    <div class="gap-4 mt-3 ">
-
-
-                        <p-fileUpload mode="basic" name="demo[]" accept="image/*"
-                         [maxFileSize]="1000000" customUpload="true" (onSelect)="onSelect($event)" [ngStyle]="{'width': '710px'}">
-                        </p-fileUpload>
-
-                    </div>
-                    <div class="col-12 md:col-4">
+                    <div class="md:col-4">
 
                         <p-toast></p-toast>
                         <button  pButton icon="pi pi-check" label="Confirm"

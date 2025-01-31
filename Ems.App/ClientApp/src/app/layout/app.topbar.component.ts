@@ -39,6 +39,8 @@ export class AppTopBarComponent {
 
     notificationcourse: string[] = [];
 
+    notificationleave: string[] = [];
+
     user: UserModel = new UserModel();
     profileItems: any[] = [];
 
@@ -66,7 +68,8 @@ export class AppTopBarComponent {
     constructor(public layoutService: LayoutService, private router: Router,
         private authService: AuthService,
         private LeaveRequestService: LeaveRequestService,
-        private notificationService: NotificationCourseService
+        private notificationService: NotificationCourseService,
+        private NotificationService: NotificationService,
     ) { }
 
     toggleMenu(event: Event) {
@@ -78,7 +81,7 @@ export class AppTopBarComponent {
         this.notificationService.userUpdated$.subscribe((updatedUser: any) => {
             if (updatedUser.userId === this.user.userId) {
             this.user = updatedUser;
-            this.updateProfileItems(); 
+            this.updateProfileItems();
             }
         });
 
@@ -93,21 +96,27 @@ export class AppTopBarComponent {
             localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
         });
 
-        // LeaveRequestNotification
-        this.LeaveRequestService.submittedLeaveData$.subscribe((request) => {
-            this.submittedLeaveData = request;
-        });
-
-        this.LeaveRequestService.getLeaveRequestNoti().subscribe(
-            (notifications: LeaveRequest[]) => {
-                this.leaveNotifications = notifications;
-                this.createLeaveRequestMessage();
+        //Leave Notification
+        const leaveNotifications = localStorage.getItem('notificationleave');
+        if (leaveNotifications) {
+            this.notificationleave = JSON.parse(leaveNotifications);
             }
-        );
+
+            this.notificationService.startConnection();
+            this.notificationService.listenNotifications((message: string) => {
+                console.log(message);
+                if (!this.notificationleave.includes(message)) {
+                    this.notificationleave.push(message);
+                    console.log("Saving to localStorage:", this.notificationleave);
+                    localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
+                }
+});
+
+
     }
 
     loadUserData() {
-        const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad"; 
+        const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad";
         this.authService.getUser(userId).subscribe({
           next: (data: any) => {
             this.user = data;
@@ -132,46 +141,15 @@ export class AppTopBarComponent {
         if (!this.user || !this.user.userId) {
             return;
         }
-    
         this.authService.updateUser(this.user.userId, this.user).subscribe({
             next: (response: any) => {
                 console.log("User updated successfully", response);
-                this.edit = false; 
+                this.edit = false;
             },
             error: (err) => {
                 console.error("Error updating user", err);
             }
         });
-    }
-
-    createLeaveRequestMessage(): void {
-        if (this.leaveNotifications && this.leaveNotifications.length > 0) {
-            this.leaveNotifications.forEach(notification => {
-                const dateRangeStr = notification.startDate + ' ' + notification.endDate;
-                // console.log('dateRangeStr:', dateRangeStr);
-
-                const message = `
-                    <li class="flex align-items-center py-2 border-bottom-1 surface-border">
-                        <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
-                            <i class="pi pi-user text-xl text-blue-500"></i>
-                        </div>
-                        <span class="text-900 line-height-3">
-                            Leave Request
-                            <span class="text-green-500">From ${dateRangeStr}</span>
-                            <span class="text-700"> (${notification.status}) are being reviewed.
-                                <span class="text-yellow-500">Currently under investigation</span>
-                            </span>
-                        </span>
-                    </li>
-                `;
-
-                const isDuplicate = this.leaveRequestMessages.some(existingMessage => existingMessage.trim() === message.trim());
-
-                if (!isDuplicate) {
-                    this.leaveRequestMessages.push(message);
-                }
-            });
-        }
     }
 
     showPositionDialog(position: string) {
@@ -181,7 +159,9 @@ export class AppTopBarComponent {
 
     logout() {
         console.log('Logging out...');
-        localStorage.removeItem('notificationcourse'); //ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ 
+        localStorage.removeItem('notificationcourse'); //
+        localStorage.removeItem('notificationleave');
+        // ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ
         localStorage.removeItem('app.token');
         sessionStorage.removeItem('app.token');
         sessionStorage.removeItem('UserInfo');
@@ -189,4 +169,5 @@ export class AppTopBarComponent {
             this.router.navigate(['account/login']);
         });
     }
+
 }

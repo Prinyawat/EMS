@@ -2,7 +2,6 @@ export class LeaveRequest {
     startDate: string;
     endDate: string;
     status: string;
-    FileUpload: File;
 }
 
 export class LeaveStatusData {

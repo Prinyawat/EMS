@@ -19,12 +19,13 @@ namespace Ems.App.Controllers
 
         [HttpPost]
         [Route("saveleaveRequest")]
-        public IActionResult saveleaveRequest([FromBody] LeaveRequestModel leaveData)
+        public IActionResult saveleaveRequest([FromBody] LeaveRequestModel formData)
         {
+            formData.UserId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var result = _leaverequestservice.saveleaveRequest(formData);
+            //_leaverequestservice.saveleaveRequest(leaveData);
 
-            _leaverequestservice.saveleaveRequest(leaveData);
-
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet]

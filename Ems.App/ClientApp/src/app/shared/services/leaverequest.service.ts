@@ -40,10 +40,7 @@ export class LeaveRequestService {
             })
         );
     }
-
-    sendLeaveRequestDate(request: any): void {
-    }
-
+    
     getLeaveRequestNoti() {
         return this.http.get(this.env + "/getLeaveRequestNoti");
     }

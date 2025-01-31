@@ -4,6 +4,7 @@ namespace Ems.App.Models
 {
     public class LeaveRequestModel
     {
+        public Guid UserId { get; set; }
         public Guid selectedLeaveStatusId { get; set; }
         public Guid selectHalfStatusId { get; set; }
         public string selectedDates { get; set; }
@@ -12,8 +13,7 @@ namespace Ems.App.Models
         public string startTime { get; set; }
         public string endTime { get; set; }
         public string additionalDescription { get; set; }
-        //public IFormFile? uploadedFiles { get; set; }
-
+ 
     }
 
     public class LeaveStatusDataModel

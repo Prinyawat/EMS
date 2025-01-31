@@ -5,6 +5,7 @@ using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -14,63 +15,55 @@ namespace Ems.App.Servies
     public class LeaveRequestService : ILeaveRequestService
     {
         private readonly EmsContext _emsContext;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public LeaveRequestService(EmsContext emsContext)
+        public LeaveRequestService(EmsContext emsContext, IHubContext<NotificationHub> hubContext)
         {
             _emsContext = emsContext;
+            _hubContext = hubContext;
         }
 
-        public void saveleaveRequest(LeaveRequestModel formData)
+        public LeaveRequestModel saveleaveRequest(LeaveRequestModel formData)
         {
-   
-            var leaveRequestEntities = new List<leave_request>();
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-
+        
             var leaveRequestEntity = new leave_request
-            {
-                user_id = userId,
-                leave_request_date = formData.selectedDates,
-                leave_request_status_id = formData.selectedLeaveStatusId,
-                leave_half_id = formData.selectHalfStatusId,
-                status_name = formData.selectedLeaveStatus,
-                leave_start_time = formData.startTime,
-                leave_end_time = formData.endTime,
-                leave_request_description = formData.additionalDescription,
-            };
+                {
+                    user_id = formData.UserId,
+                    leave_request_date = formData.selectedDates,
+                    leave_request_status_id = formData.selectedLeaveStatusId,
+                    leave_half_id = formData.selectHalfStatusId,
+                    status_name = formData.selectedLeaveStatus,
+                    leave_start_time = formData.startTime,
+                    leave_end_time = formData.endTime,
+                    leave_request_description = formData.additionalDescription,
+                };
 
-            _emsContext.leave_request.Add(leaveRequestEntity);
-            _emsContext.SaveChanges();
+                _emsContext.leave_request.Add(leaveRequestEntity);
+                _emsContext.SaveChanges();
+
+                _emsContext.Entry(leaveRequestEntity).Reload();
+
+            var user = _emsContext.user.FirstOrDefault(u => u.user_id == formData.UserId);
+            var HalfstatusName = _emsContext.leave_half.FirstOrDefault(u => u.leave_half_id == formData.selectHalfStatusId);
+            var statusName = _emsContext.leave_request.FirstOrDefault(s => s.leave_request_status_id == formData.selectedLeaveStatusId);
+
+            if (user == null || HalfstatusName == null || statusName == null)
+            {
+                throw new Exception("ข้อมูลที่จำเป็นบางประการไม่ครบถ้วน (user, HalfstatusName, statusName)");
+            }
+
+            SendLeaveRequestNotification(user, statusName, HalfstatusName, leaveRequestEntity);
+
+            return new LeaveRequestModel { }; 
         }
 
-        //public List<LeaveRequestModel> getLeaveRequestNoti()
-        //{
-        //    var leaveRequests = _emsContext.leave_request
-        //        .Select(lr => new
-        //        {
-        //            leave_request_date = lr.leave_request_date,
-        //            status = lr.status_name
-        //        })
-        //        .ToList();
+        private void SendLeaveRequestNotification(user user, leave_request statusName, leave_half HalfstatusName, leave_request leaveRequestEntity)
+        {
+            var message = $"{user.first_name} ได้ทำการยื่นคำขอ {statusName.status_name} {HalfstatusName.leave_type_name} ณ วัน {leaveRequestEntity.leave_request_date:dd/MM/yyyy}";
+            Console.WriteLine("Sending notification: " + message);
+            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        }
 
-        //    List<LeaveRequestModel> notifications = new List<LeaveRequestModel>();
-
-        //    foreach (var leaveRequest in leaveRequests)
-        //    {
-        //        var dateRange = leaveRequest.leave_request_date?.Split(" - ");
-
-        //        if (dateRange != null && dateRange.Length == 2)
-        //        {
-        //            notifications.Add(new LeaveRequestModel
-        //            {
-        //                startDate = dateRange[0].Trim(),
-        //                endDate = dateRange[1].Trim(),
-        //                status = leaveRequest.status
-        //            });
-        //        }
-        //    }
-
-        //    return notifications;
-        //}
 
         public List<LeaveHalfStatusModel> getLeaveRequestHalfStatus()
         {
