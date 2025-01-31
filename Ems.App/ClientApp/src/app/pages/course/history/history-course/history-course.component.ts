@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { jsPDF } from 'jspdf';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Course } from 'src/app/shared/models/course.model';
+import { UserModel } from 'src/app/shared/models/user.modal';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 
@@ -15,9 +18,12 @@ export class HistoryCourseComponent {
   display: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   filteredCourses: Course[] = [];
+  user: UserModel = new UserModel();
+
 
   constructor(
-    private courseService: CourseService
+    private courseService: CourseService,
+    private authService: AuthService
   ){}
     
 
@@ -28,8 +34,60 @@ export class HistoryCourseComponent {
     this.breadcrumbItems.push({ label: 'ประวัติการเรียน', styleClass: 'custom-register'});
 
     this.courseService.getCompletedCourses().subscribe((courses: Course[]) => {
-          this.filteredCourses = courses;
-        });
-    }
+      this.filteredCourses = courses;
+    });
 
+    this.loadUserData();
+  }
+
+  loadUserData() {
+    const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad"; 
+    this.authService.getUser(userId).subscribe({
+      next: (data: any) => {
+        this.user = data;
+      },
+      error: (err) => {
+        console.error("Error fetching user data", err);
+      }
+    });
+  }
+
+  exportcertificate(course: Course) {
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "A4"
+    });
+  
+    const pageWidth = doc.internal.pageSize.getWidth();
+  
+    doc.setFontSize(24);
+    doc.setFont("helvetica", "bold");
+    doc.text("SOFTSQUARE GROUP", pageWidth / 2, 50, { align: "center" });
+  
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "normal");
+    doc.text("This certificate is proudly presented to", pageWidth / 2, 70, { align: "center" });
+  
+    doc.setFontSize(22);
+    doc.setFont("times", "italic", "bold");
+    doc.text(`${this.user.firstname} ${this.user.lastname}`, pageWidth / 2, 90, { align: "center" });
+  
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "normal");
+    doc.text("For successfully completing the course", pageWidth / 2, 110, { align: "center" });
+    
+    doc.setFontSize(18);
+    doc.setFont("times", "bold");
+    doc.text(course.courseName, pageWidth / 2, 130, { align: "center" });
+    
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "normal");
+    doc.text("In recognition of the dedication and effort demonstrated during the training.", pageWidth / 2, 150, { align: "center" });
+    
+    doc.setFontSize(14);
+  
+    doc.save(`${course.courseName}_certificate.pdf`);
+  }
+  
 }
