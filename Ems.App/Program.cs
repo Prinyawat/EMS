@@ -16,6 +16,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IHomeService, HomeService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddTransient<ILeaveRequestService, LeaveRequestService>();
+builder.Services.AddTransient<ICheckingService, CheckingTimeService>();
+builder.Services.AddTransient<ICourseService, CourseService>();
 
 //SignalR
 builder.Services.AddSignalR();
@@ -32,14 +36,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-//LeaveRequest Service
-builder.Services.AddTransient<ILeaveRequestService, LeaveRequestService>();
 
-// Check In Out Service
-builder.Services.AddTransient<ICheckingService, CheckingTimeService>();
-
-// Course Service
-builder.Services.AddTransient<ICourseService, CourseService>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
