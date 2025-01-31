@@ -1,12 +1,15 @@
+import { Time } from '@angular/common';
 import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
 import { NotificationService } from '../../../shared/services/notification.service';
-
-import { Component, ViewChild} from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { debounceTime, Subscription } from 'rxjs';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { LeaveHalfStatus, LeaveStatusData } from 'src/app/shared/models/leaverequest.model';
+import { FileUpload } from 'primeng/fileupload';
+
 @Component({
     selector: 'app-leave-request',
     templateUrl: './leave-request.component.html',
@@ -14,15 +17,52 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 })
 export class LeaveRequestComponent {
 
+    additionalDescription: string = '';
+
+    Dates: Date[] = [];
+
+    startTime: string = '';
+
+    endTime: string = '';
+
+    HalfStatusOn: boolean = false;
+
+    isCustomLeave: boolean = false;
+
+    @ViewChild('fileUploader') fileUploader!: FileUpload;
+
+    InvselectedDates: boolean = false;
+
+    InvselectedLeaveHalfStatus: boolean = false;
+
+    InvselectedLeaveStatus: boolean = false;
+
+    InvstartTime: boolean = false;
+
+    InvendTime: boolean = false;
+
+    // -------------------------------------------------
+    StartTime: Time;
+
+    dates: Date[] | undefined;
+
+    selectedCategory: any = null;
+
     dateRange: string[] = [];
 
     selectedHalf: string;
 
-    selectedItem: string;
-
     leaveHalfStatus: any[];
 
-    leaveRequestStatus: any[];
+    selectedItem: string;
+
+    selectedLeaveHalfStatus: LeaveHalfStatus | null = null;
+
+    leaveRequestHalfStatus: LeaveHalfStatus[] = [];
+
+    selectedLeaveStatus: LeaveStatusData | null = null;
+
+    leaveRequestStatus: LeaveStatusData[] = [];
 
     today: Date;
 
@@ -30,7 +70,7 @@ export class LeaveRequestComponent {
 
     menuItems: MenuItem[] = [];
 
-    uploadedFiles: any[] = [];
+    uploadedFiles: File[] = [];
 
     items!: MenuItem[];
 
@@ -49,130 +89,34 @@ export class LeaveRequestComponent {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private NotificationService: NotificationService,
-        private LeaveRequestService: LeaveRequestService
-        ) {
-            this.subscription = this.layoutService.configUpdate$
-                .pipe(debounceTime(25))
-                .subscribe((config) => {
-                    this.initChart();
-                    });
-            }
-    onUpload(event: any) {
-        for (const file of event.files) {
-            this.uploadedFiles.push(file);
-        }
-        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
-    }
-
-    formatRangeDate(date: Date): string {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear() + 543;
-        return `${day}/${month}/${year}`;
-      }
-
-    confirm2(event: Event) {
-        if (!Array.isArray(this.selectedDate) || this.selectedDate.length !== 2 ||
-            !(this.selectedDate[0] instanceof Date) || !(this.selectedDate[1] instanceof Date) ||
-            !this.selectedItem) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'กรุณาเลือกวันที่และสถานะ',
-                detail: 'โปรดเลือกทั้งช่วงวันที่และสถานะการลาหยุด'
+        private LeaveRequestService: LeaveRequestService,
+    ) {
+        this.subscription = this.layoutService.configUpdate$
+            .pipe(debounceTime(25))
+            .subscribe((config) => {
+                this.initChart();
             });
-            return;
-        }
-
-        this.confirmationService.confirm({
-            key: 'confirm2',
-            target: event.target || new EventTarget(),
-            message: 'Are you sure that you want to proceed?',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                const startDate = new Date(this.selectedDate[0]);
-
-                const endDate = new Date(this.selectedDate[1]);
-                startDate.setHours(0, 0, 0, 0);
-                endDate.setHours(23, 59, 59, 999);
-
-                const startDateString = this.formatDate(startDate);
-                const endDateString = this.formatDate(endDate);
-
-                this.LeaveRequestService.saveleaveRequest({
-                    startDate: startDateString,
-                    endDate: endDateString,
-                    status: this.selectedItem,
-                }).subscribe({
-                    next: (response) => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Success',
-                            detail: 'ส่งคำขอสำเร็จแล้ว.',
-                        });
-
-                        if (this.selectedHalf) {
-                            this.LeaveRequestService.saveleaveHalf({
-
-                                halfStatus: this.selectedHalf,
-                            }).subscribe({
-                                next: (response) => {
-                                    this.messageService.add({
-                                        severity: 'success',
-                                        summary: 'Success',
-                                        detail: 'บันทึกข้อมูลลาครึ่งวันสำเร็จแล้ว.',
-                                    });
-                                },
-                                error: (err) => {
-                                    this.messageService.add({
-                                        severity: 'error',
-                                        summary: 'Error',
-                                        detail: 'เกิดข้อผิดพลาดในการบันทึกข้อมูลลาครึ่งวัน',
-                                    });
-                                },
-                            });
-                        }
-                    },
-                    error: (err) => {
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: 'เกิดข้อผิดพลาดในการส่งคำขอหลัก',
-                        });
-                    },
-                });
-            },
-            reject: () => {
-                // Handle rejection if necessary
-            }
-        });
-    }
-
-    showWarnViaToast(): void {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: 'กรุณาเลือกวันที่ต้องการจะส่งคำขอ'
-        });
-      }
-
-    showWarnStatusToast(): void {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: 'กรุณาเลือกประเภทคำลา'
-        });
-    }
-
-    //function แปลงค่าของวันที่
-    formatDate(date: Date): string {
-        const utcDate = new Date(date).toISOString(); // แปลงวันที่เป็น UTC
-        const year = utcDate.substring(0, 4); // ปี
-        const month = utcDate.substring(5, 7); // เดือน
-        const day = utcDate.substring(8, 10); // วัน
-        return `${year}-${month}-${day}`;
     }
 
     ngOnInit() {
+
+        this.LeaveRequestService.getLeaveRequestStatus().subscribe({
+            next: (data) => {
+                if (Array.isArray(data)) {
+                    this.leaveRequestStatus = data
+                }
+            },
+        });
+
+        this.LeaveRequestService.getLeaveRequestHalfStatus().subscribe({
+            next: (data) => {
+                if (Array.isArray(data)) {
+                    this.leaveRequestHalfStatus = data
+                    }
+                }
+            },
+        );
+
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
         this.breadcrumbItems.push({ label: 'Checking' });
@@ -187,43 +131,83 @@ export class LeaveRequestComponent {
             { label: 'Add New', icon: 'pi pi-fw pi-plus' },
             { label: 'Remove', icon: 'pi pi-fw pi-minus' }
         ];
+    }
 
-        this.leaveRequestStatus = [
-            { label: 'SickLeave', value: 'sickleave' },
-            { label: 'StudyLeave', value: 'studyleave' },
-            { label: 'AnnualLeave', value: 'annualleave' },
-            { label: 'PersonalLeave', value: 'personalleave' },
-            { label: 'MaternityLeave', value: 'maternityleave'},
-        ];
+    onSelect(event: any) {
+        this.uploadedFiles = [...event.files]; // ต้องใช้ spread `[...]` เพื่อให้เก็บค่าแบบ Array
+        console.log("ไฟล์ที่เลือก:", this.uploadedFiles);
+    }
 
-        this.leaveHalfStatus = [
-            { label: 'MorningLeave', value: 'morningleave' },
-            { label: 'AfternoonLeave', value: 'afternoonleave' },
-        ];
+      // กด Confirm แล้วส่ง API
+    confirmLeaveRequest() {
+        if (this.uploadedFiles.length === 0) {
+          console.warn('⚠ No files selected!');
+          return;
+        }
+
+
+    }
+
+    onBasicUpload() {
+        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode' });
+    }
+
+    formatRangeDate(date: Date): string {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear() + 543;
+        return `${day}/${month}/${year}`;
+    }
+
+    showWarnViaToast(): void {
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'กรุณาเลือกวันที่ต้องการจะส่งคำขอ'
+        });
+    }
+
+    showWarnStatusToast(): void {
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Warning',
+            detail: 'กรุณาเลือกประเภทคำลา'
+        });
+    }
+
+    //function แปลงค่าของวันที่
+    formatDate(date: Date): string {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear() + 543;
+        return `${day}/${month}/${year}`;
     }
 
     getStatusColor(status: string): string {
         const leavestatus = status.toLowerCase();
         switch (leavestatus) {
-            case 'sickleave':
+            case 'ลาป่วย':
                 return 'purple';
-            case 'studyleave':
+            case 'ลาศึกษา':
                 return '#4D96FF';
-            case 'annualleave':
-                    return '#FFD93D';
-            case 'personalleave':
+            case 'ลาพักร้อน':
+                return '#FFD93D';
+            case 'ลากิจส่วนตัว':
                 return '#8D99AE';
-            case 'maternityleave':
+            case 'ลาคลอด':
                 return '#F39AC4';
-            case 'morningleave':
-                return '#90EE90';
-            case 'afternoonleave':
+            case 'ลาครึ่งเช้า':
+                return 'orange';
+            case 'ลาครึ่งบ่าย':
                 return '#FFD700';
+            case 'ลาทั้งวัน':
+                return 'red';
+            case 'ปรับแต่งการลาเอง':
+                return 'black';
             default:
                 return 'black';
         }
     }
-
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
@@ -289,4 +273,129 @@ export class LeaveRequestComponent {
             this.subscription.unsubscribe();
         }
     }
+
+    onCalendarSelect(event: any) {
+        this.selectedDate = event;
+        if (!this.Dates.some(date => date.toDateString() === event.toDateString())) {
+            this.Dates.push(event);
+        }
+        this.selectedLeaveHalfStatus = null;
+    }
+
+    onCalendarBlur() {
+        if (!this.selectedDate) {
+            this.startTime = '';
+            this.endTime = '';
+        }
+    }
+
+    ngCalendarCheck() {
+        if (this.Dates.length === 0) {
+            this.startTime = '';
+            this.endTime = '';
+        }
+    }
+
+    onModelChange(event: any) {
+        if (!this.Dates || this.Dates.length === 0) {
+            this.startTime = '';
+            this.endTime = '';
+        }
+    }
+
+    onClearCalendarDate() {
+        this.Dates = [];
+        this.startTime = '';
+        this.endTime = '';
+        this.HalfStatusOn = false;
+
+    }
+
+    onLeaveStatusChange() {
+        if (this.selectedLeaveHalfStatus) {
+            switch (this.selectedLeaveHalfStatus.halfStatus) {
+                case 'ลาครึ่งเช้า':
+                    this.HalfStatusOn = false;
+                    this.isCustomLeave = true;
+                    break;
+
+                case 'ลาครึ่งบ่าย':
+                    this.HalfStatusOn = false;
+                    this.isCustomLeave = true;
+                    break;
+
+                case 'ลาทั้งวัน':
+                    this.HalfStatusOn = false;
+                    this.isCustomLeave = true;
+                    break;
+                case 'ปรับแต่งการลาเอง':
+                    this.startTime = '';
+                    this.endTime = '';
+                    this.HalfStatusOn = false;
+                    this.isCustomLeave = true;
+                    break;
+
+                default:
+                    this.startTime = '';
+                    this.endTime = '';
+                    this.HalfStatusOn = false;
+                    this.Dates = [];
+                    break;
+            }
+        } else {
+            this.startTime = '';
+            this.endTime = '';
+            this.HalfStatusOn = false;
+            this.Dates = [];
+        }
+    }
+
+    confirm2(event: Event): void {
+        const selectedDates = this.Dates.length > 0 ? this.Dates.map(date => this.formatDate(date)).join(', ') : null;
+        const selectedLeaveHalfStatus = this.selectedLeaveHalfStatus ? this.selectedLeaveHalfStatus.halfStatus : null;
+        const selectedLeaveStatusId = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusId : null;
+        const selectedLeaveStatus = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusData : null;
+        const selectHalfStatusId = this.selectedLeaveHalfStatus ? this.selectedLeaveHalfStatus.leaveHalfId : null;
+        const startTime = this.startTime ? new Date(this.startTime).toLocaleTimeString() : null;
+        const endTime = this.endTime ? new Date(this.endTime).toLocaleTimeString() : null;
+        const additionalDescription = this.additionalDescription;
+        const uploadedFiles = this.uploadedFiles;
+
+        this.InvselectedDates = !this.InvselectedDates;
+        this.InvselectedLeaveHalfStatus = !this.InvselectedLeaveHalfStatus;
+        this.InvselectedLeaveStatus = !this.InvselectedLeaveStatus;
+        this.InvstartTime = !this.InvstartTime;
+        this.InvendTime = !this.InvendTime;
+
+        if (!this.InvselectedDates || !this.InvselectedDates || !this.InvselectedLeaveHalfStatus || !this.InvstartTime || !this.InvendTime) {
+        }
+
+        if (!selectedDates || !selectedLeaveHalfStatus || !selectedLeaveStatus || !startTime || !endTime) {
+            this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'กรุณากรอกข้อมูลให้ครบ!' });
+            return;
+        }
+
+        const formData = {
+            selectedDates,
+            selectedLeaveStatus,
+            selectedLeaveStatusId,
+            selectedLeaveHalfStatus,
+            selectHalfStatusId,
+            startTime,
+            endTime,
+            additionalDescription,
+            uploadedFiles
+        };
+
+        this.LeaveRequestService.saveleaveRequest(formData).subscribe({
+            next: (response) => {
+                this.messageService.add({ severity: 'success', summary: 'สำเร็จ', detail: 'ส่งคำขอการลาสำเร็จ!' });
+            },
+            error: (err) => {
+                this.messageService.add({ severity: 'error', summary: 'ล้มเหลว', detail: 'เกิดข้อผิดพลาดในการส่งคำขอ!' });
+            },
+        });
+    }
 }
+
+

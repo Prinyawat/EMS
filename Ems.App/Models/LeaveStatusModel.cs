@@ -2,8 +2,9 @@
 
 namespace Ems.App.Models
 {
-    public class LeaveStatusModel
+    public class LeaveHalfStatusModel
     {
+        public Guid leaveHalfId { get; set; }
         public string halfStatus {  get; set; }
 
     }

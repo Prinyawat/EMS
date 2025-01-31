@@ -41,5 +41,13 @@ namespace Ems.App.Controllers
             var StstusData = _checkingservice.getCheckinStatus();
             return Ok(StstusData);
         }
+
+        //[HttpGet]
+        //[Route("getTimeCompare")]
+        //public IActionResult getTimeCompare()
+        //{
+        //    var TimecData = _checkingservice.getTimeCompare();
+        //    return Ok(TimecData);
+        //}
     }
 }

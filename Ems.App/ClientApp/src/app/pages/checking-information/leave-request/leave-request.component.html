@@ -8,56 +8,73 @@
 
     <div class="col-12 lg:col-12 xl:col-12">
         <div class="card">
-
             <h5>Leave Request</h5>
+            <!-- <div class="flex col-12 md:col-12"> -->
+                <div class="col-12 md:col-12 ">
+                    <div class="flex flex-wrap gap-3 mt-5 justify-content-center">
 
-            <div class="grid formgrid col justify-content-center gap-2">
+                        <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
+                        (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
+                        (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
+                        (onBlur)="onCalendarBlur()" [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}"/>
 
-                <p-dropdown [options]="leaveHalfStatus" [(ngModel)]="selectedHalf"
-                placeholder="Select Leave Half" [ngStyle]="{'width': '200px'}">
-                    <ng-template let-option pTemplate="item">
-                        <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
-                        [class]="'customer-badge status-' + option.value" [style.color]="'white'">
-                        {{ option.label }}</span>
-                    </ng-template>
-                </p-dropdown>
+                        <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
+                        placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" (onChange)="onLeaveStatusChange()" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}">
+                            <ng-template let-option pTemplate="item">
+                                    <span [ngStyle]="{'background-color': getStatusColor(option.halfStatus)}"
+                                    [class]="'customer-badge status-' + option.halfStatus" [style.color]="'white'">
+                                    {{ option.halfStatus }}</span>
+                            </ng-template>
+                        </p-dropdown>
 
-                <p-calendar  #calendar [showButtonBar]="true" [showIcon]="true" inputId="icon" [(ngModel)]="selectedDate" dateFormat="dd/mm/yy" class="p-button-warning"
-                placeholder="Selected Date" selectionMode="range"></p-calendar>
+                        <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedLeaveStatus"
+                            placeholder="เลือกประเภทการลา" [ngStyle]="{'width': '180px'}" optionLabel="leaveStatusData" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveStatus}">
+                            <ng-template let-option pTemplate="item" >
+                                    <span [ngStyle]="{'background-color': getStatusColor(option.leaveStatusData)}"
+                                    [class]="'customer-badge status-' + option.leaveStatusData" [style.color]="'white'">
+                                    {{ option.leaveStatusData }}</span>
+                            </ng-template>
+                        </p-dropdown>
 
-                <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedItem"
-                placeholder="Select Leave Status" [ngStyle]="{'width': '200px'}">
-                    <ng-template let-option pTemplate="item">
-                        <span [ngStyle]="{'background-color': getStatusColor(option.value)}"
-                        [class]="'customer-badge status-' + option.value" [style.color]="'white'">
-                        {{ option.label }}</span>
-                    </ng-template>
-                </p-dropdown>
+                        <div class="flex flex-wrap mt-3 gap-3">
 
-            </div>
+                            <span class="p-float-label" [ngStyle]="{'width': '180px'}">
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}"></p-calendar>
+                                <label for="float-input">เวลาเริ่มของวัน</label>
+                            </span>
+                            <span class="p-float-label" [ngStyle]="{'width': '180px'}">
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"></p-calendar>
+                                <label for="float-input">เวลาสิ้นสุดของวัน</label>
+                            </span>
 
-            <h5>Additional proof</h5>
-            <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"
-                          [multiple]="true" accept="image/*" [maxFileSize]="1000000">
-                <ng-template pTemplate="content">
-                    <ul *ngIf="uploadedFiles.length">
-                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-                    </ul>
-                </ng-template>
-            </p-fileUpload>
+                            <button pButton type="button" label="" icon="pi pi-folder-open" class="p-button-secondary mr-2" [ngStyle]="{'width': '70px'}"></button>
+                        </div>
 
-            <h5>Leave Request Detail</h5>
-			<textarea rows="5" cols="30" placeholder="Your Message....." pInputTextarea></textarea>
+                    </div>
+                    <div class="flex flex-wrap mt-3 md:col-12 justify-content-center">
 
-            <div class="grid formgrid mt-3 justify-content-center">
-                <div class="col-12 md:col-4">
-                    <p-toast></p-toast>
-                    <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"
-                    ></button>
-                    <p-confirmPopup key="confirm2"></p-confirmPopup>
+                        <textarea rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription"></textarea>
+
+                    </div>
+                    <div class="gap-4 mt-3 ">
+
+
+                        <p-fileUpload mode="basic" name="demo[]" accept="image/*"
+                         [maxFileSize]="1000000" customUpload="true" (onSelect)="onSelect($event)" [ngStyle]="{'width': '710px'}">
+                        </p-fileUpload>
+
+                    </div>
+                    <div class="col-12 md:col-4">
+
+                        <p-toast></p-toast>
+                        <button  pButton icon="pi pi-check" label="Confirm"
+                        (click)="confirm2($event)"></button>
+                        <p-confirmPopup key="confirm2"></p-confirmPopup>
+
+                    </div>
+
                 </div>
-            </div>
-
+            <!-- </div> -->
         </div>
     </div>
 

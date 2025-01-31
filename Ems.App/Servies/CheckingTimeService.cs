@@ -92,5 +92,26 @@ namespace Ems.App.Servies
                 }).ToList();
         }
 
+        //public List<TimeCompareModel> getTimeCompare()
+        //{
+        //    var latestCheckInOut = _emsContext.check_in_out
+        //        .OrderByDescending(r => r.check_dates)
+        //        .Take(1)
+        //        .Select(r => new TimeCompareModel
+        //        {
+        //            originTime = r.check_dates
+        //        })
+        //        .FirstOrDefault(); 
+
+        //    if (latestCheckInOut != null)
+        //    {
+        //        DateTime currentDateTime = DateTime.Now;
+        //        DateTime resetTime = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, 8, 0, 0);
+        //    }
+
+        //    return new List<TimeCompareModel> { latestCheckInOut };
+        //}
+
+
     }
 }

@@ -37,6 +37,9 @@ export class CheckingService {
         );
     }
 
+    // getTimeCompare(){
+    //     return this.http.get(this.env + "/getTimeCompare");
+    // }
     getCheckinStatus() {
         return this.http.get(this.env + "/getCheckinStatus");
     }

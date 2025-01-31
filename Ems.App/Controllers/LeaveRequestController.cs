@@ -21,33 +21,34 @@ namespace Ems.App.Controllers
         [Route("saveleaveRequest")]
         public IActionResult saveleaveRequest([FromBody] LeaveRequestModel leaveData)
         {
-            var checkingData = _leaverequestservice.saveleaveRequest(leaveData);
 
-            return Ok(new LeaveRequestModel(){
-                startDate = leaveData.startDate,
-                endDate = leaveData.endDate,
-                status = leaveData.status
-            });
-        }
+            _leaverequestservice.saveleaveRequest(leaveData);
 
-        [HttpPost]
-        [Route("saveLeaveHalf")]
-        public IActionResult saveLeaveHalf([FromBody] LeaveStatusModel leavestatusData)
-        {
-            var statusData = _leaverequestservice.saveLeaveHalf(leavestatusData);
-
-            return Ok(new LeaveStatusModel()
-            {
-                halfStatus = leavestatusData.halfStatus
-            });
+            return Ok();
         }
 
         [HttpGet]
-        [Route("getLeaveRequestNoti")]
-        public ActionResult<List<LeaveRequestModel>> getLeaveRequestNoti()
+        [Route("getLeaveRequestHalfStatus")]
+        public IActionResult getLeaveRequestHalfStatus()
         {
-            var leaveRequestChoice = _leaverequestservice.getLeaveRequestNoti();
-            return Ok(leaveRequestChoice);
+            var statusData = _leaverequestservice.getLeaveRequestHalfStatus();
+            return Ok(statusData);
+        }
+
+        //[HttpGet]
+        //[Route("getLeaveRequestNoti")]
+        //public ActionResult<List<LeaveRequestModel>> getLeaveRequestNoti()
+        //{
+        //    var leaveRequestChoice = _leaverequestservice.getLeaveRequestNoti();
+        //    return Ok(leaveRequestChoice);
+        //}
+
+        [HttpGet]
+        [Route("getLeaveRequestStatus")]
+        public IActionResult getLeaveRequestStatus()
+        {
+            var leaveData = _leaverequestservice.getLeaveRequestStatus();
+            return Ok(leaveData);
         }
     }
 }

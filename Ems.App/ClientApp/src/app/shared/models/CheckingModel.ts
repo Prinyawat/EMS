@@ -7,3 +7,7 @@ export class CheckingTimeData {
     checkout: Date;
     status: string;
 }
+
+// export class TimeCompare {
+//     timecompareDate: Date;
+// }

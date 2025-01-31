@@ -15,6 +15,11 @@ namespace Ems.App.Models
 
     }
 
+    //public class TimeCompareModel
+    //{
+    //    public DateTime? originTime { get; set; }
+    //}
+
 
 
 }

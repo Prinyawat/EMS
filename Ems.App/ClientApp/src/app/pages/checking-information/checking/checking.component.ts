@@ -13,15 +13,11 @@ import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 })
 export class CheckingComponent {
 
-    canUseSystem: boolean = true;
+    lastTimeDate: any;
 
     disableButtons: boolean = false;
 
     isCheckedOut: boolean = false;
-
-    lastCheckOutTime: Date | null = null;
-
-    resetTime: Date = new Date(new Date().setHours(8, 0, 0, 0));
 
     isButtonDisabled: boolean = false;
 
@@ -69,12 +65,31 @@ export class CheckingComponent {
         private CheckingService: CheckingService,) { }
 
     ngOnInit(): void {
-        const lastCheckOutTime = localStorage.getItem('lastCheckOutTime');
 
-        if (lastCheckOutTime) {
-            this.lastCheckOutTime = new Date(lastCheckOutTime);
-            this.checkTimeForReactivation(); // ตรวจสอบว่าตอนนี้สามารถใช้งานได้หรือยัง
+        const storedCheckInStatus = localStorage.getItem('isCheckIn');
+        const storedCheckOutTime = localStorage.getItem('checkOutTime');
+
+        if (storedCheckInStatus) {
+            this.isCheckIn = JSON.parse(storedCheckInStatus);
         }
+
+        if (!this.isCheckIn) {
+            const now = new Date();
+            const nextDay8AMString = localStorage.getItem('nextDay8AM');
+
+            if (nextDay8AMString) {
+                const nextDay8AM = new Date(nextDay8AMString);
+                
+                // เช็คสถานะการเช็คเอาท์และเวลาปัจจุบัน
+                if (storedCheckOutTime && now < nextDay8AM) {
+                    // ถ้ามีเวลาเช็คเอาท์ และเวลาปัจจุบันยังไม่ถึง 8 โมงวันถัดไป
+                    this.disableButtons = true;  // Disable ปุ่ม
+                } else {
+                    this.disableButtons = false; // ถ้าเลยเวลาแล้วสามารถคลิกได้
+                }
+            }
+        }
+
 
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
@@ -95,7 +110,6 @@ export class CheckingComponent {
               }
             },
           });
-
     }
 
     getStatusColor(status: string): string {
@@ -205,36 +219,37 @@ export class CheckingComponent {
             status: saveData.status
         }).subscribe({
             next: () => {
-                // หากเป็นการเช็คอิน
                 if (this.isCheckIn) {
                     this.isCheckIn = false;
-                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
                 } else {
-
                     this.isCheckIn = true;
-                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
                 }
+
+                localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
 
                 if (saveData.checkIn) {
                     this.checkInTime = saveData.checkIn;
                 }
                 if (saveData.checkOut) {
                     this.checkOutTime = saveData.checkOut;
-                    this.lastCheckOutTime = now;
+                    const nextDay8AM = new Date(now);
+
+                    nextDay8AM.setDate(now.getDate() + 1);
+                    nextDay8AM.setHours(8, 0, 0, 0);
+
+                    localStorage.setItem('nextDay8AM', nextDay8AM.toISOString());
+                    localStorage.setItem('checkOutTime', saveData.checkOut.toISOString());
+
                     this.disableButtons = true;
-                    localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
                 }
 
-                // สถานะสำเร็จ
                 this.messageService.add({
                     severity: 'success',
                     summary: 'สำเร็จ',
                     detail: successMessage,
                 });
-                this.checkTimeForReactivation();
             },
             error: () => {
-                // แสดงข้อผิดพลาด
                 this.messageService.add({
                     severity: 'error',
                     summary: 'เกิดข้อผิดพลาด',
@@ -242,17 +257,6 @@ export class CheckingComponent {
                 });
             },
         });
-    }
-
-    checkTimeForReactivation() {
-        const now = new Date();
-        const currentTime = now.getHours();
-
-        if (currentTime >= 8) {
-            this.canUseSystem = true; // อนุญาตให้ใช้ระบบได้อีกหลังจาก 8 โมง
-            this.disableButtons = false; // ปลดล็อกปุ่ม
-            localStorage.removeItem('lastCheckOutTime'); // ลบเวลาของ check-out ที่บันทึกไว้แล้ว
-        }
     }
 }
 

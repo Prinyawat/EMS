@@ -106,7 +106,7 @@ export class AgendaComponent {
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
-        this.leaveStatus = this.LeaveRequestService.getLeaveRequestStatus();
+        // this.leaveStatus = this.LeaveRequestService.getLeaveRequestStatus();
     }
 
     fetchAgenda() {

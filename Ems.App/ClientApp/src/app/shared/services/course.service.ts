@@ -22,14 +22,14 @@ export class CourseService {
     getRegisteredCourses() {
       return this.http.get(this.env + "/getRegisteredCourses");
     }
-    
+
     getCompletedCourses() {
       return this.http.get(this.env + "/getCompletedCourses");
     }
-       
+
     getCourseById(courseId: string) {
       return this.http.get<Course>(`${this.env}/getCourseById/${courseId}`);
-    } 
+    }
 
     registerCourse(courseId: string) {
       const payload = { courseId };
@@ -39,19 +39,20 @@ export class CourseService {
     cancelRegistration(courseId: string) {
       return this.http.delete(`${this.env}/cancelRegistration/${courseId}`);
     }
-    
+
     recordProgress(courseId: string, chapterId: string, contentId: string) {
       const payload = { courseId, chapterId, contentId };
       return this.http.post(this.env +"/recordProgress", payload);
     }
-    
+
     saveUserAnswers(answers: { courseId: string; questionId: string; optionId: string }[]) {
       return this.http.post<{ score: number; totalQuestions: number; passStatus: boolean }>
       (`${this.env}/saveAnswers`, answers);
     }
 
+
     calculateResult(courseId: string) {
       return this.http.get<any>(`${this.env}/api/Course/calculateResult/${courseId}`);
     }
-    
-} 
+
+}

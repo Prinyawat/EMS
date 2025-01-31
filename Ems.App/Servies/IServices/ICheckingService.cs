@@ -9,6 +9,8 @@ namespace Ems.App.Servies.IServices
         List<AgendaModel> getAgendas();
 
         List<CheckingStatusModel> getCheckinStatus();
+
+        //List<TimeCompareModel> getTimeCompare();
     }
 
 }

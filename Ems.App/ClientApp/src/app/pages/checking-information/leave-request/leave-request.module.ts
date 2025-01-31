@@ -12,6 +12,8 @@ import { MenuModule } from 'primeng/menu';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
     imports: [
@@ -27,6 +29,8 @@ import { DropdownModule } from 'primeng/dropdown';
         BreadcrumbModule,
         FormsModule,
         DropdownModule,
+        RadioButtonModule,
+        TagModule
 
 
     ],
