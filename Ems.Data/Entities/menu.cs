@@ -5,11 +5,23 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class role
+public partial class menu
 {
-    public Guid role_id { get; set; }
+    public Guid menu_id { get; set; }
 
-    public string role_name { get; set; }
+    public Guid? menu_parent_id { get; set; }
+
+    public string menu_code { get; set; }
+
+    public string menu_name { get; set; }
+
+    public string menu_icon { get; set; }
+
+    public string menu_path { get; set; }
+
+    public bool? is_menu_parent { get; set; }
+
+    public bool? active { get; set; }
 
     public string created_by { get; set; }
 
@@ -20,6 +32,4 @@ public partial class role
     public DateTime? updated_date { get; set; }
 
     public virtual ICollection<menu_role> menu_role { get; set; } = new List<menu_role>();
-
-    public virtual ICollection<user_role> user_role { get; set; } = new List<user_role>();
 }

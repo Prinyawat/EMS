@@ -1,6 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { MenuService } from '../shared/services/menu.service';
+import { MenuModel } from '../shared/models/menu.model';
 
 @Component({
     selector: 'app-menu',
@@ -9,10 +11,30 @@ import { LayoutService } from './service/app.layout.service';
 export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
+    menus: MenuModel[] = [];
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService, private menuService: MenuService) { }
 
     ngOnInit() {
+        this.menuService.getMenus().subscribe((res: any[]) => {
+            console.log('menuService', res);
+            if (res) {
+                res.forEach(x => {
+                    let menu = new MenuModel();
+                    menu.label = x.menuName;
+                    menu.menuId = x.menuId;
+                    if (x.isMenuParent) {
+                        menu.items = [];
+                        this.menus.push(menu);
+                    } else {
+                        menu.icon = x.menuIcon;
+                        menu.routerLink = x.menuPath;
+                        this.menus.find(m => m.menuId == x.menuParentId)?.items.push(menu);
+                    }
+                })
+                console.log('this.menus', this.menus)
+            }
+        });
         this.model = [
             {
                 label: 'Home',
@@ -27,14 +49,14 @@ export class AppMenuComponent implements OnInit {
                     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
                     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] },
                     // {
-            
-                        // label: 'Course', icon: 'pi pi-book',
-                        // items: [
-                        //     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
-                        //     // { label: 'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course'] },
-                        //     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
-                        //     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] }
-                        // ]
+
+                    // label: 'Course', icon: 'pi pi-book',
+                    // items: [
+                    //     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
+                    //     // { label: 'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course'] },
+                    //     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
+                    //     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] }
+                    // ]
                     // }
                 ]
             },
@@ -207,5 +229,6 @@ export class AppMenuComponent implements OnInit {
             //     ]
             // }
         ];
+        console.log(' this.model', this.model);
     }
 }

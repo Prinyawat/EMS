@@ -31,6 +31,10 @@ public partial class EmsContext : DbContext
 
     public virtual DbSet<leave_request_status> leave_request_status { get; set; }
 
+    public virtual DbSet<menu> menu { get; set; }
+
+    public virtual DbSet<menu_role> menu_role { get; set; }
+
     public virtual DbSet<option> option { get; set; }
 
     public virtual DbSet<position> position { get; set; }
@@ -291,6 +295,50 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+        });
+
+        modelBuilder.Entity<menu>(entity =>
+        {
+            entity.HasKey(e => e.menu_id).HasName("menu_pk");
+
+            entity.ToTable("menu", "ems");
+
+            entity.Property(e => e.menu_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by).HasMaxLength(100);
+            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.menu_code).HasMaxLength(10);
+            entity.Property(e => e.menu_icon).HasMaxLength(100);
+            entity.Property(e => e.menu_name).HasMaxLength(100);
+            entity.Property(e => e.menu_path).HasMaxLength(100);
+            entity.Property(e => e.updated_by).HasMaxLength(100);
+            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
+        });
+
+        modelBuilder.Entity<menu_role>(entity =>
+        {
+            entity.HasKey(e => e.menu_role_id).HasName("menu_role_pk");
+
+            entity.ToTable("menu_role", "ems");
+
+            entity.Property(e => e.menu_role_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.created_by)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.created_date).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.updated_date).HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.menu).WithMany(p => p.menu_role)
+                .HasForeignKey(d => d.menu_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("menu_role_menu_fk");
+
+            entity.HasOne(d => d.role).WithMany(p => p.menu_role)
+                .HasForeignKey(d => d.role_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("menu_role_role_fk");
         });
 
         modelBuilder.Entity<option>(entity =>
