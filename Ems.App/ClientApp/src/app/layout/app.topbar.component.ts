@@ -86,31 +86,31 @@ export class AppTopBarComponent {
         });
 
         // CourseNotification
-        const storedNotifications = localStorage.getItem('notificationcourse');
-            if (storedNotifications) {
-                this.notificationcourse = JSON.parse(storedNotifications);
-        }
-        this.notificationService.startConnection();
-        this.notificationService.listenNotifications((message: string) => {
-            this.notificationcourse.push(message);
-            localStorage.setItem('notificationcourse', JSON.stringify(this.notificationcourse));
-        });
-
-        //Leave Notification
         const leaveNotifications = localStorage.getItem('notificationleave');
-        if (leaveNotifications) {
-            this.notificationleave = JSON.parse(leaveNotifications);
-            }
+if (leaveNotifications) {
+    this.notificationleave = JSON.parse(leaveNotifications);
+}
 
-            this.notificationService.startConnection();
-            this.notificationService.listenNotifications((message: string) => {
-                console.log(message);
-                if (!this.notificationleave.includes(message)) {
-                    this.notificationleave.push(message);
-                    console.log("Saving to localStorage:", this.notificationleave);
-                    localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
-                }
+// เริ่มการเชื่อมต่อกับ notification service
+this.notificationService.startConnection();
+
+// ฟังการแจ้งเตือนจาก server
+this.notificationService.listenNotifications((message: string) => {
+    console.log(message);
+
+    // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
+    if (!this.notificationleave.includes(message)) {
+        // ถ้าไม่มี, เพิ่มข้อความใหม่
+        this.notificationleave.push(message);
+
+        // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
+        console.log("Saving to localStorage:", this.notificationleave);
+        localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
+    } else {
+        console.log("Duplicate notification, not saving:", message);
+    }
 });
+
 
 
     }
