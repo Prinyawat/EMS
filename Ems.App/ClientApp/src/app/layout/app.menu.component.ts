@@ -1,6 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { MenuService } from '../shared/services/menu.service';
+import { MenuModel } from '../shared/models/menu.model';
 
 @Component({
     selector: 'app-menu',
@@ -9,10 +11,30 @@ import { LayoutService } from './service/app.layout.service';
 export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
+    menus: MenuModel[] = [];
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService, private menuService: MenuService) { }
 
     ngOnInit() {
+        this.menuService.getMenus().subscribe((res: any[]) => {
+            console.log('menuService', res);
+            if (res) {
+                res.forEach(x => {
+                    let menu = new MenuModel();
+                    menu.label = x.menuName;
+                    menu.menuId = x.menuId;
+                    if (x.isMenuParent) {
+                        menu.items = [];
+                        this.menus.push(menu);
+                    } else {
+                        menu.icon = x.menuIcon;
+                        menu.routerLink = x.menuPath;
+                        this.menus.find(m => m.menuId == x.menuParentId)?.items.push(menu);
+                    }
+                })
+                console.log('this.menus', this.menus)
+            }
+        });
         this.model = [
             {
                 label: 'Home',
@@ -20,21 +42,28 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['/home'] }
                 ]
             },
+            // {
+            //     label: 'Admin',
+            //     items: [
+            //         { label: 'จัดการบัญชีผู้ใช้', icon: 'pi pi-cog', routerLink: ['/admin/manage-user'] },
+            //         { label: 'จัดการ Course', icon: 'pi pi-cog', routerLink: ['/admin/admin-course'] },
+            //     ]
+            // },
             {
                 label: 'Course',
                 items: [
                     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
-                    { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
                     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] },
+                    { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
                     // {
-            
-                        // label: 'Course', icon: 'pi pi-book',
-                        // items: [
-                        //     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
-                        //     // { label: 'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course'] },
-                        //     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
-                        //     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] }
-                        // ]
+
+                    // label: 'Course', icon: 'pi pi-book',
+                    // items: [
+                    //     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
+                    //     // { label: 'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course'] },
+                    //     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
+                    //     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] }
+                    // ]
                     // }
                 ]
             },
@@ -66,27 +95,27 @@ export class AppMenuComponent implements OnInit {
                     // }
                 ]
             },
-            // {
-            //     label: 'UI Components',
-            //     items: [
-            //         { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-            //         { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-            //         { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
-            //         { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
-            //         { label: 'Button', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
-            //         { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-            //         { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-            //         { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-            //         { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-            //         { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-            //         { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-            //         { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'], routerLinkActiveOptions: { paths: 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' } },
-            //         { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-            //         { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-            //         { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-            //         { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-            //     ]
-            // },
+            {
+                label: 'UI Components',
+                items: [
+                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+                    { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
+                    { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
+                    { label: 'Button', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
+                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
+                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
+                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
+                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
+                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
+                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
+                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'], routerLinkActiveOptions: { paths: 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' } },
+                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
+                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
+                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
+                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
+                ]
+            },
             // {
             //     label: 'Prime Blocks',
             //     items: [
@@ -207,5 +236,6 @@ export class AppMenuComponent implements OnInit {
             //     ]
             // }
         ];
+        console.log(' this.model', this.model);
     }
 }

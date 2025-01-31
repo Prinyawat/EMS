@@ -15,7 +15,7 @@ public partial class user_progress
 
     public Guid chapter_id { get; set; }
 
-    public Guid content_id { get; set; }
+    public Guid chapter_content_id { get; set; }
 
     public bool? record_read { get; set; }
 
@@ -29,7 +29,7 @@ public partial class user_progress
 
     public virtual chapter chapter { get; set; }
 
-    public virtual chapter_content content { get; set; }
+    public virtual chapter_content chapter_content { get; set; }
 
     public virtual course course { get; set; }
 

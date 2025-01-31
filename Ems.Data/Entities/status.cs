@@ -19,7 +19,7 @@ public partial class status
 
     public DateTime? updated_date { get; set; }
 
-    public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();
+    public virtual ICollection<course_complete> course_complete { get; set; } = new List<course_complete>();
 
     public virtual ICollection<registration> registration { get; set; } = new List<registration>();
 }
