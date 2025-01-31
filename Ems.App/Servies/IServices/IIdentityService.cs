@@ -2,6 +2,6 @@
 {
     public interface IIdentityService
     {
-        public string GetCurrentUser();
+        public Guid GetCurrentUser();
     }
 }

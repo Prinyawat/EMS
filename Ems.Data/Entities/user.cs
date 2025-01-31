@@ -31,7 +31,7 @@ public partial class user
 
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
 
-    public virtual ICollection<coursecomplete> coursecomplete { get; set; } = new List<coursecomplete>();
+    public virtual ICollection<course_complete> course_complete { get; set; } = new List<course_complete>();
 
     public virtual ICollection<leave_request> leave_request { get; set; } = new List<leave_request>();
 

@@ -29,8 +29,6 @@ public partial class leave_request
 
     public Guid? leave_half_id { get; set; }
 
-    public byte[] upload_file { get; set; }
-
     public string leave_start_time { get; set; }
 
     public string leave_end_time { get; set; }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Ems.Data.Entities;
 
-public partial class coursecomplete
+public partial class course_complete
 {
-    public Guid coursecomplete_id { get; set; }
+    public Guid course_complete_id { get; set; }
 
     public Guid user_id { get; set; }
 

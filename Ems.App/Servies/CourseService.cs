@@ -10,16 +10,19 @@ namespace Ems.App.Servies
     {
         private readonly EmsContext _emsContext;
         private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IIdentityService _identityService;
 
-        public CourseService(EmsContext emsContext, IHubContext<NotificationHub> hubContext)
+        public CourseService(EmsContext emsContext, IHubContext<NotificationHub> hubContext, IIdentityService identityService)
         {
             _emsContext = emsContext;
             _hubContext = hubContext;
+            _identityService = identityService;
         }
 
         public List<CourseModel> GetCourses()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+            Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.course.Select(c => new CourseModel
             {
                 courseId = c.course_id,
@@ -70,7 +73,7 @@ namespace Ems.App.Servies
                         }).ToList()
                     }).ToList(),
                     questions = c.question
-                    .OrderBy(q => q.created_date) 
+                    .OrderBy(q => q.created_date)
                     .Select(q => new QuestionModel
                     {
                         questionId = q.question_id,
@@ -89,7 +92,7 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetRegisteredCourses()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
             return _emsContext.registration
                 .Where(r => r.user_id == userId && r.status.status_name == "ลงทะเบียนแล้ว")
                 .Select(r => new CourseModel
@@ -144,7 +147,7 @@ namespace Ems.App.Servies
                 status_id = registeredStatus.status_id
             };
 
-            _emsContext.registration.Add(registration); 
+            _emsContext.registration.Add(registration);
             _emsContext.SaveChanges();
 
             var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name} แล้ว!";
@@ -204,13 +207,13 @@ namespace Ems.App.Servies
                 _emsContext.SaveChanges();
             }
         }
-        
+
         public void SaveUserAnswers(List<UserQuestionModel> answers)
         {
             var userId = answers.First().userId;
             var courseId = answers.First().courseId;
 
-            
+
             var existingAnswers = _emsContext.user_question
                 .Where(uq => uq.user_id == userId && uq.course_id == courseId)
                 .ToList();
@@ -220,7 +223,7 @@ namespace Ems.App.Servies
                 _emsContext.user_question.RemoveRange(existingAnswers);
             }
 
-            
+
             foreach (var answer in answers)
             {
                 var newAnswer = new user_question
@@ -239,7 +242,7 @@ namespace Ems.App.Servies
 
             _emsContext.SaveChanges();
 
-            
+
             CalculateUserResult(userId, courseId);
         }
 
