@@ -42,8 +42,8 @@ namespace Ems.App.Servies
 
         public CourseModel GetCourseById(Guid courseId)
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-
+            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            Guid userId = this._identityService.GetCurrentUser();
             var course = _emsContext.course
                 .Where(c => c.course_id == courseId)
                 .Select(c => new CourseModel
@@ -62,14 +62,14 @@ namespace Ems.App.Servies
                         title = ch.chapter_title,
                         contents = ch.chapter_content.Select(ct => new ContentModel
                         {
-                            contentId = ct.content_id,
+                            contentId = ct.chapter_content_id,
                             contentTitle = ct.content_title,
                             body = ct.content_body,
                             recordRead = _emsContext.user_progress
                                 .Any(up => up.user_id == userId &&
                                            up.course_id == courseId &&
                                            up.chapter_id == ch.chapter_id &&
-                                           up.content_id == ct.content_id)
+                                           up.chapter_content_id == ct.chapter_content_id)
                         }).ToList()
                     }).ToList(),
                     questions = c.question
@@ -92,7 +92,8 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetRegisteredCourses()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.registration
                 .Where(r => r.user_id == userId && r.status.status_name == "ลงทะเบียนแล้ว")
                 .Select(r => new CourseModel
@@ -111,8 +112,9 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetCompletedCourses()
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-            return _emsContext.coursecomplete
+            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            Guid userId = this._identityService.GetCurrentUser();
+            return _emsContext.course_complete
                 .Where(r => r.user_id == userId && (r.status.status_name == "เสร็จสิ้น" || r.status.status_name == "ไม่ผ่าน"))
                 .Select(r => new CourseModel
                 {
@@ -187,7 +189,7 @@ namespace Ems.App.Servies
                 .Any(up => up.user_id == userId &&
                            up.course_id == courseId &&
                            up.chapter_id == chapterId &&
-                           up.content_id == contentId);
+                           up.chapter_content_id == contentId);
 
             if (!existingProgress)
             {
@@ -197,7 +199,7 @@ namespace Ems.App.Servies
                     user_id = userId,
                     course_id = courseId,
                     chapter_id = chapterId,
-                    content_id = contentId,
+                    chapter_content_id = contentId,
                     record_read = true,
                     created_by = userId.ToString(),
                     created_date = DateTime.UtcNow
@@ -292,7 +294,7 @@ namespace Ems.App.Servies
             }
 
             // ตรวจสอบสถานะแล้วอัปเดตข้อมูลใน coursecomplete
-            var courseComplete = _emsContext.coursecomplete
+            var courseComplete = _emsContext.course_complete
                 .FirstOrDefault(cc => cc.user_id == userId && cc.course_id == courseId);
 
             if (courseComplete != null)
@@ -303,14 +305,14 @@ namespace Ems.App.Servies
                     : _emsContext.status.First(s => s.status_name == "ไม่ผ่าน").status_id;
                 courseComplete.updated_date = DateTime.UtcNow;
 
-                _emsContext.coursecomplete.Update(courseComplete);
+                _emsContext.course_complete.Update(courseComplete);
             }
             else
             {
                 // เพิ่มข้อมูลใหม่ใน coursecomplete
-                var newCourseComplete = new coursecomplete
+                var newCourseComplete = new course_complete
                 {
-                    coursecomplete_id = Guid.NewGuid(),
+                    course_complete_id = Guid.NewGuid(),
                     user_id = userId,
                     course_id = courseId,
                     status_id = passStatus
@@ -319,7 +321,7 @@ namespace Ems.App.Servies
                     created_date = DateTime.UtcNow
                 };
 
-                _emsContext.coursecomplete.Add(newCourseComplete);
+                _emsContext.course_complete.Add(newCourseComplete);
             }
 
             _emsContext.SaveChanges();
