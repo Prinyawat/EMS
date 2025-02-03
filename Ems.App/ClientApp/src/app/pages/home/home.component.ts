@@ -11,10 +11,4 @@ export class HomeComponent {
     constructor(private homeService: HomeService) {
 
     }
-    test() {
-        console.log('click)')
-        this.homeService.getItems().subscribe(res => {
-            console.log('res', res);
-        });
-    }
 }

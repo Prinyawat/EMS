@@ -11,15 +11,8 @@ namespace Ems.App.Models
     {
         public DateTime? checkin { get; set; }
         public DateTime? checkout { get; set; }
-        public string status { get; set; }
+        public string statuses { get; set; }
 
     }
-
-    //public class TimeCompareModel
-    //{
-    //    public DateTime? originTime { get; set; }
-    //}
-
-
 
 }

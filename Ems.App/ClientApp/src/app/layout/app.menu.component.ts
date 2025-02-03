@@ -17,7 +17,7 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         this.menuService.getMenus().subscribe((res: any[]) => {
-            console.log('menuService', res);
+            // console.log('menuService', res);
             if (res) {
                 res.forEach(x => {
                     let menu = new MenuModel();
@@ -32,7 +32,7 @@ export class AppMenuComponent implements OnInit {
                         this.menus.find(m => m.menuId == x.menuParentId)?.items.push(menu);
                     }
                 })
-                console.log('this.menus', this.menus)
+                // console.log('this.menus', this.menus)
             }
         });
         this.model = [
@@ -236,6 +236,6 @@ export class AppMenuComponent implements OnInit {
             //     ]
             // }
         ];
-        console.log(' this.model', this.model);
+        // console.log(' this.model', this.model);
     }
 }

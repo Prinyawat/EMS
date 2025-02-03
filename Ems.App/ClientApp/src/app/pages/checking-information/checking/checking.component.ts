@@ -1,10 +1,13 @@
+import { ValidCheckingService } from './../../../shared/services/validchecking.service';
+import { NotificationCourseService } from './../../../shared/services/notification-course.service';
+import { NotificationService } from './../../../shared/services/notification.service';
 import { CheckingService } from './../../../shared/services/checking.service';
 import { Component, Type } from '@angular/core';
 import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AgendaComponent } from '../agenda-checking/agenda.component';
-import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
+import { CheckingStatus, CheckingTimeData } from 'src/app/shared/models/CheckingModel';
 
 @Component({
     selector: 'app-checking',
@@ -12,6 +15,8 @@ import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
     providers: [ConfirmationService, MessageService, AgendaComponent]
 })
 export class CheckingComponent {
+
+    checkingData: CheckingTimeData[] = [];
 
     lastTimeDate: any;
 
@@ -62,34 +67,23 @@ export class CheckingComponent {
     private circle: L.Circle | null = null;
     constructor(private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private CheckingService: CheckingService,) { }
+        private CheckingService: CheckingService,
+        private ValidCheckingService: ValidCheckingService ) { }
 
     ngOnInit(): void {
+        this.loadCheckTimeData();
 
-        const storedCheckInStatus = localStorage.getItem('isCheckIn');
-        const storedCheckOutTime = localStorage.getItem('checkOutTime');
+        this.ValidCheckingService.startConnection();
+        this.ValidCheckingService.listenNotifications((message: string) => {
+            this.handleNotification(message);
+        });
 
-        if (storedCheckInStatus) {
-            this.isCheckIn = JSON.parse(storedCheckInStatus);
-        }
-
-        if (!this.isCheckIn) {
-            const now = new Date();
-            const nextDay8AMString = localStorage.getItem('nextDay8AM');
-
-            if (nextDay8AMString) {
-                const nextDay8AM = new Date(nextDay8AMString);
-                
-                // เช็คสถานะการเช็คเอาท์และเวลาปัจจุบัน
-                if (storedCheckOutTime && now < nextDay8AM) {
-                    // ถ้ามีเวลาเช็คเอาท์ และเวลาปัจจุบันยังไม่ถึง 8 โมงวันถัดไป
-                    this.disableButtons = true;  // Disable ปุ่ม
-                } else {
-                    this.disableButtons = false; // ถ้าเลยเวลาแล้วสามารถคลิกได้
-                }
-            }
-        }
-
+        // this.CheckingService.getInvalidCheckTime().subscribe({
+        //     next: (data: CheckingTimeData[]) => {
+        //       console.log(data);
+        //       this.checkingData = data;
+        //     },
+        // });
 
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
@@ -109,7 +103,63 @@ export class CheckingComponent {
                 this.selectedItem = this.workStatus.find(status => status.status === 'ปฏิบัติงานที่สำนักงาน') || this.workStatus[0] || null;
               }
             },
-          });
+        });
+    }
+
+    loadCheckTimeData(): void {
+        this.CheckingService.getInvalidCheckTime().subscribe({
+            next: (data: CheckingTimeData[]) => {
+                console.log('อัปเดตข้อมูล:', data);
+                this.checkingData = data;
+
+                if (data.length > 0) {
+                    this.checkInTime = data[0].checkin
+                        ? new Date(data[0].checkin).toLocaleString('th-TH', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        })
+                        : null;
+
+                    this.checkOutTime = data[0].checkout
+                        ? new Date(data[0].checkout).toLocaleString('th-TH', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        })
+                        : null;
+
+
+                    this.isCheckIn = !!this.checkInTime && !this.checkOutTime;
+                    this.isCheckedOut = !!this.checkOutTime;
+
+                    console.log('isCheckIn:', this.isCheckIn);
+                    console.log('isCheckedOut:', this.isCheckedOut);
+                }
+            },
+        });
+    }
+
+    private handleNotification(message: string): void {
+        if (message === 'LogOutNull') {
+            console.log('วันนี้เอ็งเหลือเช็คเอ๊าท์นะเห้ย !');
+            this.isCheckIn = false;
+        } else if (message === 'LogOutHasValue') {
+            console.log('วันนี้เอ็งเช็คอินครบแล้ว.');
+            this.disableButtons = true;
+            this.isCheckIn = true;
+        } else if (message === 'NoLoginSystem') {
+            console.log('แม่งลืมเช็คตั้งแต่ไหนนิ');
+            this.isCheckIn = true;
+        } else {
+            console.log('เอ็งทำระบบพัง กลับไปดู Bug!', message);
+        }
     }
 
     getStatusColor(status: string): string {
@@ -211,35 +261,19 @@ export class CheckingComponent {
             ? { checkIn: now, checkOut: null, status: this.selectedItem.status }
             : { checkIn: null, checkOut: now, status: this.selectedItem.status };
 
-        console.log(saveData);
-
         this.CheckingService.saveChecking({
             checkin: saveData.checkIn,
             checkout: saveData.checkOut,
-            status: saveData.status
+            statuses: saveData.status
         }).subscribe({
             next: () => {
-                if (this.isCheckIn) {
-                    this.isCheckIn = false;
-                } else {
-                    this.isCheckIn = true;
-                }
-
-                localStorage.setItem('isCheckIn', JSON.stringify(this.isCheckIn));
-
                 if (saveData.checkIn) {
                     this.checkInTime = saveData.checkIn;
+                    this.isCheckIn = false;
                 }
                 if (saveData.checkOut) {
                     this.checkOutTime = saveData.checkOut;
-                    const nextDay8AM = new Date(now);
-
-                    nextDay8AM.setDate(now.getDate() + 1);
-                    nextDay8AM.setHours(8, 0, 0, 0);
-
-                    localStorage.setItem('nextDay8AM', nextDay8AM.toISOString());
-                    localStorage.setItem('checkOutTime', saveData.checkOut.toISOString());
-
+                    this.isCheckedOut = true;
                     this.disableButtons = true;
                 }
 
@@ -258,5 +292,5 @@ export class CheckingComponent {
             },
         });
     }
-}
 
+}

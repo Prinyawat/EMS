@@ -123,9 +123,7 @@ public partial class EmsContext : DbContext
             entity.ToTable("check_in_out", "ems");
 
             entity.Property(e => e.check_inout_id).HasDefaultValueSql("uuid_generate_v4()");
-            entity.Property(e => e.check_dates)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.check_dates).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.created_by).HasMaxLength(100);
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

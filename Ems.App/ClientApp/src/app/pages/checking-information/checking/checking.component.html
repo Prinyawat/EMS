@@ -14,7 +14,7 @@
                     <div class="flex gap-2 field col-12 md:col justify-content-center align-items-center">
                         <div class="justify-content-center align-items-center">
 
-                            <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="กรุณาเลือกสถานะเข้างาน" [ngStyle]="{'width': '200px'}" optionLabel="status" [disabled]="isCheckIn === false">
+                            <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="กรุณาเลือกสถานะเข้างาน" [ngStyle]="{'width': '200px'}" optionLabel="status" [disabled]="isCheckIn === false || isCheckedOut === true || disableButtons === true">
                                 <ng-template let-option pTemplate="item">
                                     <span [ngStyle]="{'background-color': getStatusColor(option.status)}"
                                         [class]="'customer-badge status-' + option.status" [style.color]="'white'">
@@ -37,10 +37,10 @@
 
                 <div class="justify-content-center">
                         <div class="field-radiobutton justify-content-center gap-3">
-                            <p-tag severity="success" value="เช็คอิน : {{ checkInTime | date: 'short' }}"></p-tag>
+                            <p-tag severity="success" value="เช็คอิน : {{ checkInTime }}"></p-tag>
                         </div>
                         <div class="field-radiobutton justify-content-center gap-3">
-                            <p-tag  severity="success" value="เช็คเอาท์ : {{ checkOutTime | date: 'short' }}"></p-tag>
+                            <p-tag  severity="success" value="เช็คเอ๊าท์ : {{ checkOutTime }}"></p-tag>
                         </div>
                 </div>
 

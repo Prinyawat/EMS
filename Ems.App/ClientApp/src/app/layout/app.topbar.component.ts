@@ -42,6 +42,7 @@ export class AppTopBarComponent {
     notificationleave: string[] = [];
 
     user: UserModel = new UserModel();
+
     profileItems: any[] = [];
 
     @ViewChild('menubutton') menuButton!: ElementRef;
@@ -80,51 +81,50 @@ export class AppTopBarComponent {
         this.loadUserData();
         this.notificationService.userUpdated$.subscribe((updatedUser: any) => {
             if (updatedUser.userId === this.user.userId) {
-            this.user = updatedUser;
-            this.updateProfileItems();
+                this.user = updatedUser;
+                this.updateProfileItems();
             }
         });
 
         // CourseNotification
         const leaveNotifications = localStorage.getItem('notificationleave');
-if (leaveNotifications) {
-    this.notificationleave = JSON.parse(leaveNotifications);
-}
 
-// เริ่มการเชื่อมต่อกับ notification service
-this.notificationService.startConnection();
+        if (leaveNotifications) {
+            this.notificationleave = JSON.parse(leaveNotifications);
+        }
 
-// ฟังการแจ้งเตือนจาก server
-this.notificationService.listenNotifications((message: string) => {
-    console.log(message);
+        // เริ่มการเชื่อมต่อกับ notification service
+        this.notificationService.startConnection();
 
-    // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
-    if (!this.notificationleave.includes(message)) {
-        // ถ้าไม่มี, เพิ่มข้อความใหม่
-        this.notificationleave.push(message);
+        // ฟังการแจ้งเตือนจาก server
+        this.notificationService.listenNotifications((message: string) => {
+            console.log(message);
 
-        // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
-        console.log("Saving to localStorage:", this.notificationleave);
-        localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
-    } else {
-        console.log("Duplicate notification, not saving:", message);
-    }
-});
+            // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
+            if (!this.notificationleave.includes(message)) {
+                // ถ้าไม่มี, เพิ่มข้อความใหม่
+                this.notificationleave.push(message);
 
-
+                // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
+                console.log("Saving to localStorage:", this.notificationleave);
+                localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
+            } else {
+                console.log("Duplicate notification, not saving:", message);
+            }
+        });
 
     }
 
     loadUserData() {
         const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad";
         this.authService.getUser(userId).subscribe({
-          next: (data: any) => {
-            this.user = data;
-            this.updateProfileItems();
-          },
-          error: (err) => {
-            console.error("Error fetching user data", err);
-          }
+            next: (data: any) => {
+                this.user = data;
+                this.updateProfileItems();
+            },
+            error: (err) => {
+                console.error("Error fetching user data", err);
+            }
         });
     }
 

@@ -42,12 +42,14 @@ namespace Ems.App.Controllers
             return Ok(StstusData);
         }
 
-        //[HttpGet]
-        //[Route("getTimeCompare")]
-        //public IActionResult getTimeCompare()
-        //{
-        //    var TimecData = _checkingservice.getTimeCompare();
-        //    return Ok(TimecData);
-        //}
+        [HttpGet]
+        [Route("getInvalidCheckTime")]
+        public IActionResult getInvalidCheckTime()
+        {
+            var ValidData = _checkingservice.getInvalidCheckTime();
+            return Ok(ValidData);
+        }
+
+
     }
 }

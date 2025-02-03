@@ -22,6 +22,6 @@ export class SignalRComponent implements OnInit {
 
     sendMessage(): void {
         this.SignalRService.sendMessage(this.username, this.message);
-        this.message = ''; 
+        this.message = '';
     }
 }

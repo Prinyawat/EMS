@@ -10,7 +10,9 @@ namespace Ems.App.Servies.IServices
 
         List<CheckingStatusModel> getCheckinStatus();
 
-        //List<TimeCompareModel> getTimeCompare();
+        List<CheckingTimeDataModel> getInvalidCheckTime();
+
+
     }
 
 }

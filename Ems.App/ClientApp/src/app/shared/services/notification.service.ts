@@ -22,7 +22,7 @@ export class NotificationService {
                 this.userUpdatedSource.next(updatedUser);
         });
 
-     }
+    }
 
     env: string = `${environment.apiUrl}/api/Noti`;
 

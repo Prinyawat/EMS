@@ -25,11 +25,11 @@ export class CheckingService {
 
     private summittedChecking = new BehaviorSubject<any>(null);
     submittedData$ = this.summittedChecking.asObservable();
-    saveChecking(data: { checkin: Date | null, checkout: Date | null, status: string;}){
+    saveChecking(data: { checkin: Date | null, checkout: Date | null, statuses: string;}){
         return this.http.post(this.env + "/saveChecking", {
             checkin: data.checkin,
             checkout: data.checkout,
-            status: data.status
+            statuses: data.statuses
         }).pipe(
             tap((result: any) => {
                 this.summittedChecking.next(result);
@@ -37,9 +37,10 @@ export class CheckingService {
         );
     }
 
-    // getTimeCompare(){
-    //     return this.http.get(this.env + "/getTimeCompare");
-    // }
+    getInvalidCheckTime() {
+        return this.http.get(this.env + "/getInvalidCheckTime");
+    }
+
     getCheckinStatus() {
         return this.http.get(this.env + "/getCheckinStatus");
     }

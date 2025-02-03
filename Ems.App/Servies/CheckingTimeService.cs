@@ -1,6 +1,9 @@
-﻿using Ems.App.Models;
+﻿using System;
+using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ems.App.Servies
@@ -8,60 +11,131 @@ namespace Ems.App.Servies
     public class CheckingTimeService : ICheckingService
     {
         private readonly EmsContext _emsContext;
+        private readonly IHubContext<ValidCheckingTime> _hubContext;
 
-        public CheckingTimeService(EmsContext emsContext)
+        public CheckingTimeService(EmsContext emsContext, IHubContext<ValidCheckingTime> hubContext)
         {
             _emsContext = emsContext;
+            _hubContext = hubContext;
         }
         public CheckingTimeDataModel saveChecking(CheckingTimeDataModel checkingdata)
         {
-            // ค้นหาข้อมูลสถานะ
             var validStatus = _emsContext.checking_status
-                .FirstOrDefault(s => s.checking_status_name == checkingdata.status);
+                .FirstOrDefault(s => s.checking_status_name == checkingdata.statuses);
 
-            // ถ้าพบสถานะที่ตรงกับค่าที่ส่งมา
             var checkingStatusId = validStatus.checking_status_id;
 
-            // ค้นหาว่าผู้ใช้ได้เช็คอินแล้วแต่ยังไม่ได้เช็คเอาท์หรือไม่
             var existingCheckIn = _emsContext.check_in_out
                 .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"));
 
-            // แปลงวันที่ให้เป็น UTC
             var utcCheckIn = checkingdata.checkin?.ToUniversalTime();
             var utcCheckOut = checkingdata.checkout?.ToUniversalTime();
 
             if (existingCheckIn != null && checkingdata.checkout.HasValue)
             {
-                // กรณีที่มีข้อมูลเช็คอินอยู่แล้ว แต่ผู้ใช้ส่งค่า check_out มา
-                existingCheckIn.check_out = utcCheckOut;  // อัปเดต check_out
-                existingCheckIn.checking_status_id = checkingStatusId;  // อัปเดตสถานะ
-                _emsContext.SaveChanges();  // บันทึกการเปลี่ยนแปลง
+                existingCheckIn.check_out = utcCheckOut;  
+                existingCheckIn.checking_status_id = checkingStatusId;  
+                _emsContext.SaveChanges(); 
             }
             else if (existingCheckIn == null && checkingdata.checkin.HasValue)
             {
-                // กรณีที่ยังไม่มีการเช็คอิน (ไม่พบข้อมูลที่ยังไม่ได้เช็คเอาท์)
                 var newCheckInOut = new check_in_out
                 {
                     check_inout_id = Guid.NewGuid(),
                     user_id = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"),
                     checking_status_id = checkingStatusId,
-                    check_in = utcCheckIn,  // บันทึก check_in
-                    check_out = utcCheckOut,  // บันทึก check_out
-                    created_date = DateTime.Now  // บันทึกเวลาที่สร้างข้อมูล
+                    check_in = utcCheckIn,  
+                    check_out = utcCheckOut,  
+                    created_date = DateTime.Now  
                 };
 
-                _emsContext.check_in_out.Add(newCheckInOut);  // เพิ่มแถวใหม่
-                _emsContext.SaveChanges();  // บันทึกการเปลี่ยนแปลง
+                _emsContext.check_in_out.Add(newCheckInOut);  
+                _emsContext.SaveChanges(); 
             }
 
-            // คืนค่า model ที่ได้รับการอัปเดต
             checkingdata.checkin = checkingdata.checkin;
             checkingdata.checkout = checkingdata.checkout;
-            checkingdata.status = checkingdata.status;
+            checkingdata.statuses = checkingdata.statuses;
 
             return checkingdata;
         }
 
+        public List<CheckingTimeDataModel> getInvalidCheckTime()
+        {
+            var userId = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b");
+
+            var today = DateTime.UtcNow.Date;
+
+            // หาว่าวันนี้เช็คอินไปรึยัง
+            var validCheckDate = _emsContext.check_in_out
+            .Where(co => co.user_id == userId && co.check_dates.Value.ToUniversalTime().Date == today)
+            .OrderByDescending(co => co.check_dates)
+            .FirstOrDefault();
+
+            // ถ้ายังไม่ได้เช็คอิน เข้าเงื่อนไข
+            if (validCheckDate != null)
+            {
+                if (validCheckDate.check_out == null)
+                {
+                    NologOutToday("LogOutNull");
+
+                    return _emsContext.check_in_out
+                    .Where(r => r.user_id == userId && r.check_in.HasValue)
+                    .OrderByDescending(r => r.check_dates) // เรียงลำดับจากล่าสุด
+                    .Join(
+                        _emsContext.checking_status,
+                        r => r.checking_status_id,
+                        s => s.checking_status_id,
+                        (r, s) => new CheckingTimeDataModel
+                        {
+                            checkin = r.check_in,
+                            checkout = r.check_out,
+                            statuses = s.checking_status_name
+                        }
+                    )
+                    .ToList();
+                }
+                else
+                {
+                    SuccesToday("LogOutHasValue");
+                    return _emsContext.check_in_out
+                    .Where(r => r.user_id == userId && r.check_in.HasValue && r.check_out.HasValue)
+                    .OrderByDescending(r => r.check_dates)
+                    .Join(
+                        _emsContext.checking_status,
+                        r => r.checking_status_id,
+                        s => s.checking_status_id,
+                        (r, s) => new CheckingTimeDataModel
+                        {
+                            checkin = r.check_in,
+                            checkout = r.check_out,
+                            statuses = s.checking_status_name
+                        }
+                    )
+                    .ToList();
+                }
+            }
+            else
+            {
+                NologinToday("NoLoginSystem");
+                return new List<CheckingTimeDataModel>();
+            }
+        }
+
+        private void NologinToday(string message)
+        {
+            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        }
+
+        private void NologOutToday(string message)
+        {
+            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        }
+
+        private void SuccesToday(string message)
+        {
+            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        }
 
         public List<AgendaModel> getAgendas()
         {
@@ -89,29 +163,9 @@ namespace Ems.App.Servies
                 .Select(r => new CheckingStatusModel
                 {
                     status = r.checking_status_name
+
                 }).ToList();
         }
-
-        //public List<TimeCompareModel> getTimeCompare()
-        //{
-        //    var latestCheckInOut = _emsContext.check_in_out
-        //        .OrderByDescending(r => r.check_dates)
-        //        .Take(1)
-        //        .Select(r => new TimeCompareModel
-        //        {
-        //            originTime = r.check_dates
-        //        })
-        //        .FirstOrDefault(); 
-
-        //    if (latestCheckInOut != null)
-        //    {
-        //        DateTime currentDateTime = DateTime.Now;
-        //        DateTime resetTime = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, 8, 0, 0);
-        //    }
-
-        //    return new List<TimeCompareModel> { latestCheckInOut };
-        //}
-
 
     }
 }
