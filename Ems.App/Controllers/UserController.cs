@@ -1,4 +1,5 @@
 ﻿using Ems.App.Models;
+using Ems.App.Servies;
 using Ems.App.Servies.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,20 +31,21 @@ namespace Ems.App.Controllers
             });
         }
 
-        [Route("getUser/{userId}")]
+        [Route("getUser")]
         [HttpGet]
-        public IActionResult GetUser(Guid userId)
+        public IActionResult GetUser()
         {
-            var res = _userService.GetUser(userId);
+            var res = _userService.GetUser();
             return Ok(res);
         }
 
-        [Route("updateUser/{userId}")]
+        [Route("updateUser")]
         [HttpPut]
-        public IActionResult UpdateUser(Guid userId, [FromBody] DataHubs updatedUser)
+        public IActionResult UpdateUser([FromBody] DataHubs updatedUser)
         {
-            var res = _userService.UpdateUser(userId, updatedUser);
+            var res = _userService.UpdateUser(updatedUser);
             return Ok(res);
         }
+
     }
 }

@@ -12,14 +12,16 @@ namespace Ems.App.Servies
     {
         private readonly EmsContext _emsContext;
         private readonly ITokenService _tokenService;
+        private readonly IIdentityService _identityService;
 
         private readonly IHubContext<NotificationHub> _hubContext;
-        public UserService(EmsContext emsContext, ITokenService tokenService, IHubContext<NotificationHub> hubContext)
+        public UserService(EmsContext emsContext, ITokenService tokenService, IHubContext<NotificationHub> hubContext, IIdentityService identityService)
         {
             _emsContext = emsContext;
             _tokenService = tokenService;
 
             _hubContext = hubContext;
+            _identityService = identityService;
         }
 
         public DataHubs Login(DataHubs userModel)
@@ -69,8 +71,34 @@ namespace Ems.App.Servies
             };
         }
 
-        public DataHubs UpdateUser(Guid userId, DataHubs updatedUser)
+        public DataHubs GetUser()
         {
+            Guid userId = this._identityService.GetCurrentUser();
+
+            var user = _emsContext.user
+                .Include(u => u.position)
+                .FirstOrDefault(u => u.user_id == userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return new DataHubs
+            {
+                UserId = user.user_id,
+                Firstname = user.first_name,
+                Lastname = user.last_name,
+                Email = user.email,
+                phone = user.phone,
+                positionName = user.position?.position_name
+            };
+        }
+
+        public DataHubs UpdateUser(DataHubs updatedUser)
+        {
+            Guid userId = this._identityService.GetCurrentUser();
+
             var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
 
             if (user == null)
@@ -83,6 +111,7 @@ namespace Ems.App.Servies
             user.email = updatedUser.Email ?? user.email;
             user.phone = updatedUser.phone ?? user.phone;
             user.updated_by = userId.ToString();
+            user.updated_date = DateTime.UtcNow;
 
             _emsContext.SaveChanges();
 
@@ -100,5 +129,6 @@ namespace Ems.App.Servies
 
             return response;
         }
+
     }
 }
