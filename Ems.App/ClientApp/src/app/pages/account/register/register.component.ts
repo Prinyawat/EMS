@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { PositionModel } from 'src/app/shared/models/user.modal';
+
+import { RegisterService } from 'src/app/shared/services/Register.service';
 
 @Component({
     selector: 'app-register',
@@ -22,7 +25,6 @@ export class RegisterComponent {
     phone!: string;
     email!: string;
     password!: string;
-    position!: string;
 
     firstNameDirty: boolean = false;
     lastNameDirty: boolean = false;
@@ -30,15 +32,17 @@ export class RegisterComponent {
     emailDirty: boolean = false;
     passwordDirty: boolean = false;
 
-    positions = [
-        { label: 'Frontend Developer', value: 'frontend' },
-        { label: 'Backend Developer', value: 'backend' },
-        { label: 'Fullstack Developer', value: 'fullstack' },
-        { label: 'Mobile Developer', value: 'mobile' },
-        { label: 'DevOps Engineer', value: 'devops' }
-    ];
+    positions: PositionModel[] = []; 
+    selectedPosition: PositionModel | null = null;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService,private registerService: RegisterService) { }
+
+
+    ngOnInit(){
+         this.registerService.getPosition().subscribe((x: any) =>{})
+
+    }
+
 
     validateForm() {
         this.firstNameDirty = !this.firstName;

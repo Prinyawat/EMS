@@ -34,13 +34,32 @@ export class CourseRegisterComponent implements OnInit{
   this.fetchCourses();
   }
 
+  // fetchCourses() {
+  //   this.courseService.getCourses().subscribe((data: Course[]) => {
+  //     this.registeredCourses = data.filter(course => course.statusName === 'ลงทะเบียนแล้ว');
+  //     this.unregisteredCourses = data.filter(course => course.statusName !== 'ลงทะเบียนแล้ว');
+  //     this.showRegisteredCourses = this.registeredCourses.length > 0;
+  //   });
+  // }
+
   fetchCourses() {
     this.courseService.getCourses().subscribe((data: Course[]) => {
-      this.registeredCourses = data.filter(course => course.statusName === 'ลงทะเบียนแล้ว');
-      this.unregisteredCourses = data.filter(course => course.statusName !== 'ลงทะเบียนแล้ว');
-      this.showRegisteredCourses = this.registeredCourses.length > 0;
+      this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
+        const completedCourseIds = new Set(completedCourses.map(course => course.courseId));
+  
+        this.registeredCourses = data.filter(course => 
+          course.statusName === 'ลงทะเบียนแล้ว' && !completedCourseIds.has(course.courseId)
+        );
+  
+        this.unregisteredCourses = data.filter(course => 
+          course.statusName !== 'ลงทะเบียนแล้ว'
+        );
+  
+        this.showRegisteredCourses = this.registeredCourses.length > 0;
+      });
     });
   }
+  
 
   showSuccessViaToast(courseId: string) {
     this.courseService.registerCourse(courseId).subscribe(() => {

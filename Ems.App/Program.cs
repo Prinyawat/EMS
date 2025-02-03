@@ -21,6 +21,7 @@ builder.Services.AddTransient<ILeaveRequestService, LeaveRequestService>();
 builder.Services.AddTransient<ICheckingService, CheckingTimeService>();
 builder.Services.AddTransient<ICourseService, CourseService>();
 builder.Services.AddTransient<IMenuService, MenuService>();
+builder.Services.AddTransient<IRegisterService, RegisterService>();
 
 //SignalR
 builder.Services.AddSignalR();

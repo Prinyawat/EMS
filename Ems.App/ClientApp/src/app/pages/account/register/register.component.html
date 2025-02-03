@@ -13,16 +13,7 @@
                             <label for="firstName" class="block text-900 text-xl font-medium mb-2">
                                 First Name <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                            type="text" 
-                            id="firstName" 
-                            placeholder="First Name" 
-                            pInputText 
-                            [(ngModel)]="firstName" 
-                            
-                            class="w-full"
-                            [ngClass]="{'ng-invalid ng-dirty': firstNameDirty}"
-                        >
+                            <input type="text" id="firstName" placeholder="First Name" pInputText [(ngModel)]="firstName" class="w-full"[ngClass]="{'ng-invalid ng-dirty': firstNameDirty}">
                         <small *ngIf="firstNameDirty" class="text-red-500 block">First name is required.</small>
                         </div>
 
@@ -30,17 +21,7 @@
                             <label for="phone" class="block text-900 text-xl font-medium mb-2">
                                 Phone <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                type="text" 
-                                id="phone" 
-                                placeholder="Phone" 
-                                pInputText 
-                                [(ngModel)]="phone" 
-                                
-                                required 
-                                class="w-full"
-                                [ngClass]="{'ng-invalid ng-dirty': phoneDirty}"
-                            >
+                            <input type="text" id="phone" placeholder="Phone" pInputText [(ngModel)]="phone"  required class="w-full"[ngClass]="{'ng-invalid ng-dirty': phoneDirty}">
                             <small *ngIf="phoneDirty" class="text-red-500 block">Phone is required.</small>
                         </div>
                     </div>
@@ -50,27 +31,17 @@
                             <label for="lastName" class="block text-900 text-xl font-medium mb-2">
                                 Last Name <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                type="text" 
-                                id="lastName" 
-                                placeholder="Last Name" 
-                                pInputText 
-                                [(ngModel)]="lastName" 
-                                
-                                required 
-                                class="w-full"
-                                [ngClass]="{'ng-invalid ng-dirty': lastNameDirty}"
-                            >
+                            <input type="text" id="lastName" placeholder="Last Name" pInputText [(ngModel)]="lastName" required class="w-full"[ngClass]="{'ng-invalid ng-dirty': lastNameDirty}">
                             <small *ngIf="lastNameDirty" class="text-red-500 block">Last name is required.</small>
                         </div>
-
                         <div class="field mt-3">
                             <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
                             <p-dropdown 
-                                [options]="positions" 
-                                placeholder="Select a Position" 
-                                [(ngModel)]="position" 
-                                class="w-full">
+                            [options]="positions" 
+                            optionLabel="positionName" 
+                            placeholder="Select a Position" 
+                            [(ngModel)]="selectedPosition"  
+                            class="w-full">
                             </p-dropdown>
                         </div>
                     </div>
@@ -81,17 +52,7 @@
                             <label for="email1" class="block text-900 text-xl font-medium mb-2">
                                 Email <span class="text-red-500">*</span>
                             </label>
-                            <input 
-                                id="email1" 
-                                type="email" 
-                                placeholder="Email address" 
-                                pInputText 
-                                [(ngModel)]="email" 
-                                 
-                                required 
-                                class="w-full"
-                                [ngClass]="{'ng-invalid ng-dirty': emailDirty}"
-                            >
+                            <input id="email1" type="email" placeholder="Email address" pInputText [(ngModel)]="email" required class="w-full" [ngClass]="{'ng-invalid ng-dirty': emailDirty}">
                             <small *ngIf="emailDirty" class="text-red-500 block">Valid email is required.</small>
                         </div>
 
@@ -99,28 +60,14 @@
                             <label for="password1" class="block text-900 text-xl font-medium mb-2">
                                 Password <span class="text-red-500">*</span>
                             </label>
-                            <p-password 
-                                id="password1" 
-                                [(ngModel)]="password" 
-                                 
-                                placeholder="Password" 
-                                [toggleMask]="true" 
-                                required 
-                                styleClass="w-full"
-                                [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"
-                            ></p-password>
+                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" required styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"></p-password>
                             <small *ngIf="passwordDirty" class="text-red-500 block">Password is required.</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center">
-                    <button 
-                        pButton 
-                        pRipple 
-                        label="Sign Up" 
-                        class="w-full p-3 text-xl p-button-outlined"
-                        (click)="validateForm()">
+                    <button pButton pRipple label="Sign Up" class="w-full p-3 text-xl p-button-outlined"(click)="validateForm()">
                     </button>
                     <p-button label="Already have an account?" styleClass="p-button-link" routerLink="/account/login"></p-button>
                 </div>                                
@@ -128,3 +75,6 @@
         </div>
     </div>
 </div>
+
+
+

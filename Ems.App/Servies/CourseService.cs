@@ -21,7 +21,6 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetCourses()
         {
-            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
             Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.course.Select(c => new CourseModel
             {
@@ -42,7 +41,6 @@ namespace Ems.App.Servies
 
         public CourseModel GetCourseById(Guid courseId)
         {
-            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
             Guid userId = this._identityService.GetCurrentUser();
             var course = _emsContext.course
                 .Where(c => c.course_id == courseId)
@@ -92,7 +90,6 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetRegisteredCourses()
         {
-            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
             Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.registration
                 .Where(r => r.user_id == userId && r.status.status_name == "ลงทะเบียนแล้ว")
@@ -112,7 +109,6 @@ namespace Ems.App.Servies
 
         public List<CourseModel> GetCompletedCourses()
         {
-            //var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
             Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.course_complete
                 .Where(r => r.user_id == userId && (r.status.status_name == "เสร็จสิ้น" || r.status.status_name == "ไม่ผ่าน"))

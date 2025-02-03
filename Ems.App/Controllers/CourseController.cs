@@ -11,9 +11,11 @@ namespace Ems.App.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
-        public CourseController(ICourseService courseService)
+        private readonly IIdentityService _identityService;
+        public CourseController(ICourseService courseService, IIdentityService identityService)
         {
             _courseService = courseService;
+            _identityService = identityService;
         }
 
         [HttpGet]
@@ -63,7 +65,7 @@ namespace Ems.App.Controllers
         [Route("registerCourse")]
         public IActionResult RegisterCourse([FromBody] RegistrationCourseModel model)
         {
-            model.userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            model.userId = _identityService.GetCurrentUser();
             var result = _courseService.RegisterCourse(model);
             return Ok(result);
         }
@@ -72,7 +74,7 @@ namespace Ems.App.Controllers
         [Route("cancelRegistration/{courseId}")]
         public IActionResult CancelRegistration(Guid courseId)
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
+            var userId = _identityService.GetCurrentUser();
             _courseService.CancelRegistration(userId, courseId);
             return Ok(new { message = "ยกเลิกลงทะเบียนเสร็จสิ้น." });
         }
@@ -81,9 +83,9 @@ namespace Ems.App.Controllers
         [Route("recordProgress")]
         public IActionResult RecordProgress([FromBody] RecordProgressModel model)
         {
-         
-                var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad"); 
-                _courseService.RecordProgress(userId, model.courseId, model.chapterId, model.contentId);
+
+            var userId = _identityService.GetCurrentUser();
+            _courseService.RecordProgress(userId, model.courseId, model.chapterId, model.contentId);
                 return Ok(new { message = "บันทึกความคืบหน้าเรียบร้อยแล้ว." });
         
         }
@@ -92,7 +94,7 @@ namespace Ems.App.Controllers
         [Route("saveAnswers")]
         public IActionResult SaveUserAnswers([FromBody] List<UserQuestionModel> answers)
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var userId = _identityService.GetCurrentUser();
 
             foreach (var answer in answers)
             {
@@ -110,7 +112,7 @@ namespace Ems.App.Controllers
         [Route("calculateResult/{courseId}")]
         public IActionResult CalculateUserResult(Guid courseId)
         {
-            var userId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+            var userId = _identityService.GetCurrentUser();
             var result = _courseService.CalculateUserResult(userId, courseId);
             return Ok(result);
         }

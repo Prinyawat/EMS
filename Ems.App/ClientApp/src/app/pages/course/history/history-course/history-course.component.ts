@@ -40,16 +40,12 @@ export class HistoryCourseComponent {
     this.loadUserData();
   }
 
-  loadUserData() {
-    const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad"; 
-    this.authService.getUser(userId).subscribe({
+  loadUserData(){
+    this.authService.getUser().subscribe({
       next: (data: any) => {
         this.user = data;
-      },
-      error: (err) => {
-        console.error("Error fetching user data", err);
       }
-    });
+    })
   }
 
   exportcertificate(course: Course) {

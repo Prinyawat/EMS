@@ -53,19 +53,6 @@ export class AppTopBarComponent {
 
     @ViewChild('profileMenu') profileMenu!: Menu;
 
-    // dropdownItems = [
-    //     { name: 'Frontend Developer', code: 'Option 1' },
-    //     { name: 'Backend Developer', code: 'Option 2' },
-    //     { name: 'Fullstack Developer', code: 'Option 3' }
-    // ];
-
-    // profileItems = [
-    //     { label: 'Firstname Lastname', icon: 'pi pi-user' },
-    //     { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
-    //     { separator: true },
-    //     { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
-    // ];
-
     constructor(public layoutService: LayoutService, private router: Router,
         private authService: AuthService,
         private LeaveRequestService: LeaveRequestService,
@@ -112,12 +99,33 @@ export class AppTopBarComponent {
                 console.log("Duplicate notification, not saving:", message);
             }
         });
+        if (leaveNotifications) {
+            this.notificationleave = JSON.parse(leaveNotifications);
+        }
 
+        // เริ่มการเชื่อมต่อกับ notification service
+        this.notificationService.startConnection();
+
+        // ฟังการแจ้งเตือนจาก server
+        this.notificationService.listenNotifications((message: string) => {
+            console.log(message);
+
+            // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
+            if (!this.notificationleave.includes(message)) {
+                // ถ้าไม่มี, เพิ่มข้อความใหม่
+                this.notificationleave.push(message);
+
+                // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
+                console.log("Saving to localStorage:", this.notificationleave);
+                localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
+            } else {
+                console.log("Duplicate notification, not saving:", message);
+            }
+        });
     }
 
     loadUserData() {
-        const userId = "42cfb3be-fa01-499a-95af-fa0a879fb0ad";
-        this.authService.getUser(userId).subscribe({
+        this.authService.getUser().subscribe({
             next: (data: any) => {
                 this.user = data;
                 this.updateProfileItems();
@@ -138,10 +146,10 @@ export class AppTopBarComponent {
     }
 
     saveUserData() {
-        if (!this.user || !this.user.userId) {
+        if (!this.user) {
             return;
         }
-        this.authService.updateUser(this.user.userId, this.user).subscribe({
+        this.authService.updateUser(this.user).subscribe({
             next: (response: any) => {
                 console.log("User updated successfully", response);
                 this.edit = false;
@@ -159,9 +167,8 @@ export class AppTopBarComponent {
 
     logout() {
         console.log('Logging out...');
-        localStorage.removeItem('notificationcourse'); //
-        localStorage.removeItem('notificationleave');
-        // ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ
+        localStorage.removeItem('notificationcourse'); // ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ
+        localStorage.removeItem('notificationleave'); // ลบข้อความแจ้งเตือนเมื่อล็อคเอ้าท์ออกจากระบบ
         localStorage.removeItem('app.token');
         sessionStorage.removeItem('app.token');
         sessionStorage.removeItem('UserInfo');
