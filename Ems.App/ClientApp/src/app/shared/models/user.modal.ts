@@ -9,3 +9,8 @@ export class UserModel {
     token: string;
     refreshToken: string;
 }
+
+export class PositionModel {
+    positionId: string;
+    positionName: string;
+}
