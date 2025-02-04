@@ -162,7 +162,7 @@ namespace Ems.App.Servies
             return _emsContext.checking_status
                 .Select(r => new CheckingStatusModel
                 {
-                    status = r.checking_status_name
+                    statuses = r.checking_status_name
 
                 }).ToList();
         }

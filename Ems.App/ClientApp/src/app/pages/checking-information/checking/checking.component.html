@@ -14,11 +14,11 @@
                     <div class="flex gap-2 field col-12 md:col justify-content-center align-items-center">
                         <div class="justify-content-center align-items-center">
 
-                            <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="กรุณาเลือกสถานะเข้างาน" [ngStyle]="{'width': '200px'}" optionLabel="status" [disabled]="isCheckIn === false || isCheckedOut === true || disableButtons === true">
+                            <p-dropdown [options]="workStatus" [(ngModel)]="selectedItem" placeholder="กรุณาเลือกสถานะเข้างาน" [ngStyle]="{'width': '200px'}" optionLabel="statuses" [disabled]="isCheckIn === false || isCheckedOut === true || disableButtons === true">
                                 <ng-template let-option pTemplate="item">
-                                    <span [ngStyle]="{'background-color': getStatusColor(option.status)}"
-                                        [class]="'customer-badge status-' + option.status" [style.color]="'white'">
-                                        {{ option.status }}</span>
+                                    <span [ngStyle]="{'background-color': getStatusColor(option.statuses)}"
+                                        [class]="'customer-badge status-' + option.statuses" [style.color]="'white'">
+                                        {{ option.statuses }}</span>
                                 </ng-template>
                             </p-dropdown>
 

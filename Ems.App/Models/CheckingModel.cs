@@ -4,7 +4,7 @@ namespace Ems.App.Models
 {
     public class CheckingStatusModel
     {
-        public string status { get; set; }
+        public string statuses { get; set; }
     }
 
     public class CheckingTimeDataModel

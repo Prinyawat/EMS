@@ -1,9 +1,9 @@
 export class CheckingStatus {
-    status: string;
+    statuses: string;
 }
 
 export class CheckingTimeData {
     checkin: Date;
     checkout: Date;
-    status: string;
+    statuses: string;
 }

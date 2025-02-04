@@ -99,11 +99,12 @@ export class CheckingComponent {
 
         this.CheckingService.getCheckinStatus().subscribe({
             next: (data) => {
+                console.log(data);
               if (Array.isArray(data)) {
                 this.workStatus = data.map(item => ({
-                  status: item.status || ''
+                  statuses: item.statuses || ''
                 }));
-                this.selectedItem = this.workStatus.find(status => status.status === 'ปฏิบัติงานที่สำนักงาน') || this.workStatus[0] || null;
+                this.selectedItem = this.workStatus.find(item => item.statuses === 'ปฏิบัติงานที่สำนักงาน') || this.workStatus[0] || null;
               }
             },
         });
@@ -114,10 +115,13 @@ export class CheckingComponent {
             next: (data: CheckingTimeData[]) => {
                 console.log(data);
                 this.checkingData = data;
-
+                console.log("ค่า status ที่ได้จาก API:",data);
                 if (this.checkingData.length > 0) {
                     this.isCheckIn = !this.checkingData[0].checkin;
                     this.isCheckedOut = !!this.checkingData[0].checkout;
+                    this.selectedItem = this.workStatus.find(
+                        (option) => option.statuses === data[0].statuses
+                    ) || null;
                     this.disableButtons = this.isCheckedOut;
                 }
             },
@@ -239,8 +243,8 @@ export class CheckingComponent {
 
         const now = new Date();
         const saveData = this.isCheckIn
-            ? { checkIn: now, checkOut: null, status: this.selectedItem.status }
-            : { checkIn: null, checkOut: now, status: this.selectedItem.status };
+            ? { checkIn: now, checkOut: null, status: this.selectedItem.statuses }
+            : { checkIn: null, checkOut: now, status: this.selectedItem.statuses };
 
         this.CheckingService.saveChecking({
             checkin: saveData.checkIn,
