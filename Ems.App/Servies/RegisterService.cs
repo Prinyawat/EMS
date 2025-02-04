@@ -36,7 +36,7 @@ namespace Ems.App.Servies
 
             if (_emsContext.user.Any(u => u.email == newUser.Email))
             {
-                throw new Exception("Email is already registered.");
+                throw new Exception("Email is already registered."); 
             }
 
             if (newUser.positionId == Guid.Empty)

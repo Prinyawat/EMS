@@ -28,8 +28,15 @@ namespace Ems.App.Controllers
         [HttpPost]
         public IActionResult Register([FromBody] DataHubs newUser)
         {
-             var res = _RegisterService.Register(newUser);
-             return Ok(newUser);
+            try
+            {
+                var res = _RegisterService.Register(newUser);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

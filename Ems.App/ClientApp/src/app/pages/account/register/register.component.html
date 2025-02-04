@@ -15,15 +15,16 @@
                                 First Name <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="firstName" placeholder="First Name" pInputText [(ngModel)]="firstName" class="w-full"[ngClass]="{'ng-invalid ng-dirty': firstNameDirty}">
-                        <small *ngIf="firstNameDirty" class="text-red-500 block">First name is required.</small>
+                        <small *ngIf="firstNameDirty" class="text-red-500 block">จำเป็นต้องกรอกชื่อ.</small>
                         </div>
 
                         <div class="field mt-3">
                             <label for="phone" class="block text-900 text-xl font-medium mb-2">
                                 Phone <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="phone" placeholder="Phone" pInputText [(ngModel)]="phone"  required class="w-full"[ngClass]="{'ng-invalid ng-dirty': phoneDirty}">
-                            <small *ngIf="phoneDirty" class="text-red-500 block">Phone is required.</small>
+                            <input type="text" id="phone" placeholder="Phone" pInputText [(ngModel)]="phone" required class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': phoneDirty}">
+                            <small *ngIf="phoneError" class="text-red-500 block">{{ phoneError }}</small>
                         </div>
                     </div>
 
@@ -33,18 +34,24 @@
                                 Last Name <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="lastName" placeholder="Last Name" pInputText [(ngModel)]="lastName" required class="w-full"[ngClass]="{'ng-invalid ng-dirty': lastNameDirty}">
-                            <small *ngIf="lastNameDirty" class="text-red-500 block">Last name is required.</small>
+                            <small *ngIf="lastNameDirty" class="text-red-500 block">จำเป็นต้องกรอกนามสกุล.</small>
                         </div>
                         <div class="field mt-3">
-                            <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
+                            <label for="position" class="block text-900 text-xl font-medium mb-2">
+                                Position <span class="text-red-500">*</span>
+                            </label>
                             <p-dropdown 
-                            [options]="positions" 
-                            optionLabel="positionName" 
-                            placeholder="Select a Position" 
-                            [(ngModel)]="selectedPosition"  
-                            class="w-full">
+                                [options]="positions" 
+                                optionLabel="positionName" 
+                                placeholder="Select a Position" 
+                                [(ngModel)]="selectedPosition"  
+                                class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': positionDirty}">
                             </p-dropdown>
-                        </div>
+                            <small *ngIf="positionDirty && !selectedPosition" class="text-red-500 block">
+                                กรุณาเลือกตำแหน่งงาน.
+                            </small>
+                        </div>                        
                     </div>
                 </div>
                 <div class="grid p-fluid">
@@ -53,16 +60,17 @@
                             <label for="email1" class="block text-900 text-xl font-medium mb-2">
                                 Email <span class="text-red-500">*</span>
                             </label>
-                            <input id="email1" type="email" placeholder="Email address" pInputText [(ngModel)]="email" required class="w-full" [ngClass]="{'ng-invalid ng-dirty': emailDirty}">
-                            <small *ngIf="emailDirty" class="text-red-500 block">Valid email is required.</small>
+                            <input id="email1" type="email" placeholder="Email address" pInputText [(ngModel)]="email" required class="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': emailDirty}">
+                            <small *ngIf="emailError" class="text-red-500 block">{{ emailError }}</small>
                         </div>
-
+                    
                         <div class="field ">
                             <label for="password1" class="block text-900 text-xl font-medium mb-2">
                                 Password <span class="text-red-500">*</span>
                             </label>
                             <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" required styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"></p-password>
-                            <small *ngIf="passwordDirty" class="text-red-500 block">Password is required.</small>
+                            <small *ngIf="passwordDirty" class="text-red-500 block">จำเป็นต้องกรอกรหัสผ่าน.</small>
                         </div>
                     </div>
                 </div>

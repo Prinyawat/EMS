@@ -34,6 +34,9 @@ export class RegisterComponent {
     phoneDirty: boolean = false;
     emailDirty: boolean = false;
     passwordDirty: boolean = false;
+    positionDirty: boolean = false;
+    emailError: string = '';
+    phoneError: string = "";
 
     positions: PositionModel[] = []; 
     selectedPosition: PositionModel | null = null;
@@ -60,8 +63,27 @@ export class RegisterComponent {
         this.phoneDirty = !this.phone;
         this.emailDirty = !this.email;
         this.passwordDirty = !this.password;
+        this.positionDirty = !this.selectedPosition;
     
-        if (!this.firstName || !this.lastName || !this.phone || !this.email || !this.password) {
+        // ตรวจสอบเบอร์โทร (ต้องเป็นตัวเลข 10 หลัก)
+        if (!this.phone) {
+            this.phoneError = "จำเป็นต้องกรอกเบอร์โทรศัพท์.";
+        } else if (!/^\d{10}$/.test(this.phone)) {
+            this.phoneError = "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก.";
+        } else {
+            this.phoneError = "";
+        }
+    
+        // ตรวจสอบอีเมล (ต้องมี @)
+        if (!this.email) {
+            this.emailError = "จำเป็นต้องกรอกอีเมล.";
+        } else if (!this.email.includes('@')) {
+            this.emailError = "อีเมลต้องมี '@'.";  
+        } else {
+            this.emailError = "";
+        }
+    
+        if (this.phoneError || this.emailError || this.positionDirty || !this.firstName || !this.lastName || !this.password) {
             return;
         }
     
@@ -76,10 +98,16 @@ export class RegisterComponent {
     
         this.registerService.registerUser(newUser).subscribe({
             next: () => {
-                this.showSuccessViaToast();  
+                this.showSuccessViaToast();
                 setTimeout(() => {
-                    this.router.navigate(['/account/login']); 
+                    this.router.navigate(['/account/login']);
                 }, 1500);
+            },
+            error: (err) => {
+                if (err.error && err.error.message === "Email is already registered.") {
+                    this.emailError = "อีเมลนี้ถูกใช้งานไปแล้ว.";
+                    this.emailDirty = true; 
+                }
             }
         });
     }
