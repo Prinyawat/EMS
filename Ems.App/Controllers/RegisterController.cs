@@ -23,5 +23,13 @@ namespace Ems.App.Controllers
             var positionData = _RegisterService.getPosition();
             return Ok(positionData);
         }
+
+        [Route("register")]
+        [HttpPost]
+        public IActionResult Register([FromBody] DataHubs newUser)
+        {
+             var res = _RegisterService.Register(newUser);
+             return Ok(newUser);
+        }
     }
 }

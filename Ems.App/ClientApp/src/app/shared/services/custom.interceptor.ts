@@ -10,6 +10,14 @@ export class CustomInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         let appToken = sessionStorage.getItem('app.token');
 
+        if (request.url.includes("/Register")) {
+            request = request.clone({
+                withCredentials: true,
+                reportProgress: true,
+            });
+            return next.handle(request);
+        }
+
         if (request.url.includes("User/login")) {
             request = request.clone({
                 withCredentials: true,

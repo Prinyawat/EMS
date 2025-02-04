@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { DropdownModule } from 'primeng/dropdown';
         InputTextModule,
         FormsModule,
         PasswordModule,
-        DropdownModule
+        DropdownModule,
+        ToastModule
     ],
     declarations: [RegisterComponent]
 })
