@@ -2,12 +2,13 @@ import { ValidCheckingService } from './../../../shared/services/validchecking.s
 import { NotificationCourseService } from './../../../shared/services/notification-course.service';
 import { NotificationService } from './../../../shared/services/notification.service';
 import { CheckingService } from './../../../shared/services/checking.service';
-import { Component, Type } from '@angular/core';
+import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AgendaComponent } from '../agenda-checking/agenda.component';
 import { CheckingStatus, CheckingTimeData } from 'src/app/shared/models/CheckingModel';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-checking',
@@ -15,6 +16,10 @@ import { CheckingStatus, CheckingTimeData } from 'src/app/shared/models/Checking
     providers: [ConfirmationService, MessageService, AgendaComponent]
 })
 export class CheckingComponent {
+
+    checkInTimes: Date | null = null;
+
+    checkOutTimes: Date | null = null;
 
     checkingData: CheckingTimeData[] = [];
 
@@ -65,25 +70,23 @@ export class CheckingComponent {
     private marker: L.Marker | null = null;
 
     private circle: L.Circle | null = null;
+
+    private destroy$ = new Subject<void>();
     constructor(private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private CheckingService: CheckingService,
-        private ValidCheckingService: ValidCheckingService ) { }
+        private ValidCheckingService: ValidCheckingService) { }
 
     ngOnInit(): void {
-        this.loadCheckTimeData();
 
-        this.ValidCheckingService.startConnection();
-        this.ValidCheckingService.listenNotifications((message: string) => {
-            this.handleNotification(message);
-        });
 
-        // this.CheckingService.getInvalidCheckTime().subscribe({
-        //     next: (data: CheckingTimeData[]) => {
-        //       console.log(data);
-        //       this.checkingData = data;
-        //     },
+        // this.ValidCheckingService.startConnection();
+
+        // this.ValidCheckingService.listenNotifications((message: string) => {
+        //     this.handleNotification(message);
         // });
+
+        this.loadCheckTimeData();
 
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
@@ -109,38 +112,13 @@ export class CheckingComponent {
     loadCheckTimeData(): void {
         this.CheckingService.getInvalidCheckTime().subscribe({
             next: (data: CheckingTimeData[]) => {
-                console.log('อัปเดตข้อมูล:', data);
+                console.log(data);
                 this.checkingData = data;
 
-                if (data.length > 0) {
-                    this.checkInTime = data[0].checkin
-                        ? new Date(data[0].checkin).toLocaleString('th-TH', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
-                        })
-                        : null;
-
-                    this.checkOutTime = data[0].checkout
-                        ? new Date(data[0].checkout).toLocaleString('th-TH', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
-                        })
-                        : null;
-
-
-                    this.isCheckIn = !!this.checkInTime && !this.checkOutTime;
-                    this.isCheckedOut = !!this.checkOutTime;
-
-                    console.log('isCheckIn:', this.isCheckIn);
-                    console.log('isCheckedOut:', this.isCheckedOut);
+                if (this.checkingData.length > 0) {
+                    this.isCheckIn = !this.checkingData[0].checkin;
+                    this.isCheckedOut = !!this.checkingData[0].checkout;
+                    this.disableButtons = this.isCheckedOut;
                 }
             },
         });
@@ -148,14 +126,15 @@ export class CheckingComponent {
 
     private handleNotification(message: string): void {
         if (message === 'LogOutNull') {
-            console.log('วันนี้เอ็งเหลือเช็คเอ๊าท์นะเห้ย !');
+            // console.log('วันนี้เอ็งเหลือเช็คเอ๊าท์นะเห้ย !');
             this.isCheckIn = false;
         } else if (message === 'LogOutHasValue') {
-            console.log('วันนี้เอ็งเช็คอินครบแล้ว.');
-            this.disableButtons = true;
+            // console.log('วันนี้เอ็งเช็คอินครบแล้ว.');
             this.isCheckIn = true;
+            this.disableButtons = true;
+            // console.log(this.disableButtons);
         } else if (message === 'NoLoginSystem') {
-            console.log('แม่งลืมเช็คตั้งแต่ไหนนิ');
+            // console.log('แม่งลืมเช็คตั้งแต่ไหนนิ');
             this.isCheckIn = true;
         } else {
             console.log('เอ็งทำระบบพัง กลับไปดู Bug!', message);
@@ -175,6 +154,8 @@ export class CheckingComponent {
     }
 
     ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
         if (this.interval) {
             clearInterval(this.interval);
         }
@@ -270,12 +251,15 @@ export class CheckingComponent {
                 if (saveData.checkIn) {
                     this.checkInTime = saveData.checkIn;
                     this.isCheckIn = false;
+
                 }
                 if (saveData.checkOut) {
                     this.checkOutTime = saveData.checkOut;
                     this.isCheckedOut = true;
                     this.disableButtons = true;
                 }
+
+                this.loadCheckTimeData();
 
                 this.messageService.add({
                     severity: 'success',

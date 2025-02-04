@@ -18,7 +18,7 @@ export class ValidCheckingService {
 
     startConnection(): void {
         this.hubConnection.start()
-            .then(() => console.log('SignalR connected!'))
+            .then(() => console.log('SignalR Checking!'))
             .catch(err => console.error('Error connecting to SignalR:', err));
     }
 

@@ -37,10 +37,10 @@
 
                 <div class="justify-content-center">
                         <div class="field-radiobutton justify-content-center gap-3">
-                            <p-tag severity="success" value="เช็คอิน : {{ checkInTime }}"></p-tag>
+                            <p-tag severity="success" value="เช็คอิน : {{ checkingData[0]?.checkin }}"></p-tag>
                         </div>
                         <div class="field-radiobutton justify-content-center gap-3">
-                            <p-tag  severity="success" value="เช็คเอ๊าท์ : {{ checkOutTime }}"></p-tag>
+                            <p-tag  severity="success" value="เช็คเอ๊าท์ : {{ checkingData[0]?.checkout }}"></p-tag>
                         </div>
                 </div>
 
