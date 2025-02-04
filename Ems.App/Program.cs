@@ -88,5 +88,4 @@ app.UseAuthorization();
 
 app.MapHub<DataHub>("/datahub");
 app.MapHub<NotificationHub>("/notificationHub");
-app.MapHub<ValidCheckingTime>("/validcheckingTime");
 app.Run();

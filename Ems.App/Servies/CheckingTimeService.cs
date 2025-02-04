@@ -11,12 +11,10 @@ namespace Ems.App.Servies
     public class CheckingTimeService : ICheckingService
     {
         private readonly EmsContext _emsContext;
-        private readonly IHubContext<ValidCheckingTime> _hubContext;
 
-        public CheckingTimeService(EmsContext emsContext, IHubContext<ValidCheckingTime> hubContext)
+        public CheckingTimeService(EmsContext emsContext)
         {
             _emsContext = emsContext;
-            _hubContext = hubContext;
         }
         public CheckingTimeDataModel saveChecking(CheckingTimeDataModel checkingdata)
         {
@@ -77,8 +75,6 @@ namespace Ems.App.Servies
             {
                 if (validCheckDate.check_out == null)
                 {
-                    NologOutToday("LogOutNull");
-
                     return _emsContext.check_in_out
                     .Where(r => r.user_id == userId && r.check_in.HasValue)
                     .OrderByDescending(r => r.check_dates) // เรียงลำดับจากล่าสุด
@@ -97,7 +93,6 @@ namespace Ems.App.Servies
                 }
                 else
                 {
-                    SuccesToday("LogOutHasValue");
                     return _emsContext.check_in_out
                     .Where(r => r.user_id == userId && r.check_in.HasValue && r.check_out.HasValue)
                     .OrderByDescending(r => r.check_dates)
@@ -117,25 +112,10 @@ namespace Ems.App.Servies
             }
             else
             {
-                NologinToday("NoLoginSystem");
                 return new List<CheckingTimeDataModel>();
             }
         }
 
-        private void NologinToday(string message)
-        {
-            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
-        }
-
-        private void NologOutToday(string message)
-        {
-            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
-        }
-
-        private void SuccesToday(string message)
-        {
-            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
-        }
 
         public List<AgendaModel> getAgendas()
         {

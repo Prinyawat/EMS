@@ -34,8 +34,7 @@
                         <p-calendar #calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
                         (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
                         (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
-                        (onBlur)="onCalendarBlur()" [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')" (onMouseEnter)="op.show($event, calendar)"
-                        (onMouseLeave)="op.hide()"/>
+                        (onBlur)="onCalendarBlur()" [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')"/>
 
                         <p-overlayPanel #op>
                             <p *ngIf="Dates.length > 0">📅 <strong>วันที่ที่เลือก:</strong></p>
