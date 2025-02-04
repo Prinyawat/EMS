@@ -65,7 +65,6 @@ export class RegisterComponent {
         this.passwordDirty = !this.password;
         this.positionDirty = !this.selectedPosition;
     
-        // ตรวจสอบเบอร์โทร (ต้องเป็นตัวเลข 10 หลัก)
         if (!this.phone) {
             this.phoneError = "จำเป็นต้องกรอกเบอร์โทรศัพท์.";
         } else if (!/^\d{10}$/.test(this.phone)) {
@@ -74,7 +73,6 @@ export class RegisterComponent {
             this.phoneError = "";
         }
     
-        // ตรวจสอบอีเมล (ต้องมี @)
         if (!this.email) {
             this.emailError = "จำเป็นต้องกรอกอีเมล.";
         } else if (!this.email.includes('@')) {

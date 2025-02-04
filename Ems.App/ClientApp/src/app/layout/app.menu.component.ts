@@ -42,29 +42,19 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['/home'] }
                 ]
             },
-            // {
-            //     label: 'Admin',
-            //     items: [
-            //         { label: 'จัดการบัญชีผู้ใช้', icon: 'pi pi-cog', routerLink: ['/admin/manage-user'] },
-            //         { label: 'จัดการ Course', icon: 'pi pi-cog', routerLink: ['/admin/admin-course'] },
-            //     ]
-            // },
+            {
+                label: 'Admin',
+                items: [
+                    { label: 'จัดการบัญชีผู้ใช้', icon: 'pi pi-cog', routerLink: ['/admin/manage-user'] },
+                    { label: 'จัดการ Course', icon: 'pi pi-cog', routerLink: ['/admin/admin-course'] },
+                ]
+            },
             {
                 label: 'Course',
                 items: [
                     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
                     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] },
                     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
-                    // {
-
-                    // label: 'Course', icon: 'pi pi-book',
-                    // items: [
-                    //     { label: 'ลงทะเบียน', icon: 'pi pi-fw pi-id-card', routerLink: ['/course/course-register'] },
-                    //     // { label: 'ประวัติการลงทะเบียน', icon: 'pi pi-history', routerLink: ['/course/history/registrationhistory-course'] },
-                    //     { label: 'ประวัติการเรียน', icon: 'pi pi-history', routerLink: ['/course/history/ristory-course'] },
-                    //     { label: 'Course เปิดเรียน', icon: 'pi pi-check-square', routerLink: ['/course/course-open'] }
-                    // ]
-                    // }
                 ]
             },
             {
@@ -79,20 +69,6 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'User Agenda', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
                     }
-                    // {
-                    //     label: 'Checking', icon: 'pi pi-chart-pie',
-                    //     items: [
-                    //         {
-                    //             label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
-                    //         },
-                    //         {
-                    //             label: 'Leave Request', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
-                    //         },
-                    //         {
-                    //             label: 'User Agenda', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
-                    //         }
-                    //     ]
-                    // }
                 ]
             },
             {
