@@ -350,6 +350,26 @@ export class LeaveRequestComponent {
         }
     }
 
+    onValueChange(field: string) {
+        switch (field) {
+            case 'Dates':
+                this.InvselectedDates = this.Dates.length === 0;
+                break;
+            case 'selectedLeaveHalfStatus':
+                this.InvselectedLeaveHalfStatus = !this.selectedLeaveHalfStatus;
+                break;
+            case 'selectedLeaveStatus':
+                this.InvselectedLeaveStatus = !this.selectedLeaveStatus;
+                break;
+            case 'startTime':
+                this.InvstartTime = !this.startTime;
+                break;
+            case 'endTime':
+                this.InvendTime = !this.endTime;
+                break;
+        }
+    }
+
     confirm2(event: Event): void {
         const selectedDates = this.Dates.length > 0 ? this.Dates.map(date => this.formatDate(date)).join(', ') : null;
         const selectedLeaveHalfStatus = this.selectedLeaveHalfStatus ? this.selectedLeaveHalfStatus.halfStatus : null;
@@ -360,11 +380,11 @@ export class LeaveRequestComponent {
         const endTime = this.endTime ? new Date(this.endTime).toLocaleTimeString() : null;
         const additionalDescription = this.additionalDescription;
 
-        this.InvselectedDates = !this.InvselectedDates;
-        this.InvselectedLeaveHalfStatus = !this.InvselectedLeaveHalfStatus;
-        this.InvselectedLeaveStatus = !this.InvselectedLeaveStatus;
-        this.InvstartTime = !this.InvstartTime;
-        this.InvendTime = !this.InvendTime;
+        this.InvselectedDates = this.Dates.length === 0;
+        this.InvselectedLeaveHalfStatus = !this.selectedLeaveHalfStatus;
+        this.InvselectedLeaveStatus = !this.selectedLeaveStatus;
+        this.InvstartTime = !this.startTime;
+        this.InvendTime = !this.endTime;
 
         if (!this.InvselectedDates || !this.InvselectedDates || !this.InvselectedLeaveHalfStatus || !this.InvstartTime || !this.InvendTime) {
         }

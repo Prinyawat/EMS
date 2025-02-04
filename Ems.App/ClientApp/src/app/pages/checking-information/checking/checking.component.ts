@@ -1,4 +1,3 @@
-import { ValidCheckingService } from './../../../shared/services/validchecking.service';
 import { NotificationCourseService } from './../../../shared/services/notification-course.service';
 import { NotificationService } from './../../../shared/services/notification.service';
 import { CheckingService } from './../../../shared/services/checking.service';
@@ -75,16 +74,9 @@ export class CheckingComponent {
     constructor(private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private CheckingService: CheckingService,
-        private ValidCheckingService: ValidCheckingService) { }
+        ) { }
 
     ngOnInit(): void {
-
-
-        // this.ValidCheckingService.startConnection();
-
-        // this.ValidCheckingService.listenNotifications((message: string) => {
-        //     this.handleNotification(message);
-        // });
 
         this.loadCheckTimeData();
 
@@ -99,7 +91,6 @@ export class CheckingComponent {
 
         this.CheckingService.getCheckinStatus().subscribe({
             next: (data) => {
-                console.log(data);
               if (Array.isArray(data)) {
                 this.workStatus = data.map(item => ({
                   statuses: item.statuses || ''
@@ -113,9 +104,8 @@ export class CheckingComponent {
     loadCheckTimeData(): void {
         this.CheckingService.getInvalidCheckTime().subscribe({
             next: (data: CheckingTimeData[]) => {
-                console.log(data);
                 this.checkingData = data;
-                console.log("ค่า status ที่ได้จาก API:",data);
+
                 if (this.checkingData.length > 0) {
                     this.isCheckIn = !this.checkingData[0].checkin;
                     this.isCheckedOut = !!this.checkingData[0].checkout;
@@ -126,23 +116,6 @@ export class CheckingComponent {
                 }
             },
         });
-    }
-
-    private handleNotification(message: string): void {
-        if (message === 'LogOutNull') {
-            // console.log('วันนี้เอ็งเหลือเช็คเอ๊าท์นะเห้ย !');
-            this.isCheckIn = false;
-        } else if (message === 'LogOutHasValue') {
-            // console.log('วันนี้เอ็งเช็คอินครบแล้ว.');
-            this.isCheckIn = true;
-            this.disableButtons = true;
-            // console.log(this.disableButtons);
-        } else if (message === 'NoLoginSystem') {
-            // console.log('แม่งลืมเช็คตั้งแต่ไหนนิ');
-            this.isCheckIn = true;
-        } else {
-            console.log('เอ็งทำระบบพัง กลับไปดู Bug!', message);
-        }
     }
 
     getStatusColor(status: string): string {
