@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
     imports: [
@@ -30,9 +32,9 @@ import { TagModule } from 'primeng/tag';
         FormsModule,
         DropdownModule,
         RadioButtonModule,
-        TagModule
-
-
+        TagModule,
+        DialogModule,
+        OverlayPanelModule
     ],
         declarations: [LeaveRequestComponent]
 })

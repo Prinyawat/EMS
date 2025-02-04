@@ -13,19 +13,37 @@
                 <div class="col-12 md:col-12 ">
                     <div class="flex flex-wrap gap-3 mt-5 justify-content-center align-">
 
-                        <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
+                        <!-- <p-button (click)="showDialog('top')" icon="pi pi-arrow-down" label="Top" severity="secondary" styleClass="min-w-40" />
+
+                        <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [position]="position" [style]="{ width: '25rem' }">
+                            <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span>
+                            <div class="flex items-center gap-4 mb-4">
+                                <label for="username" class="font-semibold w-24">Username</label>
+                                <input pInputText id="username" class="flex-auto" autocomplete="off" />
+                            </div>
+                            <div class="flex items-center gap-4 mb-8">
+                                <label for="email" class="font-semibold w-24">Email</label>
+                                <input pInputText id="email" class="flex-auto" autocomplete="off" />
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+                                <p-button label="Save" (click)="visible = false" />
+                            </div>
+                        </p-dialog> -->
+
+                        <p-calendar #calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
                         (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
                         (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
-                        (onBlur)="onCalendarBlur()" [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')"/>
+                        (onBlur)="onCalendarBlur()" [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')" (onMouseEnter)="op.show($event, calendar)"
+                        (onMouseLeave)="op.hide()"/>
 
-                        <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
-                        placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" (onChange)="onLeaveStatusChange()" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}" (ngModelChange)="onValueChange('selectedLeaveHalfStatus')">
-                            <ng-template let-option pTemplate="item">
-                                    <span [ngStyle]="{'background-color': getStatusColor(option.halfStatus)}"
-                                    [class]="'customer-badge status-' + option.halfStatus" [style.color]="'white'">
-                                    {{ option.halfStatus }}</span>
-                            </ng-template>
-                        </p-dropdown>
+                        <p-overlayPanel #op>
+                            <p *ngIf="Dates.length > 0">📅 <strong>วันที่ที่เลือก:</strong></p>
+                            <ul *ngIf="Dates.length > 0">
+                                <li *ngFor="let date of Dates">{{ date | date: 'dd/MM/yyyy' }}</li>
+                            </ul>
+                            <p *ngIf="Dates.length === 0" class="text-muted">ยังไม่มีการเลือกวัน</p>
+                        </p-overlayPanel>
 
                         <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedLeaveStatus"
                             placeholder="เลือกประเภทการลา" [ngStyle]="{'width': '180px'}" optionLabel="leaveStatusData" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveStatus}" (ngModelChange)="onValueChange('selectedLeaveStatus')">
@@ -38,14 +56,23 @@
 
                         <div class="flex flex-wrap mt-3 gap-3">
 
+                            <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
+                            placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" (onChange)="onLeaveStatusChange()" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}" (ngModelChange)="onValueChange('selectedLeaveHalfStatus')">
+                                <ng-template let-option pTemplate="item">
+                                        <span [ngStyle]="{'background-color': getStatusColor(option.halfStatus)}"
+                                        [class]="'customer-badge status-' + option.halfStatus" [style.color]="'white'">
+                                        {{ option.halfStatus }}</span>
+                                </ng-template>
+                            </p-dropdown>
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" (ngModelChange)="onValueChange('startTime')"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="12" (ngModelChange)="onValueChange('startTime');"></p-calendar>
                                 <label for="float-input">เวลาเริ่มของวัน</label>
                             </span>
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}" (ngModelChange)="onValueChange('endTime')"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"  [hourFormat]="12" (ngModelChange)="onValueChange('endTime');"></p-calendar>
                                 <label for="float-input">เวลาสิ้นสุดของวัน</label>
                             </span>
+
                         </div>
 
                     </div>

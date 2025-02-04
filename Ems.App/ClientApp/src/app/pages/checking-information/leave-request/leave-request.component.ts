@@ -362,10 +362,10 @@ export class LeaveRequestComponent {
                 this.InvselectedLeaveStatus = !this.selectedLeaveStatus;
                 break;
             case 'startTime':
-                this.InvstartTime = !this.startTime;
+                this.InvstartTime = !this.startTime || this.startTime === null;
                 break;
             case 'endTime':
-                this.InvendTime = !this.endTime;
+                this.InvendTime = !this.endTime || this.endTime === null;
                 break;
         }
     }
@@ -385,9 +385,6 @@ export class LeaveRequestComponent {
         this.InvselectedLeaveStatus = !this.selectedLeaveStatus;
         this.InvstartTime = !this.startTime;
         this.InvendTime = !this.endTime;
-
-        if (!this.InvselectedDates || !this.InvselectedDates || !this.InvselectedLeaveHalfStatus || !this.InvstartTime || !this.InvendTime) {
-        }
 
         if (!selectedDates || !selectedLeaveHalfStatus || !selectedLeaveStatus || !startTime || !endTime) {
             this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'กรุณากรอกข้อมูลให้ครบ!' });
