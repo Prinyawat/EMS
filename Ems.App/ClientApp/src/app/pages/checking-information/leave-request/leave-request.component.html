@@ -13,7 +13,7 @@
                 <div class="col-12 md:col-12 ">
                     <div class="flex flex-wrap gap-3 mt-5 justify-content-center align-">
 
-                        <p-button label="" icon="pi pi-eye" (click)="showLeaveDatesDialog()" style="margin-bottom: 10px;"></p-button>
+                        <p-button label="" icon="pi pi-eye" (click)="showLeaveDatesDialog()" [ngStyle]="{'margin-bottom': '10px'}"></p-button>
 
                         <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
                         (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"

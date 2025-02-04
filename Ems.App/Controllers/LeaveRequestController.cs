@@ -21,11 +21,16 @@ namespace Ems.App.Controllers
         [Route("saveleaveRequest")]
         public IActionResult saveleaveRequest([FromBody] LeaveRequestModel formData)
         {
-            formData.UserId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
-            var result = _leaverequestservice.saveleaveRequest(formData);
-            //_leaverequestservice.saveleaveRequest(leaveData);
-
-            return Ok(result);
+            try
+            {
+                formData.UserId = new Guid("42cfb3be-fa01-499a-95af-fa0a879fb0ad");
+                var result = _leaverequestservice.saveleaveRequest(formData);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet]

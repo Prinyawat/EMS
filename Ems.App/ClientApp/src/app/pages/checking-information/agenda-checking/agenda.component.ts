@@ -9,12 +9,27 @@ import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData} from 'src/app/shared/models/agenda.model';
 import { AgendaService } from 'src/app/shared/services/agenda.service';
+import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
     providers: [MessageService]
 })
 export class AgendaComponent {
+
+    private statusColorMap = {
+        'e3312023-8545-4e9e-83bc-ab9576ba8307': 'purple',
+        '8701d6f4-5973-4f8e-8b91-5ded391e357f': '#4D96FF',
+        'cbeb053e-5c39-4c6c-9439-24c86ca56cfd': '#FFD93D',
+        '043c1da7-fa3e-4466-85b6-b2cc40a500c3': '#8D99AE',
+        '44467da9-d2fd-4293-bbb1-d8ccb7dae8f7': '#F39AC4'
+    };
+
+    value: any = null;
+
+    updateDropdownOptions: { label: string, value: string }[] = [];
+
+    selectedItem: CheckingStatus | null = null;
 
     filteredAgendas: AgendaData[] = [];
 
@@ -62,51 +77,43 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'User Agenda' });
 
         this.cols = [
-            { field: 'firstName', header: 'firstName',},
-            { field: 'lastName', header: 'lastName' },
-            { field: 'monthName', header: 'month' },
-            { field: 'checkingDate', header: 'checkingDate' },
-            { field: 'checkIn', header: 'checkIn' },
-            { field: 'checkOut', header: 'checkOut' },
-            { field: 'checkingStatus', header: 'checkingStatus' },
+            { field: 'firstName', header: 'ชื่อ',},
+            { field: 'lastName', header: 'นามสกุล' },
+            { field: 'checkingDate', header: 'วัน/เดือน/ปี' },
+            { field: 'checkIn', header: 'เวลาเข้างาน' },
+            { field: 'checkOut', header: 'เวลาออกงาน' },
+            { field: 'checkingStatus', header: 'สถานะ' },
         ];
 
-        this.statuses = [
-            {label: 'WorkIn', value: 'workin'},
-            {label: 'WorkFromHome', value: 'workfromhome'}
-        ]
+        this.CheckingService.getCheckinStatus().subscribe({
+            next: (data) => {
+                if (Array.isArray(data)) {
+                    this.workStatus = data.map(item => ({
+                        label: item.statuses || '',
+                        value: item.statuses || ''
+                    }));
+                    this.updateDropdownOptionss();
+                }
+            }
+        });
 
-        this.monthOfYear = [
-            {label: 'January', value: 'january'},
-            {label: 'February', value: 'february'},
-            {label: 'March', value: 'march'},
-            {label: 'April', value: 'april'},
-            {label: 'May', value: 'may'},
-            {label: 'June', value: 'june'},
-            {label: 'July', value: 'july'},
-            {label: 'August', value: 'august'},
-            {label: 'September', value: 'september'},
-            {label: 'October', value: 'october'},
-            {label: 'November', value: 'november'},
-            {label: 'December', value: 'december'}
-        ]
-
-        this.leaveRequestStatus = [
-            { label: 'SickLeave', value: 'sickleave' },
-            { label: 'StudyLeave', value: 'studyleave' },
-            { label: 'AnnualLeave', value: 'annualleave' },
-            { label: 'PersonalLeave', value: 'personalleave' },
-            { label: 'MaternityLeave', value: 'maternityleave'},
-        ];
-
-        this.allStatusOptions = [
-            ...this.statuses,
-            ...this.leaveRequestStatus
-          ];
+        this.LeaveRequestService.getLeaveRequestStatus().subscribe({
+            next: (data) => {
+                if (Array.isArray(data)) {
+                    this.leaveRequestStatus = data.map(item => ({
+                        label: item.leaveStatusData || '',
+                        value: item.leaveStatusId || ''
+                    }));
+                }else{
+                    this.leaveRequestStatus = [];
+                }
+                this.updateDropdownOptionss();
+                console.log('Leave Status Data:', this.leaveRequestStatus);
+            }
+        });
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
-        // this.leaveStatus = this.LeaveRequestService.getLeaveRequestStatus();
     }
 
     fetchAgenda() {
@@ -114,64 +121,44 @@ export class AgendaComponent {
             next: (data: AgendaData[]) => {
                 this.agendas = data.map(agenda => ({
                     ...agenda,
-                    checkingDate: new Date(agenda.checkingDate), // แปลง checkingDate เป็น Date object
-                    monthName: this.getMonthNameFromDate(agenda.checkingDate) // แปลง checkingDate เป็นชื่อเดือน
+                    checkingDate: new Date(agenda.checkingDate)
                 }));
-
-                // อัปเดต filteredAgendas
                 this.filteredAgendas = [...this.agendas];
-            },
-            error: err => {
-                console.error('Error fetching agendas:', err);
             }
         });
     }
 
-    getStatusColor(status: string | null): string {
-        if (!status) {
-            return 'transparent';
+    updateDropdownOptionss() {
+        this.updateDropdownOptions = [
+            { label: 'เลือกสถานะ', value: null },
+            ...this.workStatus,
+            ...this.leaveRequestStatus
+
+        ];
+    }
+
+    getStatusColor(label: string | null): string {
+        if (!label) {
+            return 'gray';
         }
-        switch (status.toLowerCase()) {
-            case 'workin':
+
+        switch (label.toLowerCase()) {
+            case 'ปฏิบัติงานที่สำนักงาน':
                 return 'green';
-            case 'workfromhome':
+            case 'ปฏิบัติงานจากที่บ้าน':
                 return 'blue';
-            case 'sickleave':
+            case 'ลาป่วย':
                 return 'purple';
-            case 'studyleave':
+            case 'ลาศึกษา':
                 return '#4D96FF';
-            case 'annualleave':
-                    return '#FFD93D';
-            case 'personalleave':
+            case 'ลาพักร้อน':
+                return '#FFD93D';
+            case 'ลากิจส่วนตัว':
                 return '#8D99AE';
-            case 'maternityleave':
+            case 'ลาคลอด':
                 return '#F39AC4';
             default:
                 return 'gray';
-        }
-    }
-
-    getMonthNameFromDate(date: Date | string | null | undefined): string {
-        if (!date) return 'Invalid date';
-
-        try {
-            const dateStr = (date instanceof Date) ? date.toISOString() : date;
-
-            const parts = dateStr.split('T')[0].split('-');
-            if (parts.length !== 3) return 'Invalid date';
-
-            const day = parseInt(parts[2], 10);
-            const month = parseInt(parts[1], 10) - 1;
-            const year = parseInt(parts[0], 10);
-
-            const formattedDate = new Date(year, month, day);
-            if (isNaN(formattedDate.getTime())) return 'Invalid date';
-
-            const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(formattedDate);
-            return monthName;
-        } catch (error) {
-            console.error('Error converting date:', error);
-            return 'Invalid date';
         }
     }
 
@@ -182,11 +169,7 @@ export class AgendaComponent {
             const dataToExport = this.selectedAgendas.map(item => {
                 const row: any = {};
                 this.cols.forEach(col => {
-                    if (col.field === 'month') {
-                        row[col.header] = this.getMonthNameFromDate(item['checkingDate']);
-                    } else {
                         row[col.header] = item[col.field];
-                    }
                 });
                 return row;
             });

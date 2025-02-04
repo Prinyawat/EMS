@@ -92,6 +92,7 @@ export class LeaveRequestComponent {
         private messageService: MessageService,
         private NotificationService: NotificationService,
         private LeaveRequestService: LeaveRequestService,
+        private cdRef: ChangeDetectorRef
     ) {
         this.subscription = this.layoutService.configUpdate$
             .pipe(debounceTime(25))
@@ -133,11 +134,6 @@ export class LeaveRequestComponent {
             { label: 'Add New', icon: 'pi pi-fw pi-plus' },
             { label: 'Remove', icon: 'pi pi-fw pi-minus' }
         ];
-    }
-
-    onSelect(event: any) {
-        this.uploadedFiles = [...event.files]; // ต้องใช้ spread `[...]` เพื่อให้เก็บค่าแบบ Array
-        console.log("ไฟล์ที่เลือก:", this.uploadedFiles);
     }
 
       // กด Confirm แล้วส่ง API
@@ -366,8 +362,8 @@ export class LeaveRequestComponent {
         const selectedLeaveStatusId = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusId : null;
         const selectedLeaveStatus = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusData : null;
         const selectHalfStatusId = this.selectedLeaveHalfStatus ? this.selectedLeaveHalfStatus.leaveHalfId : null;
-        const startTime = this.startTime ? new Date(this.startTime).toLocaleTimeString() : null;
-        const endTime = this.endTime ? new Date(this.endTime).toLocaleTimeString() : null;
+        const startTime = this.startTime
+        const endTime = this.endTime
         const additionalDescription = this.additionalDescription;
 
         this.InvselectedDates = this.Dates.length === 0;
@@ -378,7 +374,6 @@ export class LeaveRequestComponent {
 
         if (!selectedDates || !selectedLeaveHalfStatus || !selectedLeaveStatus || !startTime || !endTime) {
             this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'กรุณากรอกข้อมูลให้ครบ!' });
-            return;
         }
 
         const formData = {
@@ -395,12 +390,25 @@ export class LeaveRequestComponent {
         this.LeaveRequestService.saveleaveRequest(formData).subscribe({
             next: (response) => {
                 this.messageService.add({ severity: 'success', summary: 'สำเร็จ', detail: 'ส่งคำขอการลาสำเร็จ!' });
+
+                this.Dates = [];
+                this.selectedLeaveHalfStatus = null;
+                this.selectedLeaveStatus = null;
+                this.startTime = null;
+                this.endTime = null;
+
+                // ทำให้ UI รีเฟรชโดยไม่ต้องดึงข้อมูลใหม่
+                this.cdRef.detectChanges();
+
             },
             error: (err) => {
-                this.messageService.add({ severity: 'error', summary: 'ล้มเหลว', detail: 'เกิดข้อผิดพลาดในการส่งคำขอ!' });
+                if (err.error && err.error.message === "LeaveRequest Duplicate"){
+                    this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'คำขอของคุณซ้ำ!' });
+                }
             },
         });
     }
+
 }
 
 

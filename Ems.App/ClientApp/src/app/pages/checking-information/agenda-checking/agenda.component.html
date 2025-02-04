@@ -19,7 +19,7 @@
             </p-toolbar>
 
 			<p-table #agendaSerch [value]="agendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
-            [globalFilterFields]="['firstName','lastName','monthName','checkingDate','checkingStatus'] " >
+            [globalFilterFields]="['firstName','lastName','checkingDate','checkingStatus'] " >
 				<ng-template pTemplate="caption">
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
@@ -50,22 +50,6 @@
                                 <p-columnFilter type="text" field="firstName" display="menu" />
 							</div>
 						</th>
-                        <th style="min-width:10rem" >
-                            <div class="flex justify-content-center align-items-center">
-								Month
-                                <p-columnFilter field="monthName" display="menu">
-                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-
-                                        <p-dropdown [ngModel]="value" [options]="monthOfYear" (onChange)="filter($event.value)" placeholder="Any Status">
-                                            <ng-template let-option pTemplate="item">
-                                                <span>{{option.label}}</span>
-                                            </ng-template>
-                                        </p-dropdown>
-
-                                    </ng-template>
-                                </p-columnFilter>
-							</div>
-						</th>
                         <th style="min-width: 10rem" >
 							<div class="flex justify-content-center align-items-center">
 								Date
@@ -84,15 +68,15 @@
                                 <p-sortIcon field="checkOut"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 10rem">
+						<th style="min-width: 12rem">
 							<div class="flex justify-content-center align-items-center">
 								Status
                                 <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 
-                                        <p-dropdown [ngModel]="value" [options]="allStatusOptions" (onChange)="filter($event.value)" placeholder="Any Status">
+                                        <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filter($event.value)" placeholder="เลือกสถานะ">
                                             <ng-template let-option pTemplate="item">
-                                                <span [style.background-color]="getStatusColor(option.value)" [style.color]="'white'"
+                                                <span [style.background-color]="getStatusColor(option.label)" [style.color]="'white'"
                                                 [class]="'customer-badge status-' + option.value">{{option.label}}</span>
                                             </ng-template>
                                         </p-dropdown>
@@ -113,11 +97,6 @@
 						<td>
                             <div class="flex justify-content-center align-items-center">
 							    {{agenda?.firstName + ' ' + agenda?.lastName}}
-                            </div>
-						</td>
-                        <td>
-                            <div class="flex justify-content-center align-items-center">
-							    <span>{{ getMonthNameFromDate(agenda?.checkingDate) }}</span>
                             </div>
 						</td>
 						<td>

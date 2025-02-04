@@ -25,7 +25,14 @@ namespace Ems.App.Servies
 
         public LeaveRequestModel saveleaveRequest(LeaveRequestModel formData)
         {
-        
+            var DuplicateRequest = _emsContext.leave_request
+            .FirstOrDefault(r => r.user_id == formData.UserId && r.leave_request_date == formData.selectedDates);
+
+            if (DuplicateRequest != null)
+            {
+               throw new Exception("LeaveRequest Duplicate");
+            }
+
             var leaveRequestEntity = new leave_request
                 {
                     user_id = formData.UserId,

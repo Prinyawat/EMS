@@ -34,13 +34,14 @@ export class LeaveRequestService {
     }
 
     saveleaveRequest(formData: any) {
+        console.log(formData);
         return this.http.post(this.env + "/saveleaveRequest", formData).pipe(
             tap((result: any) => {
                 this.summittedLeaveRequest.next(result);
             })
         );
     }
-    
+
     getLeaveRequestNoti() {
         return this.http.get(this.env + "/getLeaveRequestNoti");
     }
