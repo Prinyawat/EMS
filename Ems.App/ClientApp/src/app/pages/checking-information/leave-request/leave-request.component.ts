@@ -17,6 +17,8 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class LeaveRequestComponent {
 
+    leaveDatesDialog: boolean = false;
+
     additionalDescription: string = '';
 
     Dates: Date[] = [];
@@ -209,6 +211,15 @@ export class LeaveRequestComponent {
         }
     }
 
+    showLeaveDatesDialog() {
+        if (!this.Dates || this.Dates.length === 0) {
+            this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'ยังไม่มีวันลาที่เลือก!' });
+            return;
+        }
+        this.leaveDatesDialog = true;
+    }
+
+
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
@@ -279,21 +290,6 @@ export class LeaveRequestComponent {
         if (!this.Dates.some(date => date.toDateString() === event.toDateString())) {
             this.Dates.push(event);
         }
-        this.selectedLeaveHalfStatus = null;
-    }
-
-    onCalendarBlur() {
-        if (!this.selectedDate) {
-            this.startTime = '';
-            this.endTime = '';
-        }
-    }
-
-    ngCalendarCheck() {
-        if (this.Dates.length === 0) {
-            this.startTime = '';
-            this.endTime = '';
-        }
     }
 
     onModelChange(event: any) {
@@ -311,42 +307,32 @@ export class LeaveRequestComponent {
 
     }
 
-    onLeaveStatusChange() {
+    setDefaultTime() {
         if (this.selectedLeaveHalfStatus) {
             switch (this.selectedLeaveHalfStatus.halfStatus) {
                 case 'ลาครึ่งเช้า':
-                    this.HalfStatusOn = false;
-                    this.isCustomLeave = true;
+                    this.startTime = '08:30 AM';
+                    this.endTime = '12:00 AM';
                     break;
 
                 case 'ลาครึ่งบ่าย':
-                    this.HalfStatusOn = false;
-                    this.isCustomLeave = true;
+                    this.startTime = '01:00 PM';
+                    this.endTime = '05:30 PM';
                     break;
 
                 case 'ลาทั้งวัน':
-                    this.HalfStatusOn = false;
-                    this.isCustomLeave = true;
-                    break;
-                case 'ปรับแต่งการลาเอง':
-                    this.startTime = '';
-                    this.endTime = '';
-                    this.HalfStatusOn = false;
-                    this.isCustomLeave = true;
+                    this.startTime = '08:30 AM';
+                    this.endTime = '05:30 PM';
                     break;
 
                 default:
                     this.startTime = '';
                     this.endTime = '';
-                    this.HalfStatusOn = false;
-                    this.Dates = [];
                     break;
             }
         } else {
             this.startTime = '';
             this.endTime = '';
-            this.HalfStatusOn = false;
-            this.Dates = [];
         }
     }
 
@@ -371,7 +357,11 @@ export class LeaveRequestComponent {
     }
 
     confirm2(event: Event): void {
-        const selectedDates = this.Dates.length > 0 ? this.Dates.map(date => this.formatDate(date)).join(', ') : null;
+        if (!this.Dates || !Array.isArray(this.Dates) || this.Dates.length === 0) {
+            this.messageService.add({ severity: 'warn', summary: 'แจ้งเตือน', detail: 'กรุณาเลือกวันที่ลา!' });
+            return;
+        }
+        const selectedDates = this.Dates?.length > 0 ? this.Dates.map(date => this.formatDate(date)).join(', ') : null;
         const selectedLeaveHalfStatus = this.selectedLeaveHalfStatus ? this.selectedLeaveHalfStatus.halfStatus : null;
         const selectedLeaveStatusId = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusId : null;
         const selectedLeaveStatus = this.selectedLeaveStatus ? this.selectedLeaveStatus.leaveStatusData : null;
