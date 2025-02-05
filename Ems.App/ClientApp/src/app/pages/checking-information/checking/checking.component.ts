@@ -16,6 +16,8 @@ import { Subject } from 'rxjs';
 })
 export class CheckingComponent {
 
+    private userMarker: any;
+
     checkInTimes: Date | null = null;
 
     checkOutTimes: Date | null = null;
@@ -101,6 +103,42 @@ export class CheckingComponent {
         });
     }
 
+    initializeMap() {
+        this.map = L.map('map').setView([18.7953, 98.9989], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
+
+        this.showUserLocation();
+    }
+
+    showUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // ใช้ไอคอน custom
+                const userIcon = L.icon({
+                    iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                    iconSize: [32, 32]
+                });
+
+                this.userMarker = L.marker([latitude, longitude], { icon: userIcon })
+                    .addTo(this.map)
+                    .bindPopup(`<b>ตำแหน่งของคุณ</b><br>Lat: ${latitude}, Lng: ${longitude}`)
+                    .openPopup();
+
+                this.map.setView([latitude, longitude], 15);
+            }, (error) => {
+                console.error("Error getting location: ", error);
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }
+
     loadCheckTimeData(): void {
         this.CheckingService.getInvalidCheckTime().subscribe({
             next: (data: CheckingTimeData[]) => {
@@ -172,15 +210,6 @@ export class CheckingComponent {
             this.month = month;
             this.year = year;
         }, 1000);
-    }
-
-    initializeMap() {
-
-        this.map = L.map('map').setView([18.7953, 98.9989], 13); // พิกัดของเชียงใหม่
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
     }
 
     async displaySpecificLocation() {

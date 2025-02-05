@@ -12,7 +12,7 @@
 
                 <h5>User Agenda</h5>
                 <ng-template pTemplate="right">
-                    <button pButton pRipple label="Export" icon="pi pi-print" class="p-button-help" (click)="exportExcel()" pTooltip="XLS" tooltipPosition="bottom"></button>
+                    <button pButton pRipple label="ส่งออก Excel" icon="pi pi-print" class="p-button-help" (click)="exportExcel()" pTooltip="XLS" tooltipPosition="bottom"></button>
 
                 </ng-template>
 
@@ -24,13 +24,13 @@
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
-                            <button pButton label="Clear" class="p-button-outlined mb-2"
+                            <button pButton label="รีเซ็ต" class="p-button-outlined mb-2"
                          icon="pi pi-filter-slash" (click)="clear(agendaSerch)"></button>
                         </div>
                         <div>
-                            <span class="p-input-icon-left">
+                            <span class="p-input-icon-left" style="width: 350px">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="Name, Month, Year, Status" class="w-full"/>
+                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="ค้นหาด้วย ชื่อ-นามสกุล, วัน/เดือน/ปี, สถานะ" class="w-full"/>
                             </span>
                         </div>
 
@@ -44,33 +44,33 @@
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </div>
                         </th>
-						<th style="min-width: 12rem">
+						<th style="min-width: 8rem">
 							<div class="flex justify-content-center align-items-center">
-								Name
+								ชื่อ - นามสกุล
                                 <p-columnFilter type="text" field="firstName" display="menu" />
 							</div>
 						</th>
-                        <th style="min-width: 10rem" >
+                        <th style="min-width: 8rem" >
 							<div class="flex justify-content-center align-items-center">
-								Date
+								วัน/เดือน/ปี
                                 <p-columnFilter type="date" field="checkingDate" display="menu"></p-columnFilter>
 							</div>
 						</th>
-						<th style="min-width: 10rem" pSortableColumn="checkIn">
+						<th style="min-width: 8rem" pSortableColumn="checkIn">
 							<div class="flex justify-content-center ">
-								Check In
+								เวลาเข้า
                                 <p-sortIcon field="checkIn"></p-sortIcon>
 							</div>
 						</th>
-                        <th style="min-width: 10rem" pSortableColumn="checkOut">
+                        <th style="min-width: 8rem" pSortableColumn="checkOut">
 							<div class="flex justify-content-center ">
-								Check Out
+								เวลาออก
                                 <p-sortIcon field="checkOut"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 12rem">
+						<th style="min-width: 10rem">
 							<div class="flex justify-content-center align-items-center">
-								Status
+								สถานะ
                                 <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 

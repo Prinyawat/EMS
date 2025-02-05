@@ -76,7 +76,6 @@ namespace Ems.App.Servies
             .OrderByDescending(co => co.check_dates)
             .FirstOrDefault();
 
-            // ถ้ายังไม่ได้เช็คอิน เข้าเงื่อนไข
             if (validCheckDate != null)
             {
                 if (validCheckDate.check_out == null)
