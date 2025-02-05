@@ -8,6 +8,7 @@ import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData} from 'src/app/shared/models/agenda.model';
 import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
+import { NotiAgenda } from 'src/app/shared/models/leaverequest.model';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
@@ -50,6 +51,8 @@ export class AgendaComponent {
     leaveRequestStatus: any[];
 
     loading: boolean = true;
+
+    notiAgenda: NotiAgenda[] = [];
 
     agendas: AgendaData[] = [];
 
@@ -115,7 +118,6 @@ export class AgendaComponent {
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
-                console.log(data);
                 this.agendas = data.map(agenda => ({
                     ...agenda,
                     checkingDate: new Date(agenda.checkingDate)
@@ -124,6 +126,20 @@ export class AgendaComponent {
             }
         });
     }
+    NotiAgenda() {
+        this.CheckingService.getNotiAgenda().subscribe({
+            next: (data: NotiAgenda[]) => {
+                this.notiAgenda = data.map(agenda => ({
+                    ...agenda,
+                    checkingDate: new Date(agenda.checkingDate)
+                }));
+                this.filteredAgendas = [...this.agendas];
+            }
+        });
+    }
+    // mergeAgendasAndNotiAgenda() {
+    //     this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
+    // }
 
     updateDropdownOptionss() {
         this.updateDropdownOptions = [

@@ -2,7 +2,7 @@ export class AgendaData {
     fristName: string;
     lastName: string;
     checkingDate?: Date;
-    checkIn: Date;
-    checkOut: Date;
+    checkIn: string;
+    checkOut: string;
     checkingStatus: string;
 }
