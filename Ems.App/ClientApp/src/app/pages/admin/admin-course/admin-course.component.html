@@ -6,7 +6,7 @@
             <h5>จัดการ Course</h5>
             <ng-template pTemplate="right">
                 <button pButton pRipple type="button" label="เพิ่ม Course" pTooltip="เพิ่ม Course" tooltipPosition="bottom" (click)="showDialog()" class="p-button-success"></button>
-                <p-dialog header="เพิ่ม Course" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
+                <p-dialog [header]="editMode ? 'แก้ไข Course' : 'เพิ่ม Course'" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
 
                     <div class="col-12">
                         <div class="card">
@@ -23,23 +23,25 @@
 
                                 <div class="field col-12 md:col-3">
                                     <label htmlFor="startDate" class="text-xl">วันที่เปิด</label>
-                                     <p-calendar  
-                                     [iconDisplay]="'input'" 
-                                     [showIcon]="true" 
-                                     [appendTo]="'body'"
-                                     [showButtonBar]="true"
-                                     [(ngModel)]="startDate"
-                                   />                                   
+                                    <p-calendar  
+                                        [(ngModel)]="startDate"
+                                        [minDate]="minSelectableDate"
+                                        [iconDisplay]="'input'"
+                                        [showIcon]="true"
+                                        [appendTo]="'body'"
+                                        [showButtonBar]="true"
+                                    />                                      
                                 </div>
                                 <div class="field col-12 md:col-3">
                                     <label htmlFor="endDate" class="text-xl">วันที่ปิด</label>
                                     <p-calendar  
-                                     [iconDisplay]="'input'" 
-                                     [showIcon]="true" 
-                                     [appendTo]="'body'"
-                                     [showButtonBar]="true"
-                                     [(ngModel)]="endDate"
-                                   />       
+                                        [(ngModel)]="endDate"
+                                        [minDate]="startDate"
+                                        [iconDisplay]="'input'"
+                                        [showIcon]="true"
+                                        [appendTo]="'body'"
+                                        [showButtonBar]="true"
+                                    />        
                                 </div>
                                 <div class="field col-12 md:col-3">
                                     <label htmlFor="startTime" class="text-xl">เวลาเปิด</label>
@@ -69,7 +71,7 @@
                     </div>
 
                     <ng-template pTemplate="footer">
-                        <button pButton label="เพิ่ม" class="p-button-success"(click)="saveCourse()"></button>
+                        <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'" class="p-button-success" (click)="editMode ? updateCourse() : saveCourse()"></button>
                         <button pButton (click)="display = false" label="ปิด" class="p-button-outlined"></button>
                     </ng-template>
                 </p-dialog>
@@ -95,24 +97,24 @@
                             <p-sortIcon field="courseName"></p-sortIcon>
                         </div>
                     </th>
-                    <!-- <th style="min-width: 12rem" pSortableColumn="subtitle">
+                    <th style="min-width: 10rem" pSortableColumn="subtitle">
                         <div class="flex justify-content-center align-items-center">
                             คำบรรยาย
                             <p-sortIcon field="subtitle"></p-sortIcon>
                         </div>
                     </th>
-                    <th style="min-width: 12rem" pSortableColumn="description">
+                    <!-- <th style="min-width: 10rem" pSortableColumn="description">
                         <div class="flex justify-content-center align-items-center">
                             เนื้อหาคำบรรยาย
                             <p-sortIcon field="description"></p-sortIcon>
                         </div>
                     </th> -->
-                    <th style="min-width: 10rem" >
+                    <th style="min-width: 8rem" >
                         <div class="flex justify-content-center ">
                             วันเปิด
                         </div>
                     </th>
-                    <th style="min-width: 10rem" >
+                    <th style="min-width: 8rem" >
                         <div class="flex justify-content-center ">
                             วันปิด
                         </div>
@@ -131,15 +133,15 @@
                         </div>
                     </td>
             
-                    <!-- <td>
+                    <td>
                         <div class="flex justify-content-start align-items-center">
-                            {{ truncateText(course?.subtitle, 50) }}
+                            {{ truncateText(course?.subtitle, 40) }}
                         </div>
                     </td>
             
-                    <td>
+                    <!-- <td>
                         <div class="flex justify-content-start align-items-center">
-                            <span [innerHTML]="truncateText(course?.description, 50)"></span>
+                            <span [innerHTML]="truncateText(course?.description, 30)"></span>
                         </div>
                     </td> -->
             
@@ -156,12 +158,12 @@
                     </td>
                     <td>
                         <div class="flex justify-content-center align-items-center gap-2">
-                            <!-- ปุ่ม Edit -->
-                            <button pButton pRipple label="Edit" icon="pi pi-pencil" class="p-button-info p-button-sm">
+                            
+                            <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editCourse(course)">
                             </button>
                     
-                            <!-- ปุ่ม Delete -->
-                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, course.courseId)">
+                            
+                            <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, course.courseId)">
                             </button>
                             <p-confirmPopup key="confirmCanCelViaToast"></p-confirmPopup>
                             
