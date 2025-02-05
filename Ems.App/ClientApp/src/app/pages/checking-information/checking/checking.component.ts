@@ -16,6 +16,8 @@ import { Subject } from 'rxjs';
 })
 export class CheckingComponent {
 
+    userPosition: { lat: number, lng: number } | null = null;
+
     private userMarker: any;
 
     checkInTimes: Date | null = null;
@@ -111,32 +113,154 @@ export class CheckingComponent {
         }).addTo(this.map);
 
         this.showUserLocation();
+        this.addUserLocationButton();
+    }
+
+    async displaySpecificLocation() {
+        const latitude = 18.740493;
+        const longitude = 98.940390;
+
+        if (this.marker) this.map.removeLayer(this.marker);
+        if (this.circle) this.map.removeLayer(this.circle);
+
+        this.marker = L.circleMarker([latitude, longitude], {
+            color: 'blue',
+            fillColor: '#0000ff',
+            fillOpacity: 0.8,
+            radius: 10
+        }).addTo(this.map);
+        this.marker.bindPopup(`<b>ที่ทำงาน</b><br>
+                               <b>Latitude:</b> ${latitude}<br>
+                               <b>Longitude:</b> ${longitude}`).openPopup();
+
+        this.circle = L.circle([latitude, longitude], {
+            color: 'blue',
+            fillColor: '#add8e6',
+            fillOpacity: 0.5,
+            radius: 100
+        }).addTo(this.map);
+
+        this.map.setView([latitude, longitude], 20);
+    }
+
+    checkIfInArea(userLat: number, userLng: number): boolean {
+        const workLat = 18.740493;
+        const workLng = 98.940390;
+        const radius = 100;
+
+        const workLocation = L.latLng(workLat, workLng);
+        const userLocation = L.latLng(userLat, userLng);
+
+        const distance = workLocation.distanceTo(userLocation);
+
+        return distance <= radius;
     }
 
     showUserLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    const workLat = 18.740493;
+                    const workLng = 98.940390;
+                    const accuracy = position.coords.accuracy;
 
-                // ใช้ไอคอน custom
-                const userIcon = L.icon({
-                    iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-                    iconSize: [32, 32]
-                });
+                    const userIcon = L.icon({
+                        iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                        iconSize: [32, 32]
+                    });
 
-                this.userMarker = L.marker([latitude, longitude], { icon: userIcon })
-                    .addTo(this.map)
-                    .bindPopup(`<b>ตำแหน่งของคุณ</b><br>Lat: ${latitude}, Lng: ${longitude}`)
-                    .openPopup();
+                    this.reverseGeocode(userLat, userLng).then(address => {
+                        if (this.userMarker) {
+                            this.userMarker.setLatLng([userLat, userLng]);
+                        } else {
+                            this.userMarker = L.marker([userLat, userLng], { icon: userIcon })
+                                .addTo(this.map)
+                                .bindPopup(`<b>ตำแหน่งของคุณ</b><br>${address}<br>Lat: ${userLat}, Lng: ${userLng}`)
+                                .openPopup();
+                        }
+                    }).catch(error => {
+                        if (this.userMarker) {
+                            this.userMarker.setLatLng([userLat, userLng]);
+                        } else {
+                            this.userMarker = L.marker([userLat, userLng], { icon: userIcon })
+                                .addTo(this.map)
+                                .bindPopup(`<b>ตำแหน่งของคุณ</b><br>Lat: ${userLat}, Lng: ${userLng}`)
+                                .openPopup();
+                        }
+                    });
 
-                this.map.setView([latitude, longitude], 15);
-            }, (error) => {
-                console.error("Error getting location: ", error);
-            });
+                    if (!this.marker) {
+                        this.marker = L.marker([workLat, workLng])
+                            .addTo(this.map)
+                            .bindPopup(`<b>ที่ทำงาน</b><br>Lat: ${workLat}, Lng: ${workLng}`)
+                            .openPopup();
+                    }
+
+                    const bounds = L.latLngBounds([
+                        [userLat, userLng],
+                        [workLat, workLng]
+                    ]);
+                    this.map.fitBounds(bounds, { padding: [50, 50] });
+
+                    const isInArea = this.checkIfInArea(userLat, userLng);
+
+                    if (isInArea) {
+                        console.log("User is inside the area. Enable actions.");
+                        this.disableButtons = false;
+                    } else {
+                        console.log("User is outside the area. Disable actions.");
+                        this.disableButtons = true;
+                    }
+
+                    this.userPosition = { lat: userLat, lng: userLng };
+                },
+                (error) => console.error("Error getting location:", error),
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
         } else {
             console.error("Geolocation is not supported by this browser.");
         }
+    }
+
+    reverseGeocode(lat: number, lng: number): Promise<string> {
+        const apiKey = '834b7140eee24d1799ac9bced5bb066b';
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}&language=th&pretty=1`;
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.results && data.results.length > 0) {
+                    const address = data.results[0].formatted;
+                    return address;
+                } else {
+                    throw new Error("ไม่พบที่อยู่");
+                }
+            })
+            .catch(error => {
+                console.error("Error in geocoding:", error);
+                throw error;
+            });
+    }
+
+    addUserLocationButton() {
+        const button = L.control({ position: 'topright' });
+
+        button.onAdd = () => {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            div.innerHTML = '<button style="background:white; border: none; padding: 5px; cursor: pointer;">📍ตำแหน่งของฉัน</button>';
+
+            div.onclick = () => {
+                if (this.userPosition) {
+                    this.map.setView([this.userPosition.lat, this.userPosition.lng], 15);
+                } else {
+                    alert("ยังไม่ได้ระบุตำแหน่งของคุณ!");
+                }
+            };
+            return div;
+        };
+        button.addTo(this.map);
     }
 
     loadCheckTimeData(): void {
@@ -210,33 +334,6 @@ export class CheckingComponent {
             this.month = month;
             this.year = year;
         }, 1000);
-    }
-
-    async displaySpecificLocation() {
-        const latitude = 18.740493;
-        const longitude = 98.940390;
-
-        if (this.marker) this.map.removeLayer(this.marker);
-        if (this.circle) this.map.removeLayer(this.circle);
-
-        this.marker = L.circleMarker([latitude, longitude], {
-            color: 'blue',
-            fillColor: '#0000ff',
-            fillOpacity: 0.8,
-            radius: 10
-        }).addTo(this.map);
-        this.marker.bindPopup(`<b>ตำแหน่งที่กำหนด</b><br>
-                               <b>Latitude:</b> ${latitude}<br>
-                               <b>Longitude:</b> ${longitude}`).openPopup();
-
-        this.circle = L.circle([latitude, longitude], {
-            color: 'blue',
-            fillColor: '#add8e6',
-            fillOpacity: 0.5,
-            radius: 100
-        }).addTo(this.map);
-
-        this.map.setView([latitude, longitude], 20);
     }
 
     confirm2(event: Event): void {
