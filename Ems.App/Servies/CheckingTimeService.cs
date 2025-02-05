@@ -140,6 +140,36 @@ namespace Ems.App.Servies
                 }).ToList();
         }
 
+        public List<NotiAgendaModel> getNotiAgenda()
+        {
+            var userId1 = this._identityService.GetCurrentUser();
+
+            return _emsContext.check_in_out
+                .Where(r => r.user_id == userId1)
+                .Join(
+                    _emsContext.leave_request,
+                    r => r.leave_request_id,
+                    s => s.leave_request_id,
+                    (r, s) => new { r, s}
+                     )
+                      .Join(
+                         _emsContext.leave_half,
+                         combined => combined.s.leave_half_id,
+                         t => t.leave_half_id, 
+                         (combined, t) => new NotiAgendaModel
+                         {
+                            firstName = combined.r.user.first_name,
+                            lastName = combined.r.user.last_name,
+                            checkingDate = combined.s.leave_request_date,
+                            startTime = combined.s.leave_start_time,
+                            endTime = combined.s.leave_end_time,
+                            selectedLeaveHalfStatus = combined.s.leave_half.leave_type_name,
+                            additionalDescription = combined.s.leave_request_description
+                            }
+                        )
+                    .ToList();
+        }
+
         public List<CheckingStatusModel> getCheckinStatus()
         {
 

@@ -8,6 +8,8 @@ namespace Ems.App.Servies.IServices
 
         List<AgendaModel> getAgendas();
 
+        List<NotiAgendaModel> getNotiAgenda();
+
         List<CheckingStatusModel> getCheckinStatus();
 
         List<CheckingTimeDataModel> getInvalidCheckTime();

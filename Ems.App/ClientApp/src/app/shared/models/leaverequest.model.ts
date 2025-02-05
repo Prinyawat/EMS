@@ -13,3 +13,13 @@ export class LeaveHalfStatus {
     leaveHalfId: string;
     halfStatus: string;
 }
+
+export class NotiAgenda{
+    firstName: string;
+    lastName: string;
+    checkingDate: Date;
+    startTime: string;
+    endTime: string;
+    selectedLeaveHalfStatus: string;
+    additionalDescription: string;
+}

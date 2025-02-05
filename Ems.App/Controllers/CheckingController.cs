@@ -35,6 +35,14 @@ namespace Ems.App.Controllers
         }
 
         [HttpGet]
+        [Route("getNotiAgenda")]
+        public IActionResult getNotiAgenda()
+        {
+            var NotiAgendaData = _checkingservice.getNotiAgenda();
+            return Ok(NotiAgendaData);
+        }
+
+        [HttpGet]
         [Route("getCheckinStatus")]
         public IActionResult getCheckinStatus()
         {
