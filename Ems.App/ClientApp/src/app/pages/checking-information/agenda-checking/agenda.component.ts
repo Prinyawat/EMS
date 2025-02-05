@@ -4,11 +4,9 @@ import { CheckingService } from './../../../shared/services/checking.service';
 import { Component, ElementRef, ViewChild} from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table/table';
-import { customeragenda } from 'src/app/pages/checking-information/customer-checking/customers-checking';
 import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData} from 'src/app/shared/models/agenda.model';
-import { AgendaService } from 'src/app/shared/services/agenda.service';
 import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 @Component({
     selector: 'app-agenda',
@@ -65,8 +63,7 @@ export class AgendaComponent {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor(private AgendaService: AgendaService,
-        private CheckingService: CheckingService,
+    constructor(private CheckingService: CheckingService,
         private LeaveRequestService: LeaveRequestService,
         private messageService: MessageService) { }
 
@@ -108,7 +105,6 @@ export class AgendaComponent {
                     this.leaveRequestStatus = [];
                 }
                 this.updateDropdownOptionss();
-                console.log('Leave Status Data:', this.leaveRequestStatus);
             }
         });
 
@@ -119,6 +115,7 @@ export class AgendaComponent {
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
+                console.log(data);
                 this.agendas = data.map(agenda => ({
                     ...agenda,
                     checkingDate: new Date(agenda.checkingDate)

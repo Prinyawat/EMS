@@ -143,7 +143,6 @@ export class LeaveRequestComponent {
           return;
         }
 
-
     }
 
     onBasicUpload() {
@@ -214,7 +213,6 @@ export class LeaveRequestComponent {
         }
         this.leaveDatesDialog = true;
     }
-
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Ems.App.Models;
 using Ems.App.Servies.IServices;
 using Ems.Data.Entities;
@@ -26,16 +27,20 @@ namespace Ems.App.Servies
             var existingCheckIn = _emsContext.check_in_out
                 .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b"));
 
-            var utcCheckIn = checkingdata.checkin?.ToUniversalTime();
-            var utcCheckOut = checkingdata.checkout?.ToUniversalTime();
+            var utcCheckIn = DateTime.TryParse(checkingdata.checkin, out var checkInTime)
+                             ? checkInTime.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)
+                             : string.Empty;
+            var utcCheckOut = DateTime.TryParse(checkingdata.checkout, out var checkOutTime)
+                             ? checkOutTime.ToString("hh:mm:ss tt", CultureInfo.InvariantCulture)
+                             : null;
 
-            if (existingCheckIn != null && checkingdata.checkout.HasValue)
+            if (existingCheckIn != null)
             {
                 existingCheckIn.check_out = utcCheckOut;  
                 existingCheckIn.checking_status_id = checkingStatusId;  
                 _emsContext.SaveChanges(); 
             }
-            else if (existingCheckIn == null && checkingdata.checkin.HasValue)
+            else if (existingCheckIn == null && !string.IsNullOrWhiteSpace(checkingdata.checkin))
             {
                 var newCheckInOut = new check_in_out
                 {
@@ -64,7 +69,6 @@ namespace Ems.App.Servies
 
             var today = DateTime.UtcNow.Date;
 
-            // หาว่าวันนี้เช็คอินไปรึยัง
             var validCheckDate = _emsContext.check_in_out
             .Where(co => co.user_id == userId && co.check_dates.Value.ToUniversalTime().Date == today)
             .OrderByDescending(co => co.check_dates)
@@ -76,8 +80,8 @@ namespace Ems.App.Servies
                 if (validCheckDate.check_out == null)
                 {
                     return _emsContext.check_in_out
-                    .Where(r => r.user_id == userId && r.check_in.HasValue)
-                    .OrderByDescending(r => r.check_dates) // เรียงลำดับจากล่าสุด
+                    .Where(r => r.user_id == userId && !string.IsNullOrWhiteSpace(r.check_in))
+                    .OrderByDescending(r => r.check_dates) 
                     .Join(
                         _emsContext.checking_status,
                         r => r.checking_status_id,
@@ -94,7 +98,7 @@ namespace Ems.App.Servies
                 else
                 {
                     return _emsContext.check_in_out
-                    .Where(r => r.user_id == userId && r.check_in.HasValue && r.check_out.HasValue)
+                    .Where(r => r.user_id == userId && !string.IsNullOrWhiteSpace(r.check_in) && !string.IsNullOrWhiteSpace(r.check_out))
                     .OrderByDescending(r => r.check_dates)
                     .Join(
                         _emsContext.checking_status,
@@ -120,10 +124,9 @@ namespace Ems.App.Servies
         public List<AgendaModel> getAgendas()
         {
             var userId1 = new Guid("571e4e36-f7b3-4418-832d-b9dd02d7842b");
-            var userId2 = new Guid("289a03f8-182f-46ad-b885-2a6de22bbca8");
 
             return _emsContext.check_in_out
-                .Where(r => r.user_id == userId1 || r.user_id == userId2)
+                .Where(r => r.user_id == userId1)
                 .Select(r => new AgendaModel
                 {
                     firstName = r.user.first_name,

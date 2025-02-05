@@ -9,8 +9,8 @@ namespace Ems.App.Models
 
     public class CheckingTimeDataModel
     {
-        public DateTime? checkin { get; set; }
-        public DateTime? checkout { get; set; }
+        public string checkin { get; set; }
+        public string checkout { get; set; }
         public string statuses { get; set; }
 
     }

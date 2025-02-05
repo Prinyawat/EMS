@@ -25,7 +25,8 @@ export class CheckingService {
 
     private summittedChecking = new BehaviorSubject<any>(null);
     submittedData$ = this.summittedChecking.asObservable();
-    saveChecking(data: { checkin: Date | null, checkout: Date | null, statuses: string;}){
+    saveChecking(data: { checkin: string | null, checkout: string | null, statuses: string;}){
+        console.log(data);
         return this.http.post(this.env + "/saveChecking", {
             checkin: data.checkin,
             checkout: data.checkout,

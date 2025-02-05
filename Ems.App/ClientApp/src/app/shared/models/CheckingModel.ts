@@ -3,7 +3,7 @@ export class CheckingStatus {
 }
 
 export class CheckingTimeData {
-    checkin: Date;
-    checkout: Date;
+    checkin: string;
+    checkout: string;
     statuses: string;
 }

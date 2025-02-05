@@ -13,19 +13,19 @@
                 <div class="col-12 md:col-12 ">
                     <div class="flex flex-wrap gap-3 mt-5 justify-content-center align-">
 
-                        <p-button label="" icon="pi pi-eye" (click)="showLeaveDatesDialog()" [ngStyle]="{'margin-bottom': '10px'}"></p-button>
-
-                        <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
-                        (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
-                        (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
-                        [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')"/>
-
                         <p-dialog [(visible)]="leaveDatesDialog" [modal]="true" [header]="'รายการวันลาของคุณ'" [style]="{ width: '400px' }">
                             <ul *ngIf="Dates?.length > 0">
                                 <li *ngFor="let date of Dates">{{ formatDate(date) }}</li>
                             </ul>
                             <p *ngIf="!(Dates?.length > 0)">ไม่มีวันลาที่เลือก</p>
                         </p-dialog>
+
+                        <p-button label="แสดงวันที่เลือก" icon="pi pi-eye" (click)="showLeaveDatesDialog()" [ngStyle]="{'margin-bottom': '10px'}"></p-button>
+
+                        <p-calendar [ngStyle]="{'width': '200px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
+                        (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
+                        (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
+                        [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')"/>
 
                         <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedLeaveStatus"
                             placeholder="เลือกประเภทการลา" [ngStyle]="{'width': '180px'}" optionLabel="leaveStatusData" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveStatus}" (ngModelChange)="onValueChange('selectedLeaveStatus')">

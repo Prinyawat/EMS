@@ -15,9 +15,9 @@ public partial class check_in_out
 
     public Guid? leave_request_id { get; set; }
 
-    public DateTime? check_in { get; set; }
+    public string check_in { get; set; }
 
-    public DateTime? check_out { get; set; }
+    public string check_out { get; set; }
 
     public DateTime? check_dates { get; set; }
 
