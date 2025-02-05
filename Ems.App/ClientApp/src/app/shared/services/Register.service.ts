@@ -17,10 +17,10 @@ export class RegisterService {
 
     getPosition(){
       return this.http.get(this.env + "/getPosition");
-  }   
+    }   
 
-  registerUser(newUser: any){
-    return this.http.post(`${this.env}/register`, newUser);
-  }
+    registerUser(newUser: any){
+      return this.http.post(`${this.env}/register`, newUser);
+    }
 
 }

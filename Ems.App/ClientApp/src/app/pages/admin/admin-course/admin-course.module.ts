@@ -11,6 +11,19 @@ import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { DataViewModule } from 'primeng/dataview';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { RatingModule } from 'primeng/rating';
+import { SliderModule } from 'primeng/slider';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { RippleModule } from 'primeng/ripple';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ToolbarModule } from 'primeng/toolbar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
@@ -23,7 +36,20 @@ import { DataViewModule } from 'primeng/dataview';
     BreadcrumbModule,
     TagModule,
     ConfirmPopupModule,
-    DataViewModule
+    DataViewModule,
+    FormsModule,
+    TableModule,
+    RatingModule,
+    SliderModule,
+    InputTextModule,
+    ToggleButtonModule,
+    RippleModule,
+    MultiSelectModule,
+    DropdownModule,
+    ProgressBarModule,
+    ToolbarModule,
+    InputTextareaModule,
+    CalendarModule,
   ],
   declarations: [AdminCourseComponent],
   providers: [ConfirmationService]

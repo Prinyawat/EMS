@@ -1,5 +1,187 @@
 <p-breadcrumb [model]="breadcrumbItems" [home]="{icon: 'pi pi-home', routerLink: '/home'}"></p-breadcrumb>
+<p-toast key="tst"></p-toast>
+<div class="col-12">
+    <div class="card">
+        <p-toolbar styleClass="mb-4">
+            <h5>จัดการ Course</h5>
+            <ng-template pTemplate="right">
+                <button pButton pRipple type="button" label="เพิ่ม Course" pTooltip="เพิ่ม Course" tooltipPosition="bottom" (click)="showDialog()" class="p-button-success"></button>
+                <p-dialog header="เพิ่ม Course" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
 
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="p-fluid p-formgrid grid">
 
+                                <div class="field col-12 md:col-6">
+                                    <label htmlFor="courseName" class="text-xl">ชื่อ Course</label>
+                                    <input pInputText id="courseName" type="text" [(ngModel)]="courseName"/>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label htmlFor="subtitle" class="text-xl">คำบรรยาย</label>
+                                    <input pInputText id="subtitle" type="text" [(ngModel)]="subtitle"/>
+                                </div>
 
+                                <div class="field col-12 md:col-3">
+                                    <label htmlFor="startDate" class="text-xl">วันที่เปิด</label>
+                                     <p-calendar  
+                                     [iconDisplay]="'input'" 
+                                     [showIcon]="true" 
+                                     [appendTo]="'body'"
+                                     [showButtonBar]="true"
+                                     [(ngModel)]="startDate"
+                                   />                                   
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label htmlFor="endDate" class="text-xl">วันที่ปิด</label>
+                                    <p-calendar  
+                                     [iconDisplay]="'input'" 
+                                     [showIcon]="true" 
+                                     [appendTo]="'body'"
+                                     [showButtonBar]="true"
+                                     [(ngModel)]="endDate"
+                                   />       
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label htmlFor="startTime" class="text-xl">เวลาเปิด</label>
+                                    <p-calendar 
+                                    inputId="calendar-timeonly" 
+                                    [timeOnly]="true" 
+                                    [showButtonBar]="true"
+                                    [(ngModel)]="startTime"/>
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label htmlFor="endTime" class="text-xl">เวลาปิด</label>
+                                    <p-calendar 
+                                    inputId="calendar-timeonly"  
+                                    [timeOnly]="true" 
+                                    [showButtonBar]="true"
+                                    [(ngModel)]="endTime"/>
+                                </div>
+
+                                <div class="field col-12">
+
+                                    <label htmlFor="description" class="text-xl">เนื้อหาคำยรรยาย</label>
+                                    <textarea id="description" rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea>
+            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template pTemplate="footer">
+                        <button pButton label="เพิ่ม" class="p-button-success"(click)="saveCourse()"></button>
+                        <button pButton (click)="display = false" label="ปิด" class="p-button-outlined"></button>
+                    </ng-template>
+                </p-dialog>
+            </ng-template>
+        </p-toolbar>
+        <p-table #coursedata [value]="course" dataKey="id" [rows]="5" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['courseName']" responsiveLayout="scroll">
+
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(coursedata)"></button>
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="Search Keyword" class="w-full"/>
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 12rem" pSortableColumn="courseName">
+                        <div class="flex justify-content-center align-items-center">
+                            ชื่อ Course
+                            <p-sortIcon field="courseName"></p-sortIcon>
+                        </div>
+                    </th>
+                    <!-- <th style="min-width: 12rem" pSortableColumn="subtitle">
+                        <div class="flex justify-content-center align-items-center">
+                            คำบรรยาย
+                            <p-sortIcon field="subtitle"></p-sortIcon>
+                        </div>
+                    </th>
+                    <th style="min-width: 12rem" pSortableColumn="description">
+                        <div class="flex justify-content-center align-items-center">
+                            เนื้อหาคำบรรยาย
+                            <p-sortIcon field="description"></p-sortIcon>
+                        </div>
+                    </th> -->
+                    <th style="min-width: 10rem" >
+                        <div class="flex justify-content-center ">
+                            วันเปิด
+                        </div>
+                    </th>
+                    <th style="min-width: 10rem" >
+                        <div class="flex justify-content-center ">
+                            วันปิด
+                        </div>
+                    </th>
+                    <th style="min-width: 10rem" >
+                        <div class="flex justify-content-center ">
+                            Action
+                        </div>
+                    </th>
+            </ng-template>
+            <ng-template pTemplate="body" let-course>
+                <tr>
+                    <td>
+                        <div class="flex justify-content-start align-items-center">
+                            {{ course?.courseName }}
+                        </div>
+                    </td>
+            
+                    <!-- <td>
+                        <div class="flex justify-content-start align-items-center">
+                            {{ truncateText(course?.subtitle, 50) }}
+                        </div>
+                    </td>
+            
+                    <td>
+                        <div class="flex justify-content-start align-items-center">
+                            <span [innerHTML]="truncateText(course?.description, 50)"></span>
+                        </div>
+                    </td> -->
+            
+                    <td>
+                        <div class="flex justify-content-center align-items-center">
+                            {{ course?.startDate }}
+                        </div>
+                    </td>
+            
+                    <td>
+                        <div class="flex justify-content-center align-items-center">
+                            {{ course?.endDate }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex justify-content-center align-items-center gap-2">
+                            <!-- ปุ่ม Edit -->
+                            <button pButton pRipple label="Edit" icon="pi pi-pencil" class="p-button-info p-button-sm">
+                            </button>
+                    
+                            <!-- ปุ่ม Delete -->
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, course.courseId)">
+                            </button>
+                            <p-confirmPopup key="confirmCanCelViaToast"></p-confirmPopup>
+                            
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>            
+            
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No customers found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading customers data. Please wait.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    
+</div>
         
