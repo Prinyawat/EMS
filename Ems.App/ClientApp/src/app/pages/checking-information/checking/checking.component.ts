@@ -78,6 +78,7 @@ export class CheckingComponent {
     constructor(private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private CheckingService: CheckingService,
+        private cdRef: ChangeDetectorRef
         ) { }
 
     ngOnInit(): void {
@@ -209,6 +210,7 @@ export class CheckingComponent {
                     if (isInArea) {
                         console.log("User is inside the area. Enable actions.");
                         this.disableButtons = false;
+                        this.cdRef.detectChanges();
                     } else {
                         console.log("User is outside the area. Disable actions.");
                         this.disableButtons = true;
