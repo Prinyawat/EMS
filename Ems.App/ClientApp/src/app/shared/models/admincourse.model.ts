@@ -6,4 +6,5 @@ export class AdminCourse {
   startDate: string;
   endDate: string;
   startTime: string;
+  endTime: string;
   }
