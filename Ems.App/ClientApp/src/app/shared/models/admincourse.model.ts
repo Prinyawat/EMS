@@ -8,3 +8,9 @@ export class AdminCourse {
   startTime: string;
   endTime: string;
   }
+
+export class AdminChapter {
+  chapterId: string;
+  courseId: string;
+  title: string;
+}

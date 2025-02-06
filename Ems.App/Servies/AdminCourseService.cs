@@ -108,6 +108,77 @@ namespace Ems.App.Servies
             };
         }
 
+        public AdminChapterModel AddChapter(AdminChapterModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentException("ข้อมูลบทเรียนไม่ถูกต้อง");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            var newChapter = new chapter
+            {
+                chapter_id = Guid.NewGuid(),
+                course_id = model.courseId,
+                chapter_title = model.title,
+                created_by = currentUser.ToString(),
+                created_date = DateTime.UtcNow
+            };
+
+            _emsContext.chapter.Add(newChapter);
+            _emsContext.SaveChanges();
+
+            return new AdminChapterModel
+            {
+                chapterId = newChapter.chapter_id,
+                courseId = newChapter.course_id,
+                title = newChapter.chapter_title
+            };
+        }
+
+        public AdminChapterModel UpdateChapter(AdminChapterModel updatedChapter)
+        {
+            if (updatedChapter == null || updatedChapter.chapterId == Guid.Empty)
+            {
+                throw new ArgumentException("ข้อมูลบทเรียนไม่ถูกต้อง");
+            }
+
+            var existingChapter = _emsContext.chapter.FirstOrDefault(c => c.chapter_id == updatedChapter.chapterId);
+            if (existingChapter == null)
+            {
+                throw new KeyNotFoundException("ไม่พบบทเรียนที่ต้องการอัปเดต");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            existingChapter.chapter_title = updatedChapter.title;
+            existingChapter.updated_by = currentUser.ToString();
+            existingChapter.updated_date = DateTime.UtcNow;
+
+            _emsContext.SaveChanges();
+
+            return new AdminChapterModel
+            {
+                chapterId = existingChapter.chapter_id,
+                courseId = existingChapter.course_id,
+                title = existingChapter.chapter_title
+            };
+        }
+
+        public bool DeleteChapter(Guid chapterId)
+        {
+            var chapterToDelete = _emsContext.chapter.FirstOrDefault(c => c.chapter_id == chapterId);
+            if (chapterToDelete == null)
+            {
+                return false;
+            }
+
+            _emsContext.chapter.Remove(chapterToDelete);
+            _emsContext.SaveChanges();
+            return true;
+        }
+
     }
 
 }

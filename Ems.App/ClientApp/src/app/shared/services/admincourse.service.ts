@@ -23,6 +23,19 @@ export class AdminCourseService {
 
     updateCourse(updatedCourse: any) {
       return this.http.put(`${this.env}/updateCourse`, updatedCourse);
-  }
+    }
+
+    addchapter(model: any) {
+      return this.http.post(`${this.env}/addChapter`, model)
+    }
+
+    deleteChapter(chapterId: string) {
+      return this.http.delete(`${this.env}/deleteChapter/${chapterId}`)
+    }
+
+    updateChapter(updatedChapter: any) {
+      return this.http.put(`${this.env}/updateChapter`, updatedChapter);
+    }
+  
 
 }

@@ -147,7 +147,7 @@ export class AdminCourseComponent implements OnInit{
     this.courseName = course.courseName;
     this.subtitle = course.subtitle;
     this.startDate = new Date(course.startDate);
-    this.startDate.setHours(12, 0, 0, 0); // ป้องกันการเปลี่ยนวันจาก Timezone
+    this.startDate.setHours(12, 0, 0, 0); 
     
     this.endDate = new Date(course.endDate);
     this.endDate.setHours(12, 0, 0, 0);
@@ -158,7 +158,6 @@ export class AdminCourseComponent implements OnInit{
     this.description = course.description;
     this.display = true;
   }
-  
   
   updateCourse() {
     const updatedCourse = {
@@ -206,7 +205,7 @@ export class AdminCourseComponent implements OnInit{
   
   confirmDeleteViaToast(event: Event, courseId: string) {
     this.confirmationService.confirm({
-      key: 'confirmCanCelViaToast',
+      key: 'confirmDeleteViaToast',
       target: event.target || new EventTarget(),
       message: 'คุณแน่ใจหรือไม่ว่าต้องการลบ Course นี้?',
       icon: 'pi pi-exclamation-triangle',

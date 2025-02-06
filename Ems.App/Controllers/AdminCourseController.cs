@@ -48,5 +48,34 @@ namespace Ems.App.Controllers
                 return Ok(update);
            
         }
+
+        [HttpPost]
+        [Route("addChapter")]
+        public IActionResult AddChapter([FromBody] AdminChapterModel model)
+        {
+            var newChapter = _admincourseService.AddChapter(model);
+            return Ok(newChapter);
+        }
+
+        [HttpPut]
+        [Route("updateChapter")]
+        public IActionResult UpdateChapter([FromBody] AdminChapterModel updatedChapter)
+        {
+            var updated = _admincourseService.UpdateChapter(updatedChapter);
+            return Ok(updated);
+        }
+
+        [HttpDelete]
+        [Route("deleteChapter/{chapterId}")]
+        public IActionResult DeleteChapter(Guid chapterId)
+        {
+            var isDeleted = _admincourseService.DeleteChapter(chapterId);
+            if (!isDeleted)
+            {
+                return NotFound(new { message = "ไม่พบบทเรียนที่ต้องการลบ" });
+            }
+            return Ok(new { message = "ลบบทเรียนสำเร็จ" });
+        }
+
     }
 }

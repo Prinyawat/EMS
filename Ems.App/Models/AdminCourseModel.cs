@@ -14,4 +14,11 @@ namespace Ems.App.Models
         public TimeOnly endTime { get; set; }
 
     }
+
+    public class AdminChapterModel 
+    {
+        public Guid chapterId { get; set; }
+        public Guid courseId { get; set; }
+        public string title { get; set; }
+    }
 }

@@ -8,5 +8,8 @@ namespace Ems.App.Servies.IServices
         AdminCourseModel AddCourse(AdminCourseModel model);
         AdminCourseModel UpdateCourse(AdminCourseModel updatedCourse);
         bool DeleteCourse(Guid courseId);
+        AdminChapterModel AddChapter(AdminChapterModel model);
+        AdminChapterModel UpdateChapter(AdminChapterModel updatedChapter);
+        bool DeleteChapter(Guid chapterId);
     }
 }

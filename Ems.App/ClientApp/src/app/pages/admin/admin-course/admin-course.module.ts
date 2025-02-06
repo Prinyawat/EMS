@@ -24,6 +24,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
+import { AdminChapterComponent } from '../Admin-chapter/admin-chapter.component';
 
 
 @NgModule({
@@ -51,7 +52,10 @@ import { CalendarModule } from 'primeng/calendar';
     InputTextareaModule,
     CalendarModule,
   ],
-  declarations: [AdminCourseComponent],
+  declarations: [
+    AdminCourseComponent,
+    AdminChapterComponent
+  ],
   providers: [ConfirmationService]
 })
 export class AdminCourseModule {}

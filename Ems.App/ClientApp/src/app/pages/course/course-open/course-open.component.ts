@@ -22,24 +22,6 @@ export class CourseOpenComponent implements OnInit{
     private courseService: CourseService
   ){}
 
-  // ngOnInit():void {
-  //   this.breadcrumbItems = [];
-  //   this.breadcrumbItems.push({ label: 'Course'});
-  //   this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register'});
-    
-  //   this.courseService.getRegisteredCourses().subscribe((registeredCourses: Course[]) => {
-  //     this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
-  //       this.filteredCourses = registeredCourses.map((course) => {
-  //         const completedCourse = completedCourses.find((c) => c.courseId === course.courseId);
-  //         if (completedCourse) {
-  //           course.statusName = completedCourse.statusName; 
-  //         }
-  //         return course;
-  //       });
-  //     });
-  //   });
-  // }
-
   ngOnInit(): void {
     this.breadcrumbItems = [];
     this.breadcrumbItems.push({ label: 'Course' });
