@@ -179,6 +179,82 @@ namespace Ems.App.Servies
             return true;
         }
 
+        public AdminChapterContentModel AddContent(AdminChapterContentModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentException("ข้อมูลหัวข้อไม่ถูกต้อง");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            var newContent = new chapter_content
+            {
+                chapter_content_id = Guid.NewGuid(),
+                chapter_id = model.chapterId,
+                content_title = model.contentTitle,
+                content_body = model.body,
+                created_by = currentUser.ToString(),
+                created_date = DateTime.UtcNow
+            };
+
+            _emsContext.chapter_content.Add(newContent);
+            _emsContext.SaveChanges();
+
+            return new AdminChapterContentModel
+            {
+                contentId = newContent.chapter_content_id,
+                chapterId = newContent.chapter_id,
+                contentTitle = newContent.content_title,
+                body = newContent.content_body
+            };
+        }
+
+        public AdminChapterContentModel UpdateContent(AdminChapterContentModel updateContent)
+        {
+            if (UpdateContent == null || updateContent.contentId == Guid.Empty)
+            {
+                throw new ArgumentException("ข้อมูลหัวข้อไม่ถูกต้อง");
+            }
+
+            var existingContent = _emsContext.chapter_content.FirstOrDefault(c => c.chapter_content_id == updateContent.contentId);
+            if (existingContent == null)
+            {
+                throw new KeyNotFoundException("ไม่พบหัวข้อที่ต้องการอัปเดต");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            existingContent.content_title = updateContent.contentTitle;
+            existingContent.content_body = updateContent.body;
+            existingContent.updated_by = currentUser.ToString();
+            existingContent.updated_date = DateTime.UtcNow;
+
+            _emsContext.SaveChanges();
+
+            return new AdminChapterContentModel
+            {
+                contentId = existingContent.chapter_content_id,
+                chapterId = existingContent.chapter_id,
+                contentTitle = existingContent.content_title,
+                body = existingContent.content_body
+            };
+        }
+
+        public bool DeleteContent(Guid contentId)
+        {
+            var contentToDelete = _emsContext.chapter_content.FirstOrDefault(cc => cc.chapter_content_id == contentId);
+            if (contentToDelete == null)
+            {
+                return false;
+            }
+
+            _emsContext.chapter_content.Remove(contentToDelete);
+            _emsContext.SaveChanges();
+            return true;
+                
+        }
+
     }
 
 }

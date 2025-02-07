@@ -43,10 +43,10 @@ namespace Ems.App.Controllers
         [Route("updateCourse")]
         public IActionResult UpdateCourse([FromBody] AdminCourseModel updatedCourse)
         {
-            
-                var update = _admincourseService.UpdateCourse(updatedCourse);
-                return Ok(update);
-           
+
+            var update = _admincourseService.UpdateCourse(updatedCourse);
+            return Ok(update);
+
         }
 
         [HttpPost]
@@ -77,5 +77,32 @@ namespace Ems.App.Controllers
             return Ok(new { message = "ลบบทเรียนสำเร็จ" });
         }
 
+        [HttpPost]
+        [Route("addContent")]
+        public IActionResult AddContent([FromBody] AdminChapterContentModel model)
+        {
+            var newContent = _admincourseService.AddContent(model);
+            return Ok(newContent);
+        }
+
+        [HttpPut]
+        [Route("updateContent")]
+        public IActionResult UpdateContent([FromBody] AdminChapterContentModel updatedContent)
+        {
+            var updated = _admincourseService.UpdateContent(updatedContent);
+            return Ok(updated);
+        }
+
+        [HttpDelete]
+        [Route("deleteContent/{contentId}")]
+        public IActionResult DeteleContent(Guid contentId)
+        {
+            var isDeleted = _admincourseService.DeleteContent(contentId);
+            if (!isDeleted)
+            {
+                return NotFound(new { message = "ไม่พบหัวข้อที่ต้องการลบ" });
+            }
+            return Ok(new { message = "ลบหัวข้อสำเร็จ" });
+        }
     }
 }

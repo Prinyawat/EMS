@@ -15,8 +15,9 @@ export class AdminChapter {
   title: string;
 }
 
-export class Content {
+export class AdminChapterContent {
   contentId: string;
+  chapterId: string;
   contentTitle: string;
   body: string;
 }

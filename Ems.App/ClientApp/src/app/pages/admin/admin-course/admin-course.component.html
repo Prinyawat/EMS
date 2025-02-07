@@ -87,7 +87,7 @@
                         <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(coursedata)"></button>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="Search Keyword" class="w-full"/>
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full"/>
                         </span>
                     </div>
                 </ng-template>
@@ -96,7 +96,7 @@
                     <tr>
                         <th style="min-width: 12rem" pSortableColumn="courseName">
                             <div class="flex justify-content-center align-items-center">
-                                ชื่อ Course
+                                Course
                                 <p-sortIcon field="courseName"></p-sortIcon>
                             </div>
                         </th>

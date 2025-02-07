@@ -11,5 +11,8 @@ namespace Ems.App.Servies.IServices
         AdminChapterModel AddChapter(AdminChapterModel model);
         AdminChapterModel UpdateChapter(AdminChapterModel updatedChapter);
         bool DeleteChapter(Guid chapterId);
+        AdminChapterContentModel AddContent(AdminChapterContentModel model);
+        AdminChapterContentModel UpdateContent(AdminChapterContentModel updateContent);
+        bool DeleteContent(Guid contentId);
     }
 }

@@ -13,6 +13,7 @@ export class AdminCourseService {
 
     env: string = `${environment.apiUrl}/api/AdminCourse`;
 
+    //course
     addCourse(model: any){
       return this.http.post(`${this.env}/addCourse`, model);
     }
@@ -25,6 +26,7 @@ export class AdminCourseService {
       return this.http.put(`${this.env}/updateCourse`, updatedCourse);
     }
 
+    //chapter
     addchapter(model: any) {
       return this.http.post(`${this.env}/addChapter`, model)
     }
@@ -36,6 +38,18 @@ export class AdminCourseService {
     updateChapter(updatedChapter: any) {
       return this.http.put(`${this.env}/updateChapter`, updatedChapter);
     }
-  
+
+    //content
+    addContent(model: any) {
+      return this.http.post(`${this.env}/addContent`, model)
+    }
+    
+    deleteContent(contentId: string) {
+      return this.http.delete(`${this.env}/deleteContent/${contentId}`)
+    }
+
+    updateContent(updatedContent: any) {
+      return this.http.put(`${this.env}/updateContent`, updatedContent);
+    }
 
 }
