@@ -13,7 +13,6 @@ namespace Ems.App.Models
         public string startTime { get; set; }
         public string endTime { get; set; }
         public string additionalDescription { get; set; }
- 
     }
 
     public class LeaveStatusDataModel

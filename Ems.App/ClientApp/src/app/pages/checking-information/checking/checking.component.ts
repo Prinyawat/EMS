@@ -82,7 +82,7 @@ export class CheckingComponent {
         ) { }
 
     ngOnInit(): void {
-
+        this.showUserLocation();
         this.loadCheckTimeData();
 
         this.breadcrumbItems = [];
@@ -210,10 +210,13 @@ export class CheckingComponent {
                     if (isInArea) {
                         console.log("User is inside the area. Enable actions.");
                         this.disableButtons = false;
+                        console.log(this.disableButtons);
                         this.cdRef.detectChanges();
                     } else {
                         console.log("User is outside the area. Disable actions.");
                         this.disableButtons = true;
+                        console.log(this.disableButtons);
+                        this.cdRef.detectChanges();
                     }
 
                     this.userPosition = { lat: userLat, lng: userLng };

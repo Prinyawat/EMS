@@ -8,7 +8,8 @@ import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData} from 'src/app/shared/models/agenda.model';
 import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
-import { NotiAgenda } from 'src/app/shared/models/leaverequest.model';
+
+import { LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.model';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
@@ -28,9 +29,9 @@ export class AgendaComponent {
 
     updateDropdownOptions: { label: string, value: string }[] = [];
 
-    selectedItem: CheckingStatus | null = null;
+    selectedItem: string | null = null;
 
-    filteredAgendas: AgendaData[] = [];
+    selectedLeaveStatus: LeaveStatusData | null = null;
 
     allStatusOptions: any[] = [];
 
@@ -55,6 +56,8 @@ export class AgendaComponent {
     notiAgenda: NotiAgenda[] = [];
 
     agendas: AgendaData[] = [];
+
+    filteredAgendas: (AgendaData | NotiAgenda)[] = [];
 
     cols: any[];
 
@@ -102,17 +105,21 @@ export class AgendaComponent {
                 if (Array.isArray(data)) {
                     this.leaveRequestStatus = data.map(item => ({
                         label: item.leaveStatusData || '',
-                        value: item.leaveStatusId || ''
+                        value: item.leaveStatusData  || ''
                     }));
-                }else{
+                } else {
                     this.leaveRequestStatus = [];
+                    console.error('Expected array, but received:', data);
                 }
+                console.log(this.leaveRequestStatus);
                 this.updateDropdownOptionss();
             }
         });
 
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
+        this.NotiAgenda();
+        this.updateFilteredAgendas();
     }
 
     fetchAgenda() {
@@ -122,32 +129,76 @@ export class AgendaComponent {
                     ...agenda,
                     checkingDate: new Date(agenda.checkingDate)
                 }));
-                this.filteredAgendas = [...this.agendas];
+                this.updateFilteredAgendas();
             }
         });
     }
+
+    convertThaiDateToJSDate(thaiDateStr: string): Date | null {
+        const [day, month, year] = thaiDateStr.trim().split('/').map(Number);
+        const gregorianYear = year - 543;
+        const formattedDate = new Date(gregorianYear, month - 1, day);
+        return isNaN(formattedDate.getTime()) ? null : formattedDate;
+      }
+
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
             next: (data: NotiAgenda[]) => {
-                this.notiAgenda = data.map(agenda => ({
-                    ...agenda,
-                    checkingDate: new Date(agenda.checkingDate)
-                }));
-                this.filteredAgendas = [...this.agendas];
+                console.log(data);
+                if (data && Array.isArray(data)) {
+                    this.notiAgenda = data.flatMap(agenda => {
+
+                        let checkingDates: string[];
+
+                        if (agenda.checkingDate instanceof Date) {
+                            checkingDates = [agenda.checkingDate.toISOString()];
+                        } else if (typeof agenda.checkingDate === 'string') {
+                            checkingDates = (agenda.checkingDate as string).split(',');
+                        } else {
+                            checkingDates = [];
+                        }
+                        return checkingDates.map(date => ({
+                            ...agenda,
+                            checkingDate: this.convertThaiDateToJSDate(date),
+                            startTime: agenda.startTime,
+                            endTime: agenda.endTime,
+                            selectedLeaveHalfStatus: agenda.selectedLeaveHalfStatus,
+                            leaveStatus: agenda.leaveStatus
+                        }));
+                    });
+                    this.updateFilteredAgendas();
+                } else {
+                }
             }
         });
     }
-    // mergeAgendasAndNotiAgenda() {
-    //     this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
-    // }
+
+    updateFilteredAgendas() {
+        this.filteredAgendas = [
+            ...this.agendas,
+            ...this.notiAgenda
+        ];
+    }
 
     updateDropdownOptionss() {
         this.updateDropdownOptions = [
             { label: 'เลือกสถานะ', value: null },
-            ...this.workStatus,
-            ...this.leaveRequestStatus
-
+            ...(Array.isArray(this.workStatus) ? this.workStatus : []),
+            ...(Array.isArray(this.leaveRequestStatus) ? this.leaveRequestStatus : [])
         ];
+    }
+
+    filterDropDown(selectedStatus: string | null) {
+        if (selectedStatus === null) {
+            this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
+        } else {
+            this.filteredAgendas = this.agendas.filter(agenda => agenda.checkingStatus === selectedStatus);
+            this.filteredAgendas = [
+                ...this.filteredAgendas,
+                ...(this.notiAgenda.filter(noti => noti.leaveStatus === selectedStatus))
+            ];
+        }
+        // console.log('Filtered Agendas:', this.filteredAgendas);
     }
 
     getStatusColor(label: string | null): string {

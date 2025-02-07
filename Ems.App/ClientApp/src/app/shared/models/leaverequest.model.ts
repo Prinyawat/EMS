@@ -21,5 +21,6 @@ export class NotiAgenda{
     startTime: string;
     endTime: string;
     selectedLeaveHalfStatus: string;
+    leaveStatus: string;
     additionalDescription: string;
 }

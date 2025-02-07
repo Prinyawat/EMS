@@ -18,7 +18,7 @@
 
             </p-toolbar>
 
-			<p-table #agendaSerch [value]="agendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+			<p-table #agendaSerch [value]="filteredAgendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
             [globalFilterFields]="['firstName','lastName','checkingDate','checkingStatus'] " [sortOrder]="-1" sortField="checkingDate">
 				<ng-template pTemplate="caption">
 
@@ -68,13 +68,18 @@
                                 <p-sortIcon field="checkOut"></p-sortIcon>
 							</div>
 						</th>
+                        <th style="min-width: 8rem" >
+							<div class="flex justify-content-center ">
+								กรณีลา
+							</div>
+						</th>
 						<th style="min-width: 12rem">
 							<div class="flex justify-content-center align-items-center">
 								สถานะ
                                 <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 
-                                        <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filter($event.value)" placeholder="เลือกสถานะ">
+                                        <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filterDropDown($event.value)" placeholder="เลือกสถานะ">
                                             <ng-template let-option pTemplate="item">
                                                 <span [style.background-color]="getStatusColor(option.label)" [style.color]="'white'"
                                                 [class]="'customer-badge status-' + option.value">{{option.label}}</span>
@@ -96,28 +101,37 @@
                         </td>
 						<td>
                             <div class="flex text-left">
-							    {{agenda?.firstName + ' ' + agenda?.lastName}}
+                                {{agenda?.firstName || agenda?.fristName}}
+                                {{agenda?.lastName || agenda?.lastName}}
+							    <!-- {{agenda?.firstName + ' ' + agenda?.lastName}} -->
                             </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span>{{agenda?.checkingDate | date: 'dd/MM/yyyy'}}</span>
+                            <span>
+                                {{ agenda?.checkingDate && agenda.checkingDate !== 'Invalid Date' ? (agenda.checkingDate | date: 'dd/MM/yyyy') : '-' }}
+                              </span>
                             </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span>{{agenda?.checkIn }}</span>
+							    <span>{{agenda?.checkIn || agenda?.startTime}}</span>
                             </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    {{agenda?.checkOut }}
+							    {{agenda?.checkOut || agenda?.endTime}}
+                            </div>
+						</td>
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                {{agenda?.selectedLeaveHalfStatus}}
                             </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span [class]="'customer-badge status-' + agenda?.checkingStatus" [style.background-color]="getStatusColor(agenda?.checkingStatus)"
-                                [style.color]="'white'">{{agenda?.checkingStatus}}</span>
+							    <span [class]="'customer-badge status-' + agenda?.checkingStatus||agenda?.leaveStatus" [style.background-color]="getStatusColor(agenda?.checkingStatus || agenda?.leaveStatus)"
+                                [style.color]="'white'">{{agenda?.checkingStatus || agenda?.leaveStatus}}</span>
                             </div>
 						</td>
 					</tr>

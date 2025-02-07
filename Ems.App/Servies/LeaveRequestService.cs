@@ -16,26 +16,29 @@ namespace Ems.App.Servies
     {
         private readonly EmsContext _emsContext;
         private readonly IHubContext<NotificationHub> _hubContext;
-
-        public LeaveRequestService(EmsContext emsContext, IHubContext<NotificationHub> hubContext)
+         private readonly IIdentityService _identityService;
+        public LeaveRequestService(EmsContext emsContext, IHubContext<NotificationHub> hubContext, IIdentityService identityService)
         {
             _emsContext = emsContext;
             _hubContext = hubContext;
+            _identityService = identityService;
         }
 
         public LeaveRequestModel saveleaveRequest(LeaveRequestModel formData)
         {
+            var userId1 = this._identityService.GetCurrentUser();
             var DuplicateRequest = _emsContext.leave_request
-            .FirstOrDefault(r => r.user_id == formData.UserId && r.leave_request_date == formData.selectedDates);
+                .Where(r => r.user_id == userId1 && r.leave_request_date == formData.selectedDates)
+                .ToList();
 
-            if (DuplicateRequest != null)
+            if (DuplicateRequest.Any())
             {
                throw new Exception("LeaveRequest Duplicate");
             }
 
             var leaveRequestEntity = new leave_request
                 {
-                    user_id = formData.UserId,
+                    user_id = userId1,
                     leave_request_date = formData.selectedDates,
                     leave_request_status_id = formData.selectedLeaveStatusId,
                     leave_half_id = formData.selectHalfStatusId,
@@ -77,7 +80,7 @@ namespace Ems.App.Servies
             return _emsContext.leave_half
                 .Select(r => new LeaveHalfStatusModel
                 {   
-                    
+                 
                     leaveHalfId = r.leave_half_id,
                     halfStatus = r.leave_type_name
 
