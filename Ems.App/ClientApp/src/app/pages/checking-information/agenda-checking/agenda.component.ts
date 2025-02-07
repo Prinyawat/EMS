@@ -79,12 +79,14 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'Checking' });
         this.breadcrumbItems.push({ label: 'User Agenda' });
 
+
         this.cols = [
             { field: 'firstName', header: 'ชื่อ',},
             { field: 'lastName', header: 'นามสกุล' },
             { field: 'checkingDate', header: 'วัน/เดือน/ปี' },
             { field: 'checkIn', header: 'เวลาเข้างาน' },
             { field: 'checkOut', header: 'เวลาออกงาน' },
+            { field: 'selectedLeaveHalfStatus', header: 'กรณีลา' },
             { field: 'checkingStatus', header: 'สถานะ' },
         ];
 
@@ -232,9 +234,19 @@ export class AgendaComponent {
 
             const dataToExport = this.selectedAgendas.map(item => {
                 const row: any = {};
+
                 this.cols.forEach(col => {
+                    if (col.field === 'checkIn' || col.field === 'startTime') {
+                        row['เวลาเข้างาน'] = (item.checkIn || '') + '' + (item.startTime || '');
+                    } else if (col.field === 'checkOut' || col.field === 'endTime') {
+                        row['เวลาออกงาน'] = (item.checkOut || '') + '' + (item.endTime || '');
+                    } else if (col.field === 'checkingStatus' || col.field === 'leaveStatus') {
+                        row['สถานะ'] = (item.checkingStatus || '') + ' / ' + (item.leaveStatus || '');
+                    } else {
                         row[col.header] = item[col.field];
+                    }
                 });
+
                 return row;
             });
 

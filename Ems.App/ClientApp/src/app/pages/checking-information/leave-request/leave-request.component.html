@@ -36,7 +36,7 @@
                             </ng-template>
                         </p-dropdown>
 
-                        <div class="flex flex-wrap mt-3 gap-3">
+                        <div class="flex flex-wrap gap-3">
 
                             <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
                             placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}" (ngModelChange)="onValueChange('selectedLeaveHalfStatus'); setDefaultTime() ">
@@ -48,11 +48,11 @@
                             </p-dropdown>
 
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="12" (ngModelChange)="onValueChange('startTime');"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="12" (ngModelChange)="onValueChange('startTime');" [disabled]="isCustomLeave"></p-calendar>
                                 <label for="float-input">เวลาเริ่มของวัน</label>
                             </span>
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"  [hourFormat]="12" (ngModelChange)="onValueChange('endTime');"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"  [hourFormat]="12" (ngModelChange)="onValueChange('endTime');" [disabled]="isCustomLeave"></p-calendar>
                                 <label for="float-input">เวลาสิ้นสุดของวัน</label>
                             </span>
 

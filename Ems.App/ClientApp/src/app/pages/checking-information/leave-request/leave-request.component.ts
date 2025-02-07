@@ -16,7 +16,6 @@ import { FileUpload } from 'primeng/fileupload';
     providers: [MessageService, ConfirmationService, ProductService, LayoutService]
 })
 export class LeaveRequestComponent {
-
     leaveDatesDialog: boolean = false;
 
     additionalDescription: string = '';
@@ -307,21 +306,25 @@ export class LeaveRequestComponent {
                 case 'ลาครึ่งเช้า':
                     this.startTime = '08:30 AM';
                     this.endTime = '12:00 AM';
+                    this.isCustomLeave = true;
                     break;
 
                 case 'ลาครึ่งบ่าย':
                     this.startTime = '01:00 PM';
                     this.endTime = '05:30 PM';
+                    this.isCustomLeave = true;
                     break;
 
                 case 'ลาทั้งวัน':
                     this.startTime = '08:30 AM';
                     this.endTime = '05:30 PM';
+                    this.isCustomLeave = true;
                     break;
 
                 default:
                     this.startTime = '';
                     this.endTime = '';
+                    this.isCustomLeave = false;
                     break;
             }
         } else {
