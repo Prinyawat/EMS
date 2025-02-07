@@ -14,3 +14,9 @@ export class AdminChapter {
   courseId: string;
   title: string;
 }
+
+export class Content {
+  contentId: string;
+  contentTitle: string;
+  body: string;
+}

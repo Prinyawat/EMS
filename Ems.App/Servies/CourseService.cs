@@ -22,7 +22,9 @@ namespace Ems.App.Servies
         public List<CourseModel> GetCourses()
         {
             Guid userId = this._identityService.GetCurrentUser();
-            return _emsContext.course.Select(c => new CourseModel
+            return _emsContext.course
+                .OrderBy(c => c.created_date)
+                .Select(c => new CourseModel
             {
                 courseId = c.course_id,
                 courseName = c.course_name,
@@ -54,11 +56,15 @@ namespace Ems.App.Servies
                     endDate = c.end_date,
                     startTime = c.start_time,
                     endTime = c.end_time,
-                    chapters = c.chapter.Select(ch => new ChapterModel
+                    chapters = c.chapter
+                    .OrderBy(ch => ch.created_date)
+                    .Select(ch => new ChapterModel
                     {
                         chapterId = ch.chapter_id,
                         title = ch.chapter_title,
-                        contents = ch.chapter_content.Select(ct => new ContentModel
+                        contents = ch.chapter_content
+                        .OrderBy(ch => ch.created_date)
+                        .Select(ct => new ContentModel
                         {
                             contentId = ct.chapter_content_id,
                             contentTitle = ct.content_title,

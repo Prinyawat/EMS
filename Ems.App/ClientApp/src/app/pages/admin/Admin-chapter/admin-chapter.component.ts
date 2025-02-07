@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
+import { Table, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { AdminChapter } from 'src/app/shared/models/admincourse.model';
 import { AdminCourseService } from 'src/app/shared/services/admincourse.service';
 import { CourseService } from 'src/app/shared/services/course.service';
@@ -16,7 +16,9 @@ export class AdminChapterComponent implements OnInit {
   
   course: any;
   chapters: any;
-  
+  contents: any;
+
+  expandedRows = {};
   breadcrumbItems: MenuItem[] = [];
 
   selectedChapterId: string = '';
@@ -37,16 +39,16 @@ export class AdminChapterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // const courseId = this.route.snapshot.params['courseId'];
-    // const chapterId = this.route.snapshot.params['chapterId'];
-    
-    // this.courseService.getCourseById(courseId).subscribe((course) => {
-    //   this.course = course;
-    //   this.chapters = this.course?.chapters.find((ch) => ch.chapterId === chapterId);
-
-    // });
-
   this.fetchChapters();
+  }
+
+  onRowExpand(event: TableRowExpandEvent) {
+    this.expandedRows = {}; 
+    this.expandedRows[event.data.chapterId] = true; 
+  }
+  
+  onRowCollapse(event: TableRowCollapseEvent) {
+    delete this.expandedRows[event.data.chapterId]; 
   }
 
   showDialog() {
@@ -74,9 +76,15 @@ export class AdminChapterComponent implements OnInit {
       this.courseService.getCourseById(courseId).subscribe({
         next: (course) => {
           this.course = course;
-          this.chapters = this.course?.chapters || [];
+          this.chapters = this.course?.chapters.map((chapter: any) => ({
+            ...chapter,
+            contents: chapter.contents || [],
+          }));
           this.loading = false;
-        }
+        },
+        error: () => {
+          this.loading = false;
+        },
       });
     }
     
@@ -147,7 +155,7 @@ export class AdminChapterComponent implements OnInit {
             summary: 'แก้ไขสำเร็จ',
             detail: 'คุณได้ทำการแก้ไขบทเรียนแล้ว',
           });
-          this.fetchChapters(); // โหลดข้อมูลใหม่หลังแก้ไขบทเรียน
+          this.fetchChapters(); 
         }
       });
       this.resetForm();

@@ -25,6 +25,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { AdminChapterComponent } from '../Admin-chapter/admin-chapter.component';
+import { TreeTableModule } from 'primeng/treetable';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { AdminChapterComponent } from '../Admin-chapter/admin-chapter.component'
     ToolbarModule,
     InputTextareaModule,
     CalendarModule,
+    TreeTableModule 
   ],
   declarations: [
     AdminCourseComponent,
