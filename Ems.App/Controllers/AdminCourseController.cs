@@ -104,5 +104,61 @@ namespace Ems.App.Controllers
             }
             return Ok(new { message = "ลบหัวข้อสำเร็จ" });
         }
+
+        [HttpPost]
+        [Route("addQuestion")]
+        public IActionResult AddQuestion([FromBody] AdminQuestionModel model)
+        {
+            var newQuestion = _admincourseService.AddQuestion(model);
+            return Ok(newQuestion);
+        }
+
+        [HttpPut]
+        [Route("updateQuestion")]
+        public IActionResult UpdateQuestion([FromBody] AdminQuestionModel updateQuestion)
+        {
+            var updated = _admincourseService.UpdateQuestion(updateQuestion);
+            return Ok(updated);
+        }
+
+        [HttpDelete]
+        [Route("deleteQuestion/{questionId}")]
+        public IActionResult DeleteQuestion(Guid questionId)
+        {
+            var isDeleted = _admincourseService.DeleteQuestion(questionId);
+            if (!isDeleted)
+            {
+                return NotFound(new { message = "ไม่พบคำถามที่ต้องการลบ" });
+            }
+            return Ok(new { message = "ลบคำถามสำเร็จ" });
+        }
+
+        [HttpPost]
+        [Route("addOption")]
+        public IActionResult AddOption([FromBody] AdminOptinModel model)
+        {
+            var newOption = _admincourseService.AddOption(model);
+            return Ok(newOption);
+        }
+
+        [HttpPut]
+        [Route("updateOption")]
+        public IActionResult UpdateOption([FromBody] AdminOptinModel updateOption)
+        {
+            var updated = _admincourseService.UpdateOption(updateOption);
+            return Ok(updated);
+        }
+
+        [HttpDelete]
+        [Route("deleteOption/{questionId}")]
+        public IActionResult DeleteOption(Guid optionId)
+        {
+            var isDeleted = _admincourseService.DeleteQuestion(optionId);
+            if (!isDeleted)
+            {
+                return NotFound(new { message = "ไม่พบตัวเลือกที่ต้องการลบ" });
+            }
+            return Ok(new { message = "ลบตัวเลือกสำเร็จ" });
+        }
     }
 }

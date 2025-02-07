@@ -100,12 +100,12 @@
                                 <p-sortIcon field="courseName"></p-sortIcon>
                             </div>
                         </th>
-                        <th style="min-width: 10rem" pSortableColumn="subtitle">
+                        <!-- <th style="min-width: 10rem" pSortableColumn="subtitle">
                             <div class="flex justify-content-center align-items-center">
                                 คำบรรยาย
                                 <p-sortIcon field="subtitle"></p-sortIcon>
                             </div>
-                        </th>
+                        </th> -->
                         <!-- <th style="min-width: 10rem" pSortableColumn="description">
                             <div class="flex justify-content-center align-items-center">
                                 เนื้อหาคำบรรยาย
@@ -122,6 +122,16 @@
                                 วันปิด
                             </div>
                         </th>
+                        <th style="min-width: 8rem" >
+                            <div class="flex justify-content-center ">
+                                เวลาเปิด
+                            </div>
+                        </th>
+                        <th style="min-width: 8rem" >
+                            <div class="flex justify-content-center ">
+                                เวลาปิด
+                            </div>
+                        </th>
                         <th style="min-width: 10rem" >
                             <div class="flex justify-content-center ">
                                 Action
@@ -131,19 +141,16 @@
                 <ng-template pTemplate="body" let-course>
                     <tr>
                         <td>
-                            <!-- <div class="flex justify-content-start align-items-center" [routerLink]="[course.courseId]">
-                                {{ course?.courseName }}
-                            </div> -->
                             <a [routerLink]="[course.courseId]" class="text-primary cursor-pointer underline" pTooltip="คลิกเพื่อดูรายละเอียดคอร์ส" tooltipPosition="top">
                                 {{ course?.courseName }}
                             </a>
                         </td>
                 
-                        <td>
+                        <!-- <td>
                             <div class="flex justify-content-start align-items-center">
                                 {{ truncateText(course?.subtitle, 40) }}
                             </div>
-                        </td>
+                        </td> -->
                 
                         <!-- <td>
                             <div class="flex justify-content-start align-items-center">
@@ -160,6 +167,17 @@
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 {{ course?.endDate }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                {{ course?.startTime }}
+                            </div>
+                        </td>
+                
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                {{ course?.endTime }}
                             </div>
                         </td>
                         <td>
@@ -180,12 +198,12 @@
                 
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="8">No data found.</td>
+                        <td colspan="8">ไม่พบข้อมูลคอร์สเรียน</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
-                        <td colspan="8">Loading data. Please wait.</td>
+                        <td colspan="8">โปรดรอสักครู่.</td>
                     </tr>
                 </ng-template>
             </p-table>

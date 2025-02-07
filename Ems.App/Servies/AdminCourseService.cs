@@ -255,6 +255,158 @@ namespace Ems.App.Servies
                 
         }
 
+        public AdminQuestionModel AddQuestion(AdminQuestionModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentException("ข้อมูลคำถามไม่ถูกต้อง");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            var newQuestion = new question
+            {
+                question_id = Guid.NewGuid(),
+                course_id = model.courseId,
+                question_text = model.questionText,
+                created_by = currentUser.ToString(),
+                created_date = DateTime.UtcNow
+            };
+
+            _emsContext.question.Add(newQuestion);
+            _emsContext.SaveChanges();
+
+            return new AdminQuestionModel
+            {
+                questionId = newQuestion.question_id,
+                courseId = newQuestion.course_id,
+                questionText = newQuestion.question_text,
+            
+            };
+        }
+
+        public AdminQuestionModel UpdateQuestion(AdminQuestionModel updateQuestion)
+        {
+            if (updateQuestion == null || updateQuestion.questionId == Guid.Empty)
+            {
+                throw new ArgumentException("ข้อมูลคำถามไม่ถูกต้อง");
+            }
+
+            var existingQustion = _emsContext.question.FirstOrDefault(q => q.question_id == updateQuestion.questionId);
+            if (existingQustion == null)
+            {
+                throw new KeyNotFoundException("ไม่พบคำถามที่ต้องการอัปเดต");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            existingQustion.question_text = updateQuestion.questionText;
+            existingQustion.updated_by = currentUser.ToString();
+            existingQustion.updated_date = DateTime.UtcNow;
+
+            _emsContext.SaveChanges();
+
+            return new AdminQuestionModel
+            {
+                questionId = existingQustion.question_id,
+                courseId = existingQustion.course_id,
+                questionText = existingQustion.question_text,
+
+            };
+        }
+
+        public bool DeleteQuestion(Guid questionId)
+        {
+            var questiontToDelete = _emsContext.question.FirstOrDefault(q => q.question_id == questionId);
+            if (questiontToDelete == null)
+            {
+                return false;
+            }
+
+            _emsContext.question.Remove(questiontToDelete);
+            _emsContext.SaveChanges();
+            return true;
+
+        }
+
+        public AdminOptinModel AddOption(AdminOptinModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentException("ข้อมูลตัวเลือกไม่ถูกต้อง");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            var newOption = new option
+            {
+                option_id = Guid.NewGuid(),
+                question_id = model.questionId,
+                option_text = model.optionText,
+                is_correct = model.isCorrect,
+                created_by = currentUser.ToString(),
+                created_date = DateTime.UtcNow
+            };
+
+            _emsContext.option.Add(newOption);
+            _emsContext.SaveChanges();
+
+            return new AdminOptinModel
+            {
+                optionId = newOption.option_id,
+                questionId = newOption.question_id,
+                optionText = newOption.option_text,
+                isCorrect = newOption.is_correct
+
+            };
+        }
+
+        public AdminOptinModel UpdateOption(AdminOptinModel updateOption)
+        {
+            if (updateOption == null || updateOption.optionId == Guid.Empty)
+            {
+                throw new ArgumentException("ข้อมูลตัวเลือกไม่ถูกต้อง");
+            }
+
+            var existingOption = _emsContext.option.FirstOrDefault(p => p.option_id == updateOption.optionId);
+            if (existingOption == null)
+            {
+                throw new KeyNotFoundException("ไม่พบตัวเลือกที่ต้องการอัปเดต");
+            }
+
+            var currentUser = _identityService.GetCurrentUser();
+
+            existingOption.option_text = updateOption.optionText;
+            existingOption.is_correct = updateOption.isCorrect;
+            existingOption.updated_by = currentUser.ToString();
+            existingOption.updated_date = DateTime.UtcNow;
+
+            _emsContext.SaveChanges();
+
+            return new AdminOptinModel
+            {
+                optionId = existingOption.option_id,
+                questionId = existingOption.question_id,
+                optionText = existingOption.option_text,
+                isCorrect = existingOption.is_correct
+
+            };
+        }
+
+        public bool DeleteOption(Guid optionId)
+        {
+            var optionToDelete = _emsContext.option.FirstOrDefault(p => p.option_id == optionId);
+            if (optionToDelete == null)
+            {
+                return false;
+            }
+
+            _emsContext.option.Remove(optionToDelete);
+            _emsContext.SaveChanges();
+            return true;
+
+        }
+
     }
 
 }

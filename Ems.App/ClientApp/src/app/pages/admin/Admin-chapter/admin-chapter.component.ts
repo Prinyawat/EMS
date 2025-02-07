@@ -34,6 +34,7 @@ export class AdminChapterComponent implements OnInit {
   display: boolean = false;
   editMode: boolean = false;
   displayContent: boolean = false;
+  isLessonView: boolean = true;
 
   @ViewChild('filter') filter!: ElementRef;
   
