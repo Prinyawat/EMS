@@ -14,6 +14,8 @@ namespace Ems.App.Servies.IServices
 
         List<CheckingTimeDataModel> getInvalidCheckTime();
 
+        List<HeaderAgendaModel> getAgendaHeader();
+
 
     }
 

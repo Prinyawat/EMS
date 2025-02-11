@@ -17,6 +17,7 @@ namespace Ems.App.Models
 
     public class NotiAgendaModel
     {
+        public Guid UserID { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string checkingDate { get; set; }
@@ -27,4 +28,9 @@ namespace Ems.App.Models
         public string additionalDescription { get; set; }
     }
 
+    public class HeaderAgendaModel
+    {
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+    }
 }

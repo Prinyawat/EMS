@@ -15,6 +15,7 @@ export class LeaveHalfStatus {
 }
 
 export class NotiAgenda{
+    UserID: string;
     firstName: string;
     lastName: string;
     checkingDate: Date;
@@ -23,4 +24,9 @@ export class NotiAgenda{
     selectedLeaveHalfStatus: string;
     leaveStatus: string;
     additionalDescription: string;
+}
+
+export class HeaderAgenda{
+    firstName: string;
+    lastName: string;
 }

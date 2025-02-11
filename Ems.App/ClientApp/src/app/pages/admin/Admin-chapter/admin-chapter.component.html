@@ -1,10 +1,10 @@
 <p-breadcrumb [model]="[
-  {icon: 'pi pi-home', routerLink: '/home'}, 
-  {label: 'Admin'}, 
+  {icon: 'pi pi-home', routerLink: '/home'},
+  {label: 'Admin'},
   {label: 'จัดการ Course', routerLink: '/admin/admin-course/'},
   {label: course?.courseName, routerLink: '/admin/admin-course/' + course?.courseId, styleClass: 'custom-admin'},
   ]">
-</p-breadcrumb> 
+</p-breadcrumb>
 <p-toast key="tst"></p-toast>
 
 <div class="grid" *ngIf="isLessonView">
@@ -15,7 +15,7 @@
       <p-toggleButton [(ngModel)]="isLessonView" onLabel="แบบทดสอบ" offLabel="บทเรียน"></p-toggleButton>
     </div>
   </div>
-  
+
   <div class="col-12">
     <div class="card">
       <p-toolbar styleClass="mb-4">
@@ -70,7 +70,7 @@
               </th>
             </tr>
         </ng-template>
-      
+
         <ng-template pTemplate="body" let-chapter let-expanded="expanded">
             <tr>
                 <td>
@@ -80,16 +80,16 @@
                 <td>
                   <div class="flex justify-content-center align-items-center gap-2">
 
-                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm"(click)="showDialogContent(chapter.chapterId)">  
+                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm"(click)="showDialogContent(chapter.chapterId)">
                     </button>
-                      
+
                       <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editChapter(chapter)">
                       </button>
-              
+
                       <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, chapter.chapterId)">
                       </button>
                       <p-confirmPopup key="confirmDeleteViaToast"></p-confirmPopup>
-                      
+
                   </div>
               </td>
             </tr>
@@ -104,7 +104,7 @@
               <td colspan="3">โปรดรอสักครู่./td>
           </tr>
       </ng-template>
-      
+
         <!-- Row Expansion สำหรับแสดงหัวข้อย่อย -->
         <ng-template pTemplate="rowexpansion" let-chapter>
             <tr>
@@ -146,7 +146,7 @@
                                     <div class="flex justify-content-center align-items-center gap-2">
                                         <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editContent(content)">
                                         </button>
-                                  
+
                                         <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteContentViaToast($event, content.contentId)">
                                         </button>
                                         <p-confirmPopup key="confirmDeleteContentViaToast"></p-confirmPopup>
@@ -154,7 +154,7 @@
                                   </td>
                                 </tr>
                             </ng-template>
-                            
+
                             <ng-template pTemplate="emptymessage">
                               <tr>
                                   <td colspan="8">ไม่พบข้อมูลหัวข้อ.</td>
@@ -216,7 +216,7 @@
     <div class="card">
       <p-toolbar styleClass="mb-4">
         <h3>{{course?.courseName}}</h3>
-        
+
         <ng-template pTemplate="right">
             <button pButton pRipple type="button" label="เพิ่มบทเรียน" pTooltip="เพิ่มบทเรียน" tooltipPosition="bottom" (click)="showDialog()" class="p-button-success"></button>
             <p-dialog [header]="editMode ? 'แก้ไขบทเรียน' : 'เพิ่มบทเรียน'" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '80vw'}" >
@@ -268,23 +268,23 @@
                         {{chapter.title}}
                     </a>
                 </td>
-        
+
                 <td>
                     <div class="flex justify-content-center align-items-center gap-2">
-                        
+
                         <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editChapter(chapter)">
                         </button>
-                
-                        
+
+
                         <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, chapter.chapterId)">
                         </button>
                         <p-confirmPopup key="confirmDeleteViaToast"></p-confirmPopup>
-                        
+
                     </div>
                 </td>
             </tr>
-        </ng-template>            
-        
+        </ng-template>
+
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td colspan="8">No data found.</td>

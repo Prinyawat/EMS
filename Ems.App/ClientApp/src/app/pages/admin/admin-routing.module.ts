@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
     imports: [RouterModule.forChild([
         { path: 'manage-user', data: { breadcrumb: 'manage-user' }, loadChildren: () => import('./admin-manage-user/manage-user.module').then(m => m.ManageUserModule) },
         { path: 'admin-course', data: { breadcrumb: 'manage-user' }, loadChildren: () => import('./admin-course/admin-course.module').then(m => m.AdminCourseModule) },
+        { path: 'admin-agenda', data: { breadcrumb: 'admin-agenda' }, loadChildren: () => import('./admin-agenda/admin-agenda.module').then(m => m.AdminAgendaModule) },
 
     ])],
     exports: [RouterModule]
