@@ -13,6 +13,7 @@ export class AdminChapter {
   chapterId: string;
   courseId: string;
   title: string;
+  contents: AdminChapterContent[]
 }
 
 export class AdminChapterContent {
@@ -20,4 +21,14 @@ export class AdminChapterContent {
   chapterId: string;
   contentTitle: string;
   body: string;
+}
+export class AdminQuestion {
+  questionId: string;
+  questionText: string;
+  options: AdminOption[]
+}
+export class AdminOption {
+  optionId: string;
+  optionText: string;
+  isCorrect: boolean;
 }

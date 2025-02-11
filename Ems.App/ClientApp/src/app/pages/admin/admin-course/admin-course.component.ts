@@ -195,7 +195,7 @@ export class AdminCourseComponent implements OnInit{
     this.admincourseService.deleteCourse(courseId).subscribe(() => {
       this.messageService.add({
         key: 'tst',
-        severity: 'error',
+        severity: 'success',
         summary: 'ลบสำเร็จ',
         detail: 'คุณได้ทำการลบ Course แล้ว'
       });
