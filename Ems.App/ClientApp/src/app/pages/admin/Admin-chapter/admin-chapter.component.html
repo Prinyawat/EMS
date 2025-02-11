@@ -222,7 +222,7 @@
           <p-toggleButton [(ngModel)]="isLessonView" onLabel="แบบทดสอบ" offLabel="บทเรียน" icon="pi pi-plus" class="mr-2" pTooltip="สลับระหว่างบทเรียนและแบบทดสอบ" tooltipPosition="bottom"></p-toggleButton>
           <span class="font-bold text-lg">|</span>
           <button pButton pRipple type="button" label="เพิ่มคำถาม" pTooltip="เพิ่มคำถาม" tooltipPosition="bottom"
-            (click)="showDialogQuestion()" class="p-button-success ml-2"></button>
+            (click)="showDialogQuestion()" class="p-button-success ml-2" [icon]="editMode ? 'pi pi-pencil' : 'pi pi-plus'"></button>
           <p-dialog [header]="editMode ? 'แก้ไขคำถาม' : 'เพิ่มคำถาม'" [(visible)]="displayQuestion" [modal]="true"
             showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '80vw'}">
             <div class="col-12">
