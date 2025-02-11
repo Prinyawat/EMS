@@ -27,46 +27,35 @@ export class AgendaComponent {
 
     value: any = null;
 
-    updateDropdownOptions: { label: string, value: string }[] = [];
-
-    selectedItem: string | null = null;
-
-    selectedLeaveStatus: LeaveStatusData | null = null;
-
-    allStatusOptions: any[] = [];
-
-    leaveStatus: any[];
+    isAdmin: boolean = false;
+    adminID = '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
 
     selectedAgendas = [];
+    selectedMonths: any[];
+    selectedItem: string | null = null;
+    selectedLeaveStatus: LeaveStatusData | null = null;
 
-    workStatus: any[] = [];
+    updateDropdownOptions: { label: string, value: string }[] = [];
+    allStatusOptions: any[] = [];
+    leaveStatus: any[];
 
     breadcrumbItems: MenuItem[] = [];
-
-    statuses: any[];
-
-    monthOfYear: any[];
-
-    selectedMonths: any[];
+    workStatus: any[] = [];
 
     leaveRequestStatus: any[];
+    statuses: any[];
+    monthOfYear: any[];
 
     loading: boolean = true;
 
-    notiAgenda: NotiAgenda[] = [];
-
     agendas: AgendaData[] = [];
-
+    notiAgenda: NotiAgenda[] = [];
     filteredAgendas: (AgendaData | NotiAgenda)[] = [];
 
     cols: any[];
-
     exportColumns: any[];
-
     representatives: Representative[] = [];
-
     rowGroupMetadata: any;
-
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(private CheckingService: CheckingService,
@@ -78,7 +67,6 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'Check Information' });
         this.breadcrumbItems.push({ label: 'Checking' });
         this.breadcrumbItems.push({ label: 'User Agenda' });
-
 
         this.cols = [
             { field: 'firstName', header: 'ชื่อ',},
@@ -111,13 +99,10 @@ export class AgendaComponent {
                     }));
                 } else {
                     this.leaveRequestStatus = [];
-                    console.error('Expected array, but received:', data);
                 }
-                console.log(this.leaveRequestStatus);
                 this.updateDropdownOptionss();
             }
         });
-
         this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
         this.fetchAgenda();
         this.NotiAgenda();
@@ -146,10 +131,13 @@ export class AgendaComponent {
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
             next: (data: NotiAgenda[]) => {
-                console.log(data);
-                if (data && Array.isArray(data)) {
-                    this.notiAgenda = data.flatMap(agenda => {
+                console.log("Data from API:", data);
+                console.log("Current adminID:", this.adminID);
 
+                if (this.adminID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad') {
+
+                    console.log("Admin detected, showing all data:", data);
+                    this.notiAgenda = data.flatMap(agenda => {
                         let checkingDates: string[];
 
                         if (agenda.checkingDate instanceof Date) {
@@ -159,6 +147,7 @@ export class AgendaComponent {
                         } else {
                             checkingDates = [];
                         }
+
                         return checkingDates.map(date => ({
                             ...agenda,
                             checkingDate: this.convertThaiDateToJSDate(date),
@@ -170,10 +159,14 @@ export class AgendaComponent {
                     });
                     this.updateFilteredAgendas();
                 } else {
+                    console.log("Not an Admin, processing normally");
+                    this.notiAgenda = data;
+                    this.updateFilteredAgendas();
                 }
             }
         });
     }
+
 
     updateFilteredAgendas() {
         this.filteredAgendas = [
@@ -200,7 +193,6 @@ export class AgendaComponent {
                 ...(this.notiAgenda.filter(noti => noti.leaveStatus === selectedStatus))
             ];
         }
-        // console.log('Filtered Agendas:', this.filteredAgendas);
     }
 
     getStatusColor(label: string | null): string {
@@ -241,7 +233,7 @@ export class AgendaComponent {
                     } else if (col.field === 'checkOut' || col.field === 'endTime') {
                         row['เวลาออกงาน'] = (item.checkOut || '') + '' + (item.endTime || '');
                     } else if (col.field === 'checkingStatus' || col.field === 'leaveStatus') {
-                        row['สถานะ'] = (item.checkingStatus || '') + ' / ' + (item.leaveStatus || '');
+                        row['สถานะ'] = (item.checkingStatus || '') + '' + (item.leaveStatus || '');
                     } else {
                         row[col.header] = item[col.field];
                     }

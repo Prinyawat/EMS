@@ -47,6 +47,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'จัดการ Course', icon: 'pi pi-cog', routerLink: ['/admin/admin-course'] },
                     { label: 'จัดการบัญชีผู้ใช้', icon: 'pi pi-cog', routerLink: ['/admin/manage-user'] },
+                    { label: 'จัดการระบบเช็คอินผู้ใช้', icon: 'pi pi-cog', routerLink: ['/admin/admin-agenda'] },
                 ]
             },
             {

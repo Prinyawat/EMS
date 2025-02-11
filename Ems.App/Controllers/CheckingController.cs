@@ -58,6 +58,14 @@ namespace Ems.App.Controllers
             return Ok(ValidData);
         }
 
+        [HttpGet]
+        [Route("getAgendaHeader")]
+        public IActionResult getAgendaHeader()
+        {
+            var headerData = _checkingservice.getAgendaHeader();
+            return Ok(headerData);
+        }
+
 
     }
 }

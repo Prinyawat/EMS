@@ -39,6 +39,11 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
+                        <th *ngIf="isAdmin" style="min-width: 8rem">
+                            <div class="flex justify-content-center">
+                                คำขอ
+                            </div>
+                        </th>
                         <th style="min-width: 4rem">
                             <div class="flex justify-content-center">
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -74,7 +79,7 @@
                                 <p-sortIcon field="leavehalf"></p-sortIcon>
 							</div>
 						</th>
-						<th style="min-width: 12rem">
+						<th style="min-width: 8rem">
 							<div class="flex justify-content-center align-items-center">
 								สถานะ
                                 <p-columnFilter field="checkingStatus" display="menu">
@@ -95,6 +100,11 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-agenda>
 					<tr>
+                        <td *ngIf="isAdmin">
+                            <div class="flex justify-content-center align-items-center">
+
+                            </div>
+                        </td>
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 <p-tableCheckbox [value]="agenda"></p-tableCheckbox>

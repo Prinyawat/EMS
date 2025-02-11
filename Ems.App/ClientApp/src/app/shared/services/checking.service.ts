@@ -54,5 +54,9 @@ export class CheckingService {
         return this.http.get(this.env + "/getNotiAgenda");
     }
 
+    getAgendaHeader() {
+        return this.http.get(this.env + "/getAgendaHeader");
+    }
+
 }
 
