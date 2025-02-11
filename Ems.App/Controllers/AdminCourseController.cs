@@ -150,10 +150,10 @@ namespace Ems.App.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteOption/{questionId}")]
+        [Route("deleteOption/{optionId}")]
         public IActionResult DeleteOption(Guid optionId)
         {
-            var isDeleted = _admincourseService.DeleteQuestion(optionId);
+            var isDeleted = _admincourseService.DeleteOption(optionId);
             if (!isDeleted)
             {
                 return NotFound(new { message = "ไม่พบตัวเลือกที่ต้องการลบ" });

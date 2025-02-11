@@ -78,7 +78,7 @@ export class CourseRegisterComponent implements OnInit{
     this.courseService.cancelRegistration(courseId).subscribe(() => {
       this.messageService.add({
         key: 'tst',
-        severity: 'error',
+        severity: 'success',
         summary: 'ยกเลิกการลงทะเบียน',
         detail: 'คุณได้ยกเลิกการลงทะเบียนแล้ว'
       });

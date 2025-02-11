@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <h5>จัดการ Course</h5>
                 <ng-template pTemplate="right">
-                    <button pButton pRipple type="button" label="เพิ่ม Course" pTooltip="เพิ่ม Course" tooltipPosition="bottom" (click)="showDialog()" class="p-button-success"></button>
+                    <button pButton pRipple type="button" label="เพิ่ม Course" pTooltip="เพิ่ม Course" tooltipPosition="bottom" (click)="showDialog()" icon="pi pi-plus" class="p-button-success"></button>
                     <p-dialog [header]="editMode ? 'แก้ไข Course' : 'เพิ่ม Course'" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
 
                         <div class="col-12">
@@ -73,7 +73,7 @@
                         </div>
 
                         <ng-template pTemplate="footer">
-                            <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'" [ngClass]="editMode ? 'p-button-info' : 'p-button-success'" (click)="editMode ? updateCourse() : saveCourse()"></button>
+                            <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'" [ngClass]="editMode ? 'p-button-info' : 'p-button-success'" (click)="editMode ? updateCourse() : saveCourse()" [icon]="editMode ? 'pi pi-pencil' : 'pi pi-plus'"></button>
                             <button pButton (click)="display = false" label="ปิด" class="p-button-outlined"></button>
                         </ng-template>
                     </p-dialog>
@@ -84,7 +84,7 @@
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
-                        <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(coursedata)"></button>
+                        <!-- <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(coursedata)"></button> -->
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full"/>
@@ -141,7 +141,7 @@
                 <ng-template pTemplate="body" let-course>
                     <tr>
                         <td>
-                            <a [routerLink]="[course.courseId]" class="text-primary cursor-pointer underline" pTooltip="คลิกเพื่อดูรายละเอียดคอร์ส" tooltipPosition="top">
+                            <a [routerLink]="[course.courseId]" class="text-primary cursor-pointer underline" pTooltip="คลิกเพื่อไปยังหน้าจัดการบทเรียนและเนื้อหา" tooltipPosition="top">
                                 {{ course?.courseName }}
                             </a>
                         </td>
