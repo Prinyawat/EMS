@@ -29,6 +29,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { CheckboxModule } from 'primeng/checkbox';
 import { EditorModule } from 'primeng/editor';
 
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { EditorModule } from 'primeng/editor';
     CalendarModule,
     TreeTableModule,
     CheckboxModule,
-    EditorModule
+    EditorModule,
+    AngularEditorModule
   ],
   declarations: [
     AdminCourseComponent,
