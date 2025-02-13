@@ -1,0 +1,166 @@
+<!-- <p-breadcrumb [model]="breadcrumbItems" [home]="{icon: 'pi pi-home', routerLink: '/home'}"></p-breadcrumb> -->
+<p-toast key="tst"></p-toast>
+<br>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <h5>จัดการผู้ใช้งานระบบ</h5>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple type="button" label="เพิ่มผู้ใช้งาน" pTooltip="เพิ่มผู้ใช้งาน"
+                        tooltipPosition="bottom" (click)="showDialog()" icon="pi pi-plus"
+                        class="p-button-success"></button>
+                    <p-dialog [header]="editMode ? 'แก้ไขผู้ใช้งาน' : 'เพิ่มผู้ใช้งาน'" [modal]="true" showEffect="fade"
+                        [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}">
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="p-fluid p-formgrid grid">
+
+                                    <!-- <div class="field col-12 md:col-6">
+                                        <label htmlFor="courseName" class="text-xl">ชื่อ Course</label>
+                                        <input pInputText id="courseName" type="text" [(ngModel)]="courseName" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label htmlFor="subtitle" class="text-xl">คำบรรยาย</label>
+                                        <input pInputText id="subtitle" type="text" [(ngModel)]="subtitle" />
+                                    </div>
+
+                                    <div class="field col-12 md:col-3">
+                                        <label htmlFor="startDate" class="text-xl">วันที่เปิด</label>
+                                        <p-calendar [(ngModel)]="startDate" [minDate]="minSelectableDate"
+                                            [iconDisplay]="'input'" [showIcon]="true" [appendTo]="'body'"
+                                            [showButtonBar]="true" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label htmlFor="endDate" class="text-xl">วันที่ปิด</label>
+                                        <p-calendar [(ngModel)]="endDate" [minDate]="startDate" [iconDisplay]="'input'"
+                                            [showIcon]="true" [appendTo]="'body'" [showButtonBar]="true" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label htmlFor="startTime" class="text-xl">เวลาเปิด</label>
+                                        <p-calendar inputId="calendar-timeonly" [timeOnly]="true" [showButtonBar]="true"
+                                            [(ngModel)]="startTime" />
+                                    </div>
+                                    <div class="field col-12 md:col-3">
+                                        <label htmlFor="endTime" class="text-xl">เวลาปิด</label>
+                                        <p-calendar inputId="calendar-timeonly" [timeOnly]="true" [showButtonBar]="true"
+                                            [(ngModel)]="endTime" />
+                                    </div>
+
+                                    <div class="field col-12">
+
+                                        <label htmlFor="description" class="text-xl">เนื้อหาคำยรรยาย</label>
+                                        <textarea id="description" rows="5" cols="30"
+                                            placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea
+                                            [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea>
+
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <ng-template pTemplate="footer">
+                            <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'"
+                                [ngClass]="editMode ? 'p-button-info' : 'p-button-success'"
+                                (click)="editMode ? updateCourse() : saveCourse()"
+                                [icon]="editMode ? 'pi pi-pencil' : 'pi pi-plus'"></button>
+                            <button pButton (click)="display = false" label="ปิด" class="p-button-outlined"></button>
+                        </ng-template> -->
+                    </p-dialog>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #userData [value]="users" dataKey="id" [rows]="5" [loading]="loading" [rowHover]="true"
+                styleClass="p-datatable-gridlines" [paginator]="true"
+                [globalFilterFields]="['firstname', 'lastname', 'email']" responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(userData, $event)"
+                                placeholder="ค้นหาข้อมูลผู้ใช้งาน" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="firstname">
+                            <div class="flex justify-content-center align-items-center">
+                                ชื่อ
+                                <p-sortIcon field="firstname"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center ">นามสกุล</div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center ">ชื่อผู้ใช้งาน</div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center ">ตำแหน่ง</div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-center ">Action</div>
+                        </th>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td>
+                            <div class="flex justify-content-left align-items-center">
+                                {{ user?.firstname }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex justify-content-left align-items-center">
+                                {{ user?.lastname }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex justify-content-left align-items-center">
+                                {{ user?.email }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex justify-content-left align-items-center">
+                                {{ user?.positionName }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex justify-content-center align-items-center gap-2">
+
+                                <button pButton pRipple label="แก้ไข" icon="pi pi-pencil"
+                                    class="p-button-info p-button-sm" (click)="editCourse(user)">
+                                </button>
+
+
+                                <button pButton pRipple label="ลบ" icon="pi pi-trash"
+                                    class="p-button-danger p-button-sm"
+                                    (click)="confirmDeleteViaToast($event, user.userId)">
+                                </button>
+                                <p-confirmPopup key="confirmDeleteViaToast"></p-confirmPopup>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8">ไม่พบข้อมูลคอร์สเรียน</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="8">โปรดรอสักครู่.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

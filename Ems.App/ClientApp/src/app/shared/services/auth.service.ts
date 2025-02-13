@@ -26,18 +26,9 @@ export class AuthService {
     updateUser(updatedUser: any) {
         return this.http.put(this.env + `User/updateUser`, updatedUser);
     }
-    
 
-    // getUser(userId: string) {
-    //     return this.http.get(this.env + `User/getUser/${userId}`);
-    // }
-
-    // updateUser(userId: string, updatedUser: any) {
-    //     return this.http.put(this.env + `User/updateUser/${userId}`, updatedUser);
-    // }
-
-    // getUserMenu(user) {
-    //     return this.http.post(this.env + "Menu/getMenu", user)
-    // }
+    getAllUser() {
+        return this.http.get(this.env + `User/getAllUser`);
+    }
 
 }
