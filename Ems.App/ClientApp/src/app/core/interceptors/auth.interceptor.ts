@@ -1,12 +1,5 @@
 import { Injectable } from "@angular/core";
-import {
-    HttpEvent,
-    HttpInterceptor,
-    HttpHandler,
-    HttpRequest,
-    HttpErrorResponse,
-    HttpHeaders
-} from "@angular/common/http";
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { throwError, Observable, BehaviorSubject, of } from "rxjs";
 import { catchError, filter, finalize, take, switchMap } from "rxjs/operators";
 import { paths } from "./const";

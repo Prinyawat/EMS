@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
@@ -24,8 +24,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppMenuitemComponent,
         AppTopBarComponent,
         AppFooterComponent,
@@ -33,10 +32,8 @@ import { DropdownModule } from 'primeng/dropdown';
         AppSidebarComponent,
         AppLayoutComponent,
     ],
-    imports: [
-        BrowserModule,
+    exports: [AppLayoutComponent], imports: [BrowserModule,
         FormsModule,
-        HttpClientModule,
         BrowserAnimationsModule,
         InputTextModule,
         SidebarModule,
@@ -51,8 +48,5 @@ import { DropdownModule } from 'primeng/dropdown';
         ToastModule,
         ButtonModule,
         DialogModule,
-        DropdownModule,
-    ],
-    exports: [AppLayoutComponent]
-})
+        DropdownModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppLayoutModule { }
