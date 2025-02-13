@@ -65,7 +65,8 @@
                                     <div class="field col-12">
 
                                         <label htmlFor="description" class="text-xl">เนื้อหาคำยรรยาย</label>
-                                        <textarea id="description" rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea>
+                                        <!-- <textarea id="description" rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea> -->
+                                        <angular-editor [(ngModel)]="description" [config]="config" placeholder="คำอธิบายเพิ่มเติม...."></angular-editor>
                 
                                     </div>
                                 </div>

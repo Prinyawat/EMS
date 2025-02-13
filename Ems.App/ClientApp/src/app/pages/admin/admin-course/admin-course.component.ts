@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AdminCourse } from 'src/app/shared/models/admincourse.model';
@@ -39,11 +40,25 @@ export class AdminCourseComponent implements OnInit{
 
   @ViewChild('filter') filter!: ElementRef;
 
+  htmlContent = ''; // ตัวแปรเก็บค่าข้อความที่พิมพ์
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    sanitize: false,
+   
+  };
+  
   constructor(
     private courseService: CourseService,
     private admincourseService: AdminCourseService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ){}
 
   ngOnInit() {
