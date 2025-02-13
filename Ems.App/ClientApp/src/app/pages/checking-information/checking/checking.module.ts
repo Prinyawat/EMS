@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { InputDemoRoutingModule } from 'src/app/demo/components/uikit/input/inputdemo-routing.module';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -19,6 +18,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { TagModule } from 'primeng/tag';
+import { TextareaModule } from 'primeng/textarea';
+import { ButtonModule } from 'primeng/button';
 
 
 
@@ -30,7 +31,7 @@ import { TagModule } from 'primeng/tag';
         InputDemoRoutingModule,
         CalendarModule,
         InputTextModule,
-        InputTextareaModule,
+        TextareaModule,
         RadioButtonModule,
         DialogModule,
         ToastModule,
@@ -43,6 +44,7 @@ import { TagModule } from 'primeng/tag';
         MessagesModule,
         MessageModule,
         TagModule,
+        ButtonModule
     ],
         declarations: [CheckingComponent]
 })

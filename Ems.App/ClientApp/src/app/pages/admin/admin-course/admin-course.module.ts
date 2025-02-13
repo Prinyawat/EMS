@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminCourseRoutingModule, } from './admin-course-routing.module';
 import { AdminCourseComponent, } from './admin-course.component';
-
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { TagModule } from 'primeng/tag';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ConfirmationService } from 'primeng/api';
 import { DataViewModule } from 'primeng/dataview';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -22,11 +20,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToolbarModule } from 'primeng/toolbar';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
-import { AdminChapterComponent } from '../Admin-chapter/admin-chapter.component';
 import { TreeTableModule } from 'primeng/treetable';
 import { CheckboxModule } from 'primeng/checkbox';
+import { AdminChapterComponent } from '../Admin-chapter/admin-chapter.component';
+import { ConfirmationService } from 'primeng/api';
 import { EditorModule } from 'primeng/editor';
 
 
@@ -52,7 +50,6 @@ import { EditorModule } from 'primeng/editor';
     DropdownModule,
     ProgressBarModule,
     ToolbarModule,
-    InputTextareaModule,
     CalendarModule,
     TreeTableModule,
     CheckboxModule,

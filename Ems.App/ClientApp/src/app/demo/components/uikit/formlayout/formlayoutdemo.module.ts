@@ -5,13 +5,13 @@ import { FormLayoutDemoComponent } from './formlayoutdemo.component';
 import { FormLayoutDemoRoutingModule } from './formlayoutdemo-routing.module';
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { CalendarModule } from "primeng/calendar";
-import { ChipsModule } from "primeng/chips";
-import { DropdownModule } from "primeng/dropdown";
+// import { ChipsModule } from "primeng/chips";
+import { DropdownModule } from 'primeng/dropdown';
 import { InputMaskModule } from "primeng/inputmask";
 import { InputNumberModule } from "primeng/inputnumber";
 import { CascadeSelectModule } from "primeng/cascadeselect";
 import { MultiSelectModule } from "primeng/multiselect";
-import { InputTextareaModule } from "primeng/inputtextarea";
+import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from "primeng/inputtext";
 
 @NgModule({
@@ -21,13 +21,13 @@ import { InputTextModule } from "primeng/inputtext";
 		FormLayoutDemoRoutingModule,
 		AutoCompleteModule,
 		CalendarModule,
-		ChipsModule,
+		// ChipsModule,
 		DropdownModule,
 		InputMaskModule,
 		InputNumberModule,
 		CascadeSelectModule,
 		MultiSelectModule,
-		InputTextareaModule,
+		TextareaModule,
 		InputTextModule
 	],
 	declarations: [FormLayoutDemoComponent]

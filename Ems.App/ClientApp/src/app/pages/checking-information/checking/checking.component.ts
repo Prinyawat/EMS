@@ -3,7 +3,7 @@ import { NotificationService } from './../../../shared/services/notification.ser
 import { CheckingService } from './../../../shared/services/checking.service';
 import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import * as L from 'leaflet';
-import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AgendaComponent } from '../agenda-checking/agenda.component';
 import { CheckingStatus, CheckingTimeData } from 'src/app/shared/models/CheckingModel';

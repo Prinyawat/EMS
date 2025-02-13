@@ -4,7 +4,7 @@ import { LeaveRequestRoutingModule } from './leave-request-routing.module';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
@@ -16,14 +16,13 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-
 @NgModule({
     imports: [
         LeaveRequestRoutingModule,
         CommonModule,
         InputTextModule,
         CalendarModule,
-        InputTextareaModule,
+        TextareaModule,
         FileUploadModule,
         ConfirmPopupModule,
         ToastModule,
