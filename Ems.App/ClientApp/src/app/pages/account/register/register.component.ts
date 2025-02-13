@@ -17,7 +17,8 @@ import { RegisterService } from 'src/app/shared/services/Register.service';
             color: var(--primary-color) !important;
         }
     `],
-    providers: [MessageService]
+    providers: [MessageService],
+    standalone: false
 })
 export class RegisterComponent {
 

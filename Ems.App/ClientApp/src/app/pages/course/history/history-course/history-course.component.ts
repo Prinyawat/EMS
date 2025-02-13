@@ -8,10 +8,11 @@ import { CourseService } from 'src/app/shared/services/course.service';
 
 
 @Component({
-  selector: 'app-history-course',
-  templateUrl: './history-course.component.html',
-  styleUrls:['./history-course.component.scss'],
-  providers: [MessageService]
+    selector: 'app-history-course',
+    templateUrl: './history-course.component.html',
+    styleUrls: ['./history-course.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class HistoryCourseComponent {
   

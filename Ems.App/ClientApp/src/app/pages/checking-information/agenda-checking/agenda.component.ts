@@ -13,7 +13,8 @@ import { LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
-    providers: [MessageService]
+    providers: [MessageService],
+    standalone: false
 })
 export class AgendaComponent {
 

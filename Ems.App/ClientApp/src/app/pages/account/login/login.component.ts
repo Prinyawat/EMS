@@ -15,7 +15,8 @@ import { AuthService } from 'src/app/shared/services/auth.service';
             margin-right: 1rem;
             color: var(--primary-color) !important;
         }
-    `]
+    `],
+    standalone: false
 })
 export class LoginComponent {
 

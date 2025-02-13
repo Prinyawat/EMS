@@ -3,11 +3,11 @@ import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 
 
 @Component({
-  selector: 'app-manage-user',
-  templateUrl: './manage-user.component.html',
-  styleUrls:['./manage-user.component.scss'],
-  providers: [MessageService]
-
+    selector: 'app-manage-user',
+    templateUrl: './manage-user.component.html',
+    styleUrls: ['./manage-user.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class ManageUserComponent implements OnInit{ 
   

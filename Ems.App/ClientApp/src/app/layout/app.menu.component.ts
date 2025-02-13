@@ -6,7 +6,8 @@ import { MenuModel } from '../shared/models/menu.model';
 
 @Component({
     selector: 'app-menu',
-    templateUrl: './app.menu.component.html'
+    templateUrl: './app.menu.component.html',
+    standalone: false
 })
 export class AppMenuComponent implements OnInit {
 

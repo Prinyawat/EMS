@@ -4,7 +4,8 @@ import { HomeService } from "src/app/shared/services/home.service";
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent {
 

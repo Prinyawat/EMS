@@ -5,11 +5,11 @@ import { CourseService } from 'src/app/shared/services/course.service';
 
 
 @Component({
-  selector: 'app-course-open',
-  templateUrl: './course-open.component.html',
-  styleUrls:['./course-open.component.scss'],
-  providers: []
-
+    selector: 'app-course-open',
+    templateUrl: './course-open.component.html',
+    styleUrls: ['./course-open.component.scss'],
+    providers: [],
+    standalone: false
 })
 export class CourseOpenComponent implements OnInit{
 

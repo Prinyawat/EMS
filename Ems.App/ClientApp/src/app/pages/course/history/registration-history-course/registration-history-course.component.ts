@@ -3,10 +3,11 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
-  selector: 'app-registration-history-course',
-  templateUrl: './registration-history-course.component.html',
-  styleUrls:['./registration-history-course.component.scss'],
-  providers: [MessageService]
+    selector: 'app-registration-history-course',
+    templateUrl: './registration-history-course.component.html',
+    styleUrls: ['./registration-history-course.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class RegistrationHistoryCourseComponent {
   

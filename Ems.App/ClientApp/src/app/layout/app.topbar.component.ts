@@ -14,8 +14,8 @@ import { UserModel } from '../shared/models/user.modal';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
-    providers: [
-    ],
+    providers: [],
+    standalone: false
 })
 export class AppTopBarComponent {
 

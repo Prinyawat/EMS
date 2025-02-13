@@ -13,7 +13,8 @@ import { FileUpload } from 'primeng/fileupload';
 @Component({
     selector: 'app-leave-request',
     templateUrl: './leave-request.component.html',
-    providers: [MessageService, ConfirmationService, ProductService, LayoutService]
+    providers: [MessageService, ConfirmationService, ProductService, LayoutService],
+    standalone: false
 })
 export class LeaveRequestComponent {
     leaveDatesDialog: boolean = false;

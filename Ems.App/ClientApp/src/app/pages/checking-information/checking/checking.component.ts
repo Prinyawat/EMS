@@ -12,7 +12,8 @@ import { Subject } from 'rxjs';
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
-    providers: [ConfirmationService, MessageService, AgendaComponent]
+    providers: [ConfirmationService, MessageService, AgendaComponent],
+    standalone: false
 })
 export class CheckingComponent {
 

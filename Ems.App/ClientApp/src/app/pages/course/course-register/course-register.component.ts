@@ -4,11 +4,11 @@ import { Course } from 'src/app/shared/models/course.model';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
-  selector: 'app-course-register',
-  templateUrl: './course-register.component.html',
-  styleUrls:['./course-register.component.scss'],
-  providers: [MessageService]
-
+    selector: 'app-course-register',
+    templateUrl: './course-register.component.html',
+    styleUrls: ['./course-register.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class CourseRegisterComponent implements OnInit{ 
   

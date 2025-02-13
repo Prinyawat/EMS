@@ -7,10 +7,11 @@ import { AdminCourseService } from 'src/app/shared/services/admincourse.service'
 import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
-  selector: 'app-chapter-content',
-  templateUrl: './admin-chapter.component.html',
-  styleUrls: ['./admin-chapter.component.scss'],
-  providers: [MessageService]
+    selector: 'app-chapter-content',
+    templateUrl: './admin-chapter.component.html',
+    styleUrls: ['./admin-chapter.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class AdminChapterComponent implements OnInit {
 

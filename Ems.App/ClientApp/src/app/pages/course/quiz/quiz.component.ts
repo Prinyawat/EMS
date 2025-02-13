@@ -6,9 +6,10 @@ import { CourseService } from 'src/app/shared/services/course.service';
 
 
 @Component({
-  selector: 'app-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss'],
+    selector: 'app-quiz',
+    templateUrl: './quiz.component.html',
+    styleUrls: ['./quiz.component.scss'],
+    standalone: false
 })
 export class QuizComponent implements OnInit {
 

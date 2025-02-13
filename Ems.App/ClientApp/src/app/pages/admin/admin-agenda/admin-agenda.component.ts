@@ -9,8 +9,8 @@ import { HeaderAgenda, NotiAgenda } from 'src/app/shared/models/leaverequest.mod
 @Component({
     selector: 'app-admin-agenda',
     templateUrl: './admin-agenda.component.html',
-    providers: [MessageService]
-
+    providers: [MessageService],
+    standalone: false
 })
 export class AdminAgendaComponent implements OnInit {
 

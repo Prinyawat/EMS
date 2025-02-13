@@ -8,11 +8,11 @@ import { CourseService } from 'src/app/shared/services/course.service';
 
 
 @Component({
-  selector: 'app-manage-user',
-  templateUrl: './admin-course.component.html',
-  styleUrls:['./admin-course.component.scss'],
-  providers: [MessageService]
-
+    selector: 'app-manage-user',
+    templateUrl: './admin-course.component.html',
+    styleUrls: ['./admin-course.component.scss'],
+    providers: [MessageService],
+    standalone: false
 })
 export class AdminCourseComponent implements OnInit{ 
   

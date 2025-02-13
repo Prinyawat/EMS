@@ -4,6 +4,7 @@ import { SignalRService } from 'src/app/shared/services/signalr.service';
 @Component({
     selector: 'app-signalr',
     templateUrl: './signalr.component.html',
+    standalone: false
 })
 export class SignalRComponent implements OnInit {
     username = '';

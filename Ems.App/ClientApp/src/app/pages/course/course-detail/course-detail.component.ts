@@ -3,9 +3,10 @@ import { ActivatedRoute, } from '@angular/router';
 import { CourseService } from 'src/app/shared/services/course.service';
 
 @Component({
-  selector: 'app-course-detail',
-  templateUrl: './course-detail.component.html',
-  styleUrls: ['./course-detail.component.scss'],
+    selector: 'app-course-detail',
+    templateUrl: './course-detail.component.html',
+    styleUrls: ['./course-detail.component.scss'],
+    standalone: false
 })
 export class CourseDetailComponent implements OnInit {
   course: any;
