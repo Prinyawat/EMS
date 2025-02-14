@@ -56,6 +56,7 @@ export class AdminCourseComponent implements OnInit{
     minHeight: '5rem',
     placeholder: 'Enter text here...',
     translate: 'no',
+    sanitize: false,
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
     fonts: [

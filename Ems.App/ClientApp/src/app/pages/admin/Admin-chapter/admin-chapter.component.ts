@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Table, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { AdminChapter, AdminChapterContent, AdminOption, AdminQuestion } from 'src/app/shared/models/admincourse.model';
@@ -52,6 +53,40 @@ export class AdminChapterComponent implements OnInit {
   isLessonView: boolean = true;
 
   @ViewChild('filter') filter!: ElementRef;
+
+  htmlContent = '';
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    sanitize: false,
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+    ],
+    toolbarHiddenButtons: [
+      ['bold']
+    ],
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
+  };
 
   constructor(
     private route: ActivatedRoute,

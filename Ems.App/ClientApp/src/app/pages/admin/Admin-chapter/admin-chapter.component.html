@@ -185,8 +185,10 @@
 
                     <div class="field col-12">
 
+                        <!-- <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด</label>
+                        <textarea id="body" rows="5" cols="30" placeholder="เพิ่มคำอธิบาย..." pInputTextarea [(ngModel)]="body" ></textarea> -->
                         <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด</label>
-                        <textarea id="body" rows="5" cols="30" placeholder="เพิ่มคำอธิบาย..." pInputTextarea [(ngModel)]="body" ></textarea>
+                        <angular-editor [(ngModel)]="body" [config]="config" placeholder="เพิ่มคำอธิบาย..."></angular-editor>
 
                     </div>
                 </div>
