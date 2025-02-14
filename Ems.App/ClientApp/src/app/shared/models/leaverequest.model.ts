@@ -15,7 +15,8 @@ export class LeaveHalfStatus {
 }
 
 export class NotiAgenda{
-    UserID: string;
+    leaveRequestID: string;
+    userID: string;
     firstName: string;
     lastName: string;
     checkingDate: Date;

@@ -14,7 +14,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
     imports: [
@@ -32,6 +34,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
         TabMenuModule,
         TieredMenuModule,
         MultiSelectModule,
+        InputTextareaModule,
+        OverlayPanelModule,
+        ConfirmPopupModule,
 
     ],
         declarations: [AgendaComponent]

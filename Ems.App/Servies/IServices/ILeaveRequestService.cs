@@ -11,6 +11,8 @@ namespace Ems.App.Servies.IServices
         //List<LeaveRequestModel> getLeaveRequestNoti();
 
         List<LeaveStatusDataModel> getLeaveRequestStatus();
+
+        bool deleteLeaveRequest(Guid leaveRequestID);
     }
 
 }

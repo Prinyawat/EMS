@@ -162,6 +162,7 @@ namespace Ems.App.Servies
                         lh => lh.leave_half_id,
                         (ulr, lh) => new NotiAgendaModel
                         {   
+                            leaveRequestID = ulr.lr.leave_request_id,
                             UserID = userId,
                             firstName = ulr.u.first_name,
                             lastName = ulr.u.last_name,

@@ -14,8 +14,8 @@ import { CourseService } from 'src/app/shared/services/course.service';
   providers: [MessageService]
 
 })
-export class AdminCourseComponent implements OnInit{ 
-  
+export class AdminCourseComponent implements OnInit{
+
   breadcrumbItems: MenuItem[] = [];
   course: Course [] = [];
   courses: AdminCourse [] = [];
@@ -67,18 +67,18 @@ export class AdminCourseComponent implements OnInit{
       }
     );
   }
-  
+
   showDialog() {
     this.resetForm();
     this.editMode = false;
-    this.display = true; 
+    this.display = true;
   }
 
   clear(table: Table) {
     table.clear();
     this.filter.nativeElement.value = '';
   }
-  
+
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
@@ -90,14 +90,14 @@ export class AdminCourseComponent implements OnInit{
   // แปลงวันที่ให้เป็นรูปแบบ YYYY-MM-DD
   formatDate(date: Date): string {
     if (!date) return '';
-    
+
     // ตั้งเวลาเป็น 12:00 น. เพื่อป้องกัน Timezone issue
     const localDate = new Date(date);
-    localDate.setHours(12, 0, 0, 0); 
-  
+    localDate.setHours(12, 0, 0, 0);
+
     return localDate.toISOString().split('T')[0];
   }
-  
+
   // แปลงเวลาให้เป็นรูปแบบ HH:mm
   formatTime(time: Date): string {
     if (!time) return '';
@@ -106,7 +106,7 @@ export class AdminCourseComponent implements OnInit{
     const minutes = date.getMinutes().toString().padStart(2, '0'); // แปลงให้เป็นสองหลัก
     return `${hours}:${minutes}`;
   }
-  
+
   saveCourse() {
     const model = {
       courseName: this.courseName,
@@ -117,7 +117,7 @@ export class AdminCourseComponent implements OnInit{
       endTime: this.formatTime(this.endTime),
       description: this.description,
     };
-  
+
     this.admincourseService.addCourse(model).subscribe(() => {
       this.display = false;
       this.messageService.add({
@@ -129,7 +129,7 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   resetForm() {
     this.courseName = '';
     this.subtitle = '';
@@ -143,22 +143,22 @@ export class AdminCourseComponent implements OnInit{
   editCourse(course: AdminCourse) {
     this.editMode = true;
     this.selectedCourseId = course.courseId;
-  
+
     this.courseName = course.courseName;
     this.subtitle = course.subtitle;
     this.startDate = new Date(course.startDate);
-    this.startDate.setHours(12, 0, 0, 0); 
-    
+    this.startDate.setHours(12, 0, 0, 0);
+
     this.endDate = new Date(course.endDate);
     this.endDate.setHours(12, 0, 0, 0);
-  
+
     this.startTime = new Date(`1970-01-01T${course.startTime}`);
     this.endTime = new Date(`1970-01-01T${course.endTime}`);
-  
+
     this.description = course.description;
     this.display = true;
   }
-  
+
   updateCourse() {
     const updatedCourse = {
       courseId: this.selectedCourseId,
@@ -170,7 +170,7 @@ export class AdminCourseComponent implements OnInit{
       endTime: this.formatTime(this.endTime),
       description: this.description,
     };
-  
+
     this.admincourseService.updateCourse(updatedCourse).subscribe(() => {
       this.display = false;
       this.messageService.add({
@@ -182,11 +182,11 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   onDeleteCourse(courseId: string) {
       this.admincourseService.deleteCourse(courseId).subscribe(
         () => {
-          this.fetchCourses(); 
+          this.fetchCourses();
         }
       );
   }
@@ -202,7 +202,7 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   confirmDeleteViaToast(event: Event, courseId: string) {
     this.confirmationService.confirm({
       key: 'confirmDeleteViaToast',
@@ -215,4 +215,4 @@ export class AdminCourseComponent implements OnInit{
     });
   }
 }
-  
+

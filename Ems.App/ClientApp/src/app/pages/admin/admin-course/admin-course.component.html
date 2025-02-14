@@ -25,39 +25,39 @@
 
                                     <div class="field col-12 md:col-3">
                                         <label htmlFor="startDate" class="text-xl">วันที่เปิด</label>
-                                        <p-calendar  
+                                        <p-calendar
                                             [(ngModel)]="startDate"
                                             [minDate]="minSelectableDate"
                                             [iconDisplay]="'input'"
                                             [showIcon]="true"
                                             [appendTo]="'body'"
                                             [showButtonBar]="true"
-                                        />                                      
+                                        />
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label htmlFor="endDate" class="text-xl">วันที่ปิด</label>
-                                        <p-calendar  
+                                        <p-calendar
                                             [(ngModel)]="endDate"
                                             [minDate]="startDate"
                                             [iconDisplay]="'input'"
                                             [showIcon]="true"
                                             [appendTo]="'body'"
                                             [showButtonBar]="true"
-                                        />        
+                                        />
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label htmlFor="startTime" class="text-xl">เวลาเปิด</label>
-                                        <p-calendar 
-                                        inputId="calendar-timeonly" 
-                                        [timeOnly]="true" 
+                                        <p-calendar
+                                        inputId="calendar-timeonly"
+                                        [timeOnly]="true"
                                         [showButtonBar]="true"
                                         [(ngModel)]="startTime"/>
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label htmlFor="endTime" class="text-xl">เวลาปิด</label>
-                                        <p-calendar 
-                                        inputId="calendar-timeonly"  
-                                        [timeOnly]="true" 
+                                        <p-calendar
+                                        inputId="calendar-timeonly"
+                                        [timeOnly]="true"
                                         [showButtonBar]="true"
                                         [(ngModel)]="endTime"/>
                                     </div>
@@ -66,7 +66,7 @@
 
                                         <label htmlFor="description" class="text-xl">เนื้อหาคำยรรยาย</label>
                                         <textarea id="description" rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea>
-                
+
                                     </div>
                                 </div>
                             </div>
@@ -145,25 +145,25 @@
                                 {{ course?.courseName }}
                             </a>
                         </td>
-                
+
                         <!-- <td>
                             <div class="flex justify-content-start align-items-center">
                                 {{ truncateText(course?.subtitle, 40) }}
                             </div>
                         </td> -->
-                
+
                         <!-- <td>
                             <div class="flex justify-content-start align-items-center">
                                 <span [innerHTML]="truncateText(course?.description, 30)"></span>
                             </div>
                         </td> -->
-                
+
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 {{ course?.startDate }}
                             </div>
                         </td>
-                
+
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 {{ course?.endDate }}
@@ -174,7 +174,7 @@
                                 {{ course?.startTime }}
                             </div>
                         </td>
-                
+
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 {{ course?.endTime }}
@@ -182,20 +182,19 @@
                         </td>
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">
-                                
+
                                 <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editCourse(course)">
                                 </button>
                         
-                                
                                 <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, course.courseId)">
                                 </button>
                                 <p-confirmPopup key="confirmDeleteViaToast"></p-confirmPopup>
-                                
+
                             </div>
                         </td>
                     </tr>
-                </ng-template>            
-                
+                </ng-template>
+
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td colspan="8">ไม่พบข้อมูลคอร์สเรียน</td>
@@ -209,4 +208,4 @@
             </p-table>
         </div>
     </div>
-</div>       
+</div>
