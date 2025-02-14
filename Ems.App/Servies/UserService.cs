@@ -52,7 +52,7 @@ namespace Ems.App.Servies
         public DataHubs GetUser(Guid userId)
         {
             var user = _emsContext.user
-                .Include(u => u.position) 
+                .Include(u => u.position)
                 .FirstOrDefault(u => u.user_id == userId);
 
             if (user == null)
@@ -128,6 +128,23 @@ namespace Ems.App.Servies
             _hubContext.Clients.All.SendAsync("UserUpdated", response);
 
             return response;
+        }
+
+        public List<DataHubs> GetAllUser()
+        {
+            Guid userId = this._identityService.GetCurrentUser();
+
+            var users = (from u in _emsContext.user.Include(u => u.position)
+                         select new DataHubs()
+                         {
+                             UserId = u.user_id,
+                             Firstname = u.first_name,
+                             Lastname = u.last_name,
+                             Email = u.email,
+                             phone = u.phone,
+                             positionName = u.position_id == null ? null : u.position.position_name
+                         }).ToList();
+            return users;
         }
 
     }

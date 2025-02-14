@@ -12,3 +12,32 @@ $gutter: 1rem; //for primeflex grid system
 @import "assets/demo/styles/flags/flags.css";
 @import "assets/demo/styles/badges.scss";
 @import "assets/demo/styles/code.scss";
+
+// Angular editor 
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+  
+.container {  
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;    
+}
+  
+.quote {
+    color: #8cc540;
+    font-style: italic;
+}
+  
+.redText {
+  color: Red;
+  font-size: 12px;
+  font-family: Arial;
+}
+  
+h1.titleText {
+  color: #69a8cf;
+  text-align: left;
+  margin-top: 40px;
+  font-weight: normal;
+}

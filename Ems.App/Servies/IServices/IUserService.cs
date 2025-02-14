@@ -7,5 +7,6 @@ namespace Ems.App.Servies.IServices
         DataHubs Login(DataHubs user);
         DataHubs GetUser();
         DataHubs UpdateUser(DataHubs updatedUser);
+        List<DataHubs> GetAllUser();
     }
 }

@@ -47,5 +47,13 @@ namespace Ems.App.Controllers
             return Ok(res);
         }
 
+        [Route("getAllUser")]
+        [HttpGet]
+        public IActionResult getAllUser()
+        {
+            var res = _userService.GetAllUser();
+            return Ok(res);
+        }
+
     }
 }
