@@ -177,17 +177,7 @@
 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-<<<<<<< HEAD
-                                {{ course?.startTime }}
-                            </div>
-                        </td>
-
-                        <td>
-                            <div class="flex justify-content-center align-items-center">
-                                {{ course?.endTime }}
-=======
                                 {{ formatTime(course?.endTime) }}
->>>>>>> cd06a47ee7eb77d828dd0eb4b41a2cf29c760aa0
                             </div>
                         </td>
                         <td>
@@ -195,6 +185,7 @@
 
                                 <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editCourse(course)">
                                 </button>
+
 
                                 <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, course.courseId)">
                                 </button>
