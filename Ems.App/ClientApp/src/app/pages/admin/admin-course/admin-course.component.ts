@@ -38,9 +38,17 @@ export class AdminCourseComponent implements OnInit{
   loading: boolean = true;
   display: boolean = false;
 
+  courseNameDirty: boolean = false;
+  subtitleDirty: boolean = false;
+  startDateDirty: boolean = false;
+  endDateDirty: boolean = false;
+  startTimeDirty: boolean = false;
+  endTimeDirty: boolean = false;
+
+
   @ViewChild('filter') filter!: ElementRef;
 
-  htmlContent = ''; // ตัวแปรเก็บค่าข้อความที่พิมพ์
+  htmlContent = ''; 
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -50,8 +58,27 @@ export class AdminCourseComponent implements OnInit{
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-    sanitize: false,
-   
+    fonts: [
+      {class: 'arial', name: 'Arial'},
+    ],
+    toolbarHiddenButtons: [
+      ['bold']
+      ],
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
   };
   
   constructor(
@@ -102,32 +129,62 @@ export class AdminCourseComponent implements OnInit{
     return text?.length > limit ? text.slice(0, limit) + "..." : text;
   }
 
-  // แปลงวันที่ให้เป็นรูปแบบ YYYY-MM-DD
-  formatDate(date: Date): string {
+  // แปลงจาก Date เป็น yyyy-MM-dd สำหรับบันทึก
+  formatDateForSave(date: Date): string {
     if (!date) return '';
-    
-    // ตั้งเวลาเป็น 12:00 น. เพื่อป้องกัน Timezone issue
-    const localDate = new Date(date);
-    localDate.setHours(12, 0, 0, 0); 
-  
-    return localDate.toISOString().split('T')[0];
+    const newDate = new Date(date);
+    newDate.setHours(12, 0, 0, 0); 
+    return newDate.toISOString().split('T')[0];
+  }
+
+  // แปลงจาก yyyy-MM-dd เป็น dd/MM/yyyy สำหรับแสดงผล
+  formatDateForDisplay(dateString: string): string {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`; 
   }
   
-  // แปลงเวลาให้เป็นรูปแบบ HH:mm
-  formatTime(time: Date): string {
+  formatTime(time: string | Date): string {
     if (!time) return '';
+    if (typeof time === 'string') {
+        return time.slice(0, 5); 
+    }
     const date = new Date(time);
-    const hours = date.getHours().toString().padStart(2, '0'); // แปลงให้เป็นสองหลัก
-    const minutes = date.getMinutes().toString().padStart(2, '0'); // แปลงให้เป็นสองหลัก
-    return `${hours}:${minutes}`;
+    return date.toTimeString().slice(0, 5); 
   }
-  
+
+  updateDirtyFields() {
+    if (this.courseName) this.courseNameDirty = false;
+    if (this.subtitle) this.subtitleDirty = false;
+    if (this.startDate) this.startDateDirty = false;
+    if (this.endDate) this.endDateDirty = false;
+    if (this.startTime) this.startTimeDirty = false;
+    if (this.endTime) this.endTimeDirty = false;
+  }
+
+  validateForm(): boolean {
+    this.courseNameDirty = true;
+    this.subtitleDirty = true;
+    this.startDateDirty = true;
+    this.endDateDirty = true;
+    this.startTimeDirty = true;
+    this.endTimeDirty = true;
+
+    this.updateDirtyFields();
+
+    return !!this.courseName && !!this.subtitle && !!this.startDate && !!this.endDate && !!this.startTime && !!this.endTime;
+  } 
+
   saveCourse() {
+    if (!this.validateForm()) {
+      return;
+    }
+    this.updateDirtyFields(); 
     const model = {
       courseName: this.courseName,
       subtitle: this.subtitle,
-      startDate: this.formatDate(this.startDate),
-      endDate: this.formatDate(this.endDate),
+      startDate: this.formatDateForSave(this.startDate),
+      endDate: this.formatDateForSave(this.endDate),
       startTime: this.formatTime(this.startTime),
       endTime: this.formatTime(this.endTime),
       description: this.description,
@@ -163,24 +220,34 @@ export class AdminCourseComponent implements OnInit{
     this.subtitle = course.subtitle;
     this.startDate = new Date(course.startDate);
     this.startDate.setHours(12, 0, 0, 0); 
-    
+
     this.endDate = new Date(course.endDate);
-    this.endDate.setHours(12, 0, 0, 0);
+    this.endDate.setHours(12, 0, 0, 0); 
   
     this.startTime = new Date(`1970-01-01T${course.startTime}`);
     this.endTime = new Date(`1970-01-01T${course.endTime}`);
   
     this.description = course.description;
     this.display = true;
+    this.resetDirtyFlags();
   }
-  
+
+  resetDirtyFlags() {
+    this.courseNameDirty = false;
+    this.subtitleDirty = false;
+    this.startDateDirty = false;
+    this.endDateDirty = false;
+    this.startTimeDirty = false;
+    this.endTimeDirty = false;
+  }
+
   updateCourse() {
     const updatedCourse = {
       courseId: this.selectedCourseId,
       courseName: this.courseName,
       subtitle: this.subtitle,
-      startDate: this.formatDate(this.startDate),
-      endDate: this.formatDate(this.endDate),
+      startDate: this.formatDateForSave(this.startDate),
+      endDate: this.formatDateForSave(this.endDate),
       startTime: this.formatTime(this.startTime),
       endTime: this.formatTime(this.endTime),
       description: this.description,

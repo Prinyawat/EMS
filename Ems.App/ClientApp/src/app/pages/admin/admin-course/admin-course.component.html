@@ -15,57 +15,56 @@
                                 <div class="p-fluid p-formgrid grid">
 
                                     <div class="field col-12 md:col-6">
-                                        <label htmlFor="courseName" class="text-xl">ชื่อ Course</label>
-                                        <input pInputText id="courseName" type="text" [(ngModel)]="courseName"/>
+                                        <label htmlFor="courseName" class="text-xl">ชื่อ Course <span class="text-red-500">*</span></label>
+                                        <input pInputText id="courseName" type="text" [(ngModel)]="courseName" class="w-full" [ngClass]="{'ng-invalid ng-dirty': courseNameDirty}">
+                                        <small *ngIf="courseNameDirty && !courseName" class="text-red-500 block">กรุณากรอกชื่อคอร์ส.</small>
                                     </div>
+                                    
                                     <div class="field col-12 md:col-6">
-                                        <label htmlFor="subtitle" class="text-xl">คำบรรยาย</label>
-                                        <input pInputText id="subtitle" type="text" [(ngModel)]="subtitle"/>
+                                        <label htmlFor="subtitle" class="text-xl">คำบรรยาย <span class="text-red-500">*</span></label>
+                                        <input pInputText id="subtitle" type="text" [(ngModel)]="subtitle" class="w-full" 
+                                               [ngClass]="{'ng-invalid ng-dirty': subtitleDirty}">
+                                        <small *ngIf="subtitleDirty && !subtitle" class="text-red-500 block">กรุณากรอกคำบรรยาย.</small>
                                     </div>
-
+                                    
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="startDate" class="text-xl">วันที่เปิด</label>
-                                        <p-calendar  
-                                            [(ngModel)]="startDate"
-                                            [minDate]="minSelectableDate"
-                                            [iconDisplay]="'input'"
-                                            [showIcon]="true"
-                                            [appendTo]="'body'"
-                                            [showButtonBar]="true"
-                                        />                                      
+                                        <label htmlFor="startDate" class="text-xl">วันที่เปิด <span class="text-red-500">*</span></label>
+                                        <p-calendar [(ngModel)]="startDate" [minDate]="minSelectableDate" 
+                                                    [showButtonBar]="true" dateFormat="dd/mm/yy"
+                                                    class="w-full" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}">
+                                        </p-calendar>
+                                        <small *ngIf="startDateDirty && !startDate" class="text-red-500 block">กรุณาเลือกวันที่เปิด.</small>
                                     </div>
+                                    
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="endDate" class="text-xl">วันที่ปิด</label>
-                                        <p-calendar  
-                                            [(ngModel)]="endDate"
-                                            [minDate]="startDate"
-                                            [iconDisplay]="'input'"
-                                            [showIcon]="true"
-                                            [appendTo]="'body'"
-                                            [showButtonBar]="true"
-                                        />        
+                                        <label htmlFor="endDate" class="text-xl">วันที่ปิด <span class="text-red-500">*</span></label>
+                                        <p-calendar [(ngModel)]="endDate" [minDate]="startDate" 
+                                                    [showButtonBar]="true" dateFormat="dd/mm/yy"
+                                                    class="w-full" [ngClass]="{'ng-invalid ng-dirty': endDateDirty}">
+                                        </p-calendar>
+                                        <small *ngIf="endDateDirty && !endDate" class="text-red-500 block">กรุณาเลือกวันที่ปิด.</small>
                                     </div>
+                                    
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="startTime" class="text-xl">เวลาเปิด</label>
-                                        <p-calendar 
-                                        inputId="calendar-timeonly" 
-                                        [timeOnly]="true" 
-                                        [showButtonBar]="true"
-                                        [(ngModel)]="startTime"/>
+                                        <label htmlFor="startTime" class="text-xl">เวลาเปิด <span class="text-red-500">*</span></label>
+                                        <p-calendar [(ngModel)]="startTime" [timeOnly]="true" class="w-full" 
+                                                    [ngClass]="{'ng-invalid ng-dirty': startTimeDirty}">
+                                        </p-calendar>
+                                        <small *ngIf="startTimeDirty && !startTime" class="text-red-500 block">กรุณาเลือกเวลาเปิด.</small>
                                     </div>
+                                    
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="endTime" class="text-xl">เวลาปิด</label>
-                                        <p-calendar 
-                                        inputId="calendar-timeonly"  
-                                        [timeOnly]="true" 
-                                        [showButtonBar]="true"
-                                        [(ngModel)]="endTime"/>
+                                        <label htmlFor="endTime" class="text-xl">เวลาปิด <span class="text-red-500">*</span></label>
+                                        <p-calendar [(ngModel)]="endTime" [timeOnly]="true" class="w-full" 
+                                                    [ngClass]="{'ng-invalid ng-dirty': endTimeDirty}">
+                                        </p-calendar>
+                                        <small *ngIf="endTimeDirty && !endTime" class="text-red-500 block">กรุณาเลือกเวลาปิด.</small>
                                     </div>
+                                    
 
                                     <div class="field col-12">
 
                                         <label htmlFor="description" class="text-xl">เนื้อหาคำยรรยาย</label>
-                                        <!-- <textarea id="description" rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [(ngModel)]="additionalDescription" [(ngModel)]="description"></textarea> -->
                                         <angular-editor [(ngModel)]="description" [config]="config" placeholder="คำอธิบายเพิ่มเติม...."></angular-editor>
                 
                                     </div>
@@ -85,7 +84,6 @@
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
-                        <!-- <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(coursedata)"></button> -->
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full"/>
@@ -115,17 +113,17 @@
                         </th> -->
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
-                                วันเปิด
-                            </div>
-                        </th>
-                        <th style="min-width: 8rem" >
-                            <div class="flex justify-content-center ">
-                                วันปิด
+                                วันที่เปิด
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
                                 เวลาเปิด
+                            </div>
+                        </th>
+                        <th style="min-width: 8rem" >
+                            <div class="flex justify-content-center ">
+                                วันที่ปิด
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
@@ -161,24 +159,25 @@
                 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ course?.startDate }}
+                                {{ formatDateForDisplay(course?.startDate) }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                {{ formatTime(course?.startTime) }}
                             </div>
                         </td>
                 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ course?.endDate }}
+                                {{ formatDateForDisplay(course?.endDate) }}
                             </div>
                         </td>
+                        
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ course?.startTime }}
-                            </div>
-                        </td>
-                
-                        <td>
-                            <div class="flex justify-content-center align-items-center">
-                                {{ course?.endTime }}
+                                {{ formatTime(course?.endTime) }}
                             </div>
                         </td>
                         <td>
