@@ -23,7 +23,6 @@ export class LeaveRequestComponent {
     Dates: Date[] = [];
 
     startTime: string = '';
-
     endTime: string = '';
 
     HalfStatusOn: boolean = false;
@@ -85,6 +84,12 @@ export class LeaveRequestComponent {
 
     selectedDate: Date | null = null;
 
+    minDate: Date | undefined;
+    maxDate: Date | undefined;
+
+    minDateEnd: Date | undefined;
+    maxDateEnd: Date | undefined;
+
     constructor(private productService: ProductService,
         public layoutService: LayoutService,
         private confirmationService: ConfirmationService,
@@ -101,6 +106,17 @@ export class LeaveRequestComponent {
     }
 
     ngOnInit() {
+        this.minDate = new Date();
+        this.minDate.setHours(0, 0, 0, 0);
+
+        this.maxDate = new Date();
+        this.maxDate.setHours(12, 59, 59, 0);
+
+        this.minDateEnd = new Date();
+        this.minDateEnd.setHours(13, 0, 0, 0);
+
+        this.maxDateEnd = new Date();
+        this.maxDateEnd.setHours(23, 59, 59, 0);
 
         this.LeaveRequestService.getLeaveRequestStatus().subscribe({
             next: (data) => {
@@ -178,6 +194,14 @@ export class LeaveRequestComponent {
         const year = date.getFullYear() + 543;
         return `${day}/${month}/${year}`;
     }
+
+    formatTime(time: Date): string {
+        if (!time) return '';
+        const date = new Date(time);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      }
 
     getStatusColor(status: string): string {
         const leavestatus = status.toLowerCase();
@@ -304,21 +328,27 @@ export class LeaveRequestComponent {
         if (this.selectedLeaveHalfStatus) {
             switch (this.selectedLeaveHalfStatus.halfStatus) {
                 case 'ลาครึ่งเช้า':
-                    this.startTime = '08:30 AM';
-                    this.endTime = '12:00 AM';
+                    this.startTime = '08:30';
+                    this.endTime = '12:00';
                     this.isCustomLeave = true;
                     break;
 
                 case 'ลาครึ่งบ่าย':
-                    this.startTime = '01:00 PM';
-                    this.endTime = '05:30 PM';
+                    this.startTime = '13:00';
+                    this.endTime = '17:30';
                     this.isCustomLeave = true;
                     break;
 
                 case 'ลาทั้งวัน':
-                    this.startTime = '08:30 AM';
-                    this.endTime = '05:30 PM';
+                    this.startTime = '08:30';
+                    this.endTime = '17:30';
                     this.isCustomLeave = true;
+                    break;
+
+                case 'ปรับแต่งการลาเอง':
+                    this.startTime = '00:00';
+                    this.endTime = '13:00';
+                    this.isCustomLeave = false;
                     break;
 
                 default:

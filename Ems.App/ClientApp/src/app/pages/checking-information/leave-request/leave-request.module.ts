@@ -17,6 +17,7 @@ import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 
+
 @NgModule({
     imports: [
         LeaveRequestRoutingModule,
@@ -34,7 +35,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
         RadioButtonModule,
         TagModule,
         DialogModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+
     ],
         declarations: [LeaveRequestComponent]
 })

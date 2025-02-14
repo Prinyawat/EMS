@@ -12,9 +12,11 @@ namespace Ems.App.Controllers
     public class LeaveRequestController : ControllerBase
     {
         private readonly ILeaveRequestService _leaverequestservice;
-        public LeaveRequestController(ILeaveRequestService leaverequestservice)
+        private readonly IIdentityService _identityService;
+        public LeaveRequestController(ILeaveRequestService leaverequestservice, IIdentityService identityService)
         {
             _leaverequestservice = leaverequestservice;
+            _identityService = identityService;
         }
 
         [HttpPost]
@@ -55,6 +57,14 @@ namespace Ems.App.Controllers
         {
             var leaveData = _leaverequestservice.getLeaveRequestStatus();
             return Ok(leaveData);
+        }
+
+        [HttpDelete]
+        [Route("deleteLeaveRequest/{leaveRequestID}")]
+        public IActionResult deleteLeaveRequest(Guid leaveRequestID)
+        {
+            var isDeleted = _leaverequestservice.deleteLeaveRequest(leaveRequestID);
+            return Ok(new { message = "ปฏิเสธคำขอเสร็จสิ้น" });
         }
     }
 }

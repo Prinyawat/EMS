@@ -1,19 +1,21 @@
+import { AdminLeaveRequestService } from './../../../shared/services/adminleaverequest.service';
 import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
 import { CheckingService } from './../../../shared/services/checking.service';
 
-import { Component, ElementRef, ViewChild} from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import * as FileSaver from 'file-saver';
 import { Representative } from 'src/app/demo/api/customer';
-import { AgendaData} from 'src/app/shared/models/agenda.model';
+import { AgendaData } from 'src/app/shared/models/agenda.model';
 import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 
 import { LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.model';
+import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
-    providers: [MessageService]
+    providers: [MessageService, DatePipe ,ConfirmationService]
 })
 export class AgendaComponent {
 
@@ -25,10 +27,27 @@ export class AgendaComponent {
         '44467da9-d2fd-4293-bbb1-d8ccb7dae8f7': '#F39AC4'
     };
 
+    userID: string = '';
+    firstName: string = '';
+    lastName: string = '';
+    checkingDate: Date = new Date();
+    startTime: string;
+    endTime: string;
+    selectedLeaveHalfStatus: string = '';
+    leaveStatuses: string = '';
+    additionalDescription: string = '';
+
+    formattedDate: string = '';
     value: any = null;
+    dates: string[] = [];
+
+    display: boolean = false;
+    selectedAgenda: any = null;
+    requests: any[] = [];
 
     isAdmin: boolean = false;
     adminID = '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
+    UserID: string;
 
     selectedAgendas = [];
     selectedMonths: any[];
@@ -60,7 +79,10 @@ export class AgendaComponent {
 
     constructor(private CheckingService: CheckingService,
         private LeaveRequestService: LeaveRequestService,
-        private messageService: MessageService) { }
+        private messageService: MessageService,
+        private datePipe: DatePipe,
+        private AdminLeaveRequestService: AdminLeaveRequestService,
+        private confirmationService: ConfirmationService) { }
 
     ngOnInit() {
         this.breadcrumbItems = [];
@@ -69,7 +91,7 @@ export class AgendaComponent {
         this.breadcrumbItems.push({ label: 'User Agenda' });
 
         this.cols = [
-            { field: 'firstName', header: 'ชื่อ',},
+            { field: 'firstName', header: 'ชื่อ', },
             { field: 'lastName', header: 'นามสกุล' },
             { field: 'checkingDate', header: 'วัน/เดือน/ปี' },
             { field: 'checkIn', header: 'เวลาเข้างาน' },
@@ -95,7 +117,7 @@ export class AgendaComponent {
                 if (Array.isArray(data)) {
                     this.leaveRequestStatus = data.map(item => ({
                         label: item.leaveStatusData || '',
-                        value: item.leaveStatusData  || ''
+                        value: item.leaveStatusData || ''
                     }));
                 } else {
                     this.leaveRequestStatus = [];
@@ -103,11 +125,59 @@ export class AgendaComponent {
                 this.updateDropdownOptionss();
             }
         });
-        this.exportColumns = this.cols.map(col => ({title: col.header, dataKey: col.field}));
+        this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
         this.fetchAgenda();
         this.NotiAgenda();
         this.updateFilteredAgendas();
     }
+
+    formatDateToThai(date: Date): string {
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
+        };
+        const thaiDate = new Intl.DateTimeFormat('th-TH', options).format(date);
+        const splitDate = thaiDate.split(' ');
+        const yearInEnglish = new Date(date).getFullYear();
+
+        return `${splitDate[0]} ${splitDate[1]} ${yearInEnglish}`;
+    }
+
+    parseTime(timeString: string): Date {
+        const [time, modifier] = timeString.split(" "); // แยก "08:30 AM" → ["08:30", "AM"]
+        let [hours, minutes] = time.split(":").map(Number);
+
+        if (modifier === "PM" && hours !== 12) {
+            hours += 12;
+        } else if (modifier === "AM" && hours === 12) {
+            hours = 0;
+        }
+
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+    }
+
+    onSelectRequest(agenda: NotiAgenda) {
+        console.log(agenda);
+        this.display = true;
+
+        this.userID = agenda.userID;
+
+        this.firstName = agenda.firstName;
+        this.lastName = agenda.lastName;
+
+        this.checkingDate = new Date(agenda.checkingDate);
+
+        this.startTime = agenda.startTime;
+        this.endTime = agenda.endTime;
+
+        this.selectedLeaveHalfStatus = agenda.selectedLeaveHalfStatus;
+        this.leaveStatuses = agenda.leaveStatus;
+        this.additionalDescription = agenda.additionalDescription;
+    }
+
 
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
@@ -126,17 +196,20 @@ export class AgendaComponent {
         const gregorianYear = year - 543;
         const formattedDate = new Date(gregorianYear, month - 1, day);
         return isNaN(formattedDate.getTime()) ? null : formattedDate;
-      }
+    }
 
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
+
             next: (data: NotiAgenda[]) => {
-                console.log("Data from API:", data);
-                console.log("Current adminID:", this.adminID);
+                console.log(data);
+                if (data.length > 0) {
+                    if (data[0].userID) {
+                        this.UserID = data[0].userID;
+                    }
+                }
 
-                if (this.adminID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad') {
-
-                    console.log("Admin detected, showing all data:", data);
+                if (this.UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad') {
                     this.notiAgenda = data.flatMap(agenda => {
                         let checkingDates: string[];
 
@@ -159,14 +232,32 @@ export class AgendaComponent {
                     });
                     this.updateFilteredAgendas();
                 } else {
-                    console.log("Not an Admin, processing normally");
-                    this.notiAgenda = data;
+                    this.notiAgenda = data.flatMap(agenda => {
+                        console.log("Not Admin:", data);
+                        let checkingDates: string[];
+
+                        if (agenda.checkingDate instanceof Date) {
+                            checkingDates = [agenda.checkingDate.toISOString()];
+                        } else if (typeof agenda.checkingDate === 'string') {
+                            checkingDates = (agenda.checkingDate as string).split(',');
+                        } else {
+                            checkingDates = [];
+                        }
+
+                        return checkingDates.map(date => ({
+                            ...agenda,
+                            checkingDate: this.convertThaiDateToJSDate(date),
+                            startTime: agenda.startTime,
+                            endTime: agenda.endTime,
+                            selectedLeaveHalfStatus: agenda.selectedLeaveHalfStatus,
+                            leaveStatus: agenda.leaveStatus
+                        }));
+                    });
                     this.updateFilteredAgendas();
                 }
             }
         });
     }
-
 
     updateFilteredAgendas() {
         this.filteredAgendas = [
@@ -265,7 +356,33 @@ export class AgendaComponent {
     }
 
     clear(table: Table) {
-            table.clear();
-            this.filter.nativeElement.value = '';
-        }
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
+
+    confirmDenyRequest(event: Event, leaveRequestID) {
+        this.confirmationService.confirm({
+            key: 'confirmDenyToast',
+            target: event.target || new EventTarget(),
+            message: 'ต้องการปฏิเสธคำขอลาจริงใช่ไหม',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.onDenyRequest(leaveRequestID);
+            },
+        });
+    }
+
+    onDenyRequest(leaveRequestID: string) {
+        const requestData = { leaveRequestID };
+        this.AdminLeaveRequestService.deleteLeaveRequest(requestData).subscribe(response => {
+            console.log(requestData);
+            this.messageService.add({
+                key: 'tst',
+                severity: 'success',
+                summary: 'ลบสำเร็จ',
+                detail: 'คุณได้ทำการลบคำตอบแล้ว',
+            });
+        });
+    }
+
 }

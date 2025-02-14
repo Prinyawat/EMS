@@ -15,8 +15,8 @@ import { CourseService } from 'src/app/shared/services/course.service';
   providers: [MessageService]
 
 })
-export class AdminCourseComponent implements OnInit{ 
-  
+export class AdminCourseComponent implements OnInit{
+
   breadcrumbItems: MenuItem[] = [];
   course: Course [] = [];
   courses: AdminCourse [] = [];
@@ -48,7 +48,7 @@ export class AdminCourseComponent implements OnInit{
 
   @ViewChild('filter') filter!: ElementRef;
 
-  htmlContent = ''; 
+  htmlContent = '';
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -81,7 +81,7 @@ export class AdminCourseComponent implements OnInit{
       },
     ]
   };
-  
+
   constructor(
     private courseService: CourseService,
     private admincourseService: AdminCourseService,
@@ -110,18 +110,18 @@ export class AdminCourseComponent implements OnInit{
       }
     );
   }
-  
+
   showDialog() {
     this.resetForm();
     this.editMode = false;
-    this.display = true; 
+    this.display = true;
   }
 
   clear(table: Table) {
     table.clear();
     this.filter.nativeElement.value = '';
   }
-  
+
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
@@ -134,7 +134,7 @@ export class AdminCourseComponent implements OnInit{
   formatDateForSave(date: Date): string {
     if (!date) return '';
     const newDate = new Date(date);
-    newDate.setHours(12, 0, 0, 0); 
+    newDate.setHours(12, 0, 0, 0);
     return newDate.toISOString().split('T')[0];
   }
 
@@ -142,16 +142,16 @@ export class AdminCourseComponent implements OnInit{
   formatDateForDisplay(dateString: string): string {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`; 
+    return `${day}/${month}/${year}`;
   }
-  
+
   formatTime(time: string | Date): string {
     if (!time) return '';
     if (typeof time === 'string') {
-        return time.slice(0, 5); 
+        return time.slice(0, 5);
     }
     const date = new Date(time);
-    return date.toTimeString().slice(0, 5); 
+    return date.toTimeString().slice(0, 5);
   }
 
   updateDirtyFields() {
@@ -174,13 +174,13 @@ export class AdminCourseComponent implements OnInit{
     this.updateDirtyFields();
 
     return !!this.courseName && !!this.subtitle && !!this.startDate && !!this.endDate && !!this.startTime && !!this.endTime;
-  } 
+  }
 
   saveCourse() {
     if (!this.validateForm()) {
       return;
     }
-    this.updateDirtyFields(); 
+    this.updateDirtyFields();
     const model = {
       courseName: this.courseName,
       subtitle: this.subtitle,
@@ -190,7 +190,7 @@ export class AdminCourseComponent implements OnInit{
       endTime: this.formatTime(this.endTime),
       description: this.description,
     };
-  
+
     this.admincourseService.addCourse(model).subscribe(() => {
       this.display = false;
       this.messageService.add({
@@ -202,7 +202,7 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   resetForm() {
     this.courseName = '';
     this.subtitle = '';
@@ -216,18 +216,18 @@ export class AdminCourseComponent implements OnInit{
   editCourse(course: AdminCourse) {
     this.editMode = true;
     this.selectedCourseId = course.courseId;
-  
+
     this.courseName = course.courseName;
     this.subtitle = course.subtitle;
     this.startDate = new Date(course.startDate);
-    this.startDate.setHours(12, 0, 0, 0); 
+    this.startDate.setHours(12, 0, 0, 0);
 
     this.endDate = new Date(course.endDate);
-    this.endDate.setHours(12, 0, 0, 0); 
-  
+    this.endDate.setHours(12, 0, 0, 0);
+
     this.startTime = new Date(`1970-01-01T${course.startTime}`);
     this.endTime = new Date(`1970-01-01T${course.endTime}`);
-  
+
     this.description = course.description;
     this.display = true;
     this.resetDirtyFlags();
@@ -253,7 +253,7 @@ export class AdminCourseComponent implements OnInit{
       endTime: this.formatTime(this.endTime),
       description: this.description,
     };
-  
+
     this.admincourseService.updateCourse(updatedCourse).subscribe(() => {
       this.display = false;
       this.messageService.add({
@@ -265,11 +265,11 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   onDeleteCourse(courseId: string) {
       this.admincourseService.deleteCourse(courseId).subscribe(
         () => {
-          this.fetchCourses(); 
+          this.fetchCourses();
         }
       );
   }
@@ -285,7 +285,7 @@ export class AdminCourseComponent implements OnInit{
       this.fetchCourses();
     });
   }
-  
+
   confirmDeleteViaToast(event: Event, courseId: string) {
     this.confirmationService.confirm({
       key: 'confirmDeleteViaToast',
@@ -298,4 +298,4 @@ export class AdminCourseComponent implements OnInit{
     });
   }
 }
-  
+

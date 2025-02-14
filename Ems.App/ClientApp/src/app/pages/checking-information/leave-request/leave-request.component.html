@@ -48,11 +48,11 @@
                             </p-dropdown>
 
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="12" (ngModelChange)="onValueChange('startTime');" [disabled]="isCustomLeave"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="24" [minDate]="minDate" [maxDate]="maxDate"(ngModelChange)="onValueChange('startTime');" [disabled]="isCustomLeave"></p-calendar>
                                 <label for="float-input">เวลาเริ่มของวัน</label>
                             </span>
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
-                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"  [hourFormat]="12" (ngModelChange)="onValueChange('endTime');" [disabled]="isCustomLeave"></p-calendar>
+                                <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="endTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvendTime}"  [hourFormat]="24" [minDate]="minDateEnd" [maxDate]="maxDateEnd"  (ngModelChange)="onValueChange('endTime');" [disabled]="isCustomLeave"></p-calendar>
                                 <label for="float-input">เวลาสิ้นสุดของวัน</label>
                             </span>
 

@@ -27,19 +27,29 @@ namespace Ems.App.Servies
         public LeaveRequestModel saveleaveRequest(LeaveRequestModel formData)
         {
             var userId1 = this._identityService.GetCurrentUser();
-            var DuplicateRequest = _emsContext.leave_request
-                .Where(r => r.user_id == userId1 && r.leave_request_date == formData.selectedDates)
+
+            // แยกวันที่ออกมาเป็น List<string>
+            var selectedDates = formData.selectedDates.Split(',')
+                .Select(date => date.Trim()) // ลบช่องว่างหน้า-หลัง
+                .Where(date => !string.IsNullOrEmpty(date)) // กัน error ถ้ามีค่าว่าง
                 .ToList();
 
-            if (DuplicateRequest.Any())
+            foreach (var date in selectedDates)
             {
-               throw new Exception("LeaveRequest Duplicate");
-            }
+                // เช็คว่า วันที่ซ้ำไหม
+                var DuplicateRequest = _emsContext.leave_request
+                    .Where(r => r.user_id == userId1 && r.leave_request_date == date)
+                    .ToList();
 
-            var leaveRequestEntity = new leave_request
+                if (DuplicateRequest.Any())
+                {
+                    throw new Exception($"LeaveRequest Duplicate ในวันที่ {date}");
+                }
+
+                var leaveRequestEntity = new leave_request
                 {
                     user_id = userId1,
-                    leave_request_date = formData.selectedDates,
+                    leave_request_date = date, 
                     leave_request_status_id = formData.selectedLeaveStatusId,
                     leave_half_id = formData.selectHalfStatusId,
                     status_name = formData.selectedLeaveStatus,
@@ -50,22 +60,25 @@ namespace Ems.App.Servies
 
                 _emsContext.leave_request.Add(leaveRequestEntity);
                 _emsContext.SaveChanges();
-
                 _emsContext.Entry(leaveRequestEntity).Reload();
 
-            var user = _emsContext.user.FirstOrDefault(u => u.user_id == formData.UserId);
-            var HalfstatusName = _emsContext.leave_half.FirstOrDefault(u => u.leave_half_id == formData.selectHalfStatusId);
-            var statusName = _emsContext.leave_request.FirstOrDefault(s => s.leave_request_status_id == formData.selectedLeaveStatusId);
+                // ดึงข้อมูล User, Status, HalfStatus
+                //var user = _emsContext.user.FirstOrDefault(u => u.user_id == formData.UserId);
+                //var HalfstatusName = _emsContext.leave_half.FirstOrDefault(u => u.leave_half_id == formData.selectHalfStatusId);
+                //var statusName = _emsContext.leave_request_status.FirstOrDefault(s => s.leave_request_status_id == formData.selectedLeaveStatusId);
 
-            if (user == null || HalfstatusName == null || statusName == null)
-            {
-                throw new Exception("ข้อมูลที่จำเป็นบางประการไม่ครบถ้วน (user, HalfstatusName, statusName)");
+                //if (user == null || HalfstatusName == null || statusName == null)
+                //{
+                //    throw new Exception("ข้อมูลที่จำเป็นบางประการไม่ครบถ้วน (user, HalfstatusName, statusName)");
+                //}
+
+                //// ส่งแจ้งเตือนแต่ละคำขอ
+                //SendLeaveRequestNotification(user, statusName, HalfstatusName, leaveRequestEntity);
             }
 
-            SendLeaveRequestNotification(user, statusName, HalfstatusName, leaveRequestEntity);
-
-            return new LeaveRequestModel { }; 
+            return new LeaveRequestModel();
         }
+
 
         private void SendLeaveRequestNotification(user user, leave_request statusName, leave_half HalfstatusName, leave_request leaveRequestEntity)
         {
@@ -97,6 +110,19 @@ namespace Ems.App.Servies
                     leaveStatusData = r.leave_request_status_name
 
                 }).ToList();
+        }
+
+        public bool deleteLeaveRequest(Guid leaveRequestID)
+        {
+            var leaveRequestToDelete = _emsContext.leave_request.FirstOrDefault(c => c.leave_request_id == leaveRequestID);
+            if (leaveRequestToDelete == null)
+            {
+                return false;
+            }
+
+            _emsContext.leave_request.Remove(leaveRequestToDelete);
+            _emsContext.SaveChanges();
+            return true;
         }
     }
 }
