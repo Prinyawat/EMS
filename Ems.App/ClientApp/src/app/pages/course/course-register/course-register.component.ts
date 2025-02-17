@@ -34,14 +34,6 @@ export class CourseRegisterComponent implements OnInit{
   this.fetchCourses();
   }
 
-  // fetchCourses() {
-  //   this.courseService.getCourses().subscribe((data: Course[]) => {
-  //     this.registeredCourses = data.filter(course => course.statusName === 'ลงทะเบียนแล้ว');
-  //     this.unregisteredCourses = data.filter(course => course.statusName !== 'ลงทะเบียนแล้ว');
-  //     this.showRegisteredCourses = this.registeredCourses.length > 0;
-  //   });
-  // }
-
   fetchCourses() {
     this.courseService.getCourses().subscribe((data: Course[]) => {
       this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
@@ -60,6 +52,14 @@ export class CourseRegisterComponent implements OnInit{
     });
   }
   
+  formatTime(time: string | Date): string {
+    if (!time) return '';
+    if (typeof time === 'string') {
+        return time.slice(0, 5);
+    }
+    const date = new Date(time);
+    return date.toTimeString().slice(0, 5);
+  }
 
   showSuccessViaToast(courseId: string) {
     this.courseService.registerCourse(courseId).subscribe(() => {

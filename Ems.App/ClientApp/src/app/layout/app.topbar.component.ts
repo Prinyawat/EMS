@@ -123,7 +123,7 @@ export class AppTopBarComponent {
             }
         });
     }
-
+    
     loadUserData() {
         this.authService.getUser().subscribe({
             next: (data: any) => {

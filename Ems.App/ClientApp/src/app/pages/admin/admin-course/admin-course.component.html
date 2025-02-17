@@ -84,9 +84,9 @@
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
+                        <span class="p-input-icon-left mb-2" style="width: 350px">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full"/>
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
                         </span>
                     </div>
                 </ng-template>
@@ -140,7 +140,7 @@
                 <ng-template pTemplate="body" let-course>
                     <tr>
                         <td>
-                            <a [routerLink]="[course.courseId]" class="text-primary cursor-pointer underline" pTooltip="คลิกเพื่อไปยังหน้าจัดการบทเรียนและเนื้อหา" tooltipPosition="top">
+                            <a [routerLink]="[course.courseId]" class="text-primary cursor-pointer underline" pTooltip="คลิกเพื่อไปยังหน้าจัดการบทเรียนและเนื้อหา" tooltipPosition="bottom">
                                 {{ course?.courseName }}
                             </a>
                         </td>
@@ -165,25 +165,25 @@
 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ formatTime(course?.startTime) }}
+                                {{ formatTime(course?.startTime) }} น.
                             </div>
                         </td>
 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ formatDateForDisplay(course?.endDate) }}
+                                {{ formatDateForDisplay(course?.endDate) }} 
                             </div>
                         </td>
 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ formatTime(course?.endTime) }}
+                                {{ formatTime(course?.endTime) }} น.
                             </div>
                         </td>
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">
 
-                                <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editCourse(course)">
+                                <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไข Course" tooltipPosition="bottom" (click)="editCourse(course) ">
                                 </button>
 
 

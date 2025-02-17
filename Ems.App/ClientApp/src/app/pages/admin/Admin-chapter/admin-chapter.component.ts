@@ -186,15 +186,29 @@ export class AdminChapterComponent implements OnInit {
 
     }
   
-    validateForm(): boolean {
+    validateChapterForm(): boolean {
       this.chapterTitleDirty = true;
+
+      this.updateDirtyFields();
+  
+      return !!this.chapterTitle 
+    }
+
+    validateContentForm(): boolean {
       this.contentTitleDirty = true;
       this.bodyDirty = true;
+
+      this.updateDirtyFields();
+  
+      return !!this.contentTitle && !!this.body 
+    }
+
+    validateQuestionForm(): boolean {
       this.questionTextDirty = true;
 
       this.updateDirtyFields();
   
-      return !!this.chapterTitle && !!this.contentTitle && !!this.body && !!this.questionText
+      return !!this.questionText
     }
 
     resetDirtyFlags() {
@@ -217,7 +231,7 @@ export class AdminChapterComponent implements OnInit {
     }
 
     saveChapter() {
-      if (!this.validateForm()) {
+      if (!this.validateChapterForm()) {
         return;
       }
       this.updateDirtyFields();
@@ -301,7 +315,7 @@ export class AdminChapterComponent implements OnInit {
     }
 
     saveContent() {
-        if (!this.validateForm()) {
+        if (!this.validateContentForm()) {
           return;
         }
         this.updateDirtyFields();
@@ -396,7 +410,7 @@ export class AdminChapterComponent implements OnInit {
     }
 
     saveQuestion() {
-        if (!this.validateForm()) {
+        if (!this.validateQuestionForm()) {
           return;
         }
         this.updateDirtyFields();

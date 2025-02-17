@@ -18,8 +18,8 @@
                                     </h2>
                                     <h5>{{course.subtitle}}</h5>
                                     <p class="mt-3" style="font-size: 11px;">
-                                        <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ course.startTime }} น.<br>
-                                        <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ course.endTime }} น.
+                                        <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ formatTime(course?.startTime) }} น.<br>
+                                        <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ formatTime(course?.endTime) }} น.
                                     </p>
                                     <span (click)="course.display = true" class="underline cursor-pointer text-primary" style="font-style: italic;">อ่านเพิ่มเติม</span>
                                 </div>
@@ -28,8 +28,8 @@
                                         <!-- {{ course.description }} -->
                                     </p>
                                     <p class="mt-3" style="font-size: 11px;">
-                                        <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ course.startTime }} น.<br>
-                                        <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ course.endTime }} น.
+                                        <strong>วันที่เปิด:</strong> {{ course.startDate | date:'dd/MM/yyyy' }} เวลา: {{ formatTime(course?.startTime) }} น.<br>
+                                        <strong>วันที่ปิด:</strong> {{ course.endDate | date:'dd/MM/yyyy' }} เวลา: {{ formatTime(course?.startTime) }} น.
                                     </p>
                                     <ng-template pTemplate="footer">
                                         <button pButton icon="pi pi-check" (click)="course.display = false" label="ปิด" class="p-button-outlined"></button>

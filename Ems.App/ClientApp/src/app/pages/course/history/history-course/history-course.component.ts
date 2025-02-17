@@ -48,6 +48,15 @@ export class HistoryCourseComponent {
     })
   }
 
+  formatTime(time: string | Date): string {
+    if (!time) return '';
+    if (typeof time === 'string') {
+        return time.slice(0, 5);
+    }
+    const date = new Date(time);
+    return date.toTimeString().slice(0, 5);
+  }
+
   exportcertificate(course: Course) {
     const doc = new jsPDF({
       orientation: "landscape",

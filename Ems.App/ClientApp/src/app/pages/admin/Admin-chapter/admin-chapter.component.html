@@ -10,7 +10,7 @@
 <div class="grid" *ngIf="isLessonView">
   <div class="col-12">
     <div class="navigation-container">
-      <button pButton pRipple type="button" label="กลับไปหน้า จัดการ Course" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/admin/admin-course/']"></button>
+      <button pButton pRipple type="button" label="กลับไปหน้า จัดการ Course" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" pTooltip="กลับไป จัดการ Course " tooltipPosition="bottom"[routerLink]="['/admin/admin-course/']"></button>
 
     </div>
   </div>
@@ -51,9 +51,9 @@
         <ng-template pTemplate="caption">
         <h5>จัดการบทเรียนและเนื้อหา</h5>
           <div class="flex justify-content-between flex-column sm:flex-row">
-              <span class="p-input-icon-left mb-2">
+              <span class="p-input-icon-left mb-2" style="width: 350px">
                   <i class="pi pi-search"></i>
-                  <input pInputText type="text" #filter (input)="onGlobalFilter(chapterdata, $event)" placeholder="ค้นหาบทเรียน" class="w-full"/>
+                  <input pInputText type="text" #filter (input)="onGlobalFilter(chapterdata, $event)" placeholder="ค้นหาบทเรียน" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
               </span>
           </div>
       </ng-template>
@@ -76,16 +76,16 @@
         <ng-template pTemplate="body" let-chapter let-expanded="expanded">
             <tr>
                 <td>
-                  <p-button type="button" pRipple [pRowToggler]="chapter" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                  <p-button type="button" pRipple [pRowToggler]="chapter" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" pTooltip="แสดงหัวข้อของบทเรียน" tooltipPosition="bottom"/>
                 </td>
                 <td><strong>{{ chapter.title }}</strong></td>
                 <td>
                   <div class="flex justify-content-center align-items-center gap-2">
 
-                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm"(click)="showDialogContent(chapter.chapterId)">  
+                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm" pTooltip="เพิ่มหัวข้อ ของบทเรียน" tooltipPosition="bottom"(click)="showDialogContent(chapter.chapterId)">  
                     </button>
                       
-                    <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editChapter(chapter)">
+                    <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไขบทเรียน" tooltipPosition="bottom" (click)="editChapter(chapter)">
                     </button>
               
                     <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteViaToast($event, chapter.chapterId)">
@@ -145,7 +145,7 @@
                                   </td>
                                   <td>
                                     <div class="flex justify-content-center align-items-center gap-2">
-                                        <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="editContent(content)">
+                                        <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไขหัวข้อ" tooltipPosition="bottom" (click)="editContent(content)">
                                         </button>
                                   
                                         <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="confirmDeleteContentViaToast($event, content.contentId)">
@@ -207,7 +207,7 @@
 <!-- <div class="grid"> -->
   <div class="col-12">
     <div class="navigation-container">
-      <button pButton pRipple type="button" label="กลับไปหน้า จัดการ Course" icon="pi pi-arrow-left" iconPos="left"
+      <button pButton pRipple type="button" label="กลับไปหน้า จัดการ Course" icon="pi pi-arrow-left" iconPos="left" pTooltip="กลับไปหน้า จัดการ Course" tooltipPosition="bottom"
         class="p-button-outlined p-button-primary" [routerLink]="['/admin/admin-course/']"></button>
     </div>
   </div>
@@ -220,7 +220,7 @@
         <ng-template pTemplate="right">
           <p-toggleButton [(ngModel)]="isLessonView" onLabel="แบบทดสอบ" offLabel="บทเรียน" icon="pi pi-plus" class="mr-2" pTooltip="สลับระหว่างบทเรียนและแบบทดสอบ" tooltipPosition="bottom"></p-toggleButton>
           <span class="font-bold text-lg">|</span>
-          <button pButton pRipple type="button" label="เพิ่มคำถาม" pTooltip="เพิ่มคำถาม" tooltipPosition="bottom"
+          <button pButton pRipple type="button" label="เพิ่มคำถาม" pTooltip="เพิ่มคำถาม" tooltipPosition="bottom" 
             (click)="showDialogQuestion()" class="p-button-success ml-2"></button>
           <p-dialog [header]="editMode ? 'แก้ไขคำถาม' : 'เพิ่มคำถาม'" [(visible)]="displayQuestion" [modal]="true"
             showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '80vw'}">
@@ -250,16 +250,16 @@
 
       <p-table #questiondata [value]="questions" dataKey="questionId" [tableStyle]="{ 'min-width': '60rem' }"
         [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['title']" responsiveLayout="scroll" [expandedRowKeys]="expandedRows"
+        [globalFilterFields]="['questionText']" responsiveLayout="scroll" [expandedRowKeys]="expandedRows"
         (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
 
         <ng-template pTemplate="caption">
           <h5>จัดการแบบทดสอบ</h5>
           <div class="flex justify-content-between flex-column sm:flex-row">
-            <span class="p-input-icon-left mb-2">
+            <span class="p-input-icon-left mb-2" style="width: 350px">
               <i class="pi pi-search"></i>
               <input pInputText type="text" #filter (input)="onGlobalFilter(questiondata, $event)"
-                placeholder="ค้นหาคำถาม" class="w-full" />
+                placeholder="ค้นหาคำถาม" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
             </span>
           </div>
         </ng-template>
@@ -282,19 +282,19 @@
         <ng-template pTemplate="body" let-question let-expanded="expanded">
           <tr>
             <td>
-              <p-button type="button" pRipple [pRowToggler]="question" [text]="true" [rounded]="true" [plain]="true"
+              <p-button type="button" pRipple [pRowToggler]="question" [text]="true" [rounded]="true" [plain]="true" pTooltip="แสดงตัวเลือกคำตอบของคำถาม" tooltipPosition="bottom"
                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
             </td>
             <td><strong>{{question.questionText}}</strong></td>
             <td>
               <div class="flex justify-content-center align-items-center gap-2">
 
-                <button pButton pRipple label="เพิ่มคำตอบ" icon="pi pi-plus" class="p-button-success p-button-sm"
+                <button pButton pRipple label="เพิ่มคำตอบ" icon="pi pi-plus" class="p-button-success p-button-sm" pTooltip="เพิ่มตัวเลือกคำตอบ" tooltipPosition="bottom"
                   (click)="showDialogOption(question.questionId)">
                 </button>
 
                 <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm"
-                  (click)="editQuestion(question)">
+                  pTooltip="แก้ไขคำถาม" tooltipPosition="bottom" (click)="editQuestion(question)">
                 </button>
 
                 <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm"
@@ -359,7 +359,7 @@
             <td>
               <div class="flex justify-content-center align-items-center gap-2">
                 <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm"
-                  (click)="editOption(option)">
+                  pTooltip="แก้ไขตัวเลือกคำตอบ" tooltipPosition="bottom" (click)="editOption(option)">
                 </button>
 
                 <button pButton pRipple label="ลบ" icon="pi pi-trash" class="p-button-danger p-button-sm"

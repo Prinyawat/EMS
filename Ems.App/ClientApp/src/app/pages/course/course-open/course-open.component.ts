@@ -41,5 +41,13 @@ export class CourseOpenComponent implements OnInit{
     });
   }
 
-  
+  formatTime(time: string | Date): string {
+    if (!time) return '';
+    if (typeof time === 'string') {
+        return time.slice(0, 5);
+    }
+    const date = new Date(time);
+    return date.toTimeString().slice(0, 5);
+  }
+
 }
