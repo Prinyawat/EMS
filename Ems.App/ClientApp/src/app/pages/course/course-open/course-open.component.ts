@@ -17,6 +17,8 @@ export class CourseOpenComponent implements OnInit{
   breadcrumbItems: MenuItem[] = [];
   
   filteredCourses: Course[] = [];
+  completedCourses: Course[] = [];
+  
 
   constructor(
     private courseService: CourseService
@@ -27,19 +29,55 @@ export class CourseOpenComponent implements OnInit{
     this.breadcrumbItems.push({ label: 'Course' });
     this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register' });
   
+    this.fetchCourses();
+  }
+
+  fetchCourses() {
     this.courseService.getRegisteredCourses().subscribe((registeredCourses: Course[]) => {
       this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
-        this.filteredCourses = registeredCourses.map((course) => {
-            const completedCourse = completedCourses.find((c) => c.courseId === course.courseId);
+        this.completedCourses = completedCourses;
+  
+        const now = new Date();
+  
+        this.filteredCourses = registeredCourses
+          .map((course) => {
+            const completedCourse = this.completedCourses.find((c) => c.courseId === course.courseId);
+  
             if (completedCourse) {
-              course.statusName = completedCourse.statusName;
+              course.statusName = completedCourse.statusName; // "เสร็จสิ้น" หรือ "ไม่ผ่าน"
+            } else {
+              const startDateTime = new Date(course.startDate);
+              const [startHours, startMinutes] = course.startTime.split(':').map(Number);
+              startDateTime.setHours(startHours, startMinutes);
+  
+              if (now < startDateTime) {
+                course.statusName = 'รอเปิด';
+              } else {
+                course.statusName = 'เปิดแล้ว';
+              }
             }
             return course;
           })
-          .filter((course: Course) => course.statusName !== 'เสร็จสิ้น' && course.statusName !== 'ไม่ผ่าน');
+          .filter((course) => {
+            const endDateTime = new Date(course.endDate);
+            const [endHours, endMinutes] = course.endTime.split(':').map(Number);
+            endDateTime.setHours(endHours, endMinutes);
+  
+            return now < endDateTime || (course.statusName !== 'เสร็จสิ้น' && course.statusName !== 'ไม่ผ่าน');
+          });
       });
     });
   }
+  
+  isCourseAvailable(course: Course): boolean {
+    const now = new Date();
+    const startDateTime = new Date(course.startDate);
+    const [hours, minutes] = course.startTime.split(':').map(Number);
+    startDateTime.setHours(hours, minutes);
+  
+    return now >= startDateTime; 
+  }
+  
 
   formatTime(time: string | Date): string {
     if (!time) return '';

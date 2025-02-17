@@ -16,6 +16,8 @@ namespace Ems.App.Models
         public bool IsRegistered => statusName == "ลงทะเบียนแล้ว";
         public List<ChapterModel> chapters { get; set; } = new List<ChapterModel>();
         public List<QuestionModel> questions { get; set; } = new List<QuestionModel>();
+
+        public string statusComputed { get; set; }
     }
 
     public class ChapterModel

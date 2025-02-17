@@ -84,16 +84,21 @@
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div>
+                            <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="กรองสถานะ" (onChange)="filterCourses()"></p-dropdown>
+                        </div>
+                        <div>
                         <span class="p-input-icon-left mb-2" style="width: 350px">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
                         </span>
+                        </div>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 12rem" pSortableColumn="courseName">
+                        <th style="min-width: 10rem" pSortableColumn="courseName">
                             <div class="flex justify-content-center align-items-center">
                                 Course
                                 <p-sortIcon field="courseName"></p-sortIcon>
@@ -131,6 +136,12 @@
                                 เวลาปิด
                             </div>
                         </th>
+                        <th style="min-width: 8rem">
+                            <div class="flex justify-content-center">
+                                สถานะ
+                            </div>
+                        </th>
+                        
                         <th style="min-width: 10rem" >
                             <div class="flex justify-content-center ">
                                 Action
@@ -180,6 +191,14 @@
                                 {{ formatTime(course?.endTime) }} น.
                             </div>
                         </td>
+                        <td>
+                            <div class="flex justify-content-center align-items-center">
+                                <span [ngClass]="getStatusClass(course)" class="p-2 rounded-md">
+                                    {{ getCourseStatus(course) }}
+                                </span>
+                            </div>
+                        </td>
+                        
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">
 

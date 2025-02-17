@@ -80,6 +80,15 @@ export class AdminCourseComponent implements OnInit{
     ]
   };
 
+  statusOptions = [
+    { label: 'สถานะทั้งหมด', value: null },
+    { label: 'รอเปิด', value: 'รอเปิด' },
+    { label: 'เปิดแล้ว', value: 'เปิดแล้ว' },
+    { label: 'ปิด', value: 'ปิด' }
+  ];
+  
+  selectedStatus: string | null = null;
+
   constructor(
     private courseService: CourseService,
     private admincourseService: AdminCourseService,
@@ -296,6 +305,48 @@ export class AdminCourseComponent implements OnInit{
         this.showDeleteViaToast(courseId);
       },
     });
+  }
+
+  getCourseStatus(course: Course): string {
+    if (!course.startDate || !course.startTime || !course.endDate || !course.endTime) {
+      return 'ไม่ระบุ';
+    }
+  
+    const now = new Date();
+    const startDateTime = new Date(`${course.startDate}T${course.startTime}`);
+    const endDateTime = new Date(`${course.endDate}T${course.endTime}`);
+  
+    if (now < startDateTime) {
+      return 'รอเปิด';
+    } else if (now >= startDateTime && now <= endDateTime) {
+      return 'เปิดแล้ว';
+    } else {
+      return 'ปิด';
+    }
+  }
+
+  getStatusClass(course: Course): string {
+    const status = this.getCourseStatus(course);
+    return status
+  }
+
+  //โหลดข้อมูลก่อนแล้วค่อยกรอง
+  filterCourses() {
+    this.loading = true;
+    this.courseService.getCourses().subscribe(
+      (data: Course[]) => {
+        if (this.selectedStatus) {
+          this.course = data.filter(c => this.getCourseStatus(c) === this.selectedStatus);
+        } else {
+          this.course = data;
+        }
+        this.loading = false;
+      },
+      error => {
+        console.error('Error fetching courses:', error);
+        this.loading = false;
+      }
+    );
   }
 }
 

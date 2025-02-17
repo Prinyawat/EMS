@@ -38,19 +38,33 @@ export class CourseRegisterComponent implements OnInit{
     this.courseService.getCourses().subscribe((data: Course[]) => {
       this.courseService.getCompletedCourses().subscribe((completedCourses: Course[]) => {
         const completedCourseIds = new Set(completedCourses.map(course => course.courseId));
+        const now = new Date();
   
-        this.registeredCourses = data.filter(course => 
-          course.statusName === 'ลงทะเบียนแล้ว' && !completedCourseIds.has(course.courseId)
-        );
+        this.registeredCourses = data.filter(course => {
+          if (course.statusName === 'ลงทะเบียนแล้ว' && !completedCourseIds.has(course.courseId)) {
+            const startDateTime = new Date(course.startDate);
+            const [hours, minutes] = course.startTime.split(':').map(Number);
+            startDateTime.setHours(hours, minutes);
+            return now < startDateTime; 
+          }
+          return false;
+        });
   
-        this.unregisteredCourses = data.filter(course => 
-          course.statusName !== 'ลงทะเบียนแล้ว'
-        );
+        this.unregisteredCourses = data.filter(course => {
+          if (course.statusName !== 'ลงทะเบียนแล้ว') {
+            const endDateTime = new Date(course.endDate);
+            const [hours, minutes] = course.endTime.split(':').map(Number);
+            endDateTime.setHours(hours, minutes);
+            return now < endDateTime; 
+          }
+          return false;
+        });
   
         this.showRegisteredCourses = this.registeredCourses.length > 0;
       });
     });
   }
+  
   
   formatTime(time: string | Date): string {
     if (!time) return '';

@@ -4,7 +4,7 @@
   {{ course?.courseName }}
   <ng-container *ngIf="course?.statusName === 'เสร็จสิ้น' || course?.statusName === 'ไม่ผ่าน'; else quizButton">
     <span 
-      class="p-tag" 
+      class="p-tag ml-2" 
       [ngClass]="{'p-tag-success': course?.statusName === 'เสร็จสิ้น', 'p-tag-danger': course?.statusName === 'ไม่ผ่าน'}"
       >สถานะ: {{ course?.statusName }}</span>
   </ng-container>
