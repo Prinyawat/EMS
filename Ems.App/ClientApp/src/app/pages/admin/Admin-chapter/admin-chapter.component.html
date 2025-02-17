@@ -46,7 +46,7 @@
         </ng-template>
       </p-toolbar>
 
-      <p-table #chapterdata [value]="chapters" dataKey="chapterId" [tableStyle]="{ 'min-width': '60rem' }" [rows]="5" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['title']" responsiveLayout="scroll" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
+      <p-table #chapterdata [value]="chapters" dataKey="chapterId" [tableStyle]="{ 'min-width': '60rem' }" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['title']" responsiveLayout="scroll" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
 
         <ng-template pTemplate="caption">
         <h5>จัดการบทเรียนและเนื้อหา</h5>

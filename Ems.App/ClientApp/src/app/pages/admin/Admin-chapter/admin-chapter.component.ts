@@ -73,9 +73,7 @@ export class AdminChapterComponent implements OnInit {
     fonts: [
       { class: 'arial', name: 'Arial' },
     ],
-    toolbarHiddenButtons: [
-      ['bold']
-    ],
+    toolbarHiddenButtons: [],
     customClasses: [
       {
         name: "quote",
