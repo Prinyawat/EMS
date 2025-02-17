@@ -15,7 +15,7 @@ import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-agenda',
     templateUrl: './agenda.component.html',
-    providers: [MessageService, DatePipe ,ConfirmationService]
+    providers: [MessageService, DatePipe, ConfirmationService]
 })
 export class AgendaComponent {
 
@@ -49,8 +49,9 @@ export class AgendaComponent {
     selectedAgenda: any;
     requests: any[] = [];
 
-    agendaStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
-    agendaStatusName = 'อนุมัติ';
+    pendingStatusId: string;
+    approveStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
+
     leaveRequestID: string;
     isAdmin: boolean = false;
     adminID = '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
@@ -208,6 +209,7 @@ export class AgendaComponent {
         this.CheckingService.getNotiAgenda().subscribe({
 
             next: (data: NotiAgenda[]) => {
+                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
@@ -217,6 +219,7 @@ export class AgendaComponent {
 
                 if (this.UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad') {
                     this.notiAgenda = data.flatMap(agenda => {
+                        console.log("Admin:", data);
                         let checkingDates: string[];
 
                         if (agenda.checkingDate instanceof Date) {
@@ -239,6 +242,9 @@ export class AgendaComponent {
                     this.updateFilteredAgendas();
                 } else {
                     this.notiAgenda = data.flatMap(agenda => {
+                        if (agenda.agendaStatusId) {
+                            this.pendingStatusId = agenda.agendaStatusId;
+                        }
                         console.log("Not Admin:", data);
                         let checkingDates: string[];
 
@@ -256,7 +262,8 @@ export class AgendaComponent {
                             startTime: agenda.startTime,
                             endTime: agenda.endTime,
                             selectedLeaveHalfStatus: agenda.selectedLeaveHalfStatus,
-                            leaveStatus: agenda.leaveStatus
+                            leaveStatus: agenda.leaveStatus,
+                            pendingStatusId: agenda.agendaStatusId
                         }));
                     });
                     this.updateFilteredAgendas();
@@ -394,12 +401,13 @@ export class AgendaComponent {
 
     onApprove() {
         const agendaApprove = {
-            agendaStatusId: this.agendaStatusId,
+            approveStatusId: this.approveStatusId,
             leaveRequestID: this.selectedleaveRequestID,
         };
 
         this.AdminLeaveRequestService.saveAgendaApprove(agendaApprove).subscribe(
             response => {
+                console.log(agendaApprove);
                 this.messageService.add({
                     key: 'DeleteSucess',
                     severity: 'success',

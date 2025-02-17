@@ -17,6 +17,7 @@ namespace Ems.App.Models
 
     public class NotiAgendaModel
     {
+        public Guid agendaStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
         public Guid UserID { get; set; }
         public string firstName { get; set; }

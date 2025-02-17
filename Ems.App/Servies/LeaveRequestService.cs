@@ -28,15 +28,17 @@ namespace Ems.App.Servies
         {
             var userId1 = this._identityService.GetCurrentUser();
 
-            // แยกวันที่ออกมาเป็น List<string>
+            string formattedStartTime = formData.startTime + " น.";
+            string formattedEndTime = formData.endTime + " น.";
+
             var selectedDates = formData.selectedDates.Split(',')
-                .Select(date => date.Trim()) // ลบช่องว่างหน้า-หลัง
-                .Where(date => !string.IsNullOrEmpty(date)) // กัน error ถ้ามีค่าว่าง
+                .Select(date => date.Trim())
+                .Where(date => !string.IsNullOrEmpty(date))
                 .ToList();
 
             foreach (var date in selectedDates)
             {
-                // เช็คว่า วันที่ซ้ำไหม
+
                 var DuplicateRequest = _emsContext.leave_request
                     .Where(r => r.user_id == userId1 && r.leave_request_date == date)
                     .ToList();
@@ -53,9 +55,10 @@ namespace Ems.App.Servies
                     leave_request_status_id = formData.selectedLeaveStatusId,
                     leave_half_id = formData.selectHalfStatusId,
                     status_name = formData.selectedLeaveStatus,
-                    leave_start_time = formData.startTime,
-                    leave_end_time = formData.endTime,
+                    leave_start_time = formattedStartTime,
+                    leave_end_time = formattedEndTime,
                     leave_request_description = formData.additionalDescription,
+                    agenda_status_id = new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea")
                 };
 
                 _emsContext.leave_request.Add(leaveRequestEntity);
@@ -129,7 +132,7 @@ namespace Ems.App.Servies
         {
             var validStatusData = (from leaveRequest in _emsContext.leave_request
                                    join agendaStatus in _emsContext.agenda_status
-                                   on agendaStatusData.agendaStatusId equals agendaStatus.agenda_status_id
+                                   on agendaStatusData.approveStatusId equals agendaStatus.agenda_status_id
                                    where leaveRequest.leave_request_id == agendaStatusData.leaveRequestID
                                    select new
                                    {
@@ -140,7 +143,7 @@ namespace Ems.App.Servies
             if (validStatusData != null)
             {
                 var validAgendaStatus = _emsContext.agenda_status
-                    .FirstOrDefault(a => a.agenda_status_id == agendaStatusData.agendaStatusId);
+                    .FirstOrDefault(a => a.agenda_status_id == agendaStatusData.approveStatusId);
 
                 if (validAgendaStatus != null)
                 {
