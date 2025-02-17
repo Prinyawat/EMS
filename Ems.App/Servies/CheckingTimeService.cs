@@ -145,37 +145,41 @@ namespace Ems.App.Servies
 
         public List<NotiAgendaModel> getNotiAgenda()
         {
+            Guid pending = new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea");
             Guid userId = this._identityService.GetCurrentUser();
 
             if (userId.ToString() == "42cfb3be-fa01-499a-95af-fa0a879fb0ad")
             {
-                return _emsContext.user
-                    .Join(
-                        _emsContext.leave_request,
-                        u => u.user_id,
-                        lr => lr.user_id,
-                        (u, lr) => new { u, lr }
-                    )
-                    .Where(ulr => ulr.lr.agenda_status_id == null)
-                    .Join(
-                        _emsContext.leave_half,
-                        ulr => ulr.lr.leave_half_id,
-                        lh => lh.leave_half_id,
-                        (ulr, lh) => new NotiAgendaModel
-                        {   
-                            leaveRequestID = ulr.lr.leave_request_id,
-                            UserID = userId,
-                            firstName = ulr.u.first_name,
-                            lastName = ulr.u.last_name,
-                            selectedLeaveHalfStatus = lh.leave_type_name,
-                            leaveStatus = ulr.lr.status_name,
-                            checkingDate = ulr.lr.leave_request_date,
-                            startTime = ulr.lr.leave_start_time,
-                            endTime = ulr.lr.leave_end_time,
-                            additionalDescription = ulr.lr.leave_request_description
-                        }
-                    )
-                    .ToList();
+                var result = _emsContext.user
+                .AsNoTracking()  
+                .Join(
+                    _emsContext.leave_request,
+                    u => u.user_id,
+                    lr => lr.user_id,
+                    (u, lr) => new { u, lr }
+                )
+                .Join(
+                    _emsContext.leave_half,
+                    ulr => ulr.lr.leave_half_id,
+                    lh => lh.leave_half_id,
+                    (ulr, lh) => new { ulr, lh }
+                )
+                .Where(x => x.ulr.lr.agenda_status_id == pending)
+                .Select(x => new NotiAgendaModel
+                {
+                    leaveRequestID = x.ulr.lr.leave_request_id,
+                    UserID = userId,
+                    firstName = x.ulr.u.first_name,
+                    lastName = x.ulr.u.last_name,
+                    selectedLeaveHalfStatus = x.lh.leave_type_name,
+                    leaveStatus = x.ulr.lr.status_name,
+                    checkingDate = x.ulr.lr.leave_request_date,
+                    startTime = x.ulr.lr.leave_start_time,
+                    endTime = x.ulr.lr.leave_end_time,
+                    additionalDescription = x.ulr.lr.leave_request_description
+                })
+                .ToList();
+                return result;
             }
             else
             {
@@ -193,6 +197,7 @@ namespace Ems.App.Servies
                         lh => lh.leave_half_id,
                         (ulr, lh) => new NotiAgendaModel
                         {
+                            agendaStatusId = ulr.lr.agenda_status_id.Value,
                             UserID = userId,
                             firstName = ulr.u.first_name,
                             lastName = ulr.u.last_name,
@@ -207,7 +212,6 @@ namespace Ems.App.Servies
                     .ToList();
             }
         }
-
 
         public List<CheckingStatusModel> getCheckinStatus()
         {

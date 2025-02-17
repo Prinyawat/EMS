@@ -52,8 +52,8 @@
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
-                            <button pButton label="รีเซ็ต" class="p-button-outlined mb-2"
-                         icon="pi pi-filter-slash" (click)="clear(agendaSerch)"></button>
+                            <button pButton label="ประวัติคำขอ" class="p-button-outlined mb-2"
+                         icon="pi pi-book" (click)="clear(agendaSerch)"></button>
                         </div>
                         <div>
                             <span class="p-input-icon-left" style="width: 350px">
@@ -72,6 +72,21 @@
                                 คำขอ
                             </div>
                         </th>
+                        <th *ngIf="'56c99f7b-ada2-4c63-a949-2165c708d9ea' === pendingStatusId " style="min-width: 10rem">
+                            <div class="flex justify-content-center">
+                                คำขอ
+                            </div>
+                        </th>
+                        <th *ngIf="'2972bc3a-2d3a-422c-bd03-a2dbd34a2a45' === pendingStatusId " style="min-width: 10rem">
+                            <div class="flex justify-content-center">
+                                คำขอ
+                            </div>
+                        </th>
+                        <th *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'">
+                            <div>
+                                &nbsp;
+                            </div>
+                        </th>
                         <th style="min-width: 4rem">
                             <div class="flex justify-content-center">
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -83,28 +98,25 @@
                                 <p-columnFilter type="text" field="firstName" display="menu" />
 							</div>
 						</th>
-                        <th style="min-width: 10rem" >
+                        <th style="min-width: 8rem" >
 							<div class="flex justify-content-center align-items-center">
 								วัน/เดือน/ปี
                                 <p-columnFilter type="date" field="checkingDate" display="menu"></p-columnFilter>
 							</div>
 						</th>
-						<th style="min-width: 8rem" pSortableColumn="checkIn">
+						<th style="min-width: 8rem">
 							<div class="flex justify-content-center ">
 								เวลาเข้า
-                                <p-sortIcon field="checkIn"></p-sortIcon>
 							</div>
 						</th>
-                        <th style="min-width: 8rem" pSortableColumn="checkOut">
+                        <th style="min-width: 8rem">
 							<div class="flex justify-content-center ">
 								เวลาออก
-                                <p-sortIcon field="checkOut"></p-sortIcon>
 							</div>
 						</th>
-                        <th style="min-width: 8rem" pSortableColumn="leavehalf">
+                        <th style="min-width: 8rem">
 							<div class="flex justify-content-center ">
 								กรณีลา
-                                <p-sortIcon field="leavehalf"></p-sortIcon>
 							</div>
 						</th>
 						<th style="min-width: 8rem">
@@ -133,6 +145,13 @@
                                 <button (click)="onSelectRequest(agenda)" pButton label="คำขอ !" class="p-button-warn p-button-sm"></button>
                             </div>
                         </td>
+                        <td *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad' && (agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea' || agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45'); else emptyCell">
+                            <button *ngIf="agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea'" pButton pRipple type="button" label="รออนุมัติคำขอ" class="p-button-warning p-button-sm"></button>
+                            <button *ngIf="agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45'" pButton pRipple type="button" label="อนุมัติแล้ว" class="p-button-success p-button-sm"></button>
+                        </td>
+                        <ng-template #emptyCell>
+                            <td >&nbsp;</td>
+                        </ng-template>
                         <td>
                             <div class="flex justify-content-center align-items-center">
                                 <p-tableCheckbox [value]="agenda"></p-tableCheckbox>

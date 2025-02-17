@@ -4,6 +4,7 @@ namespace Ems.App.Models
 {
     public class LeaveRequestModel
     {
+        public Guid agendaStatusId { get; set; }
         public Guid UserId { get; set; }
         public Guid selectedLeaveStatusId { get; set; }
         public Guid selectHalfStatusId { get; set; }
@@ -24,7 +25,7 @@ namespace Ems.App.Models
 
     public class agendStatusDataModel
     {
-        public Guid agendaStatusId { get; set; }
+        public Guid approveStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
     }
 }

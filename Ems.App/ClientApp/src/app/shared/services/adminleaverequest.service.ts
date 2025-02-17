@@ -17,9 +17,9 @@ export class AdminLeaveRequestService {
         return this.http.delete(`${this.env}/deleteLeaveRequest/${data.leaveRequestID}`);
     }
 
-    saveAgendaApprove(agendaApprove: { agendaStatusId: string, leaveRequestID: string;}) {
+    saveAgendaApprove(agendaApprove: { approveStatusId: string, leaveRequestID: string;}) {
         return this.http.post(this.env + "/saveAgendaApprove", {
-            agendaStatusId: agendaApprove.agendaStatusId,
+            approveStatusId: agendaApprove.approveStatusId,
             leaveRequestID: agendaApprove.leaveRequestID
         });
     }
