@@ -66,5 +66,13 @@ namespace Ems.App.Controllers
             var isDeleted = _leaverequestservice.deleteLeaveRequest(leaveRequestID);
             return Ok(new { message = "ปฏิเสธคำขอเสร็จสิ้น" });
         }
+
+        [HttpPost]
+        [Route("saveAgendaApprove")]
+        public IActionResult saveAgendaApprove([FromBody] agendStatusDataModel agendaStatusData)
+        {
+            var result = _leaverequestservice.saveAgendaApprove(agendaStatusData);
+            return Ok(result);
+        }
     }
 }

@@ -22,4 +22,9 @@ namespace Ems.App.Models
 
     }
 
+    public class agendStatusDataModel
+    {
+        public Guid agendaStatusId { get; set; }
+        public Guid leaveRequestID { get; set; }
+    }
 }

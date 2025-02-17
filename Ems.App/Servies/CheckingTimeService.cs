@@ -156,6 +156,7 @@ namespace Ems.App.Servies
                         lr => lr.user_id,
                         (u, lr) => new { u, lr }
                     )
+                    .Where(ulr => ulr.lr.agenda_status_id == null)
                     .Join(
                         _emsContext.leave_half,
                         ulr => ulr.lr.leave_half_id,

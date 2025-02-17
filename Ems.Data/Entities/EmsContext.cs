@@ -13,6 +13,8 @@ public partial class EmsContext : DbContext
     {
     }
 
+    public virtual DbSet<agenda_status> agenda_status { get; set; }
+
     public virtual DbSet<chapter> chapter { get; set; }
 
     public virtual DbSet<chapter_content> chapter_content { get; set; }
@@ -65,6 +67,28 @@ public partial class EmsContext : DbContext
             .HasPostgresEnum("lang", new[] { "th", "en" })
             .HasPostgresExtension("uuid-ossp");
 
+        modelBuilder.Entity<agenda_status>(entity =>
+        {
+            entity.HasKey(e => e.agenda_status_id).HasName("agenda_status_pkey");
+
+            entity.ToTable("agenda_status", "ems");
+
+            entity.Property(e => e.agenda_status_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.agenda_status_name).HasMaxLength(16);
+            entity.Property(e => e.created_by)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.created_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+            entity.Property(e => e.updated_by)
+                .IsRequired()
+                .HasMaxLength(100);
+            entity.Property(e => e.updated_date)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone");
+        });
+
         modelBuilder.Entity<chapter>(entity =>
         {
             entity.HasKey(e => e.chapter_id).HasName("chapter_pkey");
@@ -86,7 +110,6 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.course).WithMany(p => p.chapter)
                 .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_course");
         });
 
@@ -112,7 +135,6 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.chapter).WithMany(p => p.chapter_content)
                 .HasForeignKey(d => d.chapter_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_chapter");
         });
 
@@ -209,7 +231,6 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.course).WithMany(p => p.course_complete)
                 .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_coursecomplete_course");
 
             entity.HasOne(d => d.status).WithMany(p => p.course_complete)
@@ -263,6 +284,10 @@ public partial class EmsContext : DbContext
             entity.Property(e => e.updated_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone");
+
+            entity.HasOne(d => d.agenda_status).WithMany(p => p.leave_request)
+                .HasForeignKey(d => d.agenda_status_id)
+                .HasConstraintName("fk_agenda_status");
 
             entity.HasOne(d => d.leave_half).WithMany(p => p.leave_request)
                 .HasForeignKey(d => d.leave_half_id)
@@ -403,7 +428,6 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.course).WithMany(p => p.question)
                 .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_question_course");
         });
 
@@ -425,17 +449,14 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.course).WithMany(p => p.registration)
                 .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_course");
 
             entity.HasOne(d => d.status).WithMany(p => p.registration)
                 .HasForeignKey(d => d.status_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_status");
 
             entity.HasOne(d => d.user).WithMany(p => p.registration)
                 .HasForeignKey(d => d.user_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_user");
         });
 
@@ -570,22 +591,18 @@ public partial class EmsContext : DbContext
 
             entity.HasOne(d => d.chapter_content).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.chapter_content_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_content");
 
             entity.HasOne(d => d.chapter).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.chapter_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_chapter");
 
             entity.HasOne(d => d.course).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.course_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_course");
 
             entity.HasOne(d => d.user).WithMany(p => p.user_progress)
                 .HasForeignKey(d => d.user_id)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_user");
         });
 

@@ -13,6 +13,7 @@ namespace Ems.App.Servies.IServices
         List<LeaveStatusDataModel> getLeaveRequestStatus();
 
         bool deleteLeaveRequest(Guid leaveRequestID);
+        agendStatusDataModel saveAgendaApprove(agendStatusDataModel agendaStatusData);
     }
 
 }

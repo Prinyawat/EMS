@@ -124,5 +124,36 @@ namespace Ems.App.Servies
             _emsContext.SaveChanges();
             return true;
         }
+
+        public agendStatusDataModel saveAgendaApprove(agendStatusDataModel agendaStatusData)
+        {
+            var validStatusData = (from leaveRequest in _emsContext.leave_request
+                                   join agendaStatus in _emsContext.agenda_status
+                                   on agendaStatusData.agendaStatusId equals agendaStatus.agenda_status_id
+                                   where leaveRequest.leave_request_id == agendaStatusData.leaveRequestID
+                                   select new
+                                   {
+                                       LeaveRequest = leaveRequest,
+                                       AgendaStatus = agendaStatus
+                                   }).FirstOrDefault();
+
+            if (validStatusData != null)
+            {
+                var validAgendaStatus = _emsContext.agenda_status
+                    .FirstOrDefault(a => a.agenda_status_id == agendaStatusData.agendaStatusId);
+
+                if (validAgendaStatus != null)
+                {
+                    validStatusData.LeaveRequest.agenda_status_id = validAgendaStatus.agenda_status_id;
+
+                    _emsContext.SaveChanges();
+                }
+            }
+       
+            _emsContext.SaveChanges();
+
+            return agendaStatusData;
+        }
+
     }
 }

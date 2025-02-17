@@ -27,6 +27,9 @@ export class AgendaComponent {
         '44467da9-d2fd-4293-bbb1-d8ccb7dae8f7': '#F39AC4'
     };
 
+    selectedDataAdmin: [] = [];
+
+    selectedleaveRequestID: string = '';
     userID: string = '';
     firstName: string = '';
     lastName: string = '';
@@ -40,11 +43,15 @@ export class AgendaComponent {
     formattedDate: string = '';
     value: any = null;
     dates: string[] = [];
+    loading: boolean = true;
 
     display: boolean = false;
-    selectedAgenda: any = null;
+    selectedAgenda: any;
     requests: any[] = [];
 
+    agendaStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
+    agendaStatusName = 'อนุมัติ';
+    leaveRequestID: string;
     isAdmin: boolean = false;
     adminID = '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
     UserID: string;
@@ -64,8 +71,6 @@ export class AgendaComponent {
     leaveRequestStatus: any[];
     statuses: any[];
     monthOfYear: any[];
-
-    loading: boolean = true;
 
     agendas: AgendaData[] = [];
     notiAgenda: NotiAgenda[] = [];
@@ -159,23 +164,23 @@ export class AgendaComponent {
         return date;
     }
 
-    onSelectRequest(agenda: NotiAgenda) {
-        console.log(agenda);
+    onSelectRequest(selectedDataAdmin: NotiAgenda) {
         this.display = true;
 
-        this.userID = agenda.userID;
+        this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
+        this.userID = selectedDataAdmin.userID;
 
-        this.firstName = agenda.firstName;
-        this.lastName = agenda.lastName;
+        this.firstName = selectedDataAdmin.firstName;
+        this.lastName = selectedDataAdmin.lastName;
 
-        this.checkingDate = new Date(agenda.checkingDate);
+        this.checkingDate = new Date(selectedDataAdmin.checkingDate);
 
-        this.startTime = agenda.startTime;
-        this.endTime = agenda.endTime;
+        this.startTime = selectedDataAdmin.startTime;
+        this.endTime = selectedDataAdmin.endTime;
 
-        this.selectedLeaveHalfStatus = agenda.selectedLeaveHalfStatus;
-        this.leaveStatuses = agenda.leaveStatus;
-        this.additionalDescription = agenda.additionalDescription;
+        this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
+        this.leaveStatuses = selectedDataAdmin.leaveStatus;
+        this.additionalDescription = selectedDataAdmin.additionalDescription;
     }
 
 
@@ -199,13 +204,14 @@ export class AgendaComponent {
     }
 
     NotiAgenda() {
+        this.loading = true;
         this.CheckingService.getNotiAgenda().subscribe({
 
             next: (data: NotiAgenda[]) => {
-                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
+                        this.loading = false;
                     }
                 }
 
@@ -360,7 +366,7 @@ export class AgendaComponent {
         this.filter.nativeElement.value = '';
     }
 
-    confirmDenyRequest(event: Event, leaveRequestID) {
+    confirmDenyRequest(event: Event, leaveRequestID: string) {
         this.confirmationService.confirm({
             key: 'confirmDenyToast',
             target: event.target || new EventTarget(),
@@ -375,14 +381,35 @@ export class AgendaComponent {
     onDenyRequest(leaveRequestID: string) {
         const requestData = { leaveRequestID };
         this.AdminLeaveRequestService.deleteLeaveRequest(requestData).subscribe(response => {
-            console.log(requestData);
             this.messageService.add({
-                key: 'tst',
+                key: 'DeleteSucess',
                 severity: 'success',
                 summary: 'ลบสำเร็จ',
-                detail: 'คุณได้ทำการลบคำตอบแล้ว',
+                detail: 'คุณได้ทำการปฏิเสธคำขอแล้ว',
             });
+            this.NotiAgenda();
+            this.display = false;
         });
+    }
+
+    onApprove() {
+        const agendaApprove = {
+            agendaStatusId: this.agendaStatusId,
+            leaveRequestID: this.selectedleaveRequestID,
+        };
+
+        this.AdminLeaveRequestService.saveAgendaApprove(agendaApprove).subscribe(
+            response => {
+                this.messageService.add({
+                    key: 'DeleteSucess',
+                    severity: 'success',
+                    summary: 'อนุมัติสำเร็จ',
+                    detail: 'คุณได้ทำการอนุมัติคำขอแล้ว',
+                });
+                this.NotiAgenda();
+                this.display = false;
+            }
+        );
     }
 
 }

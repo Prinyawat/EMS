@@ -1,3 +1,4 @@
+<p-toast key="DeleteSucess"></p-toast>
 <div class="grid p-fluid" >
 
     <div class="col-12 ">
@@ -18,9 +19,36 @@
 
             </p-toolbar>
 
-			<p-table #agendaSerch [value]="filteredAgendas" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+			<p-table #agendaSerch [value]="filteredAgendas" [loading]="loading" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
             [globalFilterFields]="['firstName','lastName','checkingDate','checkingStatus'] " [sortOrder]="-1" sortField="checkingDate">
 				<ng-template pTemplate="caption">
+
+                    <!-- เป็น dialog ของ admin agenda -->
+                    <p-dialog header="รายละเอียดคำขอ" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'750px': '75vw'}" [closable]="false" >
+                        <div class="flex flex-warp gap-2">
+                            <input type="text" pInputText placeholder="ชื่อ นามสกุล" [value]="firstName+ ' ' + lastName"  [ngStyle]="{width: '360px'}"/>
+                            <div class="flex flex-warp gap-2">
+                                <input type="text" pInputText placeholder="กรณีลา" [ngStyle]="{width: '150px'}" [value]="selectedLeaveHalfStatus" />
+                                <input type="text" pInputText placeholder="สถานะลา" [ngStyle]="{width: '150px'}" [value]="leaveStatuses" />
+                            </div>
+                        </div>
+                        <div class="flex flex-warp mt-2">
+                            <input type="text" pInputText placeholder="วันที่ส่งคำขอลา" [ngStyle]="{width: '600px'}" [value]="formatDateToThai(checkingDate)" />
+                        </div>
+                        <span class="flex gap-2 mt-2 justify-content-center">
+                            <input type="text" pInputText placeholder="เวลาเข้า" [ngStyle]="{width: '150px'}" [value]="startTime" />
+                            <input type="text" pInputText placeholder="เวลาออก" [ngStyle]="{width: '150px'}" [value]="endTime" />
+                        </span>
+                        <div class="flex gap-2 mt-2">
+                            <textarea rows="5" cols="30" placeholder="รายละเอียด...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription" [value]="additionalDescription" ></textarea>
+                        </div>
+                        <ng-template pTemplate="footer">
+                                <button pButton (click)="onApprove()" label="อนุมัติคำขอ" class="p-button-success p-button-sm"></button>
+                                <button pButton (click)="confirmDenyRequest($event, selectedleaveRequestID)" label="ปฎิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
+                                <p-confirmPopup key="confirmDenyToast"></p-confirmPopup>
+                                <button pButton (click)="display=false" label="ปิด" class="p-button-outlined p-button-sm"></button>
+                        </ng-template>
+                    </p-dialog>
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
@@ -102,33 +130,7 @@
 					<tr>
                         <td *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'">
                             <div class="flex justify-content-center align-items-center">
-                                <button (click)="onSelectRequest(agenda)" pButton label="คำขอ !" class="p-button-info p-button-sm"></button>
-
-                                    <p-dialog header="รายละเอียดคำขอ" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'750px': '75vw'}" [closable]="false" >
-                                        <div class="flex flex-warp gap-2">
-                                            <input type="text" pInputText placeholder="ชื่อ นามสกุล" [value]="firstName+ ' ' + lastName"  [ngStyle]="{width: '360px'}"/>
-                                            <div class="flex flex-warp gap-2">
-                                                <input type="text" pInputText placeholder="กรณีลา" [ngStyle]="{width: '150px'}" [value]="selectedLeaveHalfStatus" />
-                                                <input type="text" pInputText placeholder="สถานะลา" [ngStyle]="{width: '150px'}" [value]="leaveStatuses" />
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-warp mt-2">
-                                            <input type="text" pInputText placeholder="วันที่ส่งคำขอลา" [ngStyle]="{width: '600px'}" [value]="formatDateToThai(checkingDate)" />
-                                        </div>
-                                        <span class="flex gap-2 mt-2 justify-content-center">
-                                            <input type="text" pInputText placeholder="เวลาเข้า" [ngStyle]="{width: '150px'}" [value]="startTime" />
-                                            <input type="text" pInputText placeholder="เวลาออก" [ngStyle]="{width: '150px'}" [value]="endTime" />
-                                        </span>
-                                        <div class="flex gap-2 mt-2">
-                                            <textarea rows="5" cols="30" placeholder="รายละเอียด...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription" [value]="additionalDescription" ></textarea>
-                                        </div>
-                                        <ng-template pTemplate="footer">
-                                                <button pButton (click)="display=false" label="อนุมัติคำขอ" class="p-button-success p-button-sm"></button>
-                                                <button pButton (click)="confirmDenyRequest($event, agenda.leaveRequestID )" label="ปฎิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
-                                                <p-confirmPopup key="confirmDenyToast"></p-confirmPopup>
-                                                <button pButton (click)="display=false" label="ปิด" class="p-button-outlined p-button-sm"></button>
-                                        </ng-template>
-                                    </p-dialog>
+                                <button (click)="onSelectRequest(agenda)" pButton label="คำขอ !" class="p-button-warn p-button-sm"></button>
                             </div>
                         </td>
                         <td>

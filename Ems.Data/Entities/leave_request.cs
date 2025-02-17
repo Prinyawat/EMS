@@ -33,6 +33,10 @@ public partial class leave_request
 
     public string leave_end_time { get; set; }
 
+    public Guid? agenda_status_id { get; set; }
+
+    public virtual agenda_status agenda_status { get; set; }
+
     public virtual ICollection<check_in_out> check_in_out { get; set; } = new List<check_in_out>();
 
     public virtual leave_half leave_half { get; set; }
