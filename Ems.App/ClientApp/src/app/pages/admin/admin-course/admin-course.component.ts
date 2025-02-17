@@ -211,6 +211,8 @@ export class AdminCourseComponent implements OnInit{
     this.startTime = null!;
     this.endTime = null!;
     this.description = '';
+
+    this.resetDirtyFlags();
   }
 
   editCourse(course: AdminCourse) {

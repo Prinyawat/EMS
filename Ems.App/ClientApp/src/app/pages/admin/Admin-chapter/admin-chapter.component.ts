@@ -43,6 +43,11 @@ export class AdminChapterComponent implements OnInit {
     isCorrect: boolean;
     options: { optionText: string; isCorrect: boolean }[] = [];
 
+    chapterTitleDirty: boolean = false;
+    contentTitleDirty: boolean = false;
+    bodyDirty: boolean = false;
+    questionTextDirty: boolean = false;
+    optionTextDirty: boolean = false;
 
     loading: boolean = true;
     display: boolean = false;
@@ -115,6 +120,7 @@ export class AdminChapterComponent implements OnInit {
         this.displayContent = true;
         this.selectedChapterId = chapterId;
         this.editMode = false;
+        this.resetForm();
     }
 
     showDialog() {
@@ -173,6 +179,33 @@ export class AdminChapterComponent implements OnInit {
         });
     }
 
+    updateDirtyFields() {
+      if (this.chapterTitle) this.chapterTitleDirty = false;
+      if (this.contentTitle) this.contentTitleDirty = false;
+      if (this.body) this.bodyDirty = false;
+      if (this.questionText) this.questionTextDirty = false;
+
+
+    }
+  
+    validateForm(): boolean {
+      this.chapterTitleDirty = true;
+      this.contentTitleDirty = true;
+      this.bodyDirty = true;
+      this.questionTextDirty = true;
+
+      this.updateDirtyFields();
+  
+      return !!this.chapterTitle && !!this.contentTitle && !!this.body && !!this.questionText
+    }
+
+    resetDirtyFlags() {
+      this.chapterTitleDirty = false;
+      this.contentTitleDirty = false;
+      this.bodyDirty = false;
+      this.questionTextDirty = false;
+    }
+
     resetForm() {
         this.chapterTitle = '';
         this.contentTitle = '';
@@ -181,18 +214,15 @@ export class AdminChapterComponent implements OnInit {
         // question & option
         this.questionText = '';
         this.options = [{ optionText: '', isCorrect: false }];
+
+        this.resetDirtyFlags();
     }
 
     saveChapter() {
-        if (!this.chapterTitle.trim()) {
-            this.messageService.add({
-                key: 'tst',
-                severity: 'warn',
-                summary: 'กรอกข้อมูลไม่ครบ',
-                detail: 'กรุณาระบุชื่อบทเรียน',
-            });
-            return;
-        }
+      if (!this.validateForm()) {
+        return;
+      }
+      this.updateDirtyFields();
 
         const model = {
             courseId: this.course.courseId,
@@ -219,19 +249,10 @@ export class AdminChapterComponent implements OnInit {
         this.selectedChapterId = chapter.chapterId;
         this.chapterTitle = chapter.title;
         this.display = true;
+        this.resetDirtyFlags()
     }
 
     updateChapter() {
-        if (!this.chapterTitle.trim()) {
-            this.messageService.add({
-                key: 'tst',
-                severity: 'warn',
-                summary: 'กรอกข้อมูลไม่ครบ',
-                detail: 'กรุณาระบุชื่อบทเรียน',
-            });
-            return;
-        }
-
         const updatedChapter = {
             chapterId: this.selectedChapterId,
             title: this.chapterTitle,
@@ -282,15 +303,10 @@ export class AdminChapterComponent implements OnInit {
     }
 
     saveContent() {
-        if (!this.contentTitle.trim()) {
-            this.messageService.add({
-                key: 'tst',
-                severity: 'warn',
-                summary: 'กรอกข้อมูลไม่ครบ',
-                detail: 'กรุณาระบุชื่อหัวข้อ',
-            });
-            return;
+        if (!this.validateForm()) {
+          return;
         }
+        this.updateDirtyFields();
 
         const model = {
             chapterId: this.selectedChapterId,
@@ -320,6 +336,7 @@ export class AdminChapterComponent implements OnInit {
         this.contentTitle = content.contentTitle;
         this.body = content.body;
         this.displayContent = true;
+        this.resetDirtyFlags()
     }
 
     updateContent() {
@@ -381,15 +398,10 @@ export class AdminChapterComponent implements OnInit {
     }
 
     saveQuestion() {
-        if (!this.questionText.trim()) {
-            this.messageService.add({
-                key: 'tst',
-                severity: 'warn',
-                summary: 'กรอกข้อมูลไม่ครบ',
-                detail: 'กรุณาระบุชื่อบทเรียน',
-            });
-            return;
+        if (!this.validateForm()) {
+          return;
         }
+        this.updateDirtyFields();
 
         const model = {
             courseId: this.course.courseId,
@@ -416,6 +428,7 @@ export class AdminChapterComponent implements OnInit {
         this.selectedQuestionId = question.questionId;
         this.questionText = question.questionText;
         this.displayQuestion = true;
+        this.resetDirtyFlags()
     }
 
     updateQuestion() {

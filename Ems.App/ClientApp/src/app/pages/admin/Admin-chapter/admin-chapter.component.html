@@ -30,8 +30,9 @@
                         <div class="p-fluid p-formgrid grid">
 
                             <div class="field col-12 ">
-                                <label htmlFor="chapterTitle" class="text-xl">ชื่อบทเรียน</label>
-                                <input pInputText id="chapterTitle" type="text" [(ngModel)]="chapterTitle"/>
+                                <label htmlFor="chapterTitle" class="text-xl">ชื่อบทเรียน<span class="text-red-500">*</span></label>
+                                <input pInputText id="chapterTitle" type="text" [(ngModel)]="chapterTitle" [ngClass]="{'ng-invalid ng-dirty': chapterTitleDirty}"/>
+                                <small *ngIf="chapterTitleDirty && !chapterTitle" class="text-red-500 block">กรุณากรอกชื่อบทเรียน.</small>
                             </div>
 
                         </div>
@@ -50,7 +51,6 @@
         <ng-template pTemplate="caption">
         <h5>จัดการบทเรียนและเนื้อหา</h5>
           <div class="flex justify-content-between flex-column sm:flex-row">
-              <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(chapterdata)"></button>
               <span class="p-input-icon-left mb-2">
                   <i class="pi pi-search"></i>
                   <input pInputText type="text" #filter (input)="onGlobalFilter(chapterdata, $event)" placeholder="ค้นหาบทเรียน" class="w-full"/>
@@ -179,17 +179,14 @@
                 <div class="p-fluid p-formgrid grid">
 
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="Title" class="text-xl">ชื่อหัวข้อ</label>
-                        <input pInputText id="Title" type="text" [(ngModel)]="contentTitle"/>
+                        <label htmlFor="Title" class="text-xl">ชื่อหัวข้อ<span class="text-red-500">*</span></label>
+                        <input pInputText id="Title" type="text" [(ngModel)]="contentTitle" [ngClass]="{'ng-invalid ng-dirty': contentTitleDirty}"/>
+                        <small *ngIf="contentTitleDirty && !contentTitle" class="text-red-500 block">กรุณากรอกชื่อบทเรียน.</small>
                     </div>
 
                     <div class="field col-12">
-
-                        <!-- <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด</label>
-                        <textarea id="body" rows="5" cols="30" placeholder="เพิ่มคำอธิบาย..." pInputTextarea [(ngModel)]="body" ></textarea> -->
-                        <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด</label>
+                        <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด<span class="text-red-500">*</span><small *ngIf="bodyDirty && !body" class="text-red-500 block">กรุณากรอกเนื้อหารายละเอียด.</small></label>
                         <angular-editor [(ngModel)]="body" [config]="config" placeholder="เพิ่มคำอธิบาย..."></angular-editor>
-
                     </div>
                 </div>
             </div>
@@ -231,8 +228,11 @@
               <div class="card">
                 <div class="p-fluid p-formgrid grid">
                   <div class="field col-12 ">
-                    <label htmlFor="questionText" class="text-xl">ตั้งคำถาม</label>
-                    <input pInputText id="questionText" type="text" [(ngModel)]="questionText" />
+                    <label htmlFor="questionText" class="text-xl">ตั้งคำถาม<span class="text-red-500">*</span></label>
+                    <input pInputText id="questionText" type="text" [(ngModel)]="questionText" [ngClass]="{'ng-invalid ng-dirty': questionTextDirty}"/>
+                    <small *ngIf="questionTextDirty && !questionText" class="text-red-500 block">กรุณาตั้งคำถาม.</small>
+
+
                   </div>
                 </div>
               </div>
@@ -256,8 +256,6 @@
         <ng-template pTemplate="caption">
           <h5>จัดการแบบทดสอบ</h5>
           <div class="flex justify-content-between flex-column sm:flex-row">
-            <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
-              (click)="clear(questiondata)"></button>
             <span class="p-input-icon-left mb-2">
               <i class="pi pi-search"></i>
               <input pInputText type="text" #filter (input)="onGlobalFilter(questiondata, $event)"
