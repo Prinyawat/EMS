@@ -26,6 +26,7 @@ export class AdminChapterComponent implements OnInit {
 
     //chapter
     selectedChapterId: string = '';
+    selectedChapterTitle: string = '';
     chapterTitle: string = '';
 
     //content
@@ -35,6 +36,7 @@ export class AdminChapterComponent implements OnInit {
 
     //question
     selectedQuestionId: string = '';
+    selectedQuestionText: string= '';
     questionText: string = '';
 
     //option
@@ -114,9 +116,10 @@ export class AdminChapterComponent implements OnInit {
         delete this.expandedRows[event.data.questionId];
     }
 
-    showDialogContent(chapterId: string) {
+    showDialogContent(chapterId: string, chapterTitle: string) {
         this.displayContent = true;
         this.selectedChapterId = chapterId;
+        this.selectedChapterTitle = chapterTitle;
         this.editMode = false;
         this.resetForm();
     }
@@ -133,9 +136,10 @@ export class AdminChapterComponent implements OnInit {
         this.resetForm();
     }
 
-    showDialogOption(questionId: string) {
+    showDialogOption(questionId: string, questionText: string) {
         this.displayOption = true;
         this.selectedQuestionId = questionId;
+        this.selectedQuestionText = questionText;
         this.editMode = false;
         this.resetForm();
     }

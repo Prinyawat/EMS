@@ -32,9 +32,9 @@
         <!-- <i class="pi pi-bell mr-2 p-text-secondary" style="font-size: 1.5rem"
         (click)="showPositionDialog('top-right')" label="TopRight"></i> -->
 
-        <i class="pi pi-bell mr-2 p-text-secondary" *ngIf="notifications.length === 0" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
+        <i class="pi pi-bell mr-2 p-text-secondary" *ngIf="notificationcourse.length === 0" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
 
-        <i class="pi pi-bell mr-2 p-text-secondary" pBadge *ngIf="notifications.length > 0"[value]="notifications.length" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
+        <i class="pi pi-bell mr-2 p-text-secondary" pBadge *ngIf="notificationcourse.length > 0"[value]="notificationcourse.length" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
 
         <button class="p-link layout-topbar-button" (click)="toggleMenu($event)">
             <i class="pi pi-user"></i>
@@ -150,7 +150,7 @@
         </ng-container>
 
         <!-- CourseNotification -->
-        <ng-container *ngFor="let notification of notifications">
+        <ng-container *ngFor="let notification of notificationcourse">
             <li class="flex align-items-center py-2 border-bottom-1 surface-border">
                 <div class="w-3rem h-3rem flex align-items-center justify-content-center bg-blue-100 border-circle mr-3 flex-shrink-0">
                     <i class="pi pi-user text-xl text-blue-500"></i>

@@ -82,7 +82,7 @@
                 <td>
                   <div class="flex justify-content-center align-items-center gap-2">
 
-                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm" pTooltip="เพิ่มหัวข้อ ของบทเรียน" tooltipPosition="bottom"(click)="showDialogContent(chapter.chapterId)">  
+                    <button pButton pRipple label="เพิ่มหัวข้อ" icon="pi pi-plus" class="p-button-success p-button-sm" pTooltip="เพิ่มหัวข้อ ของบทเรียน" tooltipPosition="bottom"(click)="showDialogContent(chapter.chapterId, chapter.title)">  
                     </button>
                       
                     <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไขบทเรียน" tooltipPosition="bottom" (click)="editChapter(chapter)">
@@ -172,7 +172,14 @@
             </tr>
         </ng-template>
       </p-table>
-      <p-dialog [header]="editMode ? 'แก้ไขหัวข้อ' : 'เพิ่มหัวข้อ'" [(visible)]="displayContent" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
+      <p-dialog [(visible)]="displayContent" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
+
+        <ng-template pTemplate="header">
+          <div class="flex flex-column">
+            <span class="text-lg font-bold">{{ editMode ? 'แก้ไขหัวข้อ' : 'เพิ่มหัวข้อ' }}</span>
+            <span class="text-lg text-gray-500 mt-2">สำหรับบทเรียน: <strong>{{ selectedChapterTitle }}</strong></span>
+          </div>
+        </ng-template>
 
         <div class="col-12">
             <div class="card">
@@ -290,7 +297,7 @@
               <div class="flex justify-content-center align-items-center gap-2">
 
                 <button pButton pRipple label="เพิ่มคำตอบ" icon="pi pi-plus" class="p-button-success p-button-sm" pTooltip="เพิ่มตัวเลือกคำตอบ" tooltipPosition="bottom"
-                  (click)="showDialogOption(question.questionId)">
+                   (click)="showDialogOption(question.questionId, question.questionText)">
                 </button>
 
                 <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm"
@@ -387,48 +394,56 @@
     </tr>
     </ng-template>
     </p-table>
-    <p-dialog [header]="editMode ? 'แก้ไขคำตอบ' : 'เพิ่มคำตอบ'" [(visible)]="displayOption" [modal]="true"
-      showEffect="fade" [style]="{ width: '45vw' }" [breakpoints]="{ '960px': '80vw' }" icon="pi pi-plus">
+    <p-dialog [(visible)]="displayOption" [modal]="true" showEffect="fade" [style]="{ width: '45vw' }" [breakpoints]="{ '960px': '80vw' }">
+  
+    <ng-template pTemplate="header">
+      <div class="flex flex-column">
+        <span class="text-lg font-bold">{{ editMode ? 'แก้ไขคำตอบ' : 'เพิ่มคำตอบ' }}</span>
+        <div></div>
+        <span class="text-lg text-gray-500 mt-2">สำหรับคำถาม: <strong>{{ selectedQuestionText }}</strong></span>
+      </div>
+    </ng-template>
 
-      <div class="col-12">
-        <div class="card">
-          <div class="p-fluid p-formgrid grid">
-            <div *ngFor="let option of options; let i = index" class="field col-12">
-              <label htmlFor="optionText-{{ i }}" class="text-xl">
-                {{ editMode ? 'คำตอบที่เลือก' : 'คำตอบที่ ' + (i + 1) }}
-              </label>
-              <div class="flex align-items-center gap-2">
-                <input pInputText id="optionText-{{ i }}" type="text" [(ngModel)]="options[i].optionText"
-                  placeholder="คำตอบ" class="flex-1" />
+    <div class="col-12">
+      <div class="card">
+        <div class="p-fluid p-formgrid grid">
+          <div *ngFor="let option of options; let i = index" class="field col-12">
+            <label htmlFor="optionText-{{ i }}" class="text-xl">
+              {{ editMode ? 'คำตอบที่เลือก' : 'คำตอบที่ ' + (i + 1) }}
+            </label>
+            <div class="flex align-items-center gap-2">
+              <input pInputText id="optionText-{{ i }}" type="text" [(ngModel)]="options[i].optionText"
+                placeholder="คำตอบ" class="flex-1" />
 
-                <p-toggleButton [(ngModel)]="options[i].isCorrect" onLabel="ถูก" offLabel="ผิด" [onIcon]="'pi pi-check'"
-                  [offIcon]="'pi pi-times'" tooltip="กำหนดคำตอบถูก" tooltipPosition="bottom">
-                </p-toggleButton>
+              <p-toggleButton [(ngModel)]="options[i].isCorrect" onLabel="ถูก" offLabel="ผิด"
+                [onIcon]="'pi pi-check'" [offIcon]="'pi pi-times'"
+                tooltip="กำหนดคำตอบถูก" tooltipPosition="bottom">
+              </p-toggleButton>
 
-                <button *ngIf="i !== 0 && !editMode" pButton type="button" icon="pi pi-trash"
-                  class="p-button-danger p-button-sm" (click)="removeOptionField(i)" pTooltip="ลบคำตอบ"
-                  tooltipPosition="bottom">
-                </button>
-              </div>
+              <button *ngIf="i !== 0 && !editMode" pButton type="button" icon="pi pi-trash"
+                class="p-button-danger p-button-sm" (click)="removeOptionField(i)" pTooltip="ลบคำตอบ"
+                tooltipPosition="bottom">
+              </button>
             </div>
           </div>
-
-          <button *ngIf="!editMode" pButton type="button" label="+ เพิ่มคำตอบ" class="p-button-sm p-button-success mt-3"
-            [disabled]="options.length >= 5" (click)="addOptionField()">
-          </button>
         </div>
-      </div>
 
-      <ng-template pTemplate="footer">
-        <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'"
-          [icon]="editMode ? 'pi pi-pencil' : 'pi pi-plus'"
-          [ngClass]="editMode ? 'p-button-info' : 'p-button-success'"
-          (click)="editMode ? updateOption() : saveOption()">
+        <button *ngIf="!editMode" pButton type="button" label="+ เพิ่มคำตอบ" 
+          class="p-button-sm p-button-success mt-3"
+          [disabled]="options.length >= 5" (click)="addOptionField()">
         </button>
-        <button pButton (click)="displayOption = false" label="ปิด" class="p-button-outlined"></button>
-      </ng-template>
-    </p-dialog>
+      </div>
+    </div>
 
+    <ng-template pTemplate="footer">
+      <button pButton [label]="editMode ? 'แก้ไข' : 'เพิ่ม'"
+        [icon]="editMode ? 'pi pi-pencil' : 'pi pi-plus'"
+        [ngClass]="editMode ? 'p-button-info' : 'p-button-success'"
+        (click)="editMode ? updateOption() : saveOption()">
+      </button>
+      <button pButton (click)="displayOption = false" label="ปิด" class="p-button-outlined"></button>
+    </ng-template>
+  </p-dialog>
   </div>
 </div>
 </div>
