@@ -20,7 +20,7 @@
             </p-toolbar>
 
 			<p-table #agendaSerch [value]="filteredAgendas" [loading]="loading" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
-            [globalFilterFields]="['firstName','lastName','checkingDate','checkingStatus'] " [sortOrder]="-1" sortField="checkingDate">
+            [globalFilterFields]="['firstName','lastName','checkingDate','selectedLeaveHalfStatus'] " [sortOrder]="-1" sortField="checkingDate">
 				<ng-template pTemplate="caption">
 
                     <!-- เป็น dialog ของ admin agenda -->
@@ -58,7 +58,7 @@
                         <div>
                             <span class="p-input-icon-left" style="width: 350px">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="ค้นหาด้วย ชื่อ-นามสกุล, วัน/เดือน/ปี, สถานะ" class="w-full"/>
+                                <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="ค้นหาด้วย ชื่อ-นามสกุล, วัน, กรณีการลา" class="w-full"/>
                             </span>
                         </div>
 
@@ -95,10 +95,10 @@
 						<th style="min-width: 8rem">
 							<div class="flex justify-content-center align-items-center">
 								ชื่อ - นามสกุล
-                                <p-columnFilter type="text" field="firstName" display="menu" />
+                                <p-columnFilter type="text" field="firstName" display="menu"/>
 							</div>
 						</th>
-                        <th style="min-width: 8rem" >
+                        <th style="min-width: 10rem" >
 							<div class="flex justify-content-center align-items-center">
 								วัน/เดือน/ปี
                                 <p-columnFilter type="date" field="checkingDate" display="menu"></p-columnFilter>
@@ -117,11 +117,13 @@
                         <th style="min-width: 8rem">
 							<div class="flex justify-content-center ">
 								กรณีลา
+
 							</div>
 						</th>
 						<th style="min-width: 8rem">
 							<div class="flex justify-content-center align-items-center">
 								สถานะ
+
                                 <p-columnFilter field="checkingStatus" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
 

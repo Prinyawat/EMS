@@ -43,7 +43,7 @@ export class AgendaComponent {
     formattedDate: string = '';
     value: any = null;
     dates: string[] = [];
-    loading: boolean = true;
+    loading: boolean = false;
 
     display: boolean = false;
     selectedAgenda: any;
@@ -205,7 +205,6 @@ export class AgendaComponent {
     }
 
     NotiAgenda() {
-        this.loading = true;
         this.CheckingService.getNotiAgenda().subscribe({
 
             next: (data: NotiAgenda[]) => {
@@ -213,7 +212,6 @@ export class AgendaComponent {
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
-                        this.loading = false;
                     }
                 }
 
