@@ -59,16 +59,16 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Check Information',
+                label: 'Checking Information',
                 items: [
                     {
-                        label: 'Check Form', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
+                        label: 'เช็คอิน-เช็คเอาต์', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
                     },
                     {
-                        label: 'Leave Request', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
+                        label: 'ยื่นคำขอการลา', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
                     },
                     {
-                        label: 'User Agenda', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
+                        label: 'แดชบอร์ดข้อมูล', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
                     }
                 ]
             },

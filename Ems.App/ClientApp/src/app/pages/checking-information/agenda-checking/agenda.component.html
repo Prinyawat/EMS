@@ -14,7 +14,6 @@
                 <h5>User Agenda</h5>
                 <ng-template pTemplate="right">
                     <button pButton pRipple label="ส่งออก Excel" icon="pi pi-print" class="p-button-help" (click)="exportExcel()" pTooltip="XLS" tooltipPosition="bottom"></button>
-
                 </ng-template>
 
             </p-toolbar>
@@ -26,25 +25,26 @@
                     <!-- เป็น dialog ของ admin agenda -->
                     <p-dialog header="รายละเอียดคำขอ" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'750px': '75vw'}" [closable]="false" >
                         <div class="flex flex-warp gap-2">
-                            <input type="text" pInputText placeholder="ชื่อ นามสกุล" [value]="firstName+ ' ' + lastName"  [ngStyle]="{width: '360px'}"/>
+                            <input type="text" pInputText placeholder="ชื่อ นามสกุล" [value]="firstName+ ' ' + lastName"  [ngStyle]="{width: '360px'}" disabled="true"/>
                             <div class="flex flex-warp gap-2">
-                                <input type="text" pInputText placeholder="กรณีลา" [ngStyle]="{width: '150px'}" [value]="selectedLeaveHalfStatus" />
-                                <input type="text" pInputText placeholder="สถานะลา" [ngStyle]="{width: '150px'}" [value]="leaveStatuses" />
+                                <input type="text" pInputText placeholder="กรณีลา" [ngStyle]="{width: '150px'}" [value]="selectedLeaveHalfStatus" disabled="true"/>
+                                <input type="text" pInputText placeholder="สถานะลา" [ngStyle]="{width: '150px'}" [value]="leaveStatuses" disabled="true"/>
                             </div>
                         </div>
                         <div class="flex flex-warp mt-2">
-                            <input type="text" pInputText placeholder="วันที่ส่งคำขอลา" [ngStyle]="{width: '600px'}" [value]="formatDateToThai(checkingDate)" />
+                            <input type="text" pInputText placeholder="วันที่ส่งคำขอลา" [ngStyle]="{width: '600px'}" [value]="formatDateToThai(checkingDate)" disabled="true"/>
                         </div>
                         <span class="flex gap-2 mt-2 justify-content-center">
-                            <input type="text" pInputText placeholder="เวลาเข้า" [ngStyle]="{width: '150px'}" [value]="startTime" />
-                            <input type="text" pInputText placeholder="เวลาออก" [ngStyle]="{width: '150px'}" [value]="endTime" />
+                            <input type="text" pInputText placeholder="เวลาเข้า" [ngStyle]="{width: '150px'}" [value]="startTime" disabled="true"/>
+                            <input type="text" pInputText placeholder="เวลาออก" [ngStyle]="{width: '150px'}" [value]="endTime" disabled="true"/>
                         </span>
                         <div class="flex gap-2 mt-2">
                             <textarea rows="5" cols="30" placeholder="รายละเอียด...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription" [value]="additionalDescription" ></textarea>
                         </div>
                         <ng-template pTemplate="footer">
-                                <button pButton (click)="onApprove()" label="อนุมัติคำขอ" class="p-button-success p-button-sm"></button>
-                                <button pButton (click)="confirmDenyRequest($event, selectedleaveRequestID)" label="ปฎิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
+                                <button *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="onApprove()" label="อนุมัติคำขอ" class="p-button-success p-button-sm"></button>
+                                <button  *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="onReject($event, selectedleaveRequestID)" label="ปฏิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
+                                <button  *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="confirmDenyRequest($event, selectedleaveRequestID)" label="ลบคำขอ" class="p-button-danger p-button-sm" ></button>
                                 <p-confirmPopup key="confirmDenyToast"></p-confirmPopup>
                                 <button pButton (click)="display=false" label="ปิด" class="p-button-outlined p-button-sm"></button>
                         </ng-template>
@@ -52,15 +52,17 @@
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
-                            <button pButton label="ประวัติคำขอ" class="p-button-outlined mb-2"
-                         icon="pi pi-book" (click)="clear(agendaSerch)"></button>
-                        </div>
-                        <div>
                             <span class="p-input-icon-left" style="width: 350px">
                                 <i class="pi pi-search"></i>
                                 <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="ค้นหาด้วย ชื่อ-นามสกุล, วัน, กรณีการลา" class="w-full"/>
                             </span>
                         </div>
+                        <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filterDropDown($event.value)" placeholder="เลือกทั้งหมด" >
+                            <ng-template let-option pTemplate="item">
+                                <span [style.background-color]="getStatusColor(option.label)" [style.color]="'white'"
+                                [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
 
 					</div>
 
@@ -123,19 +125,6 @@
 						<th style="min-width: 8rem">
 							<div class="flex justify-content-center align-items-center">
 								สถานะ
-
-                                <p-columnFilter field="checkingStatus" display="menu">
-                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-
-                                        <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filterDropDown($event.value)" placeholder="เลือกสถานะ">
-                                            <ng-template let-option pTemplate="item">
-                                                <span [style.background-color]="getStatusColor(option.label)" [style.color]="'white'"
-                                                [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                            </ng-template>
-                                        </p-dropdown>
-
-                                    </ng-template>
-                                </p-columnFilter>
 							</div>
 						</th>
 					</tr>
@@ -147,9 +136,10 @@
                                 <button (click)="onSelectRequest(agenda)" pButton label="คำขอ !" class="p-button-warn p-button-sm"></button>
                             </div>
                         </td>
-                        <td *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad' && (agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea' || agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45'); else emptyCell">
-                            <button *ngIf="agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea'" pButton pRipple type="button" label="รออนุมัติคำขอ" class="p-button-warning p-button-sm"></button>
-                            <button *ngIf="agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45'" pButton pRipple type="button" label="อนุมัติแล้ว" class="p-button-success p-button-sm"></button>
+                        <td *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad' && (agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea' || agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45' || agenda?.pendingStatusId === 'be7eef8e-1ad6-4503-a88a-f9a7b1cba773'); else emptyCell">
+                            <button *ngIf="agenda?.pendingStatusId === '56c99f7b-ada2-4c63-a949-2165c708d9ea'" pButton pRipple type="button" label="รออนุมัติคำขอ" class="p-button-warning p-button-sm" (click)="onUserSelect(agenda)"></button>
+                            <button *ngIf="agenda?.pendingStatusId === '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45'" pButton pRipple type="button" label="อนุมัติแล้ว" class="p-button-success p-button-sm" ></button>
+                            <button *ngIf="agenda?.pendingStatusId === 'be7eef8e-1ad6-4503-a88a-f9a7b1cba773'" pButton pRipple type="button" label="ปฏิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
                         </td>
                         <ng-template #emptyCell>
                             <td >&nbsp;</td>

@@ -65,30 +65,23 @@ namespace Ems.App.Servies
                 _emsContext.SaveChanges();
                 _emsContext.Entry(leaveRequestEntity).Reload();
 
-                // ดึงข้อมูล User, Status, HalfStatus
-                //var user = _emsContext.user.FirstOrDefault(u => u.user_id == formData.UserId);
+                //var userGuid = userId1;
                 //var HalfstatusName = _emsContext.leave_half.FirstOrDefault(u => u.leave_half_id == formData.selectHalfStatusId);
                 //var statusName = _emsContext.leave_request_status.FirstOrDefault(s => s.leave_request_status_id == formData.selectedLeaveStatusId);
 
-                //if (user == null || HalfstatusName == null || statusName == null)
-                //{
-                //    throw new Exception("ข้อมูลที่จำเป็นบางประการไม่ครบถ้วน (user, HalfstatusName, statusName)");
-                //}
-
-                //// ส่งแจ้งเตือนแต่ละคำขอ
-                //SendLeaveRequestNotification(user, statusName, HalfstatusName, leaveRequestEntity);
+                //SendLeaveRequestNotification(userId1, statusName, HalfstatusName, leaveRequestEntity);
             }
 
             return new LeaveRequestModel();
         }
 
 
-        private void SendLeaveRequestNotification(user user, leave_request statusName, leave_half HalfstatusName, leave_request leaveRequestEntity)
-        {
-            var message = $"{user.first_name} ได้ทำการยื่นคำขอ {statusName.status_name} {HalfstatusName.leave_type_name} ณ วัน {leaveRequestEntity.leave_request_date:dd/MM/yyyy}";
-            Console.WriteLine("Sending notification: " + message);
-            _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
-        }
+        //private void SendLeaveRequestNotification(user userGuid, leave_request_status statusName, leave_half HalfstatusName, leave_request leaveRequestEntity)
+        //{
+        //    var message = $"ยื่นคำขอ {statusName.leave_request_status_name} {HalfstatusName.leave_type_name} ณ วัน {leaveRequestEntity.leave_request_date:dd/MM/yyyy}";
+        //    Console.WriteLine("Sending notification: " + message);
+        //    _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+        //}
 
 
         public List<LeaveHalfStatusModel> getLeaveRequestHalfStatus()
@@ -128,7 +121,7 @@ namespace Ems.App.Servies
             return true;
         }
 
-        public agendStatusDataModel saveAgendaApprove(agendStatusDataModel agendaStatusData)
+        public approveStatusModel saveAgendaApprove(approveStatusModel agendaStatusData)
         {
             var validStatusData = (from leaveRequest in _emsContext.leave_request
                                    join agendaStatus in _emsContext.agenda_status
@@ -153,6 +146,36 @@ namespace Ems.App.Servies
                 }
             }
        
+            _emsContext.SaveChanges();
+
+            return agendaStatusData;
+        }
+
+        public rejectStatusModel saveAgendaReject(rejectStatusModel agendaStatusData)
+        {
+            var validStatusData = (from leaveRequest in _emsContext.leave_request
+                                   join agendaStatus in _emsContext.agenda_status
+                                   on agendaStatusData.rejectStatusId equals agendaStatus.agenda_status_id
+                                   where leaveRequest.leave_request_id == agendaStatusData.leaveRequestID
+                                   select new
+                                   {
+                                       LeaveRequest = leaveRequest,
+                                       AgendaStatus = agendaStatus
+                                   }).FirstOrDefault();
+
+            if (validStatusData != null)
+            {
+                var validAgendaStatus = _emsContext.agenda_status
+                    .FirstOrDefault(a => a.agenda_status_id == agendaStatusData.rejectStatusId);
+
+                if (validAgendaStatus != null)
+                {
+                    validStatusData.LeaveRequest.agenda_status_id = validAgendaStatus.agenda_status_id;
+
+                    _emsContext.SaveChanges();
+                }
+            }
+
             _emsContext.SaveChanges();
 
             return agendaStatusData;

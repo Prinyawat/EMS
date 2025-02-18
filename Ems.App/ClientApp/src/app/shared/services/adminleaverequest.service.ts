@@ -24,4 +24,11 @@ export class AdminLeaveRequestService {
         });
     }
 
+    saveAgendaReject(agendaApprove: { rejectStatusId: string, leaveRequestID: string;}) {
+        return this.http.post(this.env + "/saveAgendaReject", {
+            rejectStatusId: agendaApprove.rejectStatusId,
+            leaveRequestID: agendaApprove.leaveRequestID
+        });
+    }
+
 }
