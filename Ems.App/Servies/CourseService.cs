@@ -23,7 +23,8 @@ namespace Ems.App.Servies
         {
             Guid userId = this._identityService.GetCurrentUser();
             return _emsContext.course
-                .OrderBy(c => c.created_date)
+                //.OrderBy(c => c.created_date)
+                .OrderByDescending(c => c.created_date)
                 .Select(c => new CourseModel
             {
                 courseId = c.course_id,

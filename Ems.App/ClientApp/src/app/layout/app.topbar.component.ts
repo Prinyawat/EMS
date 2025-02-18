@@ -39,6 +39,8 @@ export class AppTopBarComponent {
 
     notificationcourse: string[] = [];
 
+    notifications: string[] = [];
+
     notificationleave: string[] = [];
 
     user: UserModel = new UserModel();
@@ -74,54 +76,15 @@ export class AppTopBarComponent {
         });
 
         // CourseNotification
-        const leaveNotifications = localStorage.getItem('notificationleave');
-
-        if (leaveNotifications) {
-            this.notificationleave = JSON.parse(leaveNotifications);
+        const storedNotifications = localStorage.getItem('notifications');
+        if (storedNotifications) {
+            this.notifications = JSON.parse(storedNotifications);
         }
-
-        // เริ่มการเชื่อมต่อกับ notification service
         this.notificationService.startConnection();
-
-        // ฟังการแจ้งเตือนจาก server
         this.notificationService.listenNotifications((message: string) => {
-            console.log(message);
-
-            // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
-            if (!this.notificationleave.includes(message)) {
-                // ถ้าไม่มี, เพิ่มข้อความใหม่
-                this.notificationleave.push(message);
-
-                // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
-                console.log("Saving to localStorage:", this.notificationleave);
-                localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
-            } else {
-                console.log("Duplicate notification, not saving:", message);
-            }
-        });
-        if (leaveNotifications) {
-            this.notificationleave = JSON.parse(leaveNotifications);
-        }
-
-        // เริ่มการเชื่อมต่อกับ notification service
-        this.notificationService.startConnection();
-
-        // ฟังการแจ้งเตือนจาก server
-        this.notificationService.listenNotifications((message: string) => {
-            console.log(message);
-
-            // ตรวจสอบว่ามีข้อความนี้ใน notificationleave หรือไม่
-            if (!this.notificationleave.includes(message)) {
-                // ถ้าไม่มี, เพิ่มข้อความใหม่
-                this.notificationleave.push(message);
-
-                // บันทึกข้อมูลการแจ้งเตือนใหม่ใน localStorage
-                console.log("Saving to localStorage:", this.notificationleave);
-                localStorage.setItem('notificationleave', JSON.stringify(this.notificationleave));
-            } else {
-                console.log("Duplicate notification, not saving:", message);
-            }
-        });
+        this.notifications.push(message);
+        localStorage.setItem('notifications', JSON.stringify(this.notifications));
+    });
     }
     
     loadUserData() {
