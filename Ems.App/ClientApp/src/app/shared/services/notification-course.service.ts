@@ -38,12 +38,6 @@ export class NotificationCourseService  {
         } 
     }
 
-    // startConnection(): void {
-    //     this.hubConnection.start()
-    //         .then(() => console.log('SignalR connected!'))
-    //         .catch(err => console.error('Error connecting to SignalR:', err));
-    // }
-
     listenNotifications(callback: (message: string) => void) {
         this.hubConnection.on('ReceiveNotification', callback);
     }
