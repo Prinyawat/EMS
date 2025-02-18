@@ -34,8 +34,8 @@ export class AgendaComponent {
     firstName: string = '';
     lastName: string = '';
     checkingDate: Date = new Date();
-    startTime: string;
-    endTime: string;
+    startTime!: Date ;
+    endTime!: Date;
     selectedLeaveHalfStatus: string = '';
     leaveStatuses: string = '';
     additionalDescription: string = '';
@@ -82,6 +82,7 @@ export class AgendaComponent {
     exportColumns: any[];
     representatives: Representative[] = [];
     rowGroupMetadata: any;
+
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(private CheckingService: CheckingService,
@@ -95,7 +96,6 @@ export class AgendaComponent {
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
         this.breadcrumbItems.push({ label: 'แดชบอร์ดข้อมูล' });
-
         this.cols = [
             { field: 'firstName', header: 'ชื่อ', },
             { field: 'lastName', header: 'นามสกุล' },
@@ -176,8 +176,8 @@ export class AgendaComponent {
 
         this.checkingDate = new Date(selectedDataAdmin.checkingDate);
 
-        this.startTime = selectedDataAdmin.startTime;
-        this.endTime = selectedDataAdmin.endTime;
+        this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
+        this.endTime = new Date(`1970-01-01T${selectedDataAdmin.endTime}`);
 
         this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
@@ -193,16 +193,18 @@ export class AgendaComponent {
         this.firstName = selectedDataAdmin.firstName;
         this.lastName = selectedDataAdmin.lastName;
 
+        // this.checkingDate = new Date(selectedDataAdmin.checkingDate);
         this.checkingDate = new Date(selectedDataAdmin.checkingDate);
+        this.checkingDate.setHours(12, 0, 0, 0);
 
-        this.startTime = selectedDataAdmin.startTime;
-        this.endTime = selectedDataAdmin.endTime;
+        this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
+        this.endTime = new Date(`1970-01-01T${selectedDataAdmin.endTime}`);
 
         this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
         this.additionalDescription = selectedDataAdmin.additionalDescription;
-    }
 
+    }
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
             next: (data: AgendaData[]) => {
@@ -226,7 +228,6 @@ export class AgendaComponent {
         this.CheckingService.getNotiAgenda().subscribe({
 
             next: (data: NotiAgenda[]) => {
-                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
@@ -261,7 +262,6 @@ export class AgendaComponent {
                         if (agenda.agendaStatusId) {
                             this.pendingStatusId = agenda.agendaStatusId;
                         }
-                        console.log("Not Admin:", data);
                         let checkingDates: string[];
 
                         if (agenda.checkingDate instanceof Date) {

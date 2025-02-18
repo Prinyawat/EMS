@@ -23,8 +23,8 @@ namespace Ems.App.Models
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string checkingDate { get; set; }
-        public string startTime { get; set; }
-        public string endTime { get; set; }
+        public TimeOnly startTime { get; set; }
+        public TimeOnly endTime { get; set; }
         public string selectedLeaveHalfStatus { get; set; }
         public string leaveStatus { get; set; }
         public string additionalDescription { get; set; }

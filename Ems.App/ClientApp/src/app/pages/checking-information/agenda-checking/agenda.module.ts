@@ -18,6 +18,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CalendarModule } from 'primeng/calendar';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import { CalendarModule } from 'primeng/calendar';
         OverlayPanelModule,
         ConfirmPopupModule,
         CalendarModule,
+        FormsModule,
 
     ],
         declarations: [AgendaComponent]

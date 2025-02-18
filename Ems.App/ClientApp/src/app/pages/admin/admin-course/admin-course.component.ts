@@ -86,7 +86,7 @@ export class AdminCourseComponent implements OnInit{
     { label: 'เปิดแล้ว', value: 'เปิดแล้ว' },
     { label: 'ปิด', value: 'ปิด' }
   ];
-  
+
   selectedStatus: string | null = null;
 
   constructor(
@@ -311,11 +311,11 @@ export class AdminCourseComponent implements OnInit{
     if (!course.startDate || !course.startTime || !course.endDate || !course.endTime) {
       return 'ไม่ระบุ';
     }
-  
+
     const now = new Date();
     const startDateTime = new Date(`${course.startDate}T${course.startTime}`);
     const endDateTime = new Date(`${course.endDate}T${course.endTime}`);
-  
+
     if (now < startDateTime) {
       return 'รอเปิด';
     } else if (now >= startDateTime && now <= endDateTime) {

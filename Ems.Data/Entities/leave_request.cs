@@ -29,9 +29,9 @@ public partial class leave_request
 
     public Guid? leave_half_id { get; set; }
 
-    public string leave_start_time { get; set; }
+    public TimeOnly? leave_start_time { get; set; }
 
-    public string leave_end_time { get; set; }
+    public TimeOnly? leave_end_time { get; set; }
 
     public Guid? agenda_status_id { get; set; }
 

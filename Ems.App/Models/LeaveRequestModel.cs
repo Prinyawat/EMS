@@ -11,8 +11,8 @@ namespace Ems.App.Models
         public string selectedDates { get; set; }
         public string selectedLeaveStatus { get; set; }
         public string selectedLeaveHalfStatus { get; set; }
-        public string startTime { get; set; }
-        public string endTime { get; set; }
+        public TimeOnly startTime { get; set; }
+        public TimeOnly endTime { get; set; }
         public string additionalDescription { get; set; }
     }
 

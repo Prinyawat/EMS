@@ -174,8 +174,8 @@ namespace Ems.App.Servies
                     selectedLeaveHalfStatus = x.lh.leave_type_name,
                     leaveStatus = x.ulr.lr.status_name,
                     checkingDate = x.ulr.lr.leave_request_date,
-                    startTime = x.ulr.lr.leave_start_time,
-                    endTime = x.ulr.lr.leave_end_time,
+                    startTime = x.ulr.lr.leave_start_time ?? default(TimeOnly),
+                    endTime = x.ulr.lr.leave_end_time ?? default(TimeOnly),
                     additionalDescription = x.ulr.lr.leave_request_description
                 })
                 .ToList();
@@ -205,8 +205,8 @@ namespace Ems.App.Servies
                             selectedLeaveHalfStatus = lh.leave_type_name,
                             leaveStatus = ulr.lr.status_name,
                             checkingDate = ulr.lr.leave_request_date,
-                            startTime = ulr.lr.leave_start_time,
-                            endTime = ulr.lr.leave_end_time,
+                            startTime = ulr.lr.leave_start_time ?? default(TimeOnly),
+                            endTime = ulr.lr.leave_end_time ?? default(TimeOnly),
                             additionalDescription = ulr.lr.leave_request_description
                         }
                     )

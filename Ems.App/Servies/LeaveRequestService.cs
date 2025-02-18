@@ -28,8 +28,8 @@ namespace Ems.App.Servies
         {
             var userId1 = this._identityService.GetCurrentUser();
 
-            string formattedStartTime = formData.startTime + " น.";
-            string formattedEndTime = formData.endTime + " น.";
+            //string formattedStartTime = formData.startTime + " น.";
+            //string formattedEndTime = formData.endTime + " น.";
 
             var selectedDates = formData.selectedDates.Split(',')
                 .Select(date => date.Trim())
@@ -55,8 +55,8 @@ namespace Ems.App.Servies
                     leave_request_status_id = formData.selectedLeaveStatusId,
                     leave_half_id = formData.selectHalfStatusId,
                     status_name = formData.selectedLeaveStatus,
-                    leave_start_time = formattedStartTime,
-                    leave_end_time = formattedEndTime,
+                    leave_start_time = formData.startTime,
+                    leave_end_time = formData.endTime,
                     leave_request_description = formData.additionalDescription,
                     agenda_status_id = new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea")
                 };

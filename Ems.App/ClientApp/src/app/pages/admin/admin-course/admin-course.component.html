@@ -31,7 +31,7 @@
                                         <label htmlFor="startDate" class="text-xl">วันที่เปิด <span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="startDate" [minDate]="minSelectableDate"
                                                     [showButtonBar]="true" dateFormat="dd/mm/yy"
-                                                    class="w-full" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}">
+                                                    class="w-full" size="small" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}">
                                         </p-calendar>
                                         <small *ngIf="startDateDirty && !startDate" class="text-red-500 block">กรุณาเลือกวันที่เปิด.</small>
                                     </div>
@@ -141,7 +141,7 @@
                                 สถานะ
                             </div>
                         </th>
-                        
+
                         <th style="min-width: 10rem" >
                             <div class="flex justify-content-center ">
                                 Action
@@ -182,7 +182,7 @@
 
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                {{ formatDateForDisplay(course?.endDate) }} 
+                                {{ formatDateForDisplay(course?.endDate) }}
                             </div>
                         </td>
 
@@ -198,7 +198,7 @@
                                 </span>
                             </div>
                         </td>
-                        
+
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">
 
