@@ -51,6 +51,7 @@ export class AgendaComponent {
 
     pendingStatusId: string;
     approveStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
+    rejectStatusId = 'be7eef8e-1ad6-4503-a88a-f9a7b1cba773';
 
     leaveRequestID: string;
     isAdmin: boolean = false;
@@ -93,8 +94,7 @@ export class AgendaComponent {
     ngOnInit() {
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'Check Information' });
-        this.breadcrumbItems.push({ label: 'Checking' });
-        this.breadcrumbItems.push({ label: 'User Agenda' });
+        this.breadcrumbItems.push({ label: 'แดชบอร์ดข้อมูล' });
 
         this.cols = [
             { field: 'firstName', header: 'ชื่อ', },
@@ -151,7 +151,7 @@ export class AgendaComponent {
     }
 
     parseTime(timeString: string): Date {
-        const [time, modifier] = timeString.split(" "); // แยก "08:30 AM" → ["08:30", "AM"]
+        const [time, modifier] = timeString.split(" ");
         let [hours, minutes] = time.split(":").map(Number);
 
         if (modifier === "PM" && hours !== 12) {
@@ -184,6 +184,24 @@ export class AgendaComponent {
         this.additionalDescription = selectedDataAdmin.additionalDescription;
     }
 
+    onUserSelect(selectedDataAdmin: NotiAgenda) {
+        this.display = true;
+
+        this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
+        this.userID = selectedDataAdmin.userID;
+
+        this.firstName = selectedDataAdmin.firstName;
+        this.lastName = selectedDataAdmin.lastName;
+
+        this.checkingDate = new Date(selectedDataAdmin.checkingDate);
+
+        this.startTime = selectedDataAdmin.startTime;
+        this.endTime = selectedDataAdmin.endTime;
+
+        this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
+        this.leaveStatuses = selectedDataAdmin.leaveStatus;
+        this.additionalDescription = selectedDataAdmin.additionalDescription;
+    }
 
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
@@ -279,14 +297,14 @@ export class AgendaComponent {
 
     updateDropdownOptionss() {
         this.updateDropdownOptions = [
-            { label: 'เลือกสถานะ', value: null },
+            { label: 'เลือกทั้งหมด', value: null },
             ...(Array.isArray(this.workStatus) ? this.workStatus : []),
             ...(Array.isArray(this.leaveRequestStatus) ? this.leaveRequestStatus : [])
         ];
     }
 
     filterDropDown(selectedStatus: string | null) {
-        if (selectedStatus === null) {
+        if (selectedStatus === null || selectedStatus === 'เลือกทั้งหมด') {
             this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
         } else {
             this.filteredAgendas = this.agendas.filter(agenda => agenda.checkingStatus === selectedStatus);
@@ -296,6 +314,8 @@ export class AgendaComponent {
             ];
         }
     }
+
+
 
     getStatusColor(label: string | null): string {
         if (!label) {
@@ -390,7 +410,7 @@ export class AgendaComponent {
                 key: 'DeleteSucess',
                 severity: 'success',
                 summary: 'ลบสำเร็จ',
-                detail: 'คุณได้ทำการปฏิเสธคำขอแล้ว',
+                detail: 'คุณได้ทำการลบคำขอแล้ว',
             });
             this.NotiAgenda();
             this.display = false;
@@ -402,7 +422,6 @@ export class AgendaComponent {
             approveStatusId: this.approveStatusId,
             leaveRequestID: this.selectedleaveRequestID,
         };
-
         this.AdminLeaveRequestService.saveAgendaApprove(agendaApprove).subscribe(
             response => {
                 console.log(agendaApprove);
@@ -411,6 +430,26 @@ export class AgendaComponent {
                     severity: 'success',
                     summary: 'อนุมัติสำเร็จ',
                     detail: 'คุณได้ทำการอนุมัติคำขอแล้ว',
+                });
+                this.NotiAgenda();
+                this.display = false;
+            }
+        );
+    }
+
+    onReject() {
+        const agendaApprove = {
+            rejectStatusId: this.rejectStatusId,
+            leaveRequestID: this.selectedleaveRequestID,
+        };
+        this.AdminLeaveRequestService.saveAgendaReject(agendaApprove).subscribe(
+            response => {
+                console.log(agendaApprove);
+                this.messageService.add({
+                    key: 'DeleteSucess',
+                    severity: 'success',
+                    summary: 'อนุมัติสำเร็จ',
+                    detail: 'คุณได้ทำการปฏิเสธคำขอแล้ว',
                 });
                 this.NotiAgenda();
                 this.display = false;

@@ -23,9 +23,15 @@ namespace Ems.App.Models
 
     }
 
-    public class agendStatusDataModel
+    public class approveStatusModel
     {
         public Guid approveStatusId { get; set; }
+        public Guid leaveRequestID { get; set; }
+    }
+
+    public class rejectStatusModel
+    {
+        public Guid rejectStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
     }
 }
