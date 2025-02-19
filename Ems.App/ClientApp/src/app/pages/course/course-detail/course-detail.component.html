@@ -24,7 +24,7 @@
 <h3>{{ course?.subtitle }}</h3>
 <p [innerHTML]="course?.description"></p>
 
-<h2>Chapters</h2>
+<h2>บทเรียน</h2>
 <p-table
   [value]="course?.chapters"
   styleClass="p-datatable-gridlines custom-table"
@@ -32,7 +32,7 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th>ตอนที่</th>
+      <th>บทที่</th>
       <th class="text-center">หัวข้อ</th>
       <th class="text-center">สถานะ</th>
       <th class="text-center">เอกสาร</th>
