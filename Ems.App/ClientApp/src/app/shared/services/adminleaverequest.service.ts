@@ -31,4 +31,9 @@ export class AdminLeaveRequestService {
         });
     }
 
+    saveAgendaUpdate(agendaUpdate: any) {
+        console.log(agendaUpdate);
+        return this.http.post(this.env + "/saveAgendaUpdate", agendaUpdate);
+    }
+
 }

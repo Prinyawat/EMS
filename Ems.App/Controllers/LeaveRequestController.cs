@@ -82,5 +82,13 @@ namespace Ems.App.Controllers
             var result = _leaverequestservice.saveAgendaReject(agendaStatusData);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("saveAgendaUpdate")]
+        public IActionResult saveAgendaUpdate([FromBody] updateStatusModel agendaStatusData)
+        {
+            var result = _leaverequestservice.saveAgendaUpdate(agendaStatusData);
+            return Ok(result);
+        }
     }
 }

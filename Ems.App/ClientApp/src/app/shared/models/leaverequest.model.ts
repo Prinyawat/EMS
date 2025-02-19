@@ -22,7 +22,7 @@ export class NotiAgenda{
     lastName: string;
     checkingDate: Date;
     startTime: Date;
-    endTime: string;
+    endTime: Date;
     selectedLeaveHalfStatus: string;
     leaveStatus: string;
     additionalDescription: string;

@@ -15,6 +15,7 @@ namespace Ems.App.Servies.IServices
         bool deleteLeaveRequest(Guid leaveRequestID);
         approveStatusModel saveAgendaApprove(approveStatusModel agendaStatusData);
         rejectStatusModel saveAgendaReject(rejectStatusModel agendaStatusData);
+        updateStatusModel saveAgendaUpdate(updateStatusModel agendaStatusData);
     }
 
 }

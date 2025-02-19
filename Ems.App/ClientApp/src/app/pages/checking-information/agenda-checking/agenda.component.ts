@@ -10,7 +10,7 @@ import { Representative } from 'src/app/demo/api/customer';
 import { AgendaData } from 'src/app/shared/models/agenda.model';
 import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 
-import { LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.model';
+import { LeaveHalfStatus, LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.model';
 import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-agenda',
@@ -53,6 +53,7 @@ export class AgendaComponent {
     approveStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
     rejectStatusId = 'be7eef8e-1ad6-4503-a88a-f9a7b1cba773';
 
+
     leaveRequestID: string;
     isAdmin: boolean = false;
     adminID = '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
@@ -66,6 +67,7 @@ export class AgendaComponent {
     updateDropdownOptions: { label: string, value: string }[] = [];
     allStatusOptions: any[] = [];
     leaveStatus: any[];
+    leaveRequestHalfStatus: any[];
 
     breadcrumbItems: MenuItem[] = [];
     workStatus: any[] = [];
@@ -131,6 +133,19 @@ export class AgendaComponent {
                 this.updateDropdownOptionss();
             }
         });
+
+        this.LeaveRequestService.getLeaveRequestHalfStatus().subscribe({
+            next: (data) => {
+                if (Array.isArray(data)) {
+                    this.leaveRequestHalfStatus = data.map(item => ({
+                        label: item.halfStatus,
+                        value: item.leaveHalfId
+                      }));
+                    }
+                }
+            },
+        );
+
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
         this.fetchAgenda();
         this.NotiAgenda();
@@ -166,6 +181,7 @@ export class AgendaComponent {
     }
 
     onSelectRequest(selectedDataAdmin: NotiAgenda) {
+
         this.display = true;
 
         this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
@@ -174,36 +190,61 @@ export class AgendaComponent {
         this.firstName = selectedDataAdmin.firstName;
         this.lastName = selectedDataAdmin.lastName;
 
-        this.checkingDate = new Date(selectedDataAdmin.checkingDate);
-
-        this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
-        this.endTime = new Date(`1970-01-01T${selectedDataAdmin.endTime}`);
-
-        this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
-        this.leaveStatuses = selectedDataAdmin.leaveStatus;
-        this.additionalDescription = selectedDataAdmin.additionalDescription;
-    }
-
-    onUserSelect(selectedDataAdmin: NotiAgenda) {
-        this.display = true;
-
-        this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
-        this.userID = selectedDataAdmin.userID;
-
-        this.firstName = selectedDataAdmin.firstName;
-        this.lastName = selectedDataAdmin.lastName;
-
-        // this.checkingDate = new Date(selectedDataAdmin.checkingDate);
         this.checkingDate = new Date(selectedDataAdmin.checkingDate);
         this.checkingDate.setHours(12, 0, 0, 0);
 
         this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
         this.endTime = new Date(`1970-01-01T${selectedDataAdmin.endTime}`);
 
-        this.selectedLeaveHalfStatus = selectedDataAdmin.selectedLeaveHalfStatus;
+        const selectedLeave = this.leaveRequestHalfStatus.find(
+            option => option.label === selectedDataAdmin.selectedLeaveHalfStatus
+        );
+
+        if (selectedLeave) {
+            this.selectedLeaveHalfStatus = selectedLeave.value;
+        }
+
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
         this.additionalDescription = selectedDataAdmin.additionalDescription;
+    }
 
+    onLeaveStatusChange(newStatus: any) {
+        console.log("Selected leave status:", newStatus);
+        this.leaveStatuses = newStatus;
+    }
+
+    onLeaveHalfStatusChange(newHalfStatus: any) {
+        console.log("Selected leave status:", newHalfStatus);
+        this.selectedLeaveHalfStatus = newHalfStatus;
+    }
+
+    onUserSelect(selectedDataAdmin: NotiAgenda) {
+        console.log("Raw checkingDate from API:", selectedDataAdmin.checkingDate);
+        this.display = true;
+
+        this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
+        this.userID = selectedDataAdmin.userID;
+
+        this.firstName = selectedDataAdmin.firstName;
+        this.lastName = selectedDataAdmin.lastName;
+
+        this.checkingDate = new Date(selectedDataAdmin.checkingDate);
+        // this.checkingDate.setFullYear(2025);
+        this.checkingDate.setHours(12, 0, 0, 0);
+
+        this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
+        this.endTime = new Date(`1970-01-01T${selectedDataAdmin.endTime}`);
+
+        const selectedLeave = this.leaveRequestHalfStatus.find(
+            option => option.label === selectedDataAdmin.selectedLeaveHalfStatus
+        );
+
+        if (selectedLeave) {
+            this.selectedLeaveHalfStatus = selectedLeave.value;
+        }
+
+        this.leaveStatuses = selectedDataAdmin.leaveStatus;
+        this.additionalDescription = selectedDataAdmin.additionalDescription;
     }
     fetchAgenda() {
         this.CheckingService.getAgendas().subscribe({
@@ -219,15 +260,15 @@ export class AgendaComponent {
 
     convertThaiDateToJSDate(thaiDateStr: string): Date | null {
         const [day, month, year] = thaiDateStr.trim().split('/').map(Number);
-        const gregorianYear = year - 543;
+        const gregorianYear = year;
         const formattedDate = new Date(gregorianYear, month - 1, day);
         return isNaN(formattedDate.getTime()) ? null : formattedDate;
     }
 
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
-
             next: (data: NotiAgenda[]) => {
+                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
@@ -456,5 +497,39 @@ export class AgendaComponent {
             }
         );
     }
+
+    onUpdate() {
+        const agendaUpdate = {
+            leaveRequestID: this.selectedleaveRequestID,
+            checkingDate: this.checkingDate,
+            startTime: this.formatTime(this.startTime),
+            endTime: this.formatTime(this.endTime),
+            selectedLeaveHalfStatus: this.selectedLeaveHalfStatus,
+            leaveStatuses: this.leaveStatuses,
+            additionalDescription: this.additionalDescription
+        };
+        this.AdminLeaveRequestService.saveAgendaUpdate(agendaUpdate).subscribe(
+            response => {
+                console.log(agendaUpdate);
+                this.messageService.add({
+                    key: 'DeleteSucess',
+                    severity: 'info',
+                    summary: 'อัพเดทสำเร็จ',
+                    detail: 'คุณได้ทำการอัพเดทคำขอแล้ว',
+                });
+                this.NotiAgenda();
+                this.display = false;
+            }
+        );
+    }
+
+    formatTime(time: string | Date): string {
+        if (!time) return '';
+        if (typeof time === 'string') {
+            return time.slice(0, 5);
+        }
+        const date = new Date(time);
+        return date.toTimeString().slice(0, 5);
+      }
 
 }

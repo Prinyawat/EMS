@@ -115,6 +115,9 @@ export class CheckingComponent {
 
         this.showUserLocation();
         this.addUserLocationButton();
+
+
+        this.addMockLocationButton();
     }
 
     async displaySpecificLocation() {
@@ -268,6 +271,99 @@ export class CheckingComponent {
         button.addTo(this.map);
     }
 
+    //mock up
+    mockLocation(isInside: boolean): void {
+        let userLat: number;
+        let userLng: number;
+
+        // ถ้าผู้ใช้ "inside" (ในพื้นที่)
+        if (isInside) {
+            userLat = 18.740493;  // ตัวอย่างพิกัดของที่ทำงาน
+            userLng = 98.940390;
+        }
+        // ถ้าผู้ใช้ "outside" (นอกพื้นที่)
+        else {
+            userLat = 19.740493;  // พิกัดที่อยู่นอกพื้นที่
+            userLng = 99.940390;
+        }
+
+        // เรียกใช้ฟังก์ชัน showUserLocation() กับพิกัดที่ mock ขึ้นมา
+        this.showUserLocationWithMockedCoords(userLat, userLng);
+    }
+
+    showUserLocationWithMockedCoords(userLat: number, userLng: number): void {
+        const workLat = 18.740493;
+        const workLng = 98.940390;
+        const accuracy = 50;  // ระยะความแม่นยำของพิกัด
+
+        const userIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+            iconSize: [32, 32]
+        });
+
+        // จำลองการ reverse geocoding
+        this.reverseGeocode(userLat, userLng).then(address => {
+            if (this.userMarker) {
+                this.userMarker.setLatLng([userLat, userLng]);
+            } else {
+                this.userMarker = L.marker([userLat, userLng], { icon: userIcon })
+                    .addTo(this.map)
+                    .bindPopup(`<b>ตำแหน่งของคุณ</b><br>${address}<br>Lat: ${userLat}, Lng: ${userLng}`)
+                    .openPopup();
+            }
+        }).catch(error => {
+            if (this.userMarker) {
+                this.userMarker.setLatLng([userLat, userLng]);
+            } else {
+                this.userMarker = L.marker([userLat, userLng], { icon: userIcon })
+                    .addTo(this.map)
+                    .bindPopup(`<b>ตำแหน่งของคุณ</b><br>Lat: ${userLat}, Lng: ${userLat}, Lng: ${userLng}`)
+                    .openPopup();
+            }
+        });
+
+        // กำหนดพิกัดของ "ที่ทำงาน" และทำการคำนวณว่าอยู่ในพื้นที่หรือไม่
+        const bounds = L.latLngBounds([
+            [userLat, userLng],
+            [workLat, workLng]
+        ]);
+        this.map.fitBounds(bounds, { padding: [50, 50] });
+
+        const isInArea = this.checkIfInArea(userLat, userLng);
+
+        if (isInArea) {
+            console.log("User is inside the area. Enable actions.");
+            this.disableButtons = false;
+        } else {
+            console.log("User is outside the area. Disable actions.");
+            this.disableButtons = true;
+        }
+
+        this.userPosition = { lat: userLat, lng: userLng };
+    }
+
+
+    addMockLocationButton() {
+        const buttonInside = L.control({ position: 'topright' });
+        buttonInside.onAdd = () => {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            div.innerHTML = '<button style="background:white; border: none; padding: 5px; cursor: pointer;">Inside Area</button>';
+            div.onclick = () => this.mockLocation(true); // ทดสอบ "inside"
+            return div;
+        };
+        buttonInside.addTo(this.map);
+
+        const buttonOutside = L.control({ position: 'topright' });
+        buttonOutside.onAdd = () => {
+            const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            div.innerHTML = '<button style="background:white; border: none; padding: 5px; cursor: pointer;">Outside Area</button>';
+            div.onclick = () => this.mockLocation(false); // ทดสอบ "outside"
+            return div;
+        };
+        buttonOutside.addTo(this.map);
+    }
+
+
     loadCheckTimeData(): void {
         this.CheckingService.getInvalidCheckTime().subscribe({
             next: (data: CheckingTimeData[]) => {
@@ -315,40 +411,49 @@ export class CheckingComponent {
         this.interval = setInterval(() => {
             const now = new Date();
 
-            const day = String(now.getDate()).padStart(2, '0');
-            const dayOfWeek = daysOfWeek[now.getDay()];
-            const month = months[now.getMonth()];
-            const year = String(now.getFullYear());
+            // ปรับเวลาให้ตรงกับเขตเวลาไทย (UTC+7)
+            const thaiTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
 
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            let ampm = 'AM';
+            // ใช้ toLocaleDateString เพื่อแสดงวันที่ในภาษาไทย
+            const dayOfWeek = thaiTime.toLocaleString('th-TH', { weekday: 'long' });
+            const day = String(thaiTime.getDate()).padStart(2, '0');
+            const month = thaiTime.toLocaleString('th-TH', { month: 'long' });
+            const year = String(thaiTime.getFullYear());
 
-            if (hours >= 12) {
-                ampm = 'PM';
-                    if (hours > 12) hours -= 12;
-                        } else if (hours === 0) {
-                            hours = 12;
+            // ใช้ toLocaleString เพื่อแสดงเวลาในภาษาไทย
+            const formattedTime = thaiTime.toLocaleString('th-TH', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+
+            // แยกเวลาออกเป็น ชั่วโมง นาที วินาที และ am/pm
+            let [time, ampm] = formattedTime.split(' ');
+            if (ampm === 'AM') {
+                ampm = 'น.';
+            } else if (ampm === 'PM') {
+                ampm = 'น.';
             }
 
-
-        const formattedHours = String(hours).padStart(2, '0');
-            this.time = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+            const [formattedHours, formattedMinutes, formattedSeconds] = time.split(':');
+            this.time = `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
             this.day = `วัน${dayOfWeek}ที่ ${day}`;
             this.month = month;
             this.year = year;
         }, 1000);
     }
 
+
     confirm2(event: Event): void {
         const action = this.isCheckIn ? 'Check-In' : 'Check-Out';
         const successMessage = this.isCheckIn ? 'เช็คอินสำเร็จ' : 'เช็คเอาท์สำเร็จ';
 
         const now = new Date();
+        const thaiTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
         const saveData = this.isCheckIn
-            ? { checkIn: now, checkOut: null, status: this.selectedItem.statuses }
-            : { checkIn: null, checkOut: now, status: this.selectedItem.statuses };
+            ? { checkIn: thaiTime, checkOut: null, status: this.selectedItem.statuses }
+            : { checkIn: null, checkOut: thaiTime, status: this.selectedItem.statuses };
 
         this.CheckingService.saveChecking({
             checkin: saveData.checkIn,
