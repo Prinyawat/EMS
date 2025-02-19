@@ -66,17 +66,17 @@ export class RegisterComponent {
         this.positionDirty = !this.selectedPosition;
     
         if (!this.phone) {
-            this.phoneError = "จำเป็นต้องกรอกเบอร์โทรศัพท์.";
+            this.phoneError = "กรุณากรอกเบอร์โทรศัพท์";
         } else if (!/^\d{10}$/.test(this.phone)) {
-            this.phoneError = "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก.";
+            this.phoneError = "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก";
         } else {
             this.phoneError = "";
         }
     
         if (!this.email) {
-            this.emailError = "จำเป็นต้องกรอกอีเมล.";
+            this.emailError = "กรุณากรอกอีเมล";
         } else if (!this.email.includes('@')) {
-            this.emailError = "อีเมลต้องมี '@'.";  
+            this.emailError = "อีเมลต้องมี '@'";  
         } else {
             this.emailError = "";
         }
@@ -103,7 +103,7 @@ export class RegisterComponent {
             },
             error: (err) => {
                 if (err.error && err.error.message === "Email is already registered.") {
-                    this.emailError = "อีเมลนี้ถูกใช้งานไปแล้ว.";
+                    this.emailError = "อีเมลนี้ถูกใช้งานไปแล้ว";
                     this.emailDirty = true; 
                 }
             }

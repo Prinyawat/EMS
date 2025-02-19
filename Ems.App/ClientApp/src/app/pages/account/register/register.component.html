@@ -4,25 +4,25 @@
         <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
             <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
                 <div class="text-center mb-5">
-                    <div class="text-900 text-3xl font-medium mb-3">Create a new account</div>
-                    <span class="text-600 font-medium">Sign up to continue</span>
+                    <div class="text-900 text-3xl font-medium mb-3">สร้างบัญชีใหม่</div>
+                    <span class="text-600 font-medium">ลงทะเบียนเพื่อดำเนินการล็อคอินเข้าสู่เว็บไซต์</span>
                 </div>
 
                 <div class="grid p-fluid">
                     <div class="col-12 md:col-6">
                         <div class="field mt-3">
                             <label for="firstName" class="block text-900 text-xl font-medium mb-2">
-                                First Name <span class="text-red-500">*</span>
+                                ชื่อ <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="firstName" placeholder="First Name" pInputText [(ngModel)]="firstName" class="w-full"[ngClass]="{'ng-invalid ng-dirty': firstNameDirty}">
-                        <small *ngIf="firstNameDirty" class="text-red-500 block">จำเป็นต้องกรอกชื่อ.</small>
+                            <input type="text" id="firstName" placeholder="ชื่อ" pInputText [(ngModel)]="firstName" class="w-full"[ngClass]="{'ng-invalid ng-dirty': firstNameDirty}">
+                        <small *ngIf="firstNameDirty" class="text-red-500 block">กรุณากรอกชื่อ</small>
                         </div>
 
                         <div class="field mt-3">
                             <label for="phone" class="block text-900 text-xl font-medium mb-2">
-                                Phone <span class="text-red-500">*</span>
+                                เบอร์โทรศัพท์ <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="phone" placeholder="Phone" pInputText [(ngModel)]="phone" required class="w-full"
+                            <input type="text" id="phone" placeholder="เบอร์โทรศัพท์" pInputText [(ngModel)]="phone" required class="w-full"
                                 [ngClass]="{'ng-invalid ng-dirty': phoneDirty}">
                             <small *ngIf="phoneError" class="text-red-500 block">{{ phoneError }}</small>
                         </div>
@@ -31,25 +31,25 @@
                     <div class="col-12 md:col-6">
                         <div class="field mt-3">
                             <label for="lastName" class="block text-900 text-xl font-medium mb-2">
-                                Last Name <span class="text-red-500">*</span>
+                                นามสกุล <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" id="lastName" placeholder="Last Name" pInputText [(ngModel)]="lastName" required class="w-full"[ngClass]="{'ng-invalid ng-dirty': lastNameDirty}">
-                            <small *ngIf="lastNameDirty" class="text-red-500 block">จำเป็นต้องกรอกนามสกุล.</small>
+                            <input type="text" id="lastName" placeholder="นามสกุล" pInputText [(ngModel)]="lastName" required class="w-full"[ngClass]="{'ng-invalid ng-dirty': lastNameDirty}">
+                            <small *ngIf="lastNameDirty" class="text-red-500 block">กรุณากรอกนามสกุล</small>
                         </div>
                         <div class="field mt-3">
                             <label for="position" class="block text-900 text-xl font-medium mb-2">
-                                Position <span class="text-red-500">*</span>
+                                ตำแหน่ง <span class="text-red-500">*</span>
                             </label>
                             <p-dropdown 
                                 [options]="positions" 
                                 optionLabel="positionName" 
-                                placeholder="Select a Position" 
+                                placeholder="เลือกตำแหน่งงาน" 
                                 [(ngModel)]="selectedPosition"  
                                 class="w-full"
                                 [ngClass]="{'ng-invalid ng-dirty': positionDirty}">
                             </p-dropdown>
                             <small *ngIf="positionDirty && !selectedPosition" class="text-red-500 block">
-                                กรุณาเลือกตำแหน่งงาน.
+                                กรุณาเลือกตำแหน่งงาน
                             </small>
                         </div>                        
                     </div>
@@ -60,7 +60,7 @@
                             <label for="email1" class="block text-900 text-xl font-medium mb-2">
                                 Email <span class="text-red-500">*</span>
                             </label>
-                            <input id="email1" type="email" placeholder="Email address" pInputText [(ngModel)]="email" required class="w-full"
+                            <input id="email1" type="email" placeholder="อีเมล" pInputText [(ngModel)]="email" required class="w-full"
                                 [ngClass]="{'ng-invalid ng-dirty': emailDirty}">
                             <small *ngIf="emailError" class="text-red-500 block">{{ emailError }}</small>
                         </div>
@@ -69,16 +69,16 @@
                             <label for="password1" class="block text-900 text-xl font-medium mb-2">
                                 Password <span class="text-red-500">*</span>
                             </label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" required styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"></p-password>
-                            <small *ngIf="passwordDirty" class="text-red-500 block">จำเป็นต้องกรอกรหัสผ่าน.</small>
+                            <p-password id="password1" [(ngModel)]="password" placeholder="รหัสผ่าน" [toggleMask]="true" required styleClass="w-full" [ngClass]="{'ng-invalid ng-dirty': passwordDirty}"></p-password>
+                            <small *ngIf="passwordDirty" class="text-red-500 block">กรุณากรอกรหัสผ่าน</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center">
-                    <button pButton pRipple label="Sign Up" class="w-full p-3 text-xl p-button-outlined"(click)="validateForm()">
+                    <button pButton pRipple label="ลงทะเบียน" class="w-full p-3 text-xl p-button-outlined"(click)="validateForm()">
                     </button>
-                    <p-button label="Already have an account?" styleClass="p-button-link" routerLink="/account/login"></p-button>
+                    <p-button label="มีบัญชีอยู่แล้ว?" styleClass="p-button-link" routerLink="/account/login"></p-button>
                 </div>                                
             </div>
         </div>
