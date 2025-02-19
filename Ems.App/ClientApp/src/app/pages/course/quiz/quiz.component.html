@@ -1,5 +1,4 @@
-<p-breadcrumb 
-  [model]="[
+<p-breadcrumb [model]="[
     {label: 'Home', routerLink: '/home'},
     {label: 'Course'},
     {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
@@ -7,49 +6,76 @@
     {label: 'Question ' + (currentQuestionIndex + 1)}
   ]">
 </p-breadcrumb>
+<br>
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
+      <div *ngIf="!showResult && currentQuestion">
+        <div *ngFor="let option of currentQuestion.options">
+          <div class="field-radiobutton">
+            <p-radioButton [inputId]="option.optionId" [value]="option.optionId"
+              [(ngModel)]="currentQuestion.selectedOptionId"
+              (ngModelChange)="onOptionSelect(option.optionId)"></p-radioButton>
+            <label>{{ option.optionText }}</label>
+          </div>
+        </div>
+        <small *ngIf="!currentQuestion?.selectedOptionId && isDirty" class="p-error">*
+          กรุณาเลือกคำตอบก่อนที่จะไปยังคำถามถัดไป. *</small>
+      </div>
 
-<h2 *ngIf="!showResult && currentQuestion?.questionText">{{ currentQuestion?.questionText }}</h2>
-<div *ngIf="!showResult && currentQuestion">
-  <div *ngFor="let option of currentQuestion.options">
-    <div class="field-radiobutton" >
-      <p-radioButton
-        [inputId]="option.optionId"
-        [value]="option.optionId"
-        [(ngModel)]="currentQuestion.selectedOptionId"
-        (ngModelChange)="onOptionSelect(option.optionId)"
-      ></p-radioButton>
-      <label>{{ option.optionText }}</label>
-    </div>
-  </div>
-  <small *ngIf="!currentQuestion?.selectedOptionId && isDirty" class="p-error">* กรุณาเลือกคำตอบก่อนที่จะไปยังคำถามถัดไป. *</small>
-</div>
+      <div *ngIf="!showResult" class="navigation-container">
+        <button pButton pRipple type="button" label="ข้อก่อนหน้า" icon="pi pi-arrow-left" iconPos="left"
+          class="p-button-outlined p-button-primary" (click)="previousQuestion()"
+          [disabled]="currentQuestionIndex === 0"></button>
+        <button pButton pRipple type="button" label="ข้อถัดไป" icon="pi pi-arrow-right" iconPos="right"
+          class="p-button-outlined p-button-primary" (click)="nextQuestion()"></button>
+      </div>
 
-<div *ngIf="!showResult" class="navigation-container">
-  <button pButton pRipple type="button" label="ข้อก่อนหน้า" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0"></button>
-  <button pButton pRipple type="button" label="ข้อถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" (click)="nextQuestion()" ></button>
-</div>
+      <p-dialog [(visible)]="showSubmitDialog" header="ส่งแบบทดสอบ" showEffect="fade" [style]="{width: '30vw'}"
+        [breakpoints]="{'960px': '75vw'}">
+        <p>คุณต้องการส่งคำตอบหรือไม่</p>
+        <ng-template pTemplate="footer">
+          <button pButton label="ยกเลิก" icon="pi pi-times" class="p-button-outlined"
+            (click)="showSubmitDialog = false"></button>
+          <button pButton label="ส่งคำตอบ" icon="pi pi-check" class="p-button-outlined"
+            (click)="saveAnswers()"></button>
+        </ng-template>
+      </p-dialog>
 
-<p-dialog [(visible)]="showSubmitDialog" header="ส่งแบบทดสอบ"
-showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
-  <p>คุณต้องการส่งคำตอบหรือไม่</p>
-  <ng-template pTemplate="footer">
-    <button pButton label="ยกเลิก" icon="pi pi-times" class="p-button-outlined" (click)="showSubmitDialog = false"></button>
-    <button pButton label="ส่งคำตอบ" icon="pi pi-check" class="p-button-outlined" (click)="saveAnswers()"></button>
-  </ng-template>
-</p-dialog>
-
-<div *ngIf="showResult" class="result-container mt-5">
-  <h2>คะแนนของคุณ: {{ result.score }}/{{ result.totalQuestions }}</h2>
-  <p>
-    สถานะ: 
-    <span [ngClass]="{ 'pass': result.passStatus, 'fail': !result.passStatus }">
-      {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
-    </span>
-  </p>
-  <div class="flex gap-2">
-    <div class="ml-auto flex gap-2">
-        <button *ngIf="shouldShowBackToHomeButton()" pButton pRipple type="button" label="กลับไปหน้าหลัก" class="p-button-outlined p-button-primary" routerLink="/course/course-open"></button>
-        <button *ngIf="shouldShowRetryButton()" pButton pRipple type="button" [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' " class="p-button-outlined p-button-secondary" (click)="resetQuiz()" [disabled]="attemptsLeft === 0"></button>
+      <div *ngIf="showResult" class="result-container mt-5">
+        <h2>คะแนนของคุณ: {{ result.score }}/{{ result.totalQuestions }}</h2>
+        <p>
+          สถานะ:
+          <span [ngClass]="{ 'pass': result.passStatus, 'fail': !result.passStatus }">
+            {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
+          </span>
+        </p>
+        <div class="flex gap-2">
+          <div class="ml-auto flex gap-2">
+            <button *ngIf="shouldShowBackToChapterButton()" pButton pRipple type="button" 
+              label="กลับไปหน้า Chapter"
+              class="p-button-outlined p-button-secondary"
+              [routerLink]="['/course/course-open', course?.courseId]"
+              (click)="onBackToChapter()">
+            </button>
+        
+            <button *ngIf="shouldShowRetryButton()" pButton pRipple type="button"
+              [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' "
+              class="p-button-outlined p-button-secondary"
+              (click)="resetQuiz()"
+              [disabled]="attemptsLeft === 0">
+            </button>
+        
+            <button *ngIf="shouldShowBackToHomeButton()" pButton pRipple type="button" 
+              label="กลับไปหน้าหลัก"
+              class="p-button-outlined p-button-primary"
+              routerLink="/course/course-open">
+            </button>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
 </div>

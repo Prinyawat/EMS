@@ -108,9 +108,15 @@ export class QuizComponent implements OnInit {
     });
   }
   
+  onBackToChapter(): void {
+    if (this.attemptsLeft > 0) {
+      this.attemptsLeft--; 
+    }
+  }
+  
   resetQuiz(): void {
     if (this.attemptsLeft > 0) {
-      this.attemptsLeft--;
+      this.attemptsLeft--; 
       this.currentQuestionIndex = 0;
       this.course.questions.forEach((q) => (q.selectedOptionId = null));
       this.showResult = false;
@@ -122,13 +128,15 @@ export class QuizComponent implements OnInit {
     }
   }
   
-
   shouldShowRetryButton(): boolean {
+    return !this.result.passStatus && this.attemptsLeft > 0;
+  }
+  
+  shouldShowBackToChapterButton(): boolean {
     return !this.result.passStatus && this.attemptsLeft > 0;
   }
   
   shouldShowBackToHomeButton(): boolean {
     return this.result.passStatus || this.attemptsLeft === 0;
   }
-  
 }

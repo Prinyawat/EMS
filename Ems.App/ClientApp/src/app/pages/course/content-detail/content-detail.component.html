@@ -5,12 +5,20 @@
     {label: chapters?.title, routerLink: '/course/course-open/' + course?.courseId + '/' + chapters?.chapterId},
     {label: contents?.contentTitle}]">
 </p-breadcrumb>
+<br>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h1>{{ contents?.contentTitle }}</h1>
+            <p [innerHTML]="contents?.body"></p>
 
-<h1>{{ contents?.contentTitle }}</h1>
-<p [innerHTML]="contents?.body"></p>
 
-
-<div  class="navigation-container">
-    <button pButton pRipple type="button" label="กลับ" icon="pi pi-arrow-left" iconPos="left" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.courseId + '/' + chapters?.chapterId]"></button>
-    <!-- <button pButton pRipple type="button" label="ถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.courseId + '/' + chapters?.chapterId]"></button> -->
+            <div class="navigation-container">
+                <button pButton pRipple type="button" label="กลับ" icon="pi pi-arrow-left" iconPos="left"
+                    class="p-button-outlined p-button-primary"
+                    [routerLink]="['/course/course-open/' + course?.courseId + '/' + chapters?.chapterId]"></button>
+                <!-- <button pButton pRipple type="button" label="ถัดไป" icon="pi pi-arrow-right" iconPos="right" class="p-button-outlined p-button-primary" [routerLink]="['/course/course-open/' + course?.courseId + '/' + chapters?.chapterId]"></button> -->
+            </div>
+        </div>
+    </div>
 </div>
