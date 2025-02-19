@@ -34,4 +34,15 @@ namespace Ems.App.Models
         public Guid rejectStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
     }
+
+    public class updateStatusModel
+    {
+        public Guid leaveRequestID { get; set; }
+        public DateTime checkingDate { get; set; }
+        public TimeOnly startTime { get; set; }
+        public TimeOnly endTime { get; set; }
+        public string selectedLeaveHalfStatus { get; set; }
+        public string leaveStatuses { get; set; }
+        public string additionalDescription { get; set; }
+    }
 }

@@ -23,33 +23,48 @@
 				<ng-template pTemplate="caption">
 
                     <!-- เป็น dialog ของ admin agenda -->
-                    <p-dialog header="รายละเอียดคำขอ" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '50vw'}" [breakpoints]="{'750px': '75vw'}" [closable]="false" >
+                    <p-dialog header="รายละเอียดคำขอ" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '650px', height: '400px'}" [breakpoints]="{'750px': '75vw'}" [closable]="false" >
                         <div class="flex flex-warp gap-2">
                             <input type="text" pInputText placeholder="ชื่อ นามสกุล" [value]="firstName+ ' ' + lastName"  [ngStyle]="{width: '360px'}" />
                             <div class="flex flex-warp gap-2">
-                                <input type="text" pInputText placeholder="กรณีลา" [ngStyle]="{width: '150px'}" [value]="selectedLeaveHalfStatus" />
-                                <input type="text" pInputText placeholder="สถานะลา" [ngStyle]="{width: '150px'}" [value]="leaveStatuses" />
+
+                                <p-dropdown [ngModel]="selectedLeaveHalfStatus"
+                                (ngModelChange)="onLeaveHalfStatusChange($event)" [options]="leaveRequestHalfStatus">
+                                    <ng-template let-option pTemplate="item">
+                                        {{option.label}}
+                                    </ng-template>
+                                </p-dropdown>
+                                <p-dropdown [ngModel]="leaveStatuses" (ngModelChange)="onLeaveStatusChange($event)" [options]="leaveRequestStatus">
+                                    <ng-template let-option pTemplate="item">
+                                        {{option.label}}
+                                    </ng-template>
+                                </p-dropdown>
+
                             </div>
                         </div>
                         <div class="flex flex-warp mt-2">
-                            <p-calendar [(ngModel)]="checkingDate"
+                            <p-calendar size="small" [(ngModel)]="checkingDate"
                                 [showButtonBar]="true" dateFormat="dd/mm/yy"
-                                class="w-full" size="small">
+                                class="w-full">
                             </p-calendar>
                         </div>
                         <span class="flex gap-2 mt-2 justify-content-center">
-
-                            <p-calendar #calendar [(ngModel)]="startTime" [timeOnly]="true" [ngStyle]="{width: '150px'}"></p-calendar>
-
-                            <p-calendar #calendar [(ngModel)]="endTime" [timeOnly]="true" [ngStyle]="{width: '150px'}"></p-calendar>
+                            <p-calendar #calendar [(ngModel)]="startTime" [timeOnly]="true"
+                            [ngStyle]="{width: '150px'}" [touchUI]="false"></p-calendar>
+                            <p-calendar #calendar [(ngModel)]="endTime" [timeOnly]="true"
+                            [ngStyle]="{width: '150px'}" [touchUI]="false"></p-calendar>
                         </span>
                         <div class="flex gap-2 mt-2">
                             <textarea rows="5" cols="30" placeholder="รายละเอียด...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription" [value]="additionalDescription" ></textarea>
                         </div>
                         <ng-template pTemplate="footer">
+
                                 <button *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="onApprove()" label="อนุมัติคำขอ" class="p-button-success p-button-sm"></button>
                                 <button  *ngIf="UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="onReject($event, selectedleaveRequestID)" label="ปฏิเสธคำขอ" class="p-button-danger p-button-sm" ></button>
+
+                                <button  *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="onUpdate($event, selectedleaveRequestID)" label="ยืนยันการแก้ไข" class="p-button-info p-button-sm" ></button>
                                 <button  *ngIf="UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad'" pButton (click)="confirmDenyRequest($event, selectedleaveRequestID)" label="ลบคำขอ" class="p-button-danger p-button-sm" ></button>
+
                                 <p-confirmPopup key="confirmDenyToast"></p-confirmPopup>
                                 <button pButton (click)="display=false" label="ปิด" class="p-button-outlined p-button-sm"></button>
                         </ng-template>
@@ -171,12 +186,12 @@
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    <span>{{agenda?.checkIn || agenda?.startTime}} น.</span>
+							    <span>{{agenda?.checkIn || agenda?.startTime}}</span>
                             </div>
 						</td>
 						<td>
                             <div class="flex justify-content-center align-items-center">
-							    {{agenda?.checkOut || agenda?.endTime}} น.
+							    {{agenda?.checkOut || agenda?.endTime}}
                             </div>
 						</td>
                         <td>

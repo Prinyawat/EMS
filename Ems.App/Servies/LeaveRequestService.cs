@@ -28,9 +28,6 @@ namespace Ems.App.Servies
         {
             var userId1 = this._identityService.GetCurrentUser();
 
-            //string formattedStartTime = formData.startTime + " น.";
-            //string formattedEndTime = formData.endTime + " น.";
-
             var selectedDates = formData.selectedDates.Split(',')
                 .Select(date => date.Trim())
                 .Where(date => !string.IsNullOrEmpty(date))
@@ -45,7 +42,7 @@ namespace Ems.App.Servies
 
                 if (DuplicateRequest.Any())
                 {
-                    throw new Exception($"LeaveRequest Duplicate ในวันที่ {date}");
+                    throw new Exception($"LeaveRequest Duplicate");
                 }
 
                 var leaveRequestEntity = new leave_request
@@ -65,24 +62,10 @@ namespace Ems.App.Servies
                 _emsContext.SaveChanges();
                 _emsContext.Entry(leaveRequestEntity).Reload();
 
-                //var userGuid = userId1;
-                //var HalfstatusName = _emsContext.leave_half.FirstOrDefault(u => u.leave_half_id == formData.selectHalfStatusId);
-                //var statusName = _emsContext.leave_request_status.FirstOrDefault(s => s.leave_request_status_id == formData.selectedLeaveStatusId);
-
-                //SendLeaveRequestNotification(userId1, statusName, HalfstatusName, leaveRequestEntity);
             }
 
             return new LeaveRequestModel();
         }
-
-
-        //private void SendLeaveRequestNotification(user userGuid, leave_request_status statusName, leave_half HalfstatusName, leave_request leaveRequestEntity)
-        //{
-        //    var message = $"ยื่นคำขอ {statusName.leave_request_status_name} {HalfstatusName.leave_type_name} ณ วัน {leaveRequestEntity.leave_request_date:dd/MM/yyyy}";
-        //    Console.WriteLine("Sending notification: " + message);
-        //    _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
-        //}
-
 
         public List<LeaveHalfStatusModel> getLeaveRequestHalfStatus()
         {
@@ -180,6 +163,42 @@ namespace Ems.App.Servies
 
             return agendaStatusData;
         }
+
+        public updateStatusModel saveAgendaUpdate(updateStatusModel agendaStatusData)
+        {
+            var validStatusData = (from leaveRequest in _emsContext.leave_request
+                                   where leaveRequest.leave_request_id == agendaStatusData.leaveRequestID
+                                   select new
+                                   {
+                                       LeaveRequest = leaveRequest
+                                   }).FirstOrDefault();
+
+            if (validStatusData != null)
+            {
+                validStatusData.LeaveRequest.leave_request_date = agendaStatusData.checkingDate.ToString("dd/MM/yyyy");
+                validStatusData.LeaveRequest.leave_start_time = agendaStatusData.startTime;
+                validStatusData.LeaveRequest.leave_end_time = agendaStatusData.endTime;
+                validStatusData.LeaveRequest.status_name = agendaStatusData.leaveStatuses;
+                //validStatusData.LeaveRequest.leave_half_id = agendaStatusData.selectedLeaveHalfStatus;
+                validStatusData.LeaveRequest.leave_request_description = agendaStatusData.additionalDescription;
+
+                var leaveHalfIdGuid = Guid.Parse(agendaStatusData.selectedLeaveHalfStatus);
+
+                var validLeaveHalfStatus = (from lh in _emsContext.leave_half
+                                            where lh.leave_half_id == leaveHalfIdGuid
+                                            select lh).FirstOrDefault();
+
+                if (validLeaveHalfStatus != null)
+                {
+                    validStatusData.LeaveRequest.leave_half_id = validLeaveHalfStatus.leave_half_id;
+                }
+
+                _emsContext.SaveChanges(); 
+            }
+
+            return agendaStatusData;
+        }
+
 
     }
 }
