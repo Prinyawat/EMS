@@ -35,10 +35,13 @@
         <!-- <i class="pi pi-bell mr-2 p-text-secondary" *ngIf="notificationleave.length === 0" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
 
         <i class="pi pi-bell mr-2 p-text-secondary" pBadge *ngIf="notificationleave.length > 0"[value]="notificationleave.length" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i> -->
-
+        
+        <span class="user-name" [ngStyle]="{'font-weight': 'bold', 'font-size': '1rem', }">
+            {{ user.firstname }} {{ user.lastname }}
+        </span>
+        
         <button class="p-link layout-topbar-button" (click)="toggleMenu($event)">
             <i class="pi pi-user"></i>
-            <span>Profile</span>
         </button>
         <p-menu #profileMenu [popup]="true" [model]="profileItems"></p-menu>
     </div>
@@ -127,8 +130,8 @@
     </div>
     <ng-template pTemplate="footer">
         <div class="flex justify-content-end gap-2">
-            <button pButton label="Edit" class="p-button-primary" (click)="saveUserData()"></button>
-            <button pButton  (click)="edit=false" label="Cancel" class="p-button-outlined"></button>
+            <button pButton label="แก้ไขข้อมูล" icon="pi pi-pencil" class="p-button-primary" (click)="saveUserData()"></button>
+            <button pButton  (click)="edit=false" label="ยกเลิก" class="p-button-outlined"></button>
         </div>
     </ng-template>
 </p-dialog>

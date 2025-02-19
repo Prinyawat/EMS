@@ -5,7 +5,7 @@
         <div class="card">
             <h2>ประวัติการเรียน</h2>
             <hr>
-            <p-dataView [value]="filteredCourses" [paginator]="filteredCourses.length > 0" [rows]="6" layout="grid">
+            <p-dataView [value]="filteredCourses" [paginator]="filteredCourses.length > 0" [rows]="6" layout="grid" emptyMessage="ไม่มีข้อมูลประวัติการเรียน">
                 <ng-template let-filteredCourses pTemplate="gridItem">
                     <div class="grid grid-nogutter">
                         <div class="col-12 md:col-4" *ngFor="let course of filteredCourses">

@@ -51,7 +51,7 @@
             <br *ngIf="showRegisteredCourses">
             <h2>ลงทะเบียน</h2>
             <hr>
-            <p-dataView [value]="unregisteredCourses" [paginator]="true" [rows]="6" layout="grid">
+            <p-dataView [value]="unregisteredCourses" [paginator]="unregisteredCourses.length > 0" [rows]="6" layout="grid" emptyMessage="ไม่มีข้อมูลคอร์สลงทะเบียน">
                 <ng-template let-unregisteredCourses pTemplate="gridItem">
                     <div class="grid grid-nogutter">
                         <div class="col-12 md:col-4" *ngFor="let course of unregisteredCourses">

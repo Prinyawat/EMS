@@ -5,7 +5,7 @@
         <div class="card">
             <h2>Course เปิดเรียน</h2>
             <hr>
-            <p-dataView [value]="filteredCourses" [paginator]="filteredCourses.length > 0" [rows]="6" layout="grid">
+            <p-dataView [value]="filteredCourses" [paginator]="filteredCourses.length > 0" [rows]="6" layout="grid" emptyMessage="ไม่มีข้อมูลคอร์ส">
                 <ng-template let-filteredCourses pTemplate="gridItem">
                     <div class="grid grid-nogutter">
                         <div class="col-12 md:col-4" *ngFor="let course of filteredCourses">
@@ -17,7 +17,7 @@
                                         <p-tag *ngIf="course.statusName === 'ไม่ผ่าน'" severity="danger" value="{{ course.statusName }}" class="ml-2" [ngStyle]="{'margin-bottom': '10px'}"></p-tag>
 
                                         <p-tag *ngIf="course.statusName === 'รอเปิด'" severity="warning" value="{{ course.statusName }}" class="ml-2" [ngStyle]="{'margin-bottom': '10px'}"></p-tag>
-                                        <p-tag *ngIf="course.statusName === 'เปิดแล้ว'" severity="info" value="{{ course.statusName }}" class="ml-2" [ngStyle]="{'margin-bottom': '10px'}"></p-tag>
+                                        <p-tag *ngIf="course.statusName === 'เปิดแล้ว'" severity="success" value="{{ course.statusName }}" class="ml-2" [ngStyle]="{'margin-bottom': '10px'}"></p-tag>
                                     </h2>
                                     <h5>{{course.subtitle}}</h5>
                                     <p class="mt-3" style="font-size: 11px;">

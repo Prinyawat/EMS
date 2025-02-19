@@ -30,7 +30,7 @@ export class HistoryCourseComponent {
   ngOnInit() {
     this.breadcrumbItems = [];
     this.breadcrumbItems.push({ label: 'Course'});
-    this.breadcrumbItems.push({ label: 'ประวัติ'});
+    // this.breadcrumbItems.push({ label: 'ประวัติ'});
     this.breadcrumbItems.push({ label: 'ประวัติการเรียน', styleClass: 'custom-register'});
 
     this.courseService.getCompletedCourses().subscribe((courses: Course[]) => {
