@@ -8,35 +8,44 @@
 
     <div class="col-12 lg:col-12 xl:col-12">
         <div class="card">
-            <h5>Leave Request</h5>
+            <h5>ยื่นคำขอการลา</h5>
             <!-- <div class="flex col-12 md:col-12"> -->
                 <div class="col-12 md:col-12 ">
                     <div class="flex flex-wrap gap-3 mt-5 justify-content-center align-">
 
-                        <p-calendar [ngStyle]="{'width': '400px'}" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" placeholder="ปฎิทินลา" size="small" [showIcon]="true"
-                        (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
-                        (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
-                        [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates')"/>
+                        <span class="p-float-label" [ngStyle]="{'width': '400px'}">
+                            <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="Dates" selectionMode="multiple" [readonlyInput]="true" size="small" [showIcon]="true"
+                            (onSelect)="onCalendarSelect($event)" (onClear)="onClearCalendarDate()"
+                            (ngModelChange)="onModelChange($event)" [disabled]="HalfStatusOn"
+                            [showButtonBar]="true" [ngClass]="{'ng-invalid ng-dirty': InvselectedDates}" (ngModelChange)="onValueChange('Dates') "/>
+                            <label for="float-input">ปฏิทินลา | วัน / เดือน / ปี</label>
+                        </span>
 
-                        <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedLeaveStatus"
-                            placeholder="เลือกประเภทการลา" [ngStyle]="{'width': '180px'}" optionLabel="leaveStatusData" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveStatus}" (ngModelChange)="onValueChange('selectedLeaveStatus')">
-                            <ng-template let-option pTemplate="item" >
-                                    <span [ngStyle]="{'background-color': getStatusColor(option.leaveStatusData)}"
-                                    [class]="'customer-badge status-' + option.leaveStatusData" [style.color]="'white'">
-                                    {{ option.leaveStatusData }}</span>
-                            </ng-template>
-                        </p-dropdown>
+                        <span class="p-float-label" [ngStyle]="{'width': '180px'}" >
+                            <p-dropdown [options]="leaveRequestStatus" [(ngModel)]="selectedLeaveStatus"
+                                placeholder="เลือกประเภทการลา" optionLabel="leaveStatusData" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveStatus}" (ngModelChange)="onValueChange('selectedLeaveStatus')">
+                                <ng-template let-option pTemplate="item" >
+                                        <span [ngStyle]="{'background-color': getStatusColor(option.leaveStatusData)}"
+                                        [class]="'customer-badge status-' + option.leaveStatusData" [style.color]="'white'">
+                                        {{ option.leaveStatusData }}</span>
+                                </ng-template>
+                            </p-dropdown>
+                            <label for="float-input">ประเภทการลา</label>
+                        </span>
 
                         <div class="flex flex-wrap gap-3 mt-3" >
 
-                            <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
-                            placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}" (ngModelChange)="onValueChange('selectedLeaveHalfStatus'); setDefaultTime() ">
-                                <ng-template let-option pTemplate="item">
-                                        <span [ngStyle]="{'background-color': getStatusColor(option.halfStatus)}"
-                                        [class]="'customer-badge status-' + option.halfStatus" [style.color]="'white'">
-                                        {{ option.halfStatus }}</span>
-                                </ng-template>
-                            </p-dropdown>
+                            <span class="p-float-label" [ngStyle]="{'width': '180px'}">
+                                <p-dropdown [options]="leaveRequestHalfStatus" [(ngModel)]="selectedLeaveHalfStatus"
+                                placeholder="กรณีการลา" [ngStyle]="{'width': '200px'}" optionLabel="halfStatus" [ngClass]="{'ng-invalid ng-dirty': InvselectedLeaveHalfStatus}" (ngModelChange)="onValueChange('selectedLeaveHalfStatus'); setDefaultTime() ">
+                                    <ng-template let-option pTemplate="item">
+                                            <span [ngStyle]="{'background-color': getStatusColor(option.halfStatus)}"
+                                            [class]="'customer-badge status-' + option.halfStatus" [style.color]="'white'">
+                                            {{ option.halfStatus }}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                                <label for="float-input">รูปแบบการลา</label>
+                            </span>
 
                             <span class="p-float-label" [ngStyle]="{'width': '180px'}">
                                 <p-calendar *ngIf="isCustomLeave || true" [(ngModel)]="startTime" [timeOnly]="true" [ngClass]="{'ng-invalid ng-dirty': InvstartTime}" [hourFormat]="24" [minDate]="minDate" [maxDate]="maxDate" (ngModelChange)="onValueChange('startTime'); " [disabled]="isCustomLeave"></p-calendar>
@@ -53,12 +62,14 @@
                     </div>
                     <div class="flex flex-wrap mt-3 md:col-12 justify-content-center">
 
-                        <textarea rows="5" cols="30" placeholder="คำอธิบายเพิ่มเติม...." pInputTextarea [ngStyle]="{'width': '710px'}" [(ngModel)]="additionalDescription"></textarea>
-
+                        <span class="p-float-label" [ngStyle]="{'width': '710px'}">
+                            <textarea rows="5" cols="30" pInputTextarea  [(ngModel)]="additionalDescription"></textarea>
+                            <label for="float-input">คำอธิบายเพิ่มเติม</label>
+                        </span>
                     </div>
                     <div class="flex flex-wrap mt-3 md:col-12 justify-content-center">
 
-                        <button  pButton icon="pi pi-check" label="ส่งคำขออนุญาติ"
+                        <button  pButton icon="pi pi-check" label="ยื่นคำขอลา"
                         (click)="confirm2($event)" [ngStyle]="{'width': '250px'}" ></button>
                         <p-confirmPopup key="confirm2"></p-confirmPopup>
                         <p-toast></p-toast>

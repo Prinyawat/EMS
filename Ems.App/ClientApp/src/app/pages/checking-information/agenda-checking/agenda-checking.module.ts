@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AgendaComponent } from './agenda.component';
-import { AgendaRoutingModule } from './agenda-routing.module';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -19,10 +17,12 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { AgendCheckingComponent } from './agenda-checking.component';
+import { AgendaCheckingRoutingModule } from './agenda-checking-routing.module';
 
 @NgModule({
     imports: [
-        AgendaRoutingModule,
+        AgendaCheckingRoutingModule,
         CommonModule,
         TableModule,
         ToolbarModule,
@@ -43,6 +43,6 @@ import { FormsModule } from '@angular/forms';
         FormsModule,
 
     ],
-        declarations: [AgendaComponent]
+        declarations: [AgendCheckingComponent]
 })
-export class AgendaComponentModule { }
+export class AgendaCheckingComponentModule { }

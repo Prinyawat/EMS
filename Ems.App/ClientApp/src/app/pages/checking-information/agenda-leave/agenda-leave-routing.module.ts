@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AgendaComponent } from './agenda.component';
+import { AgendaLeaveComponent } from './agenda-leave.component';
+
 
 
 @NgModule({
     imports: [RouterModule.forChild([
-        { path: '', component: AgendaComponent }
+        { path: '', component: AgendaLeaveComponent }
     ])],
     exports: [RouterModule]
 })
-export class AgendaRoutingModule { }
+export class AgendaLeaveRoutingModule { }

@@ -59,7 +59,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Checking Information',
+                label: 'ระบบบริหารจัดการทำงาน',
                 items: [
                     {
                         label: 'เช็คอิน-เช็คเอาต์', icon: 'pi pi-calendar', routerLink: ['/checkinginformation/checking']
@@ -68,8 +68,11 @@ export class AppMenuComponent implements OnInit {
                         label: 'ยื่นคำขอการลา', icon: 'pi pi-envelope', routerLink: ['/checkinginformation/leave-request']
                     },
                     {
-                        label: 'แดชบอร์ดข้อมูล', icon: 'pi pi-users', routerLink: ['/checkinginformation/agenda']
-                    }
+                        label: 'ประวัติคำขอการลา', icon: 'pi pi-th-large', routerLink: ['/checkinginformation/agenda-leave']
+                    },
+                    // {
+                    //     label: 'ประวัติเวลาเข้าเทำงาน', icon: 'pi pi-th-large', routerLink: ['/checkinginformation/agenda-checking']
+                    // }
                 ]
             },
             {

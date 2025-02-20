@@ -24,14 +24,15 @@ export class LeaveRequestComponent {
 
     startTime: string = '';
     endTime: string = '';
+    isCustomLeave: boolean = false;
 
     HalfStatusOn: boolean = false;
 
-    isCustomLeave: boolean = false;
+
 
     @ViewChild('fileUploader') fileUploader!: FileUpload;
 
-    InvselectedDates: boolean = false;
+   InvselectedDates: boolean = false;
 
     InvselectedLeaveHalfStatus: boolean = false;
 
@@ -136,9 +137,8 @@ export class LeaveRequestComponent {
         );
 
         this.breadcrumbItems = [];
-        this.breadcrumbItems.push({ label: 'Check Information' });
-        this.breadcrumbItems.push({ label: 'Checking' });
-        this.breadcrumbItems.push({ label: 'Leave Request' });
+        this.breadcrumbItems.push({ label: 'ระบบบริหารจัดการทำงาน' });
+        this.breadcrumbItems.push({ label: 'ยื่นคำขอการลา' });
 
         this.initChart();
         this.productService.getProductsSmall().then(data => this.products = data);
@@ -419,6 +419,7 @@ export class LeaveRequestComponent {
 
         this.LeaveRequestService.saveleaveRequest(formData).subscribe({
             next: (response) => {
+                console.log(formData);
                 this.messageService.add({ severity: 'success', summary: 'สำเร็จ', detail: 'ส่งคำขอการลาสำเร็จ!' });
 
                 this.Dates = [];

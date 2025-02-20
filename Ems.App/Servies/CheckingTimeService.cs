@@ -33,13 +33,12 @@ namespace Ems.App.Servies
                 .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == userId);
 
             var utcCheckIn = DateTime.TryParse(checkingdata.checkin, out var checkInTime)
-      ? checkInTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture)  // ใช้ 24-hour format
-      : string.Empty;
+                 ? checkInTime.ToString("hh:mm tt", CultureInfo.InvariantCulture).Replace("AM", "น.").Replace("PM", "น.")
+                 : string.Empty;
 
             var utcCheckOut = DateTime.TryParse(checkingdata.checkout, out var checkOutTime)
-                ? checkOutTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture)  // ใช้ 24-hour format
-                : null;
-
+                 ? checkOutTime.ToString("hh:mm tt", CultureInfo.InvariantCulture).Replace("AM", "น.").Replace("PM", "น.")
+                 : null;
 
             if (existingCheckIn != null)
             {

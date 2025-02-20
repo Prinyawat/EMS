@@ -5,14 +5,15 @@ import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import * as L from 'leaflet';
 import { ConfirmationService, MenuItem, Message, MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { AgendaComponent } from '../agenda-checking/agenda.component';
+
 import { CheckingStatus, CheckingTimeData } from 'src/app/shared/models/CheckingModel';
 import { Subject } from 'rxjs';
+import { AgendaLeaveComponent } from '../agenda-leave/agenda-leave.component';
 
 @Component({
     selector: 'app-checking',
     templateUrl: './checking.component.html',
-    providers: [ConfirmationService, MessageService, AgendaComponent]
+    providers: [ConfirmationService, MessageService, AgendaLeaveComponent]
 })
 export class CheckingComponent {
 
@@ -86,9 +87,8 @@ export class CheckingComponent {
         this.loadCheckTimeData();
 
         this.breadcrumbItems = [];
-        this.breadcrumbItems.push({ label: 'Check Information' });
-        this.breadcrumbItems.push({ label: 'Checking' });
-        this.breadcrumbItems.push({ label: 'Check Form' });
+        this.breadcrumbItems.push({ label: 'ระบบบริหารจัดการการทำงาน' });
+        this.breadcrumbItems.push({ label: 'เช็คอิน-เช็คเอาท์' });
 
         this.initializeMap();
         this.displaySpecificLocation();
@@ -134,8 +134,8 @@ export class CheckingComponent {
             radius: 10
         }).addTo(this.map);
         this.marker.bindPopup(`<b>ที่ทำงาน</b><br>
-                               <b>Latitude:</b> ${latitude}<br>
-                               <b>Longitude:</b> ${longitude}`).openPopup();
+                               <b>ละติจูด:</b> ${latitude}<br>
+                               <b>ลองจิจูด:</b> ${longitude}`).openPopup();
 
         this.circle = L.circle([latitude, longitude], {
             color: 'blue',
@@ -181,7 +181,7 @@ export class CheckingComponent {
                         } else {
                             this.userMarker = L.marker([userLat, userLng], { icon: userIcon })
                                 .addTo(this.map)
-                                .bindPopup(`<b>ตำแหน่งของคุณ</b><br>${address}<br>Lat: ${userLat}, Lng: ${userLng}`)
+                                .bindPopup(`<b>ตำแหน่งของคุณ</b><br>${address}<br>ละติจูด: ${userLat}, ลองจิจูด: ${userLng}`)
                                 .openPopup();
                         }
                     }).catch(error => {
@@ -438,7 +438,7 @@ export class CheckingComponent {
 
             const [formattedHours, formattedMinutes, formattedSeconds] = time.split(':');
             this.time = `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
-            this.day = `วัน${dayOfWeek}ที่ ${day}`;
+            this.day = `${dayOfWeek}ที่ ${day}`;
             this.month = month;
             this.year = year;
         }, 1000);

@@ -1,6 +1,6 @@
-import { AdminLeaveRequestService } from './../../../shared/services/adminleaverequest.service';
+import { AdminLeaveRequestService } from '../../../shared/services/adminleaverequest.service';
 import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
-import { CheckingService } from './../../../shared/services/checking.service';
+import { CheckingService } from '../../../shared/services/checking.service';
 
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
@@ -13,20 +13,21 @@ import { CheckingStatus } from 'src/app/shared/models/CheckingModel';
 import { LeaveHalfStatus, LeaveStatusData, NotiAgenda } from 'src/app/shared/models/leaverequest.model';
 import { DatePipe } from '@angular/common';
 @Component({
-    selector: 'app-agenda',
-    templateUrl: './agenda.component.html',
+    selector: 'app-agenda-leave',
+    templateUrl: './agenda-leave.component.html',
     providers: [MessageService, DatePipe, ConfirmationService]
 })
-export class AgendaComponent {
+export class AgendaLeaveComponent {
 
-    private statusColorMap = {
-        'e3312023-8545-4e9e-83bc-ab9576ba8307': 'purple',
-        '8701d6f4-5973-4f8e-8b91-5ded391e357f': '#4D96FF',
-        'cbeb053e-5c39-4c6c-9439-24c86ca56cfd': '#FFD93D',
-        '043c1da7-fa3e-4466-85b6-b2cc40a500c3': '#8D99AE',
-        '44467da9-d2fd-4293-bbb1-d8ccb7dae8f7': '#F39AC4'
-    };
+    startTimes: string = '';
+    endTimes: string = '';
+    isCustomLeave: boolean = false;
 
+    InvselectedDates: boolean = false;
+    InvselectedLeaveHalfStatus: boolean = false;
+    InvselectedLeaveStatus: boolean = false;
+    InvstartTime: boolean = false;
+    InvendTime: boolean = false;
     selectedDataAdmin: [] = [];
 
     selectedleaveRequestID: string = '';
@@ -96,16 +97,15 @@ export class AgendaComponent {
 
     ngOnInit() {
         this.breadcrumbItems = [];
-        this.breadcrumbItems.push({ label: 'Check Information' });
-        this.breadcrumbItems.push({ label: 'แดชบอร์ดข้อมูล' });
+        this.breadcrumbItems.push({ label: 'ระบบบริหารจัดการทำงาน' });
+        this.breadcrumbItems.push({ label: 'ประวัติคำขอการลา' });
         this.cols = [
             { field: 'firstName', header: 'ชื่อ', },
             { field: 'lastName', header: 'นามสกุล' },
             { field: 'checkingDate', header: 'วัน/เดือน/ปี' },
-            { field: 'checkIn', header: 'เวลาเข้างาน' },
-            { field: 'checkOut', header: 'เวลาออกงาน' },
-            { field: 'selectedLeaveHalfStatus', header: 'กรณีลา' },
-            { field: 'checkingStatus', header: 'สถานะ' },
+            { field: 'startTime', header: 'ลาช่วงเช้า' },
+            { field: 'endTime', header: 'ลาช่วงบ่าย' },
+            { field: 'leaveStatus', header: 'ประเภทการลา' },
         ];
 
         this.CheckingService.getCheckinStatus().subscribe({
@@ -147,7 +147,6 @@ export class AgendaComponent {
         );
 
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
-        this.fetchAgenda();
         this.NotiAgenda();
         this.updateFilteredAgendas();
     }
@@ -209,17 +208,78 @@ export class AgendaComponent {
     }
 
     onLeaveStatusChange(newStatus: any) {
-        console.log("Selected leave status:", newStatus);
         this.leaveStatuses = newStatus;
     }
 
-    onLeaveHalfStatusChange(newHalfStatus: any) {
-        console.log("Selected leave status:", newHalfStatus);
+    onLeaveHalfStatusChange(newHalfStatus: any, field: string) {
         this.selectedLeaveHalfStatus = newHalfStatus;
+        this.setDefaultTime();
+        switch (field) {
+            case 'selectedLeaveHalfStatus':
+                this.InvselectedLeaveHalfStatus = !this.selectedLeaveHalfStatus;
+                break;
+            case 'startTime':
+                this.InvstartTime = !this.startTime || this.startTime === null;
+                break;
+            case 'endTime':
+                this.InvendTime = !this.endTime || this.endTime === null;
+                break;
+        }
+    }
+
+    setDefaultTime() {
+
+        if (this.selectedLeaveHalfStatus) {
+            let start, end;
+
+            switch (this.selectedLeaveHalfStatus) {
+                case '47554f23-c29e-412c-8462-fcaf88facf97':
+                    start = this.convertTimeToDate('08:30');
+                    end = this.convertTimeToDate('12:00');
+                    break;
+
+                case '08e9cdf5-9a34-48b5-b039-575aee088e22':
+                    start = this.convertTimeToDate('13:00');
+                    end = this.convertTimeToDate('17:30');
+                    break;
+
+                case '6f203081-6a58-42c0-879f-86e8d53227db':
+                    start = this.convertTimeToDate('08:30');
+                    end = this.convertTimeToDate('17:30');
+                    break;
+
+                case '94d2ff39-6c98-40f2-a5fd-ad5583acd8ee':
+                    start = null;
+                    end = null;
+                    break;
+
+                default:
+                    start = null;
+                    end = null;
+                    break;
+            }
+
+            this.startTime = start;
+            this.endTime = end;
+        }
+    }
+
+    onValueChange(field: string) {
+        console.log(`${field} value changed:`, this[field]);
+    }
+
+    convertTimeToDate(timeStr: string): Date | null {
+        if (!timeStr) return null;
+
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        if (isNaN(hours) || isNaN(minutes)) return null;
+
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        return date;
     }
 
     onUserSelect(selectedDataAdmin: NotiAgenda) {
-        console.log("Raw checkingDate from API:", selectedDataAdmin.checkingDate);
         this.display = true;
 
         this.selectedleaveRequestID = selectedDataAdmin.leaveRequestID;
@@ -246,17 +306,6 @@ export class AgendaComponent {
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
         this.additionalDescription = selectedDataAdmin.additionalDescription;
     }
-    fetchAgenda() {
-        this.CheckingService.getAgendas().subscribe({
-            next: (data: AgendaData[]) => {
-                this.agendas = data.map(agenda => ({
-                    ...agenda,
-                    checkingDate: new Date(agenda.checkingDate)
-                }));
-                this.updateFilteredAgendas();
-            }
-        });
-    }
 
     convertThaiDateToJSDate(thaiDateStr: string): Date | null {
         const [day, month, year] = thaiDateStr.trim().split('/').map(Number);
@@ -268,7 +317,6 @@ export class AgendaComponent {
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
             next: (data: NotiAgenda[]) => {
-                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
@@ -277,7 +325,6 @@ export class AgendaComponent {
 
                 if (this.UserID === '42cfb3be-fa01-499a-95af-fa0a879fb0ad') {
                     this.notiAgenda = data.flatMap(agenda => {
-                        console.log("Admin:", data);
                         let checkingDates: string[];
 
                         if (agenda.checkingDate instanceof Date) {
@@ -329,9 +376,12 @@ export class AgendaComponent {
         });
     }
 
+    createDateFromTime(timeStr: string): Date {
+        return new Date(`1970-01-01T${timeStr}`);
+    }
+
     updateFilteredAgendas() {
         this.filteredAgendas = [
-            ...this.agendas,
             ...this.notiAgenda
         ];
     }
@@ -339,7 +389,6 @@ export class AgendaComponent {
     updateDropdownOptionss() {
         this.updateDropdownOptions = [
             { label: 'เลือกทั้งหมด', value: null },
-            ...(Array.isArray(this.workStatus) ? this.workStatus : []),
             ...(Array.isArray(this.leaveRequestStatus) ? this.leaveRequestStatus : [])
         ];
     }
@@ -350,7 +399,6 @@ export class AgendaComponent {
         } else {
             this.filteredAgendas = this.agendas.filter(agenda => agenda.checkingStatus === selectedStatus);
             this.filteredAgendas = [
-                ...this.filteredAgendas,
                 ...(this.notiAgenda.filter(noti => noti.leaveStatus === selectedStatus))
             ];
         }
@@ -364,10 +412,6 @@ export class AgendaComponent {
         }
 
         switch (label.toLowerCase()) {
-            case 'ปฏิบัติงานที่สำนักงาน':
-                return 'green';
-            case 'ปฏิบัติงานจากที่บ้าน':
-                return 'blue';
             case 'ลาป่วย':
                 return 'purple';
             case 'ลาศึกษา':
@@ -391,12 +435,12 @@ export class AgendaComponent {
                 const row: any = {};
 
                 this.cols.forEach(col => {
-                    if (col.field === 'checkIn' || col.field === 'startTime') {
-                        row['เวลาเข้างาน'] = (item.checkIn || '') + '' + (item.startTime || '');
-                    } else if (col.field === 'checkOut' || col.field === 'endTime') {
-                        row['เวลาออกงาน'] = (item.checkOut || '') + '' + (item.endTime || '');
-                    } else if (col.field === 'checkingStatus' || col.field === 'leaveStatus') {
-                        row['สถานะ'] = (item.checkingStatus || '') + '' + (item.leaveStatus || '');
+                    if (col.field === 'startTime') {
+                        row['ลาช่วงเช้า'] = item.startTime ? this.formatExcelTime(item.startTime) : '';
+                    } else if (col.field === 'endTime') {
+                        row['ลาช่วงบ่าย'] = item.endTime ? this.formatExcelTime(item.endTime) : '';
+                    } else if (col.field === 'leaveStatus') {
+                        row['ประเภทการลา'] = (item.leaveStatus || '');
                     } else {
                         row[col.header] = item[col.field];
                     }
@@ -414,6 +458,20 @@ export class AgendaComponent {
     }
 
 
+    formatExcelTime(time: Date | string): string {
+        let dateObj: Date;
+        if (typeof time === 'string') {
+          dateObj = new Date(`1970-01-01T${time}`);
+        } else {
+          dateObj = time;
+        }
+        return dateObj.toLocaleTimeString('th-TH', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }) + " น.";
+    }
+
     saveAsExcelFile(buffer: any, fileName: string): void {
         let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
         let EXCEL_EXTENSION = '.xlsx';
@@ -425,11 +483,6 @@ export class AgendaComponent {
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-    }
-
-    clear(table: Table) {
-        table.clear();
-        this.filter.nativeElement.value = '';
     }
 
     confirmDenyRequest(event: Event, leaveRequestID: string) {
