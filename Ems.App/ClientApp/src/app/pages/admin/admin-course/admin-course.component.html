@@ -30,16 +30,16 @@
                                         <label htmlFor="startDate" class="text-xl">วันที่เริ่ม<span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="startDate" [minDate]="minSelectableDate"
                                                     [showButtonBar]="true" dateFormat="dd/mm/yy"
-                                                    class="w-full" size="small" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}" (ngModelChange)="updateDirtyFields()" [appendTo]="'body'">
+                                                    class="w-full" size="small" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}" (ngModelChange)="onStartDateChange()" [appendTo]="'body'">
                                         </p-calendar>
                                         <small *ngIf="startDateDirty && !startDate" class="text-red-500 block">กรุณาเลือกวันที่เริ่ม</small>
                                     </div>
 
                                     <div class="field col-12 md:col-3">
                                         <label htmlFor="endDate" class="text-xl">วันที่สิ้นสุด <span class="text-red-500">*</span></label>
-                                        <p-calendar [(ngModel)]="endDate" [minDate]="minSelectableDate"
+                                        <p-calendar [(ngModel)]="endDate" [minDate]="startDate"
                                                     [showButtonBar]="true" dateFormat="dd/mm/yy"
-                                                    class="w-full" [ngClass]="{'ng-invalid ng-dirty': endDateDirty}" (ngModelChange)="updateDirtyFields()" [appendTo]="'body'">
+                                                    class="w-full" [ngClass]="{'ng-invalid ng-dirty': endDateDirty}" (ngModelChange)="updateDirtyFields()" [appendTo]="'body'" [defaultDate]="startDate">
                                         </p-calendar>
                                         <small *ngIf="endDateDirty && !endDate" class="text-red-500 block">กรุณาเลือกวันสิ้นสุด</small>
                                     </div>
@@ -86,14 +86,22 @@
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-start align-items-center gap-2">
-                        <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="สถานะทั้งหมด" (onChange)="filterCourses()">
+                        <p-dropdown 
+                            [(ngModel)]="selectedStatus" 
+                            [options]="statusOptions" 
+                            (onChange)="filterCourses()" 
+                            placeholder="สถานะทั้งหมด"
+                            pTooltip="เลือกสถานะ" tooltipPosition="bottom">
                             <ng-template let-option pTemplate="item">
-                                <div [ngClass]="getStatusClassFromDropdown(option.value)" class="p-2 rounded">
+                                <span 
+                                    [style.background-color]="getStatusClassFromDropdown(option.value)" 
+                                    [style.color]="'white'" 
+                                    [class]="'customer-badge status-'" >
                                     {{ option.label }}
-                                </div>
+                                </span>
                             </ng-template>
                         </p-dropdown>
-                        
+
                         <span class="p-input-icon-left" style="width: 350px">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหาหลักสูตร" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
@@ -110,9 +118,10 @@
                                 <p-sortIcon field="courseName"></p-sortIcon>
                             </div>
                         </th>
-                        <th style="min-width: 8rem" >
+                        <th style="min-width: 8rem" pSortableColumn="startDate">
                             <div class="flex justify-content-center ">
                                 วันที่เริ่ม
+                                <p-sortIcon field="startDate"></p-sortIcon>
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
@@ -121,8 +130,9 @@
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
-                            <div class="flex justify-content-center ">
+                            <div class="flex justify-content-center " pSortableColumn="endDate">
                                 วันที่สิ้นสุด
+                                <p-sortIcon field="endDate"></p-sortIcon>
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
@@ -175,11 +185,16 @@
                         </td>
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                <span [ngClass]="getStatusClass(course)" class="p-2 border rounded-md ">
+                                <span 
+                                    [class]="'customer-badge status-'"
+                                    [style.background-color]="getStatusColor(course)"
+                                    [style.color]="'white'"
+                                    class="p-2 border rounded-md">
                                     {{ getCourseStatus(course) }}
                                 </span>
                             </div>
                         </td>
+                        
 
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">

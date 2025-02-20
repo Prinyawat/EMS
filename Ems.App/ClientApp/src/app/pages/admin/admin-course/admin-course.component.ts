@@ -161,6 +161,13 @@ export class AdminCourseComponent implements OnInit{
     return date.toTimeString().slice(0, 5);
   }
 
+  onStartDateChange() {
+    if (this.startDate) {
+        this.endDate = this.endDate && this.endDate >= this.startDate ? this.endDate : null;
+    }
+    this.updateDirtyFields();
+}
+
   updateDirtyFields() {
     if (this.courseName) this.courseNameDirty = false;
     if (this.subtitle) this.subtitleDirty = false;
@@ -364,30 +371,26 @@ updateCourse() {
     }
   }
 
-  getStatusClass(course: Course): string {
+  getStatusColor(course: Course): string {
     const status = this.getCourseStatus(course);
     switch (status) {
-      case 'รอเปิด':
-        return 'border-orange-500 text-orange-500 bg-transparent';
-      case 'เปิดแล้ว':
-        return 'border-green-500 text-green-500 bg-transparent';
-      case 'ปิด':
-        return 'border-red-500 text-red-500 bg-transparent';
-      default:
-        return 'border-gray-300 text-gray-500 bg-transparent';
+        case 'รอเปิด':
+            return '#FFA500'; 
+        case 'เปิดแล้ว':
+            return '#28A745'; 
+        case 'ปิด':
+            return '#DC3545'; 
+        default:
+            return '#6C757D'; 
     }
 }
 
 getStatusClassFromDropdown(status: string | null): string {
   switch (status) {
-    case 'รอเปิด':
-      return 'text-orange-500';
-    case 'เปิดแล้ว':
-      return 'text-green-500';
-    case 'ปิด':
-      return 'text-red-500';
-    default:
-      return 'text-gray-500';
+      case 'รอเปิด': return '#FFA500'; 
+      case 'เปิดแล้ว': return '#28A745'; 
+      case 'ปิด': return '#DC3545'; 
+      default: return '#6C757D'; 
   }
 }
 
