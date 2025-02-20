@@ -1,6 +1,6 @@
 <p-breadcrumb [model]="[
     {label: 'Home', routerLink: '/home'},
-    {label: 'Course'}, 
+    {label: 'หลักสูตร'}, 
     {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
     {label: chapters?.title, routerLink: '/course/course-open/' + course?.courseId + '/' + chapters?.chapterId},
     {label: contents?.contentTitle}]">

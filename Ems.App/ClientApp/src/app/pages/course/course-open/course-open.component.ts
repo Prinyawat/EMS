@@ -26,8 +26,8 @@ export class CourseOpenComponent implements OnInit{
 
   ngOnInit(): void {
     this.breadcrumbItems = [];
-    this.breadcrumbItems.push({ label: 'Course' });
-    this.breadcrumbItems.push({ label: 'Course เปิดเรียน', styleClass: 'custom-register' });
+    this.breadcrumbItems.push({ label: 'หลักสูตร' });
+    this.breadcrumbItems.push({ label: 'หลักสูตรเปิดเรียน', styleClass: 'custom-register' });
   
     this.fetchCourses();
   }

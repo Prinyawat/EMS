@@ -1,9 +1,9 @@
 <p-breadcrumb [model]="[
     {label: 'Home', routerLink: '/home'},
-    {label: 'Course'},
+    {label: 'หลักสูตร'},
     {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
-    {label: 'Quiz'},
-    {label: 'Question ' + (currentQuestionIndex + 1)}
+    {label: 'แบบทดสอบ'},
+    {label: 'คำถามที่ ' + (currentQuestionIndex + 1)}
   ]">
 </p-breadcrumb>
 <br>

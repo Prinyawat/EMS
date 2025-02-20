@@ -53,12 +53,12 @@
         <div class="col-12 md:col-6">
             <div class="field mt-3">
                 <label for="firstName" class="block text-900 text-xl font-medium mb-2">
-                    First Name
+                    ชื่อ
                 </label>
                 <input
                 type="text"
                 id="firstName"
-                placeholder="First Name"
+                placeholder="ชื่อ"
                 pInputText
                 [(ngModel)]="user.firstname"
                 class="w-full"
@@ -67,12 +67,12 @@
 
             <div class="field mt-3">
                 <label for="phone" class="block text-900 text-xl font-medium mb-2">
-                    Phone
+                    เบอร์โทรศัพท์
                 </label>
                 <input
                     type="text"
                     id="phone"
-                    placeholder="Phone"
+                    placeholder="เบอร์โทรศัพท์"
                     pInputText
                     [(ngModel)]="user.phone"
                     required
@@ -84,12 +84,12 @@
         <div class="col-12 md:col-6">
             <div class="field mt-3">
                 <label for="lastName" class="block text-900 text-xl font-medium mb-2">
-                    Last Name
+                    นามสกุล
                 </label>
                 <input
                     type="text"
                     id="lastName"
-                    placeholder="Last Name"
+                    placeholder="นามสกุล"
                     pInputText
                     [(ngModel)]="user.lastname"
                     required
@@ -98,7 +98,7 @@
             </div>
 
             <div class="field mt-3">
-                <label for="position" class="block text-900 text-xl font-medium mb-2">Position</label>
+                <label for="position" class="block text-900 text-xl font-medium mb-2">ตำแน่งงาน</label>
                 <input
                 pInputText
                 id="position"
@@ -119,7 +119,7 @@
                 <input
                     id="email1"
                     type="email"
-                    placeholder="Email address"
+                    placeholder="อีเมล"
                     pInputText
                     [(ngModel)]="user.email"
                     [disabled]="true"

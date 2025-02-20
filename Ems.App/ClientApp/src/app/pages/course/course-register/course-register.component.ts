@@ -28,7 +28,7 @@ export class CourseRegisterComponent implements OnInit{
 
   ngOnInit() {
   this.breadcrumbItems = [];
-  this.breadcrumbItems.push({ label: 'Course'});
+  this.breadcrumbItems.push({ label: 'หลักสูตร'});
   this.breadcrumbItems.push({ label: 'ลงทะเบียน', styleClass: 'custom-register'});
 
   this.fetchCourses();

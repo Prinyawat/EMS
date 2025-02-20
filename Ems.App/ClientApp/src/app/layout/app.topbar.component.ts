@@ -102,9 +102,9 @@ export class AppTopBarComponent {
     updateProfileItems() {
         this.profileItems = [
             { label: `${this.user.firstname} ${this.user.lastname}`, icon: 'pi pi-user' },
-            { label: 'Edit', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
+            { label: 'แก้ไขโปรไฟล์', icon: 'pi pi-fw pi-user-edit', command: () => this.edit = true },
             { separator: true },
-            { label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout() }
+            { label: 'ออกจากระบบ', icon: 'pi pi-sign-out', command: () => this.logout() }
         ];
     }
 

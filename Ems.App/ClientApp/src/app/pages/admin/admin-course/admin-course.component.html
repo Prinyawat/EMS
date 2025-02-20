@@ -5,60 +5,60 @@
     <div class="col-12">
         <div class="card">
             <p-toolbar styleClass="mb-4">
-                <h5>จัดการ Course</h5>
+                <h5>จัดการหลักสูตร</h5>
                 <ng-template pTemplate="right">
-                    <button pButton pRipple type="button" label="เพิ่ม Course" pTooltip="เพิ่ม Course" tooltipPosition="bottom" (click)="showDialog()" icon="pi pi-plus" class="p-button-success"></button>
-                    <p-dialog [header]="editMode ? 'แก้ไข Course' : 'เพิ่ม Course'" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
+                    <button pButton pRipple type="button" label="เพิ่มหลักสูตร" pTooltip="เพิ่มหลักสูตร" tooltipPosition="bottom" (click)="showDialog()" icon="pi pi-plus" class="p-button-success"></button>
+                    <p-dialog [header]="editMode ? 'แก้ไขหลักสูตร' : 'เพิ่มหลักสูตร'" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '75vw'}" [breakpoints]="{'960px': '80vw'}" >
 
                         <div class="col-12">
                             <div class="card">
                                 <div class="p-fluid p-formgrid grid">
 
                                     <div class="field col-12 md:col-6">
-                                        <label htmlFor="courseName" class="text-xl">ชื่อ Course <span class="text-red-500">*</span></label>
+                                        <label htmlFor="courseName" class="text-xl">ชื่อหลักสูตร <span class="text-red-500">*</span></label>
                                         <input pInputText id="courseName" type="text" [(ngModel)]="courseName" class="w-full" [ngClass]="{'ng-invalid ng-dirty': courseNameDirty}">
-                                        <small *ngIf="courseNameDirty && !courseName" class="text-red-500 block">กรุณากรอกชื่อคอร์ส.</small>
+                                        <small *ngIf="courseNameDirty && !courseName" class="text-red-500 block">กรุณากรอกชื่อหลักสูตร</small>
                                     </div>
 
                                     <div class="field col-12 md:col-6">
                                         <label htmlFor="subtitle" class="text-xl">คำบรรยาย <span class="text-red-500">*</span></label>
                                         <input pInputText id="subtitle" type="text" [(ngModel)]="subtitle" class="w-full"
                                                [ngClass]="{'ng-invalid ng-dirty': subtitleDirty}">
-                                        <small *ngIf="subtitleDirty && !subtitle" class="text-red-500 block">กรุณากรอกคำบรรยาย.</small>
+                                        <small *ngIf="subtitleDirty && !subtitle" class="text-red-500 block">กรุณากรอกคำบรรยาย</small>
                                     </div>
 
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="startDate" class="text-xl">วันที่เปิด <span class="text-red-500">*</span></label>
+                                        <label htmlFor="startDate" class="text-xl">วันที่เริ่ม<span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="startDate" [minDate]="minSelectableDate"
                                                     [showButtonBar]="true" dateFormat="dd/mm/yy"
-                                                    class="w-full" size="small" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}">
+                                                    class="w-full" size="small" [ngClass]="{'ng-invalid ng-dirty': startDateDirty}" >
                                         </p-calendar>
-                                        <small *ngIf="startDateDirty && !startDate" class="text-red-500 block">กรุณาเลือกวันที่เปิด.</small>
+                                        <small *ngIf="startDateDirty && !startDate" class="text-red-500 block">กรุณาเลือกวันที่เริ่ม</small>
                                     </div>
 
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="endDate" class="text-xl">วันที่ปิด <span class="text-red-500">*</span></label>
+                                        <label htmlFor="endDate" class="text-xl">วันที่สิ้นสุด <span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="endDate" [minDate]="startDate"
                                                     [showButtonBar]="true" dateFormat="dd/mm/yy"
                                                     class="w-full" [ngClass]="{'ng-invalid ng-dirty': endDateDirty}">
                                         </p-calendar>
-                                        <small *ngIf="endDateDirty && !endDate" class="text-red-500 block">กรุณาเลือกวันที่ปิด.</small>
+                                        <small *ngIf="endDateDirty && !endDate" class="text-red-500 block">กรุณาเลือกวันที่เริ่ม</small>
                                     </div>
 
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="startTime" class="text-xl">เวลาเปิด <span class="text-red-500">*</span></label>
+                                        <label htmlFor="startTime" class="text-xl">เวลาเริ่ม <span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="startTime" [timeOnly]="true" class="w-full"
-                                                    [ngClass]="{'ng-invalid ng-dirty': startTimeDirty}" [touchUI]="false">
+                                                    [ngClass]="{'ng-invalid ng-dirty': startTimeDirty}" [touchUI]="false" >
                                         </p-calendar>
-                                        <small *ngIf="startTimeDirty && !startTime" class="text-red-500 block">กรุณาเลือกเวลาเปิด.</small>
+                                        <small *ngIf="startTimeDirty && !startTime" class="text-red-500 block">กรุณาเลือกเวลาเริ่ม</small>
                                     </div>
 
                                     <div class="field col-12 md:col-3">
-                                        <label htmlFor="endTime" class="text-xl">เวลาปิด <span class="text-red-500">*</span></label>
+                                        <label htmlFor="endTime" class="text-xl">เวลาสิ้นสุด <span class="text-red-500">*</span></label>
                                         <p-calendar [(ngModel)]="endTime" [timeOnly]="true" class="w-full"
                                                     [ngClass]="{'ng-invalid ng-dirty': endTimeDirty}" [touchUI]="false">
                                         </p-calendar>
-                                        <small *ngIf="endTimeDirty && !endTime" class="text-red-500 block">กรุณาเลือกเวลาปิด.</small>
+                                        <small *ngIf="endTimeDirty && !endTime" class="text-red-500 block">กรุณาเลือกเวลาสิ้นสุด</small>
                                     </div>
 
 
@@ -83,45 +83,49 @@
             <p-table #coursedata [value]="course" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['courseName']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <div>
-                            <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="กรองสถานะ" (onChange)="filterCourses()"></p-dropdown>
-                        </div>
-                        <div>
-                        <span class="p-input-icon-left mb-2" style="width: 350px">
+                    <div class="flex justify-content-start align-items-center gap-2">
+                        <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="สถานะทั้งหมด" (onChange)="filterCourses()">
+                            <ng-template let-option pTemplate="item">
+                                <div [ngClass]="getStatusClassFromDropdown(option.value)" class="p-2 rounded">
+                                    {{ option.label }}
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        
+                        <span class="p-input-icon-left" style="width: 350px">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหา Course" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
+                            <input pInputText type="text" #filter (input)="onGlobalFilter(coursedata, $event)" placeholder="ค้นหาหลักสูตร" class="w-full" pTooltip="ค้นหา" tooltipPosition="bottom"/>
                         </span>
-                        </div>
                     </div>
                 </ng-template>
+                
 
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 10rem" pSortableColumn="courseName">
                             <div class="flex justify-content-center align-items-center">
-                                Course
+                                หลักสูตร
                                 <p-sortIcon field="courseName"></p-sortIcon>
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
-                                วันที่เปิด
+                                วันที่เริ่ม
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
-                                เวลาเปิด
+                                เวลาเริ่ม
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
-                                วันที่ปิด
+                                วันที่สิ้นสุด
                             </div>
                         </th>
                         <th style="min-width: 8rem" >
                             <div class="flex justify-content-center ">
-                                เวลาปิด
+                                เวลาสิ้นสุด
                             </div>
                         </th>
                         <th style="min-width: 8rem">
@@ -132,7 +136,7 @@
 
                         <th style="min-width: 10rem" >
                             <div class="flex justify-content-center ">
-                                Action
+                                การดำเนินการ
                             </div>
                         </th>
                 </ng-template>
@@ -169,7 +173,7 @@
                         </td>
                         <td>
                             <div class="flex justify-content-center align-items-center">
-                                <span [ngClass]="getStatusClass(course)" class="p-2 rounded-md">
+                                <span [ngClass]="getStatusClass(course)" class="p-2 border rounded-md ">
                                     {{ getCourseStatus(course) }}
                                 </span>
                             </div>
@@ -178,7 +182,7 @@
                         <td>
                             <div class="flex justify-content-center align-items-center gap-2">
 
-                                <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไข Course" tooltipPosition="bottom" (click)="editCourse(course) ">
+                                <button pButton pRipple label="แก้ไข" icon="pi pi-pencil" class="p-button-info p-button-sm" pTooltip="แก้ไขหลักสูตร" tooltipPosition="bottom" (click)="editCourse(course) ">
                                 </button>
 
 
@@ -193,12 +197,12 @@
 
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="8">ไม่พบข้อมูลคอร์สเรียน</td>
+                        <td colspan="8">ไม่พบข้อมูลหลักสูตร</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
-                        <td colspan="8">โปรดรอสักครู่.</td>
+                        <td colspan="8">โปรดรอสักครู่</td>
                     </tr>
                 </ng-template>
             </p-table>

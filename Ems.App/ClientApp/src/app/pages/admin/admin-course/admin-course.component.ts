@@ -99,7 +99,7 @@ export class AdminCourseComponent implements OnInit{
   ngOnInit() {
   this.breadcrumbItems = [];
   this.breadcrumbItems.push({ label: 'Admin'});
-  this.breadcrumbItems.push({ label: 'จัดการ Course', styleClass: 'custom-admin'});
+  this.breadcrumbItems.push({ label: 'จัดการหลักสูตร', styleClass: 'custom-admin'});
 
   this.fetchCourses();
   }
@@ -327,8 +327,30 @@ export class AdminCourseComponent implements OnInit{
 
   getStatusClass(course: Course): string {
     const status = this.getCourseStatus(course);
-    return status
+    switch (status) {
+      case 'รอเปิด':
+        return 'border-orange-500 text-orange-500 bg-transparent';
+      case 'เปิดแล้ว':
+        return 'border-green-500 text-green-500 bg-transparent';
+      case 'ปิด':
+        return 'border-red-500 text-red-500 bg-transparent';
+      default:
+        return 'border-gray-300 text-gray-500 bg-transparent';
+    }
+}
+
+getStatusClassFromDropdown(status: string | null): string {
+  switch (status) {
+    case 'รอเปิด':
+      return 'text-orange-500';
+    case 'เปิดแล้ว':
+      return 'text-green-500';
+    case 'ปิด':
+      return 'text-red-500';
+    default:
+      return 'text-gray-500';
   }
+}
 
   //โหลดข้อมูลก่อนแล้วค่อยกรอง
   filterCourses() {
