@@ -31,7 +31,7 @@
 
                             <div class="field col-12 ">
                                 <label htmlFor="chapterTitle" class="text-xl">ชื่อบทเรียน<span class="text-red-500">*</span></label>
-                                <input pInputText id="chapterTitle" type="text" [(ngModel)]="chapterTitle" [ngClass]="{'ng-invalid ng-dirty': chapterTitleDirty}"/>
+                                <input pInputText id="chapterTitle" type="text" [(ngModel)]="chapterTitle" [ngClass]="{'ng-invalid ng-dirty': chapterTitleDirty}" (ngModelChange)="updateDirtyFields()"/>
                                 <small *ngIf="chapterTitleDirty && !chapterTitle" class="text-red-500 block">กรุณากรอกชื่อบทเรียน</small>
                             </div>
 
@@ -187,13 +187,13 @@
 
                     <div class="field col-12 md:col-6">
                         <label htmlFor="Title" class="text-xl">ชื่อหัวข้อ<span class="text-red-500">*</span></label>
-                        <input pInputText id="Title" type="text" [(ngModel)]="contentTitle" [ngClass]="{'ng-invalid ng-dirty': contentTitleDirty}"/>
+                        <input pInputText id="Title" type="text" [(ngModel)]="contentTitle" [ngClass]="{'ng-invalid ng-dirty': contentTitleDirty}" (ngModelChange)="updateDirtyFields()"/>
                         <small *ngIf="contentTitleDirty && !contentTitle" class="text-red-500 block">กรุณากรอกชื่อบทเรียน</small>
                     </div>
 
                     <div class="field col-12">
                         <label htmlFor="body" class="text-xl">เนื้อหารายละเอียด<span class="text-red-500">*</span><small *ngIf="bodyDirty && !body" class="text-red-500 block">กรุณากรอกเนื้อหารายละเอียด</small></label>
-                        <angular-editor [(ngModel)]="body" [config]="config" placeholder="เพิ่มคำอธิบาย..."></angular-editor>
+                        <angular-editor [(ngModel)]="body" [config]="config" placeholder="เพิ่มคำอธิบาย..." (ngModelChange)="updateDirtyFields()"></angular-editor>
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@
                 <div class="p-fluid p-formgrid grid">
                   <div class="field col-12 ">
                     <label htmlFor="questionText" class="text-xl">ตั้งคำถาม<span class="text-red-500">*</span></label>
-                    <input pInputText id="questionText" type="text" [(ngModel)]="questionText" [ngClass]="{'ng-invalid ng-dirty': questionTextDirty}"/>
+                    <input pInputText id="questionText" type="text" [(ngModel)]="questionText" [ngClass]="{'ng-invalid ng-dirty': questionTextDirty}" (ngModelChange)="updateDirtyFields()"/>
                     <small *ngIf="questionTextDirty && !questionText" class="text-red-500 block">กรุณาตั้งคำถาม.</small>
 
 
