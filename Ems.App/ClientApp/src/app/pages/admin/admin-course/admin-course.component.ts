@@ -180,15 +180,50 @@ export class AdminCourseComponent implements OnInit{
 
     this.updateDirtyFields();
 
-    return !!this.courseName && !!this.subtitle && !!this.startDate && !!this.endDate && !!this.startTime && !!this.endTime;
-  }
-
-  saveCourse() {
-    if (!this.validateForm()) {
-      return;
+    if (!this.courseName || !this.subtitle || !this.startDate || !this.endDate || !this.startTime || !this.endTime) {
+        return false;
     }
-    this.updateDirtyFields();
-    const model = {
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+
+    const startTime = this.startTime instanceof Date ? this.startTime : new Date(this.startTime);
+    const endTime = this.endTime instanceof Date ? this.endTime : new Date(this.endTime);
+
+    start.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
+    end.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
+
+    if (end < start) {
+        this.endTimeDirty = true;
+        this.messageService.add({
+            key: 'tst',
+            severity: 'error',
+            summary: 'ข้อผิดพลาด',
+            detail: 'เวลาสิ้นสุดต้องอยู่หลังเวลาเริ่ม',
+        });
+        return false;
+    }
+
+    if (start.getTime() === end.getTime()) {
+        this.endTimeDirty = true;
+        this.messageService.add({
+            key: 'tst',
+            severity: 'error',
+            summary: 'ข้อผิดพลาด',
+            detail: 'เวลาเริ่มและเวลาสิ้นสุดต้องไม่เท่ากัน',
+        });
+        return false;
+    }
+
+    return true;
+}
+
+saveCourse() {
+  if (!this.validateForm()) {
+      return;
+  }
+  this.updateDirtyFields();
+  const model = {
       courseName: this.courseName,
       subtitle: this.subtitle,
       startDate: this.formatDateForSave(this.startDate),
@@ -196,21 +231,21 @@ export class AdminCourseComponent implements OnInit{
       startTime: this.formatTime(this.startTime),
       endTime: this.formatTime(this.endTime),
       description: this.description,
-    };
+  };
 
-    this.admincourseService.addCourse(model).subscribe(() => {
+  this.admincourseService.addCourse(model).subscribe(() => {
       this.display = false;
       this.messageService.add({
-        key: 'tst',
-        severity: 'success',
-        summary: 'เพิ่มสำเร็จ',
-        detail: 'คุณได้ทำการเพิ่ม Course แล้ว',
+          key: 'tst',
+          severity: 'success',
+          summary: 'เพิ่มสำเร็จ',
+          detail: 'คุณได้ทำการเพิ่มหลักสูตรแล้ว',
       });
       this.fetchCourses();
-    });
-  }
+  });
+}
 
-  resetForm() {
+resetForm() {
     this.courseName = '';
     this.subtitle = '';
     this.startDate = null!;
@@ -220,9 +255,9 @@ export class AdminCourseComponent implements OnInit{
     this.description = '';
 
     this.resetDirtyFlags();
-  }
+}
 
-  editCourse(course: AdminCourse) {
+editCourse(course: AdminCourse) {
     this.editMode = true;
     this.selectedCourseId = course.courseId;
 
@@ -240,40 +275,44 @@ export class AdminCourseComponent implements OnInit{
     this.description = course.description;
     this.display = true;
     this.resetDirtyFlags();
-  }
+}
 
-  resetDirtyFlags() {
+resetDirtyFlags() {
     this.courseNameDirty = false;
     this.subtitleDirty = false;
     this.startDateDirty = false;
     this.endDateDirty = false;
     this.startTimeDirty = false;
     this.endTimeDirty = false;
-  }
+}
 
-  updateCourse() {
+updateCourse() {
+    if (!this.validateForm()) {
+        return;
+    }
+
     const updatedCourse = {
-      courseId: this.selectedCourseId,
-      courseName: this.courseName,
-      subtitle: this.subtitle,
-      startDate: this.formatDateForSave(this.startDate),
-      endDate: this.formatDateForSave(this.endDate),
-      startTime: this.formatTime(this.startTime),
-      endTime: this.formatTime(this.endTime),
-      description: this.description,
+        courseId: this.selectedCourseId,
+        courseName: this.courseName,
+        subtitle: this.subtitle,
+        startDate: this.formatDateForSave(this.startDate),
+        endDate: this.formatDateForSave(this.endDate),
+        startTime: this.formatTime(this.startTime),
+        endTime: this.formatTime(this.endTime),
+        description: this.description,
     };
 
     this.admincourseService.updateCourse(updatedCourse).subscribe(() => {
-      this.display = false;
-      this.messageService.add({
-        key: 'tst',
-        severity: 'info',
-        summary: 'แก้ไขสำเร็จ',
-        detail: 'คุณได้ทำการแก้ไข Course แล้ว',
-      });
-      this.fetchCourses();
+        this.display = false;
+        this.messageService.add({
+            key: 'tst',
+            severity: 'info',
+            summary: 'แก้ไขสำเร็จ',
+            detail: 'คุณได้ทำการแก้ไขหลักสูตรแล้ว',
+        });
+        this.fetchCourses();
     });
-  }
+}
 
   onDeleteCourse(courseId: string) {
       this.admincourseService.deleteCourse(courseId).subscribe(
@@ -289,7 +328,7 @@ export class AdminCourseComponent implements OnInit{
         key: 'tst',
         severity: 'success',
         summary: 'ลบสำเร็จ',
-        detail: 'คุณได้ทำการลบ Course แล้ว'
+        detail: 'คุณได้ทำการลบหลักสูตรแล้ว'
       });
       this.fetchCourses();
     });
@@ -299,7 +338,7 @@ export class AdminCourseComponent implements OnInit{
     this.confirmationService.confirm({
       key: 'confirmDeleteViaToast',
       target: event.target || new EventTarget(),
-      message: 'คุณแน่ใจหรือไม่ว่าต้องการลบ Course นี้?',
+      message: 'คุณแน่ใจหรือไม่ว่าต้องการลบหลักสูตรนี้?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.showDeleteViaToast(courseId);
