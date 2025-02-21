@@ -201,11 +201,34 @@ namespace Ems.App.Servies
                 var user = _emsContext.user.FirstOrDefault(u => u.user_id == userId);
                 var course = _emsContext.course.FirstOrDefault(c => c.course_id == courseId);
 
+                if (user == null || course == null)
+                    throw new Exception("ไม่พบข้อมูลผู้ใช้หรือหลักสูตร");
+
                 _emsContext.registration.Remove(registration);
                 _emsContext.SaveChanges();
 
                 var message = $"{user.first_name} ได้ยกเลิกการลงทะเบียนคอร์ส {course.course_name} แล้ว!";
                 _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+
+                // ส่งอีเมลแจ้งเตือนเมื่อยกเลิกการลงทะเบียน
+                Task.Run(async () =>
+                {
+                    var emailSubject = "ยกเลิกการลงทะเบียนหลักสูตร";
+                    var emailBody = $"<p>เรียน คุณ {user.first_name} {user.last_name},</p>" +
+                                    $"<p>ทางระบบขอแจ้งให้ท่านทราบว่า ท่านได้ดำเนินการยกเลิกการลงทะเบียนสำหรับหลักสูตร <strong>{course.course_name}</strong> เรียบร้อยแล้ว</p>" +
+                                    $"<p><strong>รายละเอียดหลักสูตร:</strong></p>" +
+                                    $"<ul>" +
+                                    $"<li><strong>วันเริ่มต้น:</strong> {course.start_date:dd/MM/yyyy} เวลา {course.start_time:HH:mm} น.</li>" +
+                                    $"<li><strong>วันสิ้นสุด:</strong> {course.end_date:dd/MM/yyyy} เวลา {course.end_time:HH:mm} น.</li>" +
+                                    $"</ul>" +
+                                    $"<br>" +
+                                    $"<p>หากท่านมีข้อสงสัยหรือต้องการข้อมูลเพิ่มเติมเกี่ยวกับการลงทะเบียน โปรดติดต่อฝ่ายอบรมและพัฒนา</p>" +
+                                    $"<br>" +
+                                    $"<p>ขอแสดงความนับถือ,</p>" +
+                                    $"<p><strong>ฝ่ายอบรมและพัฒนา</strong></p>";
+
+                    await _emailService.SendEmailAsync(user.email, emailSubject, emailBody);
+                });
             }
         }
 
