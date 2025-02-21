@@ -43,39 +43,81 @@
         </ng-template>
       </p-dialog>
 
-      <div *ngIf="showResult" class="result-container mt-5">
-        <h2>คะแนนของคุณ: {{ result.score }}/{{ result.totalQuestions }}</h2>
-        <p>
-          สถานะ:
-          <span [ngClass]="{ 'pass': result.passStatus, 'fail': !result.passStatus }">
-            {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
-          </span>
-        </p>
-        <div class="flex gap-2">
-          <div class="ml-auto flex gap-2">
-            <button *ngIf="shouldShowBackToChapterButton()" pButton pRipple type="button" 
-              label="กลับไปหน้า Chapter"
-              class="p-button-outlined p-button-secondary"
-              [routerLink]="['/course/course-open', course?.courseId]"
-              (click)="onBackToChapter()">
-            </button>
-        
-            <button *ngIf="shouldShowRetryButton()" pButton pRipple type="button"
-              [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')' "
-              class="p-button-outlined p-button-secondary"
-              (click)="resetQuiz()"
-              [disabled]="attemptsLeft === 0">
-            </button>
-        
-            <button *ngIf="shouldShowBackToHomeButton()" pButton pRipple type="button" 
-              label="กลับไปหน้าหลัก"
-              class="p-button-outlined p-button-primary"
-              routerLink="/course/course-open">
-            </button>
-          </div>
+      <div *ngIf="showResult" class="result-container flex flex-column align-items-center">
+        <div class="w-full flex justify-content-between mb-3">
+          <h3>แบบทดสอบหลักสูตร: {{ course?.courseName }}</h3>
         </div>
-        
+
+        <div class="card text-center p-4 w-50 shadow-3">
+          <h2 class="mb-3">คะแนนของคุณ: {{ result.score }} / {{ result.totalQuestions }}</h2>
+          <p class="text-xl font-bold"
+            [ngClass]="{ 'text-green-500': result.passStatus, 'text-red-500': !result.passStatus }">
+            {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
+          </p>
+        </div>
+
+        <div class="flex gap-3 mt-4">
+          <button *ngIf="shouldShowBackToChapterButton()" pButton label="กลับไปหน้า Chapter"
+            class="p-button-outlined p-button-secondary" [routerLink]="['/course/course-open', course?.courseId]"
+            (click)="onBackToChapter()">
+          </button>
+
+          <button pButton label="แสดงผลลัพธ์" class="p-button-outlined p-button-info" (click)="viewResults()">
+          </button>
+
+          <button *ngIf="shouldShowRetryButton()" pButton [label]="'เริ่มทำใหม่อีกครั้ง (เหลือ: ' + attemptsLeft + ')'"
+            class="p-button-outlined p-button-warning" (click)="resetQuiz()" [disabled]="attemptsLeft === 0">
+          </button>
+
+          <button *ngIf="shouldShowBackToHomeButton()" pButton pRipple type="button" label="กลับไปหน้าหลัก"
+            class="p-button-outlined p-button-primary" routerLink="/course/course-open">
+          </button>
+        </div>
       </div>
+
+      <p-dialog [(visible)]="showAnswerResult" header="ผลลัพธ์ของคุณ" [style]="{ width: '50vw' }"
+        [breakpoints]="{ '960px': '80vw' }">
+        <div *ngFor="let userAnswer of userAnswers" class="mb-6">
+          <p class="text-xl font-semibold leading-relaxed text-gray-900 mb-2">
+            <strong>คำถาม:</strong> {{ userAnswer.questionText }}
+          </p>
+
+          <ul class="space-y-2">
+            <li *ngFor="let option of userAnswer.options"
+              class="text-lg px-4 py-2 rounded-lg border flex items-center justify-between" [ngClass]="{
+                  'bg-red-200 border-red-500': option.optionId === userAnswer.optionId && !userAnswer.isCorrect,
+                  'bg-green-200 border-green-500': option.optionId === userAnswer.optionId && userAnswer.isCorrect
+                }">
+
+              <span class="font-medium text-gray-900">
+                {{ option.optionText }}
+              </span>
+
+              <div class="flex items-center space-x-2">
+                <span *ngIf="option.optionId === userAnswer.optionId && !userAnswer.isCorrect">
+                  <i class="pi pi-times text-red-500 text-xl ml-2 mt-1"></i>
+                </span>
+
+                <span *ngIf="option.optionId === userAnswer.optionId && userAnswer.isCorrect">
+                  <i class="pi pi-check text-green-500 text-xl ml-2"></i>
+                </span>
+
+                <span *ngIf="option.optionId === userAnswer.optionId"
+                  class="text-sm font-semibold text-white px-2 py-1 rounded-lg inline-flex items-center ml-2"
+                  [ngClass]="{'bg-red-500': !userAnswer.isCorrect, 'bg-green-500': userAnswer.isCorrect}">
+                  คำตอบของคุณ
+                </span>
+              </div>
+
+            </li>
+          </ul>
+          <hr class="my-3 border-gray-300">
+        </div>
+        <ng-template pTemplate="footer">
+          <button pButton label="ปิด" class="p-button-outlined p-button-secondary text-lg px-4 py-2"
+            (click)="showAnswerResult = false"></button>
+        </ng-template>
+      </p-dialog>
     </div>
   </div>
 </div>

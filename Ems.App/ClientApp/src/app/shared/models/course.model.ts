@@ -45,3 +45,11 @@ export class Course {
     totalQuestions: number;
     passStatus: boolean; 
   }
+  export class UserQuestionModel {
+    userquestionId: string;
+    userId: string;
+    courseId: string;
+    questionId: string;
+    optionId: string;
+    isCorrect: boolean;
+  }

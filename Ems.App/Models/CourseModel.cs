@@ -63,7 +63,12 @@ namespace Ems.App.Models
         public Guid courseId { get; set; }
         public Guid questionId { get; set; }
         public Guid optionId { get; set; }
+        public bool isCorrect { get; set; }
+
+        public string questionText { get; set; }
+        public List<OptionModel> options { get; set; } = new List<OptionModel>();
     }
+
 
     public class UserResultModel
     {
