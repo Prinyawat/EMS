@@ -61,12 +61,4 @@ export class CourseDetailComponent implements OnInit {
     );
   }
   
-  
-  // canNavigateNext(): boolean {
-  //   return (
-  //     this.course?.chapters?.length > 0 &&
-  //     (this.course.chapters.some((chapter: any) => !this.isChapterCompleted(chapter)) ||
-  //       this.course.chapters.some((chapter: any) => this.isChapterCompleted(chapter)))
-  //   );
-  // }
 }

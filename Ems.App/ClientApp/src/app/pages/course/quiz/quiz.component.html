@@ -3,7 +3,7 @@
     {label: 'หลักสูตร'},
     {label: course?.courseName, routerLink: '/course/course-open/' + course?.courseId},
     {label: 'แบบทดสอบ'},
-    {label: 'คำถามที่ ' + (currentQuestionIndex + 1)}
+    {label: showResult ? 'ผลลัพธ์แบบทดสอบ' : 'คำถามที่ ' + (currentQuestionIndex + 1)}
   ]">
 </p-breadcrumb>
 <br>
@@ -50,17 +50,18 @@
 
         <div class="card text-center p-4 w-50 shadow-3">
           <h2 class="mb-3">คะแนนของคุณ: {{ result.score }} / {{ result.totalQuestions }}</h2>
-          <p class="text-xl font-bold"
-            [ngClass]="{ 'text-green-500': result.passStatus, 'text-red-500': !result.passStatus }">
-            {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
-          </p>
+          <p class="text-xl font-semibold leading-relaxed text-gray-900 mb-2 px-4 py-2 rounded-lg"
+   [ngClass]="{ 'bg-green-200': result.passStatus, 'bg-red-200': !result.passStatus }">
+   <strong>ผลลัพธ์:</strong> {{ result.passStatus ? 'ผ่าน' : 'ไม่ผ่าน' }}
+</p>
+
         </div>
 
         <div class="flex gap-3 mt-4">
-          <button *ngIf="shouldShowBackToChapterButton()" pButton label="กลับไปหน้า Chapter"
+          <!-- <button *ngIf="shouldShowBackToChapterButton()" pButton label="กลับไปหน้า Chapter"
             class="p-button-outlined p-button-secondary" [routerLink]="['/course/course-open', course?.courseId]"
             (click)="onBackToChapter()">
-          </button>
+          </button> -->
 
           <button pButton label="แสดงผลลัพธ์" class="p-button-outlined p-button-info" (click)="viewResults()">
           </button>

@@ -16,7 +16,7 @@ export class QuizComponent implements OnInit {
     course: Course;
     user: UserModel;
     currentQuestionIndex: number = 0;
-    attemptsLeft: number = 2;
+    attemptsLeft: number = 1;
 
     score: number = 0;
     passStatus: boolean = false;
@@ -142,6 +142,7 @@ export class QuizComponent implements OnInit {
   shouldShowBackToHomeButton(): boolean {
     return this.result.passStatus || this.attemptsLeft === 0;
   }
+
   viewResults(): void {
     this.courseService.getUserAnswers(this.course.courseId).subscribe({
       next: (userAnswers: UserQuestionModel[]) => {
