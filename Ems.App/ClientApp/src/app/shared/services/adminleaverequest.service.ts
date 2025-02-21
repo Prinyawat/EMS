@@ -17,22 +17,15 @@ export class AdminLeaveRequestService {
         return this.http.delete(`${this.env}/deleteLeaveRequest/${data.leaveRequestID}`);
     }
 
-    saveAgendaApprove(agendaApprove: { approveStatusId: string, leaveRequestID: string;}) {
-        return this.http.post(this.env + "/saveAgendaApprove", {
-            approveStatusId: agendaApprove.approveStatusId,
-            leaveRequestID: agendaApprove.leaveRequestID
-        });
+    saveAgendaApprove(agendaApprove: any) {
+        return this.http.post(this.env + "/saveAgendaApprove", agendaApprove);
     }
 
-    saveAgendaReject(agendaApprove: { rejectStatusId: string, leaveRequestID: string;}) {
-        return this.http.post(this.env + "/saveAgendaReject", {
-            rejectStatusId: agendaApprove.rejectStatusId,
-            leaveRequestID: agendaApprove.leaveRequestID
-        });
+    saveAgendaReject(agendaApprove: any) {
+        return this.http.post(this.env + "/saveAgendaReject", agendaApprove);
     }
 
     saveAgendaUpdate(agendaUpdate: any) {
-        console.log(agendaUpdate);
         return this.http.post(this.env + "/saveAgendaUpdate", agendaUpdate);
     }
 

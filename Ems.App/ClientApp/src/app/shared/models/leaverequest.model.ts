@@ -26,6 +26,7 @@ export class NotiAgenda{
     selectedLeaveHalfStatus: string;
     leaveStatus: string;
     additionalDescription: string;
+    adminMessageBack: string;
 }
 
 export class HeaderAgenda{

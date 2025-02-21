@@ -79,6 +79,30 @@ export class AgendCheckingComponent {
 
     @ViewChild('filter') filter!: ElementRef;
 
+    filteredMonthYear: any[] = [];
+    selectedMonth: number;
+    months = [
+        { label: 'มกราคม', value: 1 },
+        { label: 'กุมภาพันธ์', value: 2 },
+        { label: 'มีนาคม', value: 3 },
+        { label: 'เมษายน', value: 4 },
+        { label: 'พฤษภาคม', value: 5 },
+        { label: 'มิถุนายน', value: 6 },
+        { label: 'กรกฎาคม', value: 7 },
+        { label: 'สิงหาคม', value: 8 },
+        { label: 'กันยายน', value: 9 },
+        { label: 'ตุลาคม', value: 10 },
+        { label: 'พฤศจิกายน', value: 11 },
+        { label: 'ธันวาคม', value: 12 }
+    ];
+
+    selectedYear: number;
+    years = [
+        { label: '2026', value: 2026 },
+        { label: '2025', value: 2025 },
+        { label: '2024', value: 2024 },
+    ];
+
     constructor(private CheckingService: CheckingService,
         private LeaveRequestService: LeaveRequestService,
         private messageService: MessageService,
@@ -115,6 +139,26 @@ export class AgendCheckingComponent {
         this.fetchAgenda();
         this.NotiAgenda();
         this.updateFilteredAgendas();
+    }
+
+    filterMonthYear() {
+        if (!this.selectedMonth || !this.selectedYear) {
+            this.filteredAgendas = [...this.agendas];
+            return;
+        }
+
+        this.filteredAgendas = [
+            ...this.agendas.filter(agen => this.isMatchingMonthYear(agen.checkingDate))
+        ];
+    }
+
+    isMatchingMonthYear(checkingDate: Date): boolean {
+        let date = new Date(checkingDate);
+        if (isNaN(date.getTime())) {
+            console.warn("Invalid date:", checkingDate);
+            return false;
+        }
+        return date.getMonth() + 1 === this.selectedMonth && date.getFullYear() === this.selectedYear;
     }
 
     formatDateToThai(date: Date): string {

@@ -269,6 +269,7 @@ public partial class EmsContext : DbContext
             entity.ToTable("leave_request", "ems");
 
             entity.Property(e => e.leave_request_id).HasDefaultValueSql("uuid_generate_v4()");
+            entity.Property(e => e.admin_message).HasMaxLength(100);
             entity.Property(e => e.created_by).HasMaxLength(100);
             entity.Property(e => e.created_date)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

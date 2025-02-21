@@ -27,16 +27,19 @@ namespace Ems.App.Models
     {
         public Guid approveStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
+        
     }
 
     public class rejectStatusModel
     {
         public Guid rejectStatusId { get; set; }
         public Guid leaveRequestID { get; set; }
+        public string adminMessageBack { get; set; }
     }
 
     public class updateStatusModel
     {
+        public Guid agendaStatusesID { get; set; }
         public Guid leaveRequestID { get; set; }
         public DateTime checkingDate { get; set; }
         public TimeOnly startTime { get; set; }

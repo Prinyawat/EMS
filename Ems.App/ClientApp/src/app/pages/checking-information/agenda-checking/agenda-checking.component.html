@@ -18,16 +18,22 @@
 
             </p-toolbar>
 
-			<p-table #agendaSerch [value]="filteredAgendas" [loading]="loading" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+			<p-table #agendaSerch [value]="filteredAgendas" [loading]="loading" [(selection)]="selectedAgendas" selectionMode="checkbox" [rows]="7" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
             [globalFilterFields]="['firstName','lastName','checkingDate','checkingStatus'] " [sortOrder]="-1" sortField="checkingDate">
 				<ng-template pTemplate="caption">
 
 					<div class="flex justify-content-between flex-column sm:flex-row ">
                         <div>
-                            <span class="p-input-icon-left" style="width: 350px">
+                            <span class="p-input-icon-left" style="width: 310px">
                                 <i class="pi pi-search"></i>
                                 <input pInputText type="text" #filter (input)="onGlobalFilter(agendaSerch, $event)" placeholder="ค้นหาด้วย ชื่อ-นามสกุล, วัน, การปฏิบัติงาน" class="w-full"/>
                             </span>
+                        </div>
+                        <div style="width: 180px">
+                            <p-dropdown [(ngModel)]="selectedMonth" [options]="months" placeholder="แสดงเดือนทั้งหมด" (onChange)="filterMonthYear()"></p-dropdown>
+                        </div>
+                        <div style="width: 160px">
+                            <p-dropdown [(ngModel)]="selectedYear" [options]="years " placeholder="แสดงปีทั้งหมด" (onChange)="filterMonthYear()" ></p-dropdown>
                         </div>
                         <p-dropdown [ngModel]="selectedStatus" [options]="updateDropdownOptions" (onChange)="filterDropDown($event.value)" placeholder="เลือกทั้งหมด" >
                             <ng-template let-option pTemplate="item">
@@ -51,9 +57,10 @@
 								ชื่อ - นามสกุล
 							</div>
 						</th>
-                        <th style="min-width: 10rem" >
+                        <th style="min-width: 10rem" pSortableColumn="checkingDate">
 							<div class="flex justify-content-center align-items-center">
 								วัน/เดือน/ปี
+                                <p-sortIcon field="checkingDate"/>
 							</div>
 						</th>
 						<th style="min-width: 8rem">

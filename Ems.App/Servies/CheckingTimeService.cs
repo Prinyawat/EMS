@@ -177,7 +177,9 @@ namespace Ems.App.Servies
                     checkingDate = x.ulr.lr.leave_request_date,
                     startTime = x.ulr.lr.leave_start_time ?? default(TimeOnly),
                     endTime = x.ulr.lr.leave_end_time ?? default(TimeOnly),
-                    additionalDescription = x.ulr.lr.leave_request_description
+                    additionalDescription = x.ulr.lr.leave_request_description,
+                    adminMessageBack = x.ulr.lr.admin_message
+
                 })
                 .ToList();
                 return result;
@@ -208,7 +210,8 @@ namespace Ems.App.Servies
                             checkingDate = ulr.lr.leave_request_date,
                             startTime = ulr.lr.leave_start_time ?? default(TimeOnly),
                             endTime = ulr.lr.leave_end_time ?? default(TimeOnly),
-                            additionalDescription = ulr.lr.leave_request_description
+                            additionalDescription = ulr.lr.leave_request_description,
+                            adminMessageBack = ulr.lr.admin_message
                         }
                     )
                     .ToList();
