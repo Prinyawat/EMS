@@ -1,9 +1,11 @@
 <div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/image/{{layoutService.config().colorScheme === 'light' ? 'logo-ems2' : 'logo-ems2'}}.png" alt="logo">
+        <span>EMS</span>
+    </a>
     <!-- <a class="layout-topbar-logo" routerLink="">
-        <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo">
-        <span>SAKAI</span>
+        <img src="assets/image/logo-ems2.png" >
     </a> -->
-
     <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
         <i class="pi pi-bars"></i>
     </button>
@@ -35,11 +37,11 @@
         <!-- <i class="pi pi-bell mr-2 p-text-secondary" *ngIf="notificationleave.length === 0" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i>
 
         <i class="pi pi-bell mr-2 p-text-secondary" pBadge *ngIf="notificationleave.length > 0"[value]="notificationleave.length" style="font-size: 1.5rem; cursor: pointer;" (click)="showPositionDialog('top-right')"></i> -->
-        
+
         <span class="user-name" [ngStyle]="{'font-weight': 'bold', 'font-size': '1rem', }">
             {{ user.firstname }} {{ user.lastname }}
         </span>
-        
+
         <button class="p-link layout-topbar-button" (click)="toggleMenu($event)">
             <i class="pi pi-user"></i>
         </button>
