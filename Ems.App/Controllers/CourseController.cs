@@ -116,5 +116,14 @@ namespace Ems.App.Controllers
             var result = _courseService.CalculateUserResult(userId, courseId);
             return Ok(result);
         }
+
+        [HttpGet("GetUserAnswers/{courseId}")]
+        public IActionResult GetUserAnswers(Guid courseId)
+        {
+            Guid userId = _identityService.GetCurrentUser();
+            var answers = _courseService.GetUserAnswers(userId, courseId);
+            return Ok(answers);
+        }
+
     }
 }

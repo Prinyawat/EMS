@@ -340,5 +340,39 @@ namespace Ems.App.Servies
             };
         }
 
+        public List<UserQuestionModel> GetUserAnswers(Guid userId, Guid courseId)
+        {
+            var userAnswers = _emsContext.user_question
+                .Where(uq => uq.user_id == userId && uq.course_id == courseId)
+                .OrderBy(uq => uq.created_date) 
+                .Select(uq => new UserQuestionModel
+                {
+                    userquestionId = uq.user_question_id,
+                    userId = uq.user_id,
+                    courseId = uq.course_id,
+                    questionId = uq.question_id,
+                    optionId = uq.option_id,
+                    isCorrect = _emsContext.option
+                        .Where(o => o.option_id == uq.option_id)
+                        .Select(o => o.is_correct ?? false)
+                        .FirstOrDefault(),
+                    questionText = _emsContext.question
+                        .Where(q => q.question_id == uq.question_id)
+                        .Select(q => q.question_text)
+                        .FirstOrDefault(),
+                    options = _emsContext.option
+                        .Where(o => o.question_id == uq.question_id)
+                        .Select(o => new OptionModel
+                        {
+                            optionId = o.option_id,
+                            optionText = o.option_text,
+                            isCorrect = o.is_correct ?? false
+                        }).ToList()
+                })
+                .ToList();
+
+            return userAnswers;
+        }
+
     }
 }

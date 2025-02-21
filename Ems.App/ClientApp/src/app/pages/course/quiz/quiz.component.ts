@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Course, Question } from 'src/app/shared/models/course.model';
+import { Course, Question, UserQuestionModel } from 'src/app/shared/models/course.model';
 import { UserModel } from 'src/app/shared/models/user.modal';
 import { CourseService } from 'src/app/shared/services/course.service';
 
@@ -16,7 +16,7 @@ export class QuizComponent implements OnInit {
     course: Course;
     user: UserModel;
     currentQuestionIndex: number = 0;
-    attemptsLeft: number = 2;
+    attemptsLeft: number = 1;
 
     score: number = 0;
     passStatus: boolean = false;
@@ -25,6 +25,9 @@ export class QuizComponent implements OnInit {
     showResult: boolean = false;
     showSubmitDialog: boolean = false;
     showAnswerRequiredDialog: boolean = false;
+
+    userAnswers: UserQuestionModel[] = [];
+  showAnswerResult: boolean = false;
 
     result: {
       score: number;
@@ -139,4 +142,24 @@ export class QuizComponent implements OnInit {
   shouldShowBackToHomeButton(): boolean {
     return this.result.passStatus || this.attemptsLeft === 0;
   }
+
+  viewResults(): void {
+    this.courseService.getUserAnswers(this.course.courseId).subscribe({
+      next: (userAnswers: UserQuestionModel[]) => {
+        this.userAnswers = userAnswers.map(userAnswer => {
+          const question = this.course.questions.find(q => q.questionId === userAnswer.questionId);
+          return {
+            ...userAnswer,
+            questionText: question?.questionText || "ไม่พบคำถาม",
+            options: question?.options || []
+          };
+        });
+        this.showAnswerResult = true;
+      },
+      error: (err) => {
+        console.error("Error fetching user answers:", err);
+      }
+    });
+  }
+  
 }

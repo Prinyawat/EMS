@@ -14,6 +14,7 @@ namespace Ems.App.Servies.IServices
         void RecordProgress(Guid userId, Guid courseId, Guid chapterId, Guid contentId);
         void SaveUserAnswers(List<UserQuestionModel> answers);
         UserResultModel CalculateUserResult(Guid userId, Guid courseId);
+        List<UserQuestionModel> GetUserAnswers(Guid userId, Guid courseId);
 
     }
 }

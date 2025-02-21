@@ -522,14 +522,39 @@ export class AdminChapterComponent implements OnInit {
             });
             return;
         }
-
+    
+        const selectedQuestion = this.questions.find(q => q.questionId === this.selectedQuestionId);
+        const existingOptions = selectedQuestion ? selectedQuestion.options.length : 0;
+        const existingCorrectOption = selectedQuestion ? selectedQuestion.options.some(opt => opt.isCorrect) : false;
+        const newCorrectCount = this.options.filter(opt => opt.isCorrect).length;
+    
+        if (existingOptions === 0 && newCorrectCount > 1) {
+            this.messageService.add({
+                key: 'tst',
+                severity: 'warn',
+                summary: 'เพิ่มคำตอบถูกได้เพียงข้อเดียว',
+                detail: 'คุณสามารถเพิ่มคำตอบที่ถูกต้องได้เพียงข้อเดียว',
+            });
+            return;
+        }
+    
+        if (existingCorrectOption && newCorrectCount > 0) {
+            this.messageService.add({
+                key: 'tst',
+                severity: 'warn',
+                summary: 'คำตอบที่ถูกต้องมีอยู่แล้ว',
+                detail: 'แต่ละคำถามสามารถมีคำตอบที่ถูกต้องได้เพียงข้อเดียว',
+            });
+            return;
+        }
+    
         this.options.forEach((option) => {
             const model = {
                 questionId: this.selectedQuestionId,
                 optionText: option.optionText.trim(),
                 isCorrect: option.isCorrect,
             };
-
+    
             this.admincourseService.addOption(model).subscribe({
                 next: () => {
                     this.displayOption = false;
@@ -552,16 +577,38 @@ export class AdminChapterComponent implements OnInit {
                 },
             });
         });
-
+    
         this.resetForm();
     }
-
+    
     editOption(option: AdminOption) {
         this.editMode = true;
         this.selectedOptionId = option.optionId;
-        this.options = [{ optionText: option.optionText, isCorrect: option.isCorrect }];
+
+        const selectedQuestion = this.questions.find(q => 
+            q.options.some(opt => opt.optionId === option.optionId)
+        );
+    
+        if (!selectedQuestion) {
+            this.messageService.add({
+                key: 'tst',
+                severity: 'error',
+                summary: 'เกิดข้อผิดพลาด',
+                detail: 'ไม่พบคำถามที่เกี่ยวข้อง',
+            });
+            return;
+        }
+    
+        this.selectedQuestionId = selectedQuestion.questionId;
+        this.selectedQuestionText = selectedQuestion.questionText;
+    
+        this.options = [{ 
+            optionText: option.optionText, 
+            isCorrect: option.isCorrect 
+        }];
+        
         this.displayOption = true;
-    }
+    }    
 
     updateOption() {
         if (!this.options[0].optionText.trim()) {
@@ -573,13 +620,40 @@ export class AdminChapterComponent implements OnInit {
             });
             return;
         }
-
+    
+        const selectedQuestion = this.questions.find(q => q.questionId === this.selectedQuestionId);
+        if (!selectedQuestion) {
+            this.messageService.add({
+                key: 'tst',
+                severity: 'error',
+                summary: 'เกิดข้อผิดพลาด',
+                detail: 'ไม่พบคำถามที่เกี่ยวข้อง',
+            });
+            return;
+        }
+    
+        const existingCorrectOption = selectedQuestion.options.find(opt => opt.isCorrect);
+        const isUpdatingToCorrect = this.options[0].isCorrect;
+        const isCurrentCorrect = existingCorrectOption?.optionId === this.selectedOptionId;
+    
+        if (isUpdatingToCorrect) {
+            if (existingCorrectOption && !isCurrentCorrect) {
+                this.messageService.add({
+                    key: 'tst',
+                    severity: 'warn',
+                    summary: 'มีคำตอบที่ถูกต้องอยู่แล้ว',
+                    detail: 'กรุณาเปลี่ยนคำตอบที่ถูกต้องเดิมให้เป็นผิดก่อน',
+                });
+                return;
+            }
+        }
+    
         const updateOption = {
             optionId: this.selectedOptionId,
             optionText: this.options[0].optionText.trim(),
             isCorrect: this.options[0].isCorrect,
         };
-
+    
         this.admincourseService.updateOption(updateOption).subscribe({
             next: () => {
                 this.displayOption = false;
@@ -592,10 +666,10 @@ export class AdminChapterComponent implements OnInit {
                 this.fetchChapters();
             }
         });
-
+    
         this.resetForm();
     }
-
+    
     deleteOption(optionId: string) {
         this.admincourseService.deleteOption(optionId).subscribe(() => {
             this.messageService.add({

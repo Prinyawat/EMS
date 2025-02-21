@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Course, Question} from '../models/course.model';
+import { Course, Question, UserQuestionModel} from '../models/course.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CourseService {
+
+  userAnswers: UserQuestionModel[] = [];
 
     constructor(
       private http: HttpClient
@@ -31,6 +33,10 @@ export class CourseService {
       return this.http.get<Course>(`${this.env}/getCourseById/${courseId}`);
     }
 
+    getUserAnswers(courseId: string): Observable<UserQuestionModel[]> {
+      return this.http.get<UserQuestionModel[]>(`${this.env}/GetUserAnswers/${courseId}`);
+    }
+    
     registerCourse(courseId: string) {
       const payload = { courseId };
       return this.http.post(this.env + "/registerCourse", payload);
@@ -49,7 +55,6 @@ export class CourseService {
       return this.http.post<{ score: number; totalQuestions: number; passStatus: boolean }>
       (`${this.env}/saveAnswers`, answers);
     }
-
 
     calculateResult(courseId: string) {
       return this.http.get<any>(`${this.env}/api/Course/calculateResult/${courseId}`);
