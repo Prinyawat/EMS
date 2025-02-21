@@ -11,12 +11,14 @@ namespace Ems.App.Servies
         private readonly EmsContext _emsContext;
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IIdentityService _identityService;
+        private readonly EmailService _emailService;
 
-        public CourseService(EmsContext emsContext, IHubContext<NotificationHub> hubContext, IIdentityService identityService)
+        public CourseService(EmsContext emsContext, IHubContext<NotificationHub> hubContext, IIdentityService identityService, EmailService emailService)
         {
             _emsContext = emsContext;
             _hubContext = hubContext;
             _identityService = identityService;
+            _emailService = emailService;
         }
 
         public List<CourseModel> GetCourses()
@@ -157,6 +159,27 @@ namespace Ems.App.Servies
 
             var message = $"{user.first_name} ได้ลงทะเบียนคอร์ส {course.course_name} แล้ว!";
             _hubContext.Clients.All.SendAsync("ReceiveNotification", message);
+
+            Task.Run(() =>
+            {
+                var emailSubject = "ยืนยันการลงทะเบียนเข้าร่วมหลักสูตร";
+                var emailBody = $"<p>เรียน {user.first_name} {user.last_name},</p>" +
+                                $"<p>ทางเราขอขอบคุณที่ให้ความสนใจและลงทะเบียนเข้าร่วมหลักสูตร <strong>{course.course_name}</strong></p>" +
+                                $"<strong>รายละเอียดหลักสูตร:</strong>" +
+                                $"<p>{course.subtitle}</p>" +
+                                $"<ul>" +
+                                $"<li><strong>วันเริ่ม:</strong> {course.start_date:dd/MM/yyyy} เวลา {course.start_time:HH:mm} น.</li>" +
+                                $"<li><strong>วันสิ้นสุด:</strong> {course.end_date:dd/MM/yyyy} เวลา {course.end_time:HH:mm} น.</li>" +
+                                $"</ul>" +
+                                 $"<br>" +
+                                $"<p>โปรดตรวจสอบรายละเอียดการเรียนรู้ของท่าน</p>" +
+                                $"<p>ขอให้ท่านมีประสบการณ์การเรียนรู้ที่ดี!</p>" +
+                                $"<br>" +
+                                $"<p>ขอแสดงความนับถือ,</p>" +
+                                $"<p><strong>ทีมงานฝ่ายอบรมและพัฒนา</strong></p>";
+
+                _emailService.SendEmailAsync(user.email, emailSubject, emailBody);
+            });
 
             return new RegistrationCourseModel
             {

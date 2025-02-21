@@ -23,6 +23,8 @@ builder.Services.AddTransient<ICourseService, CourseService>();
 builder.Services.AddTransient<IMenuService, MenuService>();
 builder.Services.AddTransient<IRegisterService, RegisterService>();
 builder.Services.AddTransient<IAdminCourseService, AdminCourseService>();
+builder.Services.AddSingleton<EmailService>();
+
 
 //SignalR
 builder.Services.AddSignalR();
