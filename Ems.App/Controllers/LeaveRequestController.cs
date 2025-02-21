@@ -43,14 +43,6 @@ namespace Ems.App.Controllers
             return Ok(statusData);
         }
 
-        //[HttpGet]
-        //[Route("getLeaveRequestNoti")]
-        //public ActionResult<List<LeaveRequestModel>> getLeaveRequestNoti()
-        //{
-        //    var leaveRequestChoice = _leaverequestservice.getLeaveRequestNoti();
-        //    return Ok(leaveRequestChoice);
-        //}
-
         [HttpGet]
         [Route("getLeaveRequestStatus")]
         public IActionResult getLeaveRequestStatus()
@@ -87,8 +79,15 @@ namespace Ems.App.Controllers
         [Route("saveAgendaUpdate")]
         public IActionResult saveAgendaUpdate([FromBody] updateStatusModel agendaStatusData)
         {
-            var result = _leaverequestservice.saveAgendaUpdate(agendaStatusData);
-            return Ok(result);
+            try
+            {
+                var result = _leaverequestservice.saveAgendaUpdate(agendaStatusData);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

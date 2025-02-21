@@ -28,6 +28,7 @@ namespace Ems.App.Models
         public string selectedLeaveHalfStatus { get; set; }
         public string leaveStatus { get; set; }
         public string additionalDescription { get; set; }
+        public string adminMessageBack { get; set; }
     }
 
     public class HeaderAgendaModel

@@ -33,39 +33,49 @@ namespace Ems.App.Servies
                 .Select(date => date.Trim())
                 .Where(date => !string.IsNullOrEmpty(date))
                 .ToList();
-
-            foreach (var date in selectedDates)
+            using (var transaction = _emsContext.Database.BeginTransaction())
             {
-
-                var DuplicateRequest = _emsContext.leave_request
-                    .Where(r => r.user_id == userId1 && r.leave_request_date == date)
-                    .ToList();
-
-                if (DuplicateRequest.Any())
+                try
                 {
-                    throw new Exception($"LeaveRequest Duplicate");
+                    foreach (var date in selectedDates)
+                    {
+
+                        var DuplicateRequest = _emsContext.leave_request
+                            .Where(r => r.user_id == userId1 && r.leave_request_date == date)
+                            .ToList();
+
+                        if (DuplicateRequest.Any())
+                        {
+                            throw new Exception($"LeaveRequest Duplicate");
+                        }
+
+                        var leaveRequestEntity = new leave_request
+                        {
+                            user_id = userId1,
+                            leave_request_date = date,
+                            leave_request_status_id = formData.selectedLeaveStatusId,
+                            leave_half_id = formData.selectHalfStatusId,
+                            status_name = formData.selectedLeaveStatus,
+                            leave_start_time = formData.startTime,
+                            leave_end_time = formData.endTime,
+                            leave_request_description = formData.additionalDescription,
+                            agenda_status_id = new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea")
+                        };
+
+                        _emsContext.leave_request.Add(leaveRequestEntity);
+                        _emsContext.SaveChanges();
+                        _emsContext.Entry(leaveRequestEntity).Reload();
+                    }
+                    transaction.Commit();
                 }
-
-                var leaveRequestEntity = new leave_request
+                catch (Exception ex)
                 {
-                    user_id = userId1,
-                    leave_request_date = date, 
-                    leave_request_status_id = formData.selectedLeaveStatusId,
-                    leave_half_id = formData.selectHalfStatusId,
-                    status_name = formData.selectedLeaveStatus,
-                    leave_start_time = formData.startTime,
-                    leave_end_time = formData.endTime,
-                    leave_request_description = formData.additionalDescription,
-                    agenda_status_id = new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea")
-                };
-
-                _emsContext.leave_request.Add(leaveRequestEntity);
-                _emsContext.SaveChanges();
-                _emsContext.Entry(leaveRequestEntity).Reload();
-
+                    transaction.Rollback();
+                    throw ex;
+                }
             }
 
-            return new LeaveRequestModel();
+                return new LeaveRequestModel();
         }
 
         public List<LeaveHalfStatusModel> getLeaveRequestHalfStatus()
@@ -155,6 +165,7 @@ namespace Ems.App.Servies
                 if (validAgendaStatus != null)
                 {
                     validStatusData.LeaveRequest.agenda_status_id = validAgendaStatus.agenda_status_id;
+                    validStatusData.LeaveRequest.admin_message = agendaStatusData.adminMessageBack;
 
                     _emsContext.SaveChanges();
                 }
@@ -167,6 +178,16 @@ namespace Ems.App.Servies
 
         public updateStatusModel saveAgendaUpdate(updateStatusModel agendaStatusData)
         {
+            var existingLeaveRequest = (from leaveRequest in _emsContext.leave_request
+                                        where leaveRequest.leave_request_date == agendaStatusData.checkingDate.ToString("dd/MM/yyyy")
+                                              && leaveRequest.leave_request_id != agendaStatusData.leaveRequestID 
+                                        select leaveRequest).FirstOrDefault();
+
+            if (existingLeaveRequest != null)
+            {
+                throw new Exception($"Duplicate");
+            }
+
             var validStatusData = (from leaveRequest in _emsContext.leave_request
                                    where leaveRequest.leave_request_id == agendaStatusData.leaveRequestID
                                    select new
@@ -174,14 +195,18 @@ namespace Ems.App.Servies
                                        LeaveRequest = leaveRequest
                                    }).FirstOrDefault();
 
+            Guid validStatusRejected = agendaStatusData.agendaStatusesID == new Guid("be7eef8e-1ad6-4503-a88a-f9a7b1cba773")
+                                       ? new Guid("56c99f7b-ada2-4c63-a949-2165c708d9ea")
+                                       : agendaStatusData.agendaStatusesID;
+
             if (validStatusData != null)
             {
                 validStatusData.LeaveRequest.leave_request_date = agendaStatusData.checkingDate.ToString("dd/MM/yyyy");
                 validStatusData.LeaveRequest.leave_start_time = agendaStatusData.startTime;
                 validStatusData.LeaveRequest.leave_end_time = agendaStatusData.endTime;
                 validStatusData.LeaveRequest.status_name = agendaStatusData.leaveStatuses;
-                //validStatusData.LeaveRequest.leave_half_id = agendaStatusData.selectedLeaveHalfStatus;
                 validStatusData.LeaveRequest.leave_request_description = agendaStatusData.additionalDescription;
+                validStatusData.LeaveRequest.agenda_status_id = validStatusRejected;
 
                 var leaveHalfIdGuid = Guid.Parse(agendaStatusData.selectedLeaveHalfStatus);
 

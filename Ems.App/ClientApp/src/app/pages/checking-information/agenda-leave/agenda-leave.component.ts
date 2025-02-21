@@ -2,7 +2,7 @@ import { AdminLeaveRequestService } from '../../../shared/services/adminleavereq
 import { LeaveRequestService } from '../../../shared/services/leaverequest.service';
 import { CheckingService } from '../../../shared/services/checking.service';
 
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table/table';
 import * as FileSaver from 'file-saver';
@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-agenda-leave',
     templateUrl: './agenda-leave.component.html',
+    styleUrls: ['./agenda-leave.component.scss'],
     providers: [MessageService, DatePipe, ConfirmationService]
 })
 export class AgendaLeaveComponent {
@@ -22,6 +23,7 @@ export class AgendaLeaveComponent {
     startTimes: string = '';
     endTimes: string = '';
     isCustomLeave: boolean = false;
+    timeDisable: boolean = false;
 
     InvselectedDates: boolean = false;
     InvselectedLeaveHalfStatus: boolean = false;
@@ -40,6 +42,9 @@ export class AgendaLeaveComponent {
     selectedLeaveHalfStatus: string = '';
     leaveStatuses: string = '';
     additionalDescription: string = '';
+    agendaStatusId: string;
+    adminCallBack: string = '';
+    adminRejectedMess: string = '';
 
     formattedDate: string = '';
     value: any = null;
@@ -53,7 +58,6 @@ export class AgendaLeaveComponent {
     pendingStatusId: string;
     approveStatusId = '2972bc3a-2d3a-422c-bd03-a2dbd34a2a45';
     rejectStatusId = 'be7eef8e-1ad6-4503-a88a-f9a7b1cba773';
-
 
     leaveRequestID: string;
     isAdmin: boolean = false;
@@ -86,6 +90,30 @@ export class AgendaLeaveComponent {
     representatives: Representative[] = [];
     rowGroupMetadata: any;
 
+    filteredMonthYear: any[] = [];
+    selectedMonth: number;
+    months = [
+        { label: 'มกราคม', value: 1 },
+        { label: 'กุมภาพันธ์', value: 2 },
+        { label: 'มีนาคม', value: 3 },
+        { label: 'เมษายน', value: 4 },
+        { label: 'พฤษภาคม', value: 5 },
+        { label: 'มิถุนายน', value: 6 },
+        { label: 'กรกฎาคม', value: 7 },
+        { label: 'สิงหาคม', value: 8 },
+        { label: 'กันยายน', value: 9 },
+        { label: 'ตุลาคม', value: 10 },
+        { label: 'พฤศจิกายน', value: 11 },
+        { label: 'ธันวาคม', value: 12 }
+    ];
+
+    selectedYear: number;
+    years = [
+        { label: '2026', value: 2026 },
+        { label: '2025', value: 2025 },
+        { label: '2024', value: 2024 },
+    ];
+
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(private CheckingService: CheckingService,
@@ -93,9 +121,12 @@ export class AgendaLeaveComponent {
         private messageService: MessageService,
         private datePipe: DatePipe,
         private AdminLeaveRequestService: AdminLeaveRequestService,
-        private confirmationService: ConfirmationService) { }
+        private confirmationService: ConfirmationService,
+        private cdRef: ChangeDetectorRef) { }
 
     ngOnInit() {
+        this.cdRef.detectChanges();
+
         this.breadcrumbItems = [];
         this.breadcrumbItems.push({ label: 'ระบบบริหารจัดการทำงาน' });
         this.breadcrumbItems.push({ label: 'ประวัติคำขอการลา' });
@@ -149,7 +180,29 @@ export class AgendaLeaveComponent {
         this.exportColumns = this.cols.map(col => ({ title: col.header, dataKey: col.field }));
         this.NotiAgenda();
         this.updateFilteredAgendas();
+        this.filteredAgendas = [...this.agendas];
     }
+
+    filterMonthYear() {
+        if (!this.selectedMonth || !this.selectedYear) {
+            this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
+            return;
+        }
+
+        this.filteredAgendas = [
+            ...this.notiAgenda.filter(noti => this.isMatchingMonthYear(noti.checkingDate))
+        ];
+    }
+
+    isMatchingMonthYear(checkingDate: Date): boolean {
+        let date = new Date(checkingDate);
+        if (isNaN(date.getTime())) {
+            console.warn("Invalid date:", checkingDate);
+            return false;
+        }
+        return date.getMonth() + 1 === this.selectedMonth && date.getFullYear() === this.selectedYear;
+    }
+
 
     formatDateToThai(date: Date): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -205,6 +258,7 @@ export class AgendaLeaveComponent {
 
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
         this.additionalDescription = selectedDataAdmin.additionalDescription;
+        this.cdRef.detectChanges();
     }
 
     onLeaveStatusChange(newStatus: any) {
@@ -236,21 +290,25 @@ export class AgendaLeaveComponent {
                 case '47554f23-c29e-412c-8462-fcaf88facf97':
                     start = this.convertTimeToDate('08:30');
                     end = this.convertTimeToDate('12:00');
+                    this.timeDisable = true;
                     break;
 
                 case '08e9cdf5-9a34-48b5-b039-575aee088e22':
                     start = this.convertTimeToDate('13:00');
                     end = this.convertTimeToDate('17:30');
+                    this.timeDisable = true;
                     break;
 
                 case '6f203081-6a58-42c0-879f-86e8d53227db':
                     start = this.convertTimeToDate('08:30');
                     end = this.convertTimeToDate('17:30');
+                    this.timeDisable = true;
                     break;
 
                 case '94d2ff39-6c98-40f2-a5fd-ad5583acd8ee':
                     start = null;
                     end = null;
+                    this.timeDisable = false;
                     break;
 
                 default:
@@ -265,7 +323,6 @@ export class AgendaLeaveComponent {
     }
 
     onValueChange(field: string) {
-        console.log(`${field} value changed:`, this[field]);
     }
 
     convertTimeToDate(timeStr: string): Date | null {
@@ -289,7 +346,6 @@ export class AgendaLeaveComponent {
         this.lastName = selectedDataAdmin.lastName;
 
         this.checkingDate = new Date(selectedDataAdmin.checkingDate);
-        // this.checkingDate.setFullYear(2025);
         this.checkingDate.setHours(12, 0, 0, 0);
 
         this.startTime = new Date(`1970-01-01T${selectedDataAdmin.startTime}`);
@@ -305,6 +361,9 @@ export class AgendaLeaveComponent {
 
         this.leaveStatuses = selectedDataAdmin.leaveStatus;
         this.additionalDescription = selectedDataAdmin.additionalDescription;
+        this.agendaStatusId = selectedDataAdmin.agendaStatusId;
+        this.adminCallBack = selectedDataAdmin.adminMessageBack;
+        this.cdRef.detectChanges();
     }
 
     convertThaiDateToJSDate(thaiDateStr: string): Date | null {
@@ -317,6 +376,7 @@ export class AgendaLeaveComponent {
     NotiAgenda() {
         this.CheckingService.getNotiAgenda().subscribe({
             next: (data: NotiAgenda[]) => {
+                console.log(data);
                 if (data.length > 0) {
                     if (data[0].userID) {
                         this.UserID = data[0].userID;
@@ -395,16 +455,13 @@ export class AgendaLeaveComponent {
 
     filterDropDown(selectedStatus: string | null) {
         if (selectedStatus === null || selectedStatus === 'เลือกทั้งหมด') {
-            this.filteredAgendas = [...this.agendas, ...this.notiAgenda];
+            this.filteredAgendas = [...this.notiAgenda];
         } else {
-            this.filteredAgendas = this.agendas.filter(agenda => agenda.checkingStatus === selectedStatus);
             this.filteredAgendas = [
                 ...(this.notiAgenda.filter(noti => noti.leaveStatus === selectedStatus))
             ];
         }
     }
-
-
 
     getStatusColor(label: string | null): string {
         if (!label) {
@@ -425,6 +482,10 @@ export class AgendaLeaveComponent {
             default:
                 return 'gray';
         }
+    }
+
+    AdminChecking(): boolean {
+        return this.UserID !== '42cfb3be-fa01-499a-95af-fa0a879fb0ad';
     }
 
     exportExcel() {
@@ -456,7 +517,6 @@ export class AgendaLeaveComponent {
             this.saveAsExcelFile(excelBuffer, "user_agendas");
         });
     }
-
 
     formatExcelTime(time: Date | string): string {
         let dateObj: Date;
@@ -515,6 +575,7 @@ export class AgendaLeaveComponent {
         const agendaApprove = {
             approveStatusId: this.approveStatusId,
             leaveRequestID: this.selectedleaveRequestID,
+
         };
         this.AdminLeaveRequestService.saveAgendaApprove(agendaApprove).subscribe(
             response => {
@@ -535,6 +596,7 @@ export class AgendaLeaveComponent {
         const agendaApprove = {
             rejectStatusId: this.rejectStatusId,
             leaveRequestID: this.selectedleaveRequestID,
+            adminMessageBack: this.adminRejectedMess,
         };
         this.AdminLeaveRequestService.saveAgendaReject(agendaApprove).subscribe(
             response => {
@@ -554,16 +616,17 @@ export class AgendaLeaveComponent {
     onUpdate() {
         const agendaUpdate = {
             leaveRequestID: this.selectedleaveRequestID,
-            checkingDate: this.checkingDate,
+            checkingDate: this.checkingDate.toLocaleDateString("en-CA"),
             startTime: this.formatTime(this.startTime),
             endTime: this.formatTime(this.endTime),
             selectedLeaveHalfStatus: this.selectedLeaveHalfStatus,
             leaveStatuses: this.leaveStatuses,
-            additionalDescription: this.additionalDescription
+            additionalDescription: this.additionalDescription,
+            agendaStatusesID: this.agendaStatusId
         };
-        this.AdminLeaveRequestService.saveAgendaUpdate(agendaUpdate).subscribe(
-            response => {
-                console.log(agendaUpdate);
+
+        this.AdminLeaveRequestService.saveAgendaUpdate(agendaUpdate).subscribe({
+            next: (response) => {
                 this.messageService.add({
                     key: 'DeleteSucess',
                     severity: 'info',
@@ -572,8 +635,17 @@ export class AgendaLeaveComponent {
                 });
                 this.NotiAgenda();
                 this.display = false;
-            }
-        );
+            },
+            error: (err) => {
+                if (err.error && err.error.message === "Duplicate") {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: 'แจ้งเตือน',
+                        detail: 'ปฏิทินลาที่เลือก ซ้ำ!'
+                    });
+                }
+            },
+        });
     }
 
     formatTime(time: string | Date): string {
