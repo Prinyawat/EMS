@@ -33,12 +33,13 @@ namespace Ems.App.Servies
                 .FirstOrDefault(co => co.check_in != null && co.check_out == null && co.user_id == userId);
 
             var utcCheckIn = DateTime.TryParse(checkingdata.checkin, out var checkInTime)
-                 ? checkInTime.ToString("hh:mm tt", CultureInfo.InvariantCulture).Replace("AM", "น.").Replace("PM", "น.")
+                 ? checkInTime.ToString("HH:mm น.", CultureInfo.InvariantCulture) // ใช้ HH:mm เพื่อแสดงเป็น 24 ชั่วโมง
                  : string.Empty;
 
             var utcCheckOut = DateTime.TryParse(checkingdata.checkout, out var checkOutTime)
-                 ? checkOutTime.ToString("hh:mm tt", CultureInfo.InvariantCulture).Replace("AM", "น.").Replace("PM", "น.")
+                 ? checkOutTime.ToString("HH:mm น.", CultureInfo.InvariantCulture)
                  : null;
+
 
             if (existingCheckIn != null)
             {
@@ -55,6 +56,7 @@ namespace Ems.App.Servies
                     checking_status_id = checkingStatusId,
                     check_in = utcCheckIn,  
                     check_out = utcCheckOut,  
+                    check_dates = DateTime.UtcNow,
                     created_date = DateTime.Now  
                 };
 

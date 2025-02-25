@@ -425,7 +425,7 @@ export class CheckingComponent {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: true
+                hour12: false
             });
 
             // แยกเวลาออกเป็น ชั่วโมง นาที วินาที และ am/pm
@@ -437,7 +437,7 @@ export class CheckingComponent {
             }
 
             const [formattedHours, formattedMinutes, formattedSeconds] = time.split(':');
-            this.time = `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+            this.time = `${formattedHours}:${formattedMinutes}:${formattedSeconds} น.`;
             this.day = `${dayOfWeek}ที่ ${day}`;
             this.month = month;
             this.year = year;
@@ -462,6 +462,7 @@ export class CheckingComponent {
         }).subscribe({
             next: () => {
                 if (saveData.checkIn) {
+                    console.log(saveData);
                     this.checkInTime = saveData.checkIn;
                     this.isCheckIn = false;
 
