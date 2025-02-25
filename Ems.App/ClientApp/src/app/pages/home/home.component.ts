@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { HomeService } from "src/app/shared/services/home.service";
 
@@ -8,7 +9,7 @@ import { HomeService } from "src/app/shared/services/home.service";
 })
 export class HomeComponent {
 
-    constructor(private homeService: HomeService) {
+    constructor(private homeService: HomeService,private router: Router) {
 
     }
 }
